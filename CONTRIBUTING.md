@@ -10,7 +10,6 @@ Punchcard is a headless CMS designed with content strategy at its heart. With a 
 * Can create an issue in the most relevant repository. If unable to determine which one that is, file an issue in this repository. It may be moved.
 * Please follow our [Issue Guidelines](#issue-guidelines) when creating a new issue.
 * Do not open a [pull request](#pull-requests) to resolve an issue without first receiving feedback from a `Punchcard CMS member` and having them agree on a solution forward.
-
 * Include screenshots and animated GIFs whenever possible; they are immensely helpful.
 * When submitting a browser bug, please include the browser, version, operating system, and operating system version.
 * When submitting an update to or a new feature, pattern, guideline, etc… we prefer to see user research associated with the suggestion including testing methods, results, and sample size, whenever possible. This allows us to make more user-centered decisions and cut through assumptions and individual preferences.
