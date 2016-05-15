@@ -20,6 +20,7 @@ Punchcard is a headless CMS designed with content strategy at its heart. With a 
 * **DO NOT ISSUE A PULL REQUEST WITHOUT FIRST [SUBMITTING AN ISSUE](#submitting-issues)**
 * **ALL PULL REQUESTS MUST INCLUDE A [DEVELOPER CERTIFICATE OF ORIGIN](#developer-certificate-of-origin)**
 * Pull requests should reference their related issues. If the pull request closes an issue, [please reference its closing from a commit messages](https://help.github.com/articles/closing-issues-via-commit-messages/). Pull requests not referencing any issues will be closed.
+* Commit messages _must_ begin with the [relevant emoji](#emoji-cheatsheet) describing what the commit does.
 * Pull request titles should be descriptive, explaining at the high level what it is doing, and should be written in the same style as [commit messages](#git-commit-messages).
 * Include a summarized list of changes, additions, and deletions in the body of the pull request in the same style as [commit messages](#git-commit-messages).
 * Follow our JavaScript and CSS styleguides. We have linters set up to catch most of it.
