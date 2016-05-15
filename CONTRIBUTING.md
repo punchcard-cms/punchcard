@@ -200,10 +200,12 @@ The following can be copied as a templates to follow:
 
 When creating creating commits or updating the CHANGELOG, please **start** the commit message or update with one of the following applicable Emoji. Emoji should not be used at the start of issue or pull request titles.
 
+* :new: `:new:` when adding new functionality
+* :boom: `:boom:` when changing in a non-backwards-compatible way current functionality
+* :bug: `:bug:` when fixing a bug
+* :memo: `:memo:` when writing long-form text (documentation, guidelines, principles, etc…)
 * :art: `:art:` when improving the format/structure of the code
 * :racehorse: `:racehorse:` when improving performance
-* :memo: `:memo:` when writing long-form text (documentation, guidelines, principles, etc…)
-* :bug: `:bug:` when fixing a bug
 * :fire: `:fire:` when removing code or files
 * :green_heart: `:green_heart:` when fixing the CI build
 * :white_check_mark: `:white_check_mark:` when adding tests
