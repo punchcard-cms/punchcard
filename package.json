@@ -16,7 +16,6 @@
     "needs": "^0.8.3"
   },
   "scripts": {
-    "postinstall": "bower install",
     "pretest": "CI=true npm run lint",
     "test": "CI=true npm run nyc",
     "posttest": "CI=true gulp build",
@@ -41,7 +40,6 @@
   "license": "Apache-2.0",
   "dependencies": {
     "body-parser": "^1.13.3",
-    "bower": "^1.7.9",
     "cfenv": "^1.0.3",
     "config": "^1.19.0",
     "connect-multiparty": "^2.0.0",
