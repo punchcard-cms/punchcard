@@ -1,0 +1,13 @@
+{% extends "_donut.html" %}
+
+{% block pageTitle %}{{pageTitle}}{% endblock %}
+
+{% block pageHead %}
+  {{ super() }}
+{% endblock %}
+
+{% block main %}
+<h1>{{title}}</h1>
+<div>{{description}}</div>
+{% endblock %}
+

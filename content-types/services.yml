@@ -1,0 +1,33 @@
+name: Services
+description: I am a form for entering in data about a service!
+attributes:
+  - type: text
+    id: service-name
+    name: Service Name
+    description: Write a really cool name please.
+    settings:
+      id: service-name
+      name: service-name
+      placeholder: add svc name
+  - type: text
+    id: service-desciption
+    name: Service Desc
+    description: Write your brief desciption
+    settings:
+      id: service-desciption
+      name: service-desciption
+      placeholder: add svc desc
+  - type: text
+    id: service-url
+    name: Service URL
+    settings:
+      id: service-url
+      name: service-url
+      placeholder: add svc url
+  - type: email
+    id: service-email
+    name: Service Email
+    settings:
+      id: service-email
+      name: service-email
+      placeholder: add svc email

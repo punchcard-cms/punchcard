@@ -1,0 +1,18 @@
+language: node_js
+node_js:
+  - '5.7'
+
+#########################
+## Setup
+#########################
+cache:
+  directories:
+    - node_modules
+
+
+#########################
+## Notifications
+#########################
+notifications:
+  slack:
+    secure: gFBl2hhfDTho5DYKCWY05nWJLAIpbIYZc2cdGv44BUfCErOBP4wT9olTpf4k7RebZgeHpflwaHCdRHtSdYgZJdQJGga2yL+d1hJqTH99gSMKLYg9xyQvF0baEaBTEaFryCyYZOEDvmWuuvuJnFyNZnk0SUTCAC1i8f+Ec5Vt+rM=

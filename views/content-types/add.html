@@ -1,0 +1,21 @@
+{% extends "_donut.html" %}
+
+{% block pageHead %}
+  {{ super() }}
+{% endblock %}
+
+{% block header %}
+  {{ super() }}
+  <h1>{{contentTypeInfo.name}}</h1>
+{% endblock %}
+
+{% block main %}
+  {% include "content-types/form.html" %}
+{% endblock %}
+
+{% block footer %}
+  {{ super() }}
+
+
+  <script type="text/javascript" src="/js/sunrise-sunset.js"></script>
+{% endblock %}

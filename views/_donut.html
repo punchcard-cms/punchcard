@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>{{pageTitle}}</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+  {% block header %}
+    {% include "_header.html" %}
+  {% endblock %}
+
+  {% block main %}
+  <div><h1>Original MAIN</h1></div>
+  {% endblock %}
+
+  {% block footer %}
+    {% include "_footer.html" %}
+  {% endblock %}
+
+  <script src="/js/app.js"></script>
+  {% block pageFoot %}
+    <script type="text/javascript">
+      // this is where the sitewide js goes
+    </script>
+  {% endblock %}
+</body>
+</html>

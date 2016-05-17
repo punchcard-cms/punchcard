@@ -1,0 +1,35 @@
+{% extends "_donut.html" %}
+
+{% block pageHead %}
+  {{ super() }}
+{% endblock %}
+
+{% block header %}
+  {{ super() }}
+  <h1>{{contentTypeInfo.name}}</h1>
+{% endblock %}
+
+{% block main %}
+<p><a href="{{contentTypesConfig.contentTypesHome.path}}/{{contentTypeInfo.machine}}/add">ADD A NEW ENTRY</a></p>
+<h2>Content</h2>
+
+{% if contentTypeContent %}
+  <table>
+    <tr><th>name</th><th>edit</th><th>delete</th><th>date</th></tr>
+  {% for entry in contentTypeContent %}
+    {% if entry['service-name'] %}
+      <tr>
+        <td>{{entry['service-name']}}</td>
+        <td><a href="{{contentTypesConfig.contentTypesHome.path}}/{{contentTypeInfo.machine}}/edit/{{entry.id}}">EDIT</a></td>
+        <td><a href="{{contentTypesConfig.contentTypesHome.path}}/{{contentTypeInfo.machine}}/delete/{{entry.id}}">DEL</a></td>
+        <td>{{entry.created}}</td>
+      </tr>
+    {% endif %}
+  {% endfor %}
+  </table>
+{% endif %}
+{% endblock %}
+
+{% block footer %}
+{{ super() }}
+{% endblock %}

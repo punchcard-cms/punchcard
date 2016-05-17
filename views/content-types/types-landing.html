@@ -1,0 +1,25 @@
+{% extends "_donut.html" %}
+
+{% block pageHead %}
+  {{ super() }}
+{% endblock %}
+
+
+{% block header %}
+  {{ super() }}
+  <h1>{{contentTypesConfig.contentTypesHome.title}}</h1>
+{% endblock %}
+
+{% block main %}
+<ul>
+  {% if contentTypesNames %}
+    {% for ct in contentTypesNames %}
+      <li><a href="{{contentTypesConfig.contentTypesHome.path}}/{{ct.machine}}">{{ct.name}}</a></li>
+    {% endfor %}
+  {% endif %}
+</ul>
+{% endblock %}
+
+{% block footer %}
+{{ super() }}
+{% endblock %}
