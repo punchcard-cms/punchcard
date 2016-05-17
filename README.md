@@ -2,6 +2,18 @@
 
 Headless Content Management System designed with content strategy at its heart. Built with Node.
 
+## Install and Usage
+
+```bash
+npm i punchcard-cms --save
+```
+
+```javascript
+const punchcard = require('punchcard');
+
+punchcard.listen(8080);
+```
+
 ## Developing Locally
 
 Make sure PostgresSQL is set up locally (see below)
