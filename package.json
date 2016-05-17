@@ -26,7 +26,8 @@
     "nyc": "nyc --all npm run ava",
     "dev:database": "postgres -D /usr/local/var/postgres",
     "dev:start": "gulp",
-    "dev": "npm run dev:database & npm run dev:start"
+    "dev": "npm run dev:database & npm run dev:start",
+    "coverage": "nyc report --reporter=text-lcov | coveralls"
   },
   "repository": {
     "type": "git",
@@ -61,6 +62,7 @@
   },
   "devDependencies": {
     "ava": "^0.14",
+    "coveralls": "^2.11.9",
     "jsdom": "^9.0.0",
     "mock-express-response": "^0.1.2",
     "mock-knex": "^0.3.1",
