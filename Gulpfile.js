@@ -8,7 +8,6 @@ require('punchcard-runner')(gulp, {
     library: {
       src: [
         'lib',
-        'routes',
         'config',
         'content-types'
       ],
