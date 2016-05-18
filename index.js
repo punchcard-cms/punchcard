@@ -4,7 +4,6 @@
  * @fileoverview Punchcard CMS Init
  */
 const bodyParser = require('body-parser');
-const cookieParser = require('cookie-parser');
 const express = require('express');
 const logger = require('morgan');
 const nunjucks = require('nunjucks');
@@ -14,8 +13,11 @@ const contentTypes = require('punchcard-content-types');
 
 const indexRoutes = require('./lib/routes/index');
 const contentTypesRoutes = require('./lib/routes/content-types');
+const session = require('./lib/auth/sessions');
 
-const app = express();
+let app = express();
+
+app = session(app);
 
 // Nunjucks templating setup
 app.set('views', path.join(__dirname, 'views'));
@@ -30,7 +32,6 @@ app.set('view engine', 'html');
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 /*
