@@ -32,7 +32,7 @@ $ npm run dev
 3. `brew install postgres`
 4. type this to start the postgres server `postgres -D /usr/local/var/postgres`
 5. open new terminal tab
-6.` createuser punchcard -P` (it'll prompt for a password) use ‘W@ts0n'
+6.` createuser punchcard -P` (it'll prompt for a password) use `W@ts0n`
 7. `createdb -O punchcard punchcard`
 8. reconnect to psql as new user `psql -d punchcard -U punchcard`
 9. connect to db `\connect punchcard`
