@@ -30,4 +30,8 @@ module.exports = {
     acquireConnectionTimeout: 1000,
   },
   env,
+  cookies: {
+    secure: false,
+    secret: process.env.COOKIE_SECRET || 'babka',
+  },
 };
