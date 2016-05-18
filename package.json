@@ -64,6 +64,8 @@
   "devDependencies": {
     "ava": "^0.14",
     "coveralls": "^2.11.9",
+    "input-plugin-email": "0.0.4",
+    "input-plugin-text": "0.0.5",
     "jsdom": "^9.0.0",
     "mock-express-response": "^0.1.2",
     "mock-knex": "^0.3.1",
