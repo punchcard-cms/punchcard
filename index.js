@@ -20,8 +20,14 @@ let app = express();
 app = session(app);
 
 // Nunjucks templating setup
-app.set('views', path.join(__dirname, 'views'));
-nunjucks.configure(['views', 'templates'], {
+const views = [
+  path.join(process.cwd(), 'views'),
+  path.join(process.cwd(), 'templates'),
+  path.join(__dirname, 'views'),
+  path.join(__dirname, 'templates'),
+];
+
+nunjucks.configure(views, {
   'autoescape': true,
   'express': app,
 });
