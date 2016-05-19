@@ -6,19 +6,17 @@
 
 {% block header %}
   {{ super() }}
-  <h1>{{contentTypeInfo.name}}</h1>
+  <h1>{{pageTitle}}</h1>
 {% endblock %}
 
 {% block main %}
-  {% include "content-types/form.html" %}
+  {% include "users/_form.html" %}
+
 {% endblock %}
 
 {% block footer %}
   {{ super() }}
-
-
   <script type="text/javascript">
     {{validation|safe}}
   </script>
-  <script type="text/javascript" src="/js/sunrise-sunset.js"></script>
 {% endblock %}

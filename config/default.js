@@ -26,12 +26,20 @@ module.exports = {
       user: 'punchcard',
       database: 'punchcard',
     },
-    debug: true,
+    debug: false,
     acquireConnectionTimeout: 1000,
   },
   env,
   cookies: {
     secure: false,
     secret: process.env.COOKIE_SECRET || 'babka',
+  },
+  users: {
+    usersHome: {
+      path: '/users',
+      title: 'Users',
+      desc: 'This is the users landing page.',
+    },
+    configFile: path.join(__dirname, '../lib/users/users.yml'),
   },
 };

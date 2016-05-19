@@ -74,6 +74,9 @@ app.use('/content', contentTypesRoutes);
  */
 app.use('/users', users.userRoutes);
 
+// TEMP: will be removed when we have a table-making process
+users.checkUserTable();
+
 /*
   @name 404
   @description catch 404 and forward to error handler
