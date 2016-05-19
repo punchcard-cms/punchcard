@@ -26,7 +26,7 @@ module.exports = {
       user: 'punchcard',
       database: 'punchcard',
     },
-    debug: false,
+    debug: true,
     acquireConnectionTimeout: 1000,
   },
   env,
