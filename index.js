@@ -11,6 +11,7 @@ const path = require('path');
 const config = require('config');
 const contentTypes = require('punchcard-content-types');
 
+const users = require('./lib/users');
 const indexRoutes = require('./lib/routes/index');
 const contentTypesRoutes = require('./lib/routes/content-types');
 const session = require('./lib/auth/sessions');
@@ -60,6 +61,12 @@ app.use('/', indexRoutes);
   @description create routes for all content type configurations in ./content-types
  */
 app.use('/content', contentTypesRoutes);
+
+/*
+  @name users route
+  @description create routes for users
+ */
+app.use('/users', users.userRoutes);
 
 /*
   @name 404
