@@ -77,7 +77,7 @@ if (!module.parent) {
   initApp().then(app => {
     app.listen(config.env.port, () => {
       console.log(`Server starting on ${config.env.url}`);
-    })
+    });
   });
 }
 
