@@ -15,9 +15,6 @@ module.exports = {
       desc: 'This is the content type ALL landing page.',
     },
     contentTypeDir: path.join(__dirname, '../content-types'),
-    contentTypeExt: 'yml',
-    viewsDir: path.join(__dirname, '../views/'),
-    formTemplateFile: '_content-type-form.html',
   },
   knex: {
     dialect: 'pg',
@@ -26,8 +23,11 @@ module.exports = {
       user: 'punchcard',
       database: 'punchcard',
     },
-    debug: true,
+    debug: false,
     acquireConnectionTimeout: 1000,
+  },
+  site: {
+    name: 'Punchcard CMS',
   },
   env,
   cookies: {
