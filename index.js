@@ -3,45 +3,20 @@
 /**
  * @fileoverview Punchcard CMS Init
  */
-const bodyParser = require('body-parser');
 const express = require('express');
-const logger = require('morgan');
-const path = require('path');
 const config = require('config');
-const contentTypes = require('punchcard-content-types');
 
 const indexRoutes = require('./lib/routes/index');
 const contentTypesRoutes = require('./lib/routes/content-types');
 
 const init = require('./lib/init');
 
-let application = express();
+const application = express();
 
 // Initialize the Database
-application = () => {
+const initApp = () => {
   return init(application).then(initialized => {
     const app = initialized;
-
-    // TODO: where does `dev` come from; should control with config
-    app.use(logger('dev'));
-    app.use(bodyParser.json());
-    app.use(bodyParser.urlencoded({ extended: false }));
-    app.use(express.static(path.join(process.cwd(), 'public')));
-
-    /*
-      @name sitewide persistent variables
-      @description create variables which will work in any route
-     */
-    app.locals.siteName = 'Punchcard CMS';
-    app.locals.contentTypesConfig = config.contentTypes;
-    contentTypes().then(types => {
-      // make content type object available to entire express app
-      app.locals.contentTypesNames = types;
-
-      return;
-    }).catch(err => {
-      console.error(err);
-    });
 
     /*
       @name home page route
@@ -90,19 +65,20 @@ application = () => {
     });
 
     return app;
+  }).catch(e => {
+    throw new Error(e);
   });
 };
-
 
 /*
   @description run the server if and only if this file is being run directly
  */
 if (!module.parent) {
-  application().then(app => {
+  initApp().then(app => {
     app.listen(config.env.port, () => {
       console.log(`Server starting on ${config.env.url}`);
-    });
+    })
   });
 }
 
-module.exports = application;
+module.exports = initApp;
