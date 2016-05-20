@@ -11,6 +11,12 @@ const path = require('path');
 const config = require('config');
 const contentTypes = require('punchcard-content-types');
 
+// NEW for user AUTH:
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
+const knex = require('knex')(config.knex);
+const db = require('./lib/db');
+
 const users = require('./lib/users');
 const indexRoutes = require('./lib/routes/index');
 const contentTypesRoutes = require('./lib/routes/content-types');
@@ -34,6 +40,47 @@ nunjucks.configure(views, {
 });
 app.set('view engine', 'html');
 
+// Passport Authentication setup
+passport.use(new LocalStrategy({
+    usernameField: 'email',
+  },
+  function(username, password, done) {
+    console.log('I AM LOCAL STRAT');
+    knex.select('*').from('users').where({ email: username, password: password })
+      .then(user => {
+        console.log('user');
+        console.log(user);
+        if (!user) {
+          return done(null, false, { message: 'Incorrect login.' });
+        }
+        return done(null, user);
+      })
+      .catch(err => {
+        return done(err);
+      })
+  }
+));
+
+// Configure Passport authenticated session persistence.
+//
+// In order to restore authentication state across HTTP requests, Passport needs
+// to serialize users into and deserialize users out of the session.  The
+// typical implementation of this is as simple as supplying the user ID when
+// serializing, and querying the user record by ID from the database when
+// deserializing.
+passport.serializeUser(function(user, cb) {
+  console.log('serializeUser');
+  console.log(user);
+  cb(null, user.id);
+});
+
+passport.deserializeUser(function(id, cb) {
+  db.users.findById(id, function (err, user) {
+    if (err) { return cb(err); }
+    cb(null, user);
+  });
+});
+
 
 // TODO: where does `dev` come from; should control with config
 app.use(logger('dev'));
@@ -41,6 +88,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(process.cwd(), 'public')));
 
+app.use(passport.initialize());
+app.use(passport.session());
 /*
   @name sitewide persistent variables
   @description create variables which will work in any route
