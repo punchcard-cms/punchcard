@@ -12,7 +12,7 @@ test.beforeEach((t) => {
   });
 });
 
-test('CMS Landing Page', t => {
+test.cb('CMS Landing Page', t => {
   t.context.request
     .get('/')
     .end((err, res) => {
