@@ -19,7 +19,7 @@
     "pretest": "npm run lint",
     "test": "NODE_APP_INSTANCE=test npm run nyc",
     "posttest": "gulp build",
-    "start": "nodemon -e html,js ./bin/www",
+    "start": "nodemon -e html,js ./index.js",
     "lint": "gulp lint",
     "ava:watch": "NODE_CONFIG_DIR=../config ava --watch | tap-diff",
     "ava": "NODE_CONFIG_DIR=../config ava | tap-diff",
@@ -42,7 +42,7 @@
   "dependencies": {
     "body-parser": "^1.13.3",
     "cfenv": "^1.0.3",
-    "config": "^1.19.0",
+    "config": "^1.20.3",
     "connect-multiparty": "^2.0.0",
     "connect-session-knex": "^1.0.23",
     "debug": "^2.2.0",
