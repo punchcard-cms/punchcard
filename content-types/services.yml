@@ -1,5 +1,6 @@
 name: Services
 description: I am a form for entering in data about a service!
+id: services
 attributes:
   - type: text
     id: service-name
