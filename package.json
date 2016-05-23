@@ -40,6 +40,7 @@
   ],
   "license": "Apache-2.0",
   "dependencies": {
+    "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.13.3",
     "cfenv": "^1.0.3",
     "config": "^1.20.3",

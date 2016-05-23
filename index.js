@@ -34,10 +34,7 @@ const initApp = () => {
       @name users route
       @description create routes for users
      */
-    app.use('/users', users.userRoutes);
-
-    // TEMP: will be removed when we have a table-making process
-    users.checkUserTable();
+    app.use('/users', users);
 
     /*
       @name 404
