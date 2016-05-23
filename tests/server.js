@@ -5,8 +5,6 @@ import punchcard from '../';
 // cue up our application for all tests
 test.beforeEach((t) => {
   return punchcard().then(app => {
-    console.log('BEFORE');
-    console.log(app);
     // Ignoring this param reassign as it's the standard for AVA to allow users to assign context to the tests
     t.context.request = request(app); // eslint-disable-line no-param-reassign
 
