@@ -40,6 +40,7 @@ test('Users merged with correct param', t => {
       t.is(result[0].name, 'Users', 'Get users content type name');
       t.is(result[0].description, 'A users content model.', 'Get users content type desc');
       t.is(result[0].id, 'users', 'Get users content type id');
-      t.is(result[0].attributes[1].name, 'Password', 'Password content type');
+      t.is(result[0].attributes[1].name, 'Password', 'Password attribute name');
+      t.is(result[0].attributes[1].id, 'password', 'Password attribute id');
     });
 });
