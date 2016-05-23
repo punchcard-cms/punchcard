@@ -1,5 +1,5 @@
 name: Foo
-description: I am a copy of services!
+description: I am a copy of services
 id: foo
 attributes:
   - type: text

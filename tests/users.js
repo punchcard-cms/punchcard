@@ -24,12 +24,13 @@ test('Exports exist', t => {
   t.is(typeof users.checkUserTable, 'function', 'Submodule `checkUserTable` exists and is a function');
 });
 
-test('Users merged with correct param', t => {
+test('Users, with config, merged with correct param', t => {
   return users.userContentType(usersContentObj)
     .then(result => {
       t.is(result[0].name, 'Users', 'Get users content type name');
       t.is(result[0].description, 'Test users description', 'Get users content type desc');
       t.is(result[0].id, 'users', 'Get users content type id');
+      t.is(result[0].attributes[0].name, 'Email', 'Email content type');
     });
 });
 
@@ -39,5 +40,6 @@ test('Users merged with correct param', t => {
       t.is(result[0].name, 'Users', 'Get users content type name');
       t.is(result[0].description, 'A users content model.', 'Get users content type desc');
       t.is(result[0].id, 'users', 'Get users content type id');
+      t.is(result[0].attributes[1].name, 'Password', 'Password content type');
     });
 });
