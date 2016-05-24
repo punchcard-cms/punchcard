@@ -34,7 +34,7 @@ const initApp = () => {
       @name users route
       @description create routes for users
      */
-    app.use('/users', users.userRoutes);
+    app.use('/users', users.routes);
 
     /*
       @name 404
