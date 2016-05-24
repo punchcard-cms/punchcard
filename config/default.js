@@ -8,13 +8,17 @@ env.host = env.url.replace(`:${env.port}`, '');
 
 
 module.exports = {
-  contentTypes: {
-    contentTypesHome: {
-      path: '/content',
-      title: 'Content Type ALL Landing Page',
-      desc: 'This is the content type ALL landing page.',
+  content: {
+    base: 'content',
+    home: {
+      title: 'All Content Types',
     },
-    contentTypeDir: path.join(__dirname, '../content-types'),
+    actions: {
+      add: 'add',
+      edit: 'edit',
+      save: 'save',
+    },
+    directory: path.join(__dirname, '../content-types'),
   },
   knex: {
     dialect: 'pg',
@@ -28,6 +32,16 @@ module.exports = {
   },
   site: {
     name: 'Punchcard CMS',
+    nav: [
+      {
+        path: '/',
+        label: 'Home',
+      },
+      {
+        path: 'content',
+        label: 'Content',
+      },
+    ],
   },
   env,
   cookies: {

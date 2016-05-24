@@ -1,6 +1,6 @@
-<form action="{{action}}" name="{{machine}}" method="post" enctype="multipart/form-data">
+<form action="{{action}}" method="post" enctype="multipart/form-data">
 
-  {{samsMagicFormIsMagic}}
+  {{form.html | safe}}
 
   <fieldset id="sunrise-sunset">
     <legend>Select Sunrise and Sunset</legend>

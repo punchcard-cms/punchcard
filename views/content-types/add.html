@@ -16,6 +16,8 @@
 {% block footer %}
   {{ super() }}
 
-
+  <script>
+    {{form.validation | safe}}
+  </script>
   <script type="text/javascript" src="/js/sunrise-sunset.js"></script>
 {% endblock %}
