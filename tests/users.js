@@ -2,7 +2,7 @@ import test from 'ava';
 import users from '../lib/users';
 
 
-const usersContentObj = {
+const model = {
   'name': 'Users',
   'description': 'Test users description',
   'id': 'users',
@@ -17,15 +17,12 @@ const usersContentObj = {
 };
 
 test('Exports exist', t => {
-  t.is(typeof users, 'object', 'Users exports a function');
-
-  t.is(typeof users.userContentType, 'function', 'Submodule `userContentType` exists and is a function');
-  t.is(typeof users.userRoutes, 'function', 'Submodule `userRoutes` exists and is a function');
-  t.is(typeof users.checkUserTable, 'function', 'Submodule `checkUserTable` exists and is a function');
+  t.is(typeof users.routes, 'function', 'Submodule `routes` exists and is a function');
+  t.is(typeof users, 'function', 'Submodule `model` exists, is the primary for `users`, and is a function');
 });
 
 test('Users, with config, merged with correct param', t => {
-  return users.userContentType(usersContentObj)
+  return users(model)
     .then(result => {
       t.is(result[0].name, 'Users', 'Get users content type name');
       t.is(result[0].description, 'Test users description', 'Get users content type desc');
@@ -35,7 +32,7 @@ test('Users, with config, merged with correct param', t => {
 });
 
 test('Users merged with correct param', t => {
-  return users.userContentType()
+  return users()
     .then(result => {
       t.is(result[0].name, 'Users', 'Get users content type name');
       t.is(result[0].description, 'A users content model.', 'Get users content type desc');
