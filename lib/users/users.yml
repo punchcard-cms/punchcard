@@ -10,7 +10,14 @@ attributes:
     id: password
     name: Password
     description: Make it secure!
-  - type: text
-    id: level
-    name: Access Level
-    description: (make multi-select plugin w/selection of CTs for `content-creator`) CHOOSE one - superuser/admin/content-creator
+  - type: select
+    id: role
+    name: Authorization role
+    label: Select authorization level
+    options:
+      - label: Super Users
+        value: superuser
+      - label: Administrator
+        value: admin
+      - label: Content Creator
+        value: creator
