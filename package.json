@@ -52,7 +52,7 @@
     "ibm-design-colors": "^1.6.0",
     "input-plugin-password": "0.0.1",
     "js-yaml": "^3.5.5",
-    "knex": "^0.10.0",
+    "knex": "^0.11.4",
     "lodash": "^4.6.1",
     "morgan": "^1.6.1",
     "node-dir": "^0.1.11",
