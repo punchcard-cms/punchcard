@@ -40,6 +40,7 @@
   ],
   "license": "Apache-2.0",
   "dependencies": {
+    "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.13.3",
     "cfenv": "^1.0.3",
     "config": "^1.20.3",
@@ -49,6 +50,7 @@
     "express": "^4.13.4",
     "express-session": "^1.13.0",
     "ibm-design-colors": "^1.6.0",
+    "input-plugin-password": "0.0.1",
     "js-yaml": "^3.5.5",
     "knex": "^0.10.0",
     "lodash": "^4.6.1",

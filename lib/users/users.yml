@@ -1,0 +1,16 @@
+name: Users
+description: A users content model.
+id: users
+attributes:
+  - type: email
+    id: email
+    name: Email
+    description: Your email is your username
+  - type: password
+    id: password
+    name: Password
+    description: Make it secure!
+  - type: text
+    id: level
+    name: Access Level
+    description: (make multi-select plugin w/selection of CTs for `content-creator`) CHOOSE one - superuser/admin/content-creator

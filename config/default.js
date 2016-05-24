@@ -34,4 +34,12 @@ module.exports = {
     secure: false,
     secret: process.env.COOKIE_SECRET || 'babka',
   },
+  users: {
+    usersHome: {
+      path: '/users',
+      title: 'Users',
+      desc: 'This is the users landing page.',
+    },
+    configFile: path.join(__dirname, '../lib/users/users.yml'),
+  },
 };

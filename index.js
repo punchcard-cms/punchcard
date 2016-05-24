@@ -6,9 +6,9 @@
 const express = require('express');
 const config = require('config');
 
+const users = require('./lib/users');
 const indexRoutes = require('./lib/routes/index');
 const contentTypesRoutes = require('./lib/routes/content-types');
-
 const init = require('./lib/init');
 
 const application = express();
@@ -29,6 +29,12 @@ const initApp = () => {
       @description create routes for all content type configurations in ./content-types
      */
     app.use('/content', contentTypesRoutes);
+
+    /*
+      @name users route
+      @description create routes for users
+     */
+    app.use('/users', users.routes);
 
     /*
       @name 404
