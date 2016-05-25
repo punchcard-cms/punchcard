@@ -64,7 +64,7 @@
     "uuid": "^2.0.2"
   },
   "devDependencies": {
-    "ava": "^0.14",
+    "ava": "^0.15.0",
     "coveralls": "^2.11.9",
     "input-plugin-email": "0.0.4",
     "input-plugin-text": "0.0.5",
