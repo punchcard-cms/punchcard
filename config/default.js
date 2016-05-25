@@ -29,6 +29,10 @@ module.exports = {
   site: {
     name: 'Punchcard CMS',
   },
+  login: {
+    loginPath: '/login',
+    logoutPath: '/logout',
+  },
   env,
   cookies: {
     secure: false,
