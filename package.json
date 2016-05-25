@@ -44,7 +44,6 @@
     "body-parser": "^1.13.3",
     "cfenv": "^1.0.3",
     "config": "^1.20.3",
-    "connect-ensure-login": "^0.1.1",
     "connect-multiparty": "^2.0.0",
     "connect-session-knex": "^1.0.23",
     "debug": "^2.2.0",

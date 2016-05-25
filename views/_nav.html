@@ -2,7 +2,9 @@
   <ul>
     <li><a href="/" title="home">home</a></li>
     <li><a href="/users" title="users">users</a></li>
-    <li><a href="/logout" title="logout">logout</a></li>
+    {% if user %}
+      <li><a href="/logout" title="logout">logout</a></li>
+    {% endif %}
     {% if contentTypesNames %}
       <li><a href="{{contentTypesConfig.contentTypesHome.path}}" title="{{contentTypesConfig.contentTypesHome.title}}">{{contentTypesConfig.contentTypesHome.title}}</a><ul>
       {% for ct in contentTypesNames %}

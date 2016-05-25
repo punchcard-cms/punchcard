@@ -22,3 +22,14 @@ test.cb('CMS Landing Page', t => {
       t.end();
     });
 });
+
+test.cb('CMS Landing Page', t => {
+  t.context.request
+    .get('/')
+    .end((err, res) => {
+      t.is(err, null, 'Should have an error');
+      t.is(res.status, 302, 'should return status 302');
+      t.regex(res.text, /DOCTYPE html/, 'should have an html doctype');
+      t.end();
+    });
+});
