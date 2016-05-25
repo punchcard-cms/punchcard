@@ -14,10 +14,12 @@ attributes:
     id: role
     name: Authorization role
     label: Select authorization level
-    options:
-      - label: Super Users
-        value: superuser
-      - label: Administrator
-        value: admin
-      - label: Content Creator
-        value: creator
+    inputs:
+      select:
+        options:
+          - label: Super Users
+            value: superuser
+          - label: Administrator
+            value: admin
+          - label: Content Creator
+            value: creator
