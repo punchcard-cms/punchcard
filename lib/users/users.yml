@@ -17,9 +17,11 @@ attributes:
     inputs:
       select:
         options:
-          - label: Super Users
-            value: superuser
+          - label: Super Admin
+            value: superadmin
           - label: Administrator
             value: admin
+          - label: Implementor
+            value: implementor
           - label: Content Creator
             value: creator
