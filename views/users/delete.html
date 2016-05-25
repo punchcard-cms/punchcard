@@ -1,0 +1,28 @@
+{% extends "_donut.html" %}
+
+{% block pageHead %}
+  {{ super() }}
+{% endblock %}
+
+{% block header %}
+  {{ super() }}
+  <h1>{{pageTitle}}</h1>
+{% endblock %}
+
+{% block main %}
+<form action="{{action}}" name="{{machine}}" method="post" enctype="multipart/form-data">
+
+  <p>Delete {{userEmail}}?</p>
+  <p>This cannot be undone!</p>
+
+  <button type="submit">Delete</button>
+</form>
+
+{% endblock %}
+
+{% block footer %}
+  {{ super() }}
+  <script type="text/javascript">
+    {{validation|safe}}
+  </script>
+{% endblock %}
