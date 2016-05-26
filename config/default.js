@@ -19,6 +19,9 @@ module.exports = {
       save: 'save',
     },
     directory: path.join(__dirname, '../content-types'),
+    messages: {
+      missing: 'Content Type \'%type\' not found',
+    },
   },
   knex: {
     dialect: 'pg',
