@@ -1,7 +1,7 @@
 <nav>
   <ul>
     {% for item in nav %}
-    <li><a href="/{{item}}">{{item}}</a></li>
+    <li><a href="/{{item.path}}">{{item.label}}</a></li>
     {% endfor %}
   </ul>
 </nav>
