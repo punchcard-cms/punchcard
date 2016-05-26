@@ -34,7 +34,7 @@ module.exports = {
     name: 'Punchcard CMS',
     nav: [
       {
-        path: '/',
+        path: '.',
         label: 'Home',
       },
       {
