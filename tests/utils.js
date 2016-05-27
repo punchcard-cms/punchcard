@@ -42,12 +42,12 @@ test('Single Item - Fail', t => {
 
 test('ISO UTC Time', t => {
   const time = {
-    date: '2016-05-26',
-    time: '20:50',
-    zone: 'EDT',
+    date: '2016-05-27',
+    time: '21:56',
+    zone: 'America/New_York',
   };
 
-  const expected = '2016-05-27T00:50:00Z';
+  const expected = '2016-05-28T01:56:00.000Z';
 
   const result = utils.time.iso(time.date, time.time, time.zone);
 
@@ -58,18 +58,26 @@ test('ISO UTC Time', t => {
 });
 
 test('Input Time', t => {
-  const time = '2016-05-27T00:50:00Z';
+  const time = '2016-05-28T01:56:00.000Z';
 
   const expected = {
-    date: '2016-05-26',
-    time: '20:50',
-    zone: 'EDT',
+    date: '2016-05-27',
+    time: '21:56',
+    zone: 'America/New_York',
   };
 
-  const result = utils.time.input(time);
+  const expectedUTC = {
+    date: '2016-05-28',
+    time: '01:56',
+    zone: 'UTC',
+  };
+
+  const result = utils.time.input(time, 'America/New_York');
+  const resultUTC = utils.time.input(time);
   const badResult = utils.time.input('');
 
   t.deepEqual(result, expected, 'ISO Date Time converted to date, time, and zone');
+  t.deepEqual(resultUTC, expectedUTC, 'ISO Date Time converted to UTC date, time, and zone');
   t.is(badResult, null, 'Returns `null` if empty string passed in');
 });
 
