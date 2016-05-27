@@ -40,25 +40,25 @@ test('Single Item - Fail', t => {
   t.false(result, '`false` is returned if no item found');
 });
 
-test('ISO Time', t => {
+test('ISO UTC Time', t => {
   const time = {
     date: '2016-05-26',
     time: '20:50',
     zone: 'EDT',
   };
 
-  const expected = '2016-05-26T20:50:00-0400';
+  const expected = '2016-05-27T00:50:00Z';
 
   const result = utils.time.iso(time.date, time.time, time.zone);
 
   const badResult = utils.time.iso(time.date, time.time);
 
-  t.is(result, expected, 'Date, Time, and Zone converted to ISO Date Time');
+  t.is(result, expected, 'Date, Time, and Zone converted to ISO UTC Date Time');
   t.is(badResult, null, 'If an item is not included, `null` is returned');
 });
 
 test('Input Time', t => {
-  const time = '2016-05-26T20:50:00-0400';
+  const time = '2016-05-27T00:50:00Z';
 
   const expected = {
     date: '2016-05-26',
