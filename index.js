@@ -6,71 +6,15 @@
 const express = require('express');
 const config = require('config');
 
-const users = require('./lib/users');
-const indexRoutes = require('./lib/routes/index');
-const contentTypesRoutes = require('./lib/routes/content-types');
 const init = require('./lib/init');
+const routes = require('./lib/routes');
 
 const application = express();
 
 // Initialize the Database
 const initApp = () => {
-  return init(application).then(initialized => {
-    const app = initialized;
-
-    /*
-      @name home page route
-      @description create route for the site landing page
-     */
-    app.use('/', indexRoutes);
-
-    /*
-      @name content types route
-      @description create routes for all content type configurations in ./content-types
-     */
-    app.use('/content', contentTypesRoutes);
-
-    /*
-      @name users route
-      @description create routes for users
-     */
-    app.use('/users', users.routes);
-
-    /*
-      @name 404
-      @description catch 404 and forward to error handler
-     */
-    app.use((req, res, next) => {
-      const err = new Error('Not Found');
-      err.status = 404;
-      next(err);
-    });
-
-    // error handlers
-
-    // development error handler
-    // will print stacktrace
-    if (app.get('env') === 'development') {
-      app.use((err, req, res) => {
-        res.status(err.status || 500);
-        res.render('error', {
-          message: err.message,
-          error: err,
-        });
-      });
-    }
-
-    // production error handler
-    // no stacktraces leaked to user
-    app.use((err, req, res) => {
-      res.status(err.status || 500);
-      res.render('error', {
-        message: err.message,
-        error: {},
-      });
-    });
-
-    return app;
+  return init(application).then(app => {
+    return routes(app);
   }).catch(e => {
     throw new Error(e);
   });
@@ -82,7 +26,8 @@ const initApp = () => {
 if (!module.parent) {
   initApp().then(app => {
     app.listen(config.env.port, () => {
-      console.log(`Server starting on ${config.env.url}`);
+      // Mean to console.log out, so disabling
+      console.log(`Server starting on ${config.env.url}`); // eslint-disable-line no-console
     });
   });
 }

@@ -1,13 +1,7 @@
 <nav>
   <ul>
-    <li><a href="/" title="home">home</a></li>
-    <li><a href="/users" title="users">users</a></li>
-    {% if contentTypesNames %}
-      <li><a href="{{contentTypesConfig.contentTypesHome.path}}" title="{{contentTypesConfig.contentTypesHome.title}}">{{contentTypesConfig.contentTypesHome.title}}</a><ul>
-      {% for ct in contentTypesNames %}
-        <li><a href="{{contentTypesConfig.contentTypesHome.path}}/{{ct.id}}">{{ct.name}}</a></li>
-      {% endfor %}
-      </li></ul>
-    {% endif %}
+    {% for item in nav %}
+    <li><a href="/{{item.path}}">{{item.label}}</a></li>
+    {% endfor %}
   </ul>
 </nav>
