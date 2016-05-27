@@ -6,23 +6,24 @@
 
 {% block header %}
   {{ super() }}
-  <h1>{{pageTitle}}</h1>
+  <h1>{{title}}</h1>
 {% endblock %}
 
 {% block main %}
-<p><a href="{{usersConfig.usersHome.path}}/add">ADD A NEW USER</a></p>
+<p><a href="{{config.home.path}}/add">ADD A NEW USER</a></p>
 <h2>Content</h2>
 
-{% if usersContent %}
+{% if users %}
   <table>
-    <tr><th>email</th><th>edit</th><th>delete</th><th>date</th></tr>
-  {% for entry in usersContent %}
-    {% if entry.email %}
+    <tr><th>email</th><th>role</th><th>edit</th><th>delete</th><th>date</th></tr>
+  {% for user in users %}
+    {% if user.email %}
       <tr>
-        <td>{{entry.email}}</td>
-        <td><a href="{{usersConfig.usersHome.path}}/edit/{{entry.id}}">EDIT</a></td>
-        <td><a href="{{usersConfig.usersHome.path}}/delete/{{entry.id}}">DEL</a></td>
-        <td>{{entry.created}}</td>
+        <td>{{user.email}}</td>
+        <td>{{user.role}}</td>
+        <td><a href="{{config.home.path}}/edit/{{user.id}}">EDIT</a></td>
+        <td><a href="{{config.home.path}}/delete/{{user.id}}">DEL</a></td>
+        <td>{{user.created}}</td>
       </tr>
     {% endif %}
   {% endfor %}

@@ -44,6 +44,10 @@ module.exports = {
         path: 'content',
         label: 'Content',
       },
+      {
+        path: 'users',
+        label: 'Users',
+      },
     ],
   },
   env,
@@ -52,10 +56,23 @@ module.exports = {
     secret: process.env.COOKIE_SECRET || 'babka',
   },
   users: {
-    usersHome: {
+    home: {
       path: '/users',
       title: 'Users',
-      desc: 'This is the users landing page.',
+    },
+    add: {
+      path: '/users/add',
+      title: 'Add a new user',
+    },
+    edit: {
+      path: '/users/edit',
+      title: 'Edit a user',
+      error: 'User does not exist',
+    },
+    delete: {
+      path: '/users/delete',
+      title: 'Delete a user',
+      error: 'User does not exist',
     },
     configFile: path.join(__dirname, '../lib/users/users.yml'),
   },

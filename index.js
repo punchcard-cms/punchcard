@@ -8,12 +8,17 @@ const config = require('config');
 
 const init = require('./lib/init');
 const routes = require('./lib/routes');
+const authenticated = require('./lib/auth/authenticated');
 
 const application = express();
-
+var myLogger = function (req, res, next) {
+  console.log('LOGGED');
+  next();
+};
 // Initialize the Database
 const initApp = () => {
   return init(application).then(app => {
+    //app.use(authenticated);
     return routes(app);
   }).catch(e => {
     throw new Error(e);
