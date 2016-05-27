@@ -26,7 +26,8 @@ const initApp = () => {
 if (!module.parent) {
   initApp().then(app => {
     app.listen(config.env.port, () => {
-      console.log(`Server starting on ${config.env.url}`);
+      // Mean to console.log out, so disabling
+      console.log(`Server starting on ${config.env.url}`); // eslint-disable-line no-console
     });
   });
 }
