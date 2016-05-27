@@ -22,3 +22,46 @@ test.cb('CMS Landing Page', t => {
       t.end();
     });
 });
+
+test.cb('Content Landing Page', t => {
+  t.context.request
+    .get('/content')
+    .end((err, res) => {
+      t.is(err, null, 'Should not have an error');
+      t.is(res.status, 200, 'should return status 200');
+      t.regex(res.text, /DOCTYPE html/, 'should have an html doctype');
+      t.end();
+    });
+});
+
+test.cb('Content Type Landing Page', t => {
+  t.context.request
+    .get('/content/services')
+    .end((err, res) => {
+      t.is(err, null, 'Should not have an error');
+      t.is(res.status, 200, 'should return status 200');
+      t.regex(res.text, /DOCTYPE html/, 'should have an html doctype');
+      t.end();
+    });
+});
+
+test.cb('Content Type Add Page', t => {
+  t.context.request
+    .get('/content/services/add')
+    .end((err, res) => {
+      t.is(err, null, 'Should not have an error');
+      t.is(res.status, 200, 'should return status 200');
+      t.regex(res.text, /DOCTYPE html/, 'should have an html doctype');
+      t.end();
+    });
+});
+
+test.cb('404 Page', t => {
+  t.context.request
+    .get('/foo')
+    .end((err, res) => {
+      t.is(err, null, 'Should not have an error');
+      t.is(res.status, 404, 'should return status 404');
+      t.end();
+    });
+});
