@@ -6,11 +6,12 @@
 
 {% block header %}
   {{ super() }}
-  <h1>{{contentTypeInfo.name}}</h1>
+  <h1>{{type.name}}</h1>
+  <p>{{type.description}}</p>
 {% endblock %}
 
 {% block main %}
-  {% include "content-types/form.html" %}
+  {% include "content/form.html" %}
 {% endblock %}
 
 {% block footer %}
