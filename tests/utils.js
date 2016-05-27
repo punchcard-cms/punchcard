@@ -112,7 +112,5 @@ test('Config', t => {
 
   const result = utils.config(input);
 
-  utils.log(result);
-
   t.deepEqual(result, expected, 'Transforms input name:value in to object');
 });
