@@ -6,14 +6,14 @@
 
 {% block header %}
   {{ super() }}
-  <h1>{{contentTypeInfo.name}}</h1>
+  <h1>{{content.type.name}}</h1>
 {% endblock %}
 
 {% block main %}
-<p><a href="{{contentTypesConfig.contentTypesHome.path}}/{{contentTypeInfo.machine}}/add">ADD A NEW ENTRY</a></p>
+<p><a href="{{content.base}}/{{content.actions.add}}">Add New {{content.type.name}}</a></p>
 <h2>Content</h2>
 
-{% if contentTypeContent %}
+{# {% if contentTypeContent %}
   <table>
     <tr><th>name</th><th>edit</th><th>delete</th><th>date</th></tr>
   {% for entry in contentTypeContent %}
@@ -27,7 +27,7 @@
     {% endif %}
   {% endfor %}
   </table>
-{% endif %}
+{% endif %} #}
 {% endblock %}
 
 {% block footer %}

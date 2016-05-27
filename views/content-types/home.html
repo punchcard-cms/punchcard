@@ -1,0 +1,23 @@
+{% extends "_donut.html" %}
+
+{% block pageHead %}
+  {{ super() }}
+{% endblock %}
+
+
+{% block header %}
+  {{ super() }}
+  <h1>{{content.home.title}}</h1>
+{% endblock %}
+
+{% block main %}
+<ul>
+  {% for type in content.types %}
+    <li><a href="/{{content.base}}/{{type.id}}">{{type.name}}</a></li>
+  {% endfor %}
+</ul>
+{% endblock %}
+
+{% block footer %}
+{{ super() }}
+{% endblock %}
