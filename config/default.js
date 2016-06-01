@@ -3,6 +3,7 @@
 const path = require('path');
 const cfenv = require('cfenv');
 
+const roles = require('./all/roles');
 const env = cfenv.getAppEnv();
 env.host = env.url.replace(`:${env.port}`, '');
 
@@ -52,11 +53,17 @@ module.exports = {
   },
   authentication: {
     messages: {
-      badlogin: 'Email and/or passowrd incorrect',
+      login: {
+        error: 'Email and/or passowrd incorrect',
+      },
     },
-    paths: {
-      login: '/login',
-      logout: '/logout',
+    login: {
+      path: '/login',
+      title: 'Login',
+    },
+    logout: {
+      path: '/logout',
+      title: 'Logout',
     },
   },
   env,
@@ -65,10 +72,12 @@ module.exports = {
     secret: process.env.COOKIE_SECRET || 'babka',
   },
   roles: {
-    config: {
-      file: path.join(__dirname, 'all/roles.js'),
-      error: 'Configuration must be an array',
+    messages: {
+      config: {
+        type: 'Configuration must be an array',
+      },
     },
+    config: roles,
   },
   users: {
     home: {
