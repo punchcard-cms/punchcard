@@ -50,6 +50,15 @@ module.exports = {
       },
     ],
   },
+  authentication: {
+    messages: {
+      badlogin: 'Email and/or passowrd incorrect',
+    },
+    paths: {
+      login: '/login',
+      logout: '/logout',
+    },
+  },
   env,
   cookies: {
     secure: false,
