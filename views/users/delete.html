@@ -10,12 +10,16 @@
 {% endblock %}
 
 {% block main %}
-  {% include "users/_form.html" %}
+<form action="{{action}}" method="post" enctype="multipart/form-data">
+
+  <p>Delete {{email}}?</p>
+  <p>This cannot be undone!</p>
+
+  <button type="submit">Delete</button>
+</form>
+
 {% endblock %}
 
 {% block footer %}
   {{ super() }}
-  <script type="text/javascript">
-    {{form.validation|safe}}
-  </script>
 {% endblock %}
