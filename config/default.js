@@ -55,6 +55,12 @@ module.exports = {
     secure: false,
     secret: process.env.COOKIE_SECRET || 'babka',
   },
+  roles: {
+    config: {
+      file: path.join(__dirname, 'all/roles.js'),
+      error: 'Configuration must be an array',
+    },
+  },
   users: {
     home: {
       path: '/users',
