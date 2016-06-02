@@ -1,10 +1,13 @@
 import test from 'ava';
 import request from 'supertest';
 import bcrypt from 'bcrypt-nodejs';
+import Promise from 'bluebird';
 
 import punchcard from '../';
 import database from '../lib/database';
 
+let agent;
+let cookie;
 
 const accounts = [
   {
@@ -20,146 +23,124 @@ const accounts = [
 ];
 
 const userCheck = (usr) => {
-  database.select('*').from('users').where({
+  return database.select('*').from('users').where({
     email: usr.email,
-  })
-  .then(user => {
+  }).then(user => {
     if (user.length < 1) {
-      database('users').insert({
+      return database('users').insert({
         email: usr.email,
         password: bcrypt.hashSync(usr.password),
         role: usr.role,
-      })
-      .then(() => {
-        console.log('user created?');
       });
     }
+
+    return [];
   });
 };
 
 // cue up our application for all tests
-test.cb.beforeEach((t) => {
-  t.context.agent = request.agent(); // eslint-disable-line
+test.cb.before((t) => {
   punchcard().then(app => {
-    accounts.forEach((usr) => {
-      userCheck(usr);
-    });
+    agent = request.agent(app);
 
-
-    request(app)
-      .post('/login')
+    return Promise.map(accounts, userCheck);
+  }).then(() => {
+    agent.post('/login')
       .send({
-        username: accounts[0].email,
+        email: accounts[0].email,
         password: accounts[0].password,
+        provider: 'local',
       })
+      .expect('set-cookie', /connect.sid/)
+      .expect(302)
+      .expect('location', '/')
       .end((err, res) => { // eslint-disable-line
-        if (err) return err;
-        t.context.agent.saveCookies(res); // eslint-disable-line
-        t.context.request = request(app); // eslint-disable-line
+        if (err) throw err;
+
+        cookie = res.headers['set-cookie'];
         t.end();
       });
   });
 });
 
-test.cb('CMS Login', t => {
-  t.pass();
-  t.end();
-
-  // @snugug: this is where I got. It looks like attachCookies may not exist. Good luck!
-  // const req = t.context.agent.attachCookies(t.context.request);
-  // req
-  //   .get('/')
-  //   .end((err, res) => {
-  //       console.log('I no ERR NONONONONO');
-
-  //     t.is(err, null, 'Should not have an error');
-  //     t.is(res.status, 200, 'should return status 200');
-  //     t.pass();
-  //     t.end();
-  //   });
-});
-
-test.cb.skip('CMS Landing Page', t => {
-  t.context.request
+test.cb('CMS Landing Page', t => {
+  agent
     .get('/')
+    .set('cookie', cookie)
+    .expect(200)
     .end((err, res) => {
       t.is(err, null, 'Should not have an error');
-      t.is(res.status, 200, 'should return status 200');
       t.regex(res.text, /DOCTYPE html/, 'should have an html doctype');
       t.end();
     });
 });
 
-// test.cb.skip('CMS Landing Page', t => {
-//   t.context.request
-//     .get('/')
-//     .end((err, res) => {
-//       t.is(err, null, 'Should not have an error');
-//       t.is(res.status, 200, 'should return status 200');
-//       t.regex(res.text, /DOCTYPE html/, 'should have an html doctype');
-//       t.end();
-//     });
-// });
+test.cb('Content Landing Page', t => {
+  agent
+    .get('/content')
+    .set('cookie', cookie)
+    .expect(200)
+    .end((err, res) => {
+      t.is(err, null, 'Should not have an error');
+      t.regex(res.text, /DOCTYPE html/, 'should have an html doctype');
 
-// test.cb.skip('Content Landing Page', t => {
-//   t.context.request
-//     .get('/content')
-//     .end((err, res) => {
-//       t.is(err, null, 'Should not have an error');
-//       t.is(res.status, 200, 'should return status 200');
-//       t.regex(res.text, /DOCTYPE html/, 'should have an html doctype');
-//       t.end();
-//     });
-// });
+      t.end();
+    });
+});
 
-// test.cb.skip('Content Type Landing Page', t => {
-//   t.context.request
-//     .get('/content/services')
-//     .end((err, res) => {
-//       t.is(err, null, 'Should not have an error');
-//       t.is(res.status, 200, 'should return status 200');
-//       t.regex(res.text, /DOCTYPE html/, 'should have an html doctype');
-//       t.end();
-//     });
-// });
+test.cb('Content Type Landing Page', t => {
+  agent
+    .get('/content/services')
+    .expect(200)
+    .end((err, res) => {
+      t.is(err, null, 'Should not have an error');
+      t.regex(res.text, /DOCTYPE html/, 'should have an html doctype');
 
-// test.cb.skip('Invalid Content Type - Landing', t => {
-//   t.context.request
-//     .get('/content/foo')
-//     .end((err, res) => {
-//       t.is(err, null, 'Should not have an error');
-//       t.is(res.status, 404, 'should return status 404');
-//       t.end();
-//     });
-// });
+      t.end();
+    });
+});
 
-// test.cb.skip('Content Type Add Page', t => {
-//   t.context.request
-//     .get('/content/services/add')
-//     .end((err, res) => {
-//       t.is(err, null, 'Should not have an error');
-//       t.is(res.status, 200, 'should return status 200');
-//       t.regex(res.text, /DOCTYPE html/, 'should have an html doctype');
-//       t.end();
-//     });
-// });
+test.cb('Invalid Content Type - Landing', t => {
+  agent
+    .get('/content/foo')
+    .expect(404)
+    .end(err => {
+      t.is(err, null, 'Should not have an error');
+      t.end();
+    });
+});
 
-// test.cb.skip('Invalid Content Type - Add', t => {
-//   t.context.request
-//     .get('/content/foo/add')
-//     .end((err, res) => {
-//       t.is(err, null, 'Should not have an error');
-//       t.is(res.status, 404, 'should return status 404');
-//       t.end();
-//     });
-// });
+test.cb('Content Type Add Page', t => {
+  agent
+    .get('/content/services/add')
+    .expect(200)
+    .end((err, res) => {
+      if (err) {
+        t.fail(err);
+      }
 
-// test.cb.skip('404 Page', t => {
-//   t.context.request
-//     .get('/foo')
-//     .end((err, res) => {
-//       t.is(err, null, 'Should not have an error');
-//       t.is(res.status, 404, 'should return status 404');
-//       t.end();
-//     });
-// });
+      t.regex(res.text, /DOCTYPE html/, 'should have an html doctype');
+
+      t.end();
+    });
+});
+
+test.cb('Invalid Content Type - Add', t => {
+  agent
+    .get('/content/foo/add')
+    .expect(404)
+    .end(err => {
+      t.is(err, null, 'Should not have an error');
+      t.end();
+    });
+});
+
+test.cb('404 Page', t => {
+  agent
+    .get('/foo')
+    .expect(404)
+    .end(err => {
+      t.is(err, null, 'Should not have an error');
+      t.end();
+    });
+});
