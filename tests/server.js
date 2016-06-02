@@ -9,7 +9,7 @@ import database from '../lib/database';
 let agent;
 let cookie;
 
-const accounts = [
+let accounts = [
   {
     email: 'admin@test.com',
     password: 'pa55word',
@@ -22,10 +22,14 @@ const accounts = [
   },
 ];
 
-const userCheck = (usr) => {
+const getUser = (usr) => {
   return database.select('*').from('users').where({
     email: usr.email,
-  }).then(user => {
+  });
+};
+
+const userCheck = (usr) => {
+  return getUser(usr).then(user => {
     if (user.length < 1) {
       return database('users').insert({
         email: usr.email,
@@ -45,6 +49,23 @@ test.cb.before((t) => {
 
     return Promise.map(accounts, userCheck);
   }).then(() => {
+    return Promise.map(accounts, getUser);
+  }).then((users) => {
+    accounts = accounts.map(account => {
+      const act = account;
+      const usr = users.filter(user => {
+        if (user[0].email === account.email) {
+          return true;
+        }
+
+        return false;
+      })[0][0];
+
+      act.id = usr.id;
+
+      return act;
+    });
+
     agent.post('/login')
       .send({
         email: accounts[0].email,
@@ -75,6 +96,9 @@ test.cb('CMS Landing Page', t => {
     });
 });
 
+//////////////////////////////
+// Content Pages
+//////////////////////////////
 test.cb('Content Landing Page', t => {
   agent
     .get('/content')
@@ -91,6 +115,7 @@ test.cb('Content Landing Page', t => {
 test.cb('Content Type Landing Page', t => {
   agent
     .get('/content/services')
+    .set('cookie', cookie)
     .expect(200)
     .end((err, res) => {
       t.is(err, null, 'Should not have an error');
@@ -103,6 +128,7 @@ test.cb('Content Type Landing Page', t => {
 test.cb('Invalid Content Type - Landing', t => {
   agent
     .get('/content/foo')
+    .set('cookie', cookie)
     .expect(404)
     .end(err => {
       t.is(err, null, 'Should not have an error');
@@ -113,12 +139,10 @@ test.cb('Invalid Content Type - Landing', t => {
 test.cb('Content Type Add Page', t => {
   agent
     .get('/content/services/add')
+    .set('cookie', cookie)
     .expect(200)
     .end((err, res) => {
-      if (err) {
-        t.fail(err);
-      }
-
+      t.is(err, null, 'Should not have an error');
       t.regex(res.text, /DOCTYPE html/, 'should have an html doctype');
 
       t.end();
@@ -128,6 +152,7 @@ test.cb('Content Type Add Page', t => {
 test.cb('Invalid Content Type - Add', t => {
   agent
     .get('/content/foo/add')
+    .set('cookie', cookie)
     .expect(404)
     .end(err => {
       t.is(err, null, 'Should not have an error');
@@ -135,12 +160,71 @@ test.cb('Invalid Content Type - Add', t => {
     });
 });
 
+//////////////////////////////
+// 404 Pages
+//////////////////////////////
 test.cb('404 Page', t => {
   agent
     .get('/foo')
+    .set('cookie', cookie)
     .expect(404)
     .end(err => {
       t.is(err, null, 'Should not have an error');
+      t.end();
+    });
+});
+
+//////////////////////////////
+// User Pages
+//////////////////////////////
+test.cb('Users Landing Page', t => {
+  agent
+    .get('/users')
+    .set('cookie', cookie)
+    .expect(200)
+    .end((err, res) => {
+      t.is(err, null, 'Should not have an error');
+      t.regex(res.text, /DOCTYPE html/, 'should have an html doctype');
+
+      t.end();
+    });
+});
+
+test.cb('Users Add Landing Page', t => {
+  agent
+    .get('/users/add')
+    .set('cookie', cookie)
+    .expect(200)
+    .end((err, res) => {
+      t.is(err, null, 'Should not have an error');
+      t.regex(res.text, /DOCTYPE html/, 'should have an html doctype');
+
+      t.end();
+    });
+});
+
+test.cb('Users Edit Landing Page', t => {
+  agent
+    .get(`/users/edit/${accounts[1].id}`)
+    .set('cookie', cookie)
+    .expect(200)
+    .end((err, res) => {
+      t.is(err, null, 'Should not have an error');
+      t.regex(res.text, /DOCTYPE html/, 'should have an html doctype');
+
+      t.end();
+    });
+});
+
+test.cb('Users Delete Landing Page', t => {
+  agent
+    .get(`/users/delete/${accounts[1].id}`)
+    .set('cookie', cookie)
+    .expect(200)
+    .end((err, res) => {
+      t.is(err, null, 'Should not have an error');
+      t.regex(res.text, /DOCTYPE html/, 'should have an html doctype');
+
       t.end();
     });
 });
