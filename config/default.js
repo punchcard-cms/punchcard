@@ -98,6 +98,5 @@ module.exports = {
       title: 'Delete a user',
       error: 'User does not exist',
     },
-    configFile: path.join(__dirname, '../lib/users/users.yml'),
   },
 };
