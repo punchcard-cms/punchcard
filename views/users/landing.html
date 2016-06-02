@@ -10,19 +10,19 @@
 {% endblock %}
 
 {% block main %}
-<p><a href="{{config.home.path}}/add">ADD A NEW USER</a></p>
+<p><a href="{{config.base}}/{{config.actions.add}}">{{config.base}} | {{config.actions.add}}</a></p>
 <h2>Content</h2>
 
 {% if users %}
   <table>
-    <tr><th>email</th><th>role</th><th>edit</th><th>delete</th><th>date</th></tr>
+    <tr><th>email</th><th>role</th><th>{{config.actions.edit}}</th><th>{{config.actions.delete}}</th><th>date</th></tr>
   {% for user in users %}
     {% if user.email %}
       <tr>
         <td>{{user.email}}</td>
         <td>{{user.role}}</td>
-        <td><a href="{{config.home.path}}/edit/{{user.id}}">EDIT</a></td>
-        <td><a href="{{config.home.path}}/delete/{{user.id}}">DEL</a></td>
+        <td><a href="{{config.base}}/{{config.actions.edit}}/{{user.id}}">{{config.actions.edit}}</a></td>
+        <td><a href="{{config.base}}/{{config.actions.delete}}/{{user.id}}">{{config.actions.delete}}</a></td>
         <td>{{user.created}}</td>
       </tr>
     {% endif %}

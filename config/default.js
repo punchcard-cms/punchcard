@@ -80,23 +80,17 @@ module.exports = {
     config: roles,
   },
   users: {
-    home: {
-      path: '/users',
-      title: 'Users',
+    base: 'users',
+    actions: {
+      add: 'add',
+      edit: 'edit',
+      delete: 'delete',
     },
-    add: {
-      path: '/users/add',
-      title: 'Add a new user',
-    },
-    edit: {
-      path: '/users/edit',
-      title: 'Edit a user',
-      error: 'User does not exist',
-    },
-    delete: {
-      path: '/users/delete',
-      title: 'Delete a user',
-      error: 'User does not exist',
+    messages: {
+      errors: {
+        edit: 'User does not exist',
+        delete: 'User does not exist',
+      },
     },
   },
 };
