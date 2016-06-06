@@ -3,6 +3,7 @@
 const path = require('path');
 const cfenv = require('cfenv');
 
+const roles = require('./all/roles');
 const env = cfenv.getAppEnv();
 env.host = env.url.replace(`:${env.port}`, '');
 
@@ -44,19 +45,52 @@ module.exports = {
         path: 'content',
         label: 'Content',
       },
+      {
+        path: 'users',
+        label: 'Users',
+      },
     ],
+  },
+  authentication: {
+    messages: {
+      login: {
+        error: 'Email and/or passowrd incorrect',
+      },
+    },
+    login: {
+      path: '/login',
+      title: 'Login',
+    },
+    logout: {
+      path: '/logout',
+      title: 'Logout',
+    },
   },
   env,
   cookies: {
     secure: false,
     secret: process.env.COOKIE_SECRET || 'babka',
   },
-  users: {
-    usersHome: {
-      path: '/users',
-      title: 'Users',
-      desc: 'This is the users landing page.',
+  roles: {
+    messages: {
+      config: {
+        type: 'Configuration must be an array',
+      },
     },
-    configFile: path.join(__dirname, '../lib/users/users.yml'),
+    config: roles,
+  },
+  users: {
+    base: 'users',
+    actions: {
+      add: 'add',
+      edit: 'edit',
+      delete: 'delete',
+    },
+    messages: {
+      errors: {
+        edit: 'User does not exist',
+        delete: 'User does not exist',
+      },
+    },
   },
 };

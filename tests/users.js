@@ -1,5 +1,6 @@
 import test from 'ava';
 import users from '../lib/users';
+import userRoutes from '../lib/routes/users';
 
 
 const model = {
@@ -17,8 +18,8 @@ const model = {
 };
 
 test('Exports exist', t => {
-  t.is(typeof users.routes, 'function', 'Submodule `routes` exists and is a function');
-  t.is(typeof users, 'function', 'Submodule `model` exists, is the primary for `users`, and is a function');
+  t.is(typeof userRoutes, 'function', 'Submodule `routes` exists and is a function');
+  t.is(typeof users, 'function', 'Submodule `model`, is the primary for `users`, and is a function');
 });
 
 test('Users, with config, merged with correct param', t => {
@@ -35,7 +36,7 @@ test('Users merged with correct param', t => {
   return users()
     .then(result => {
       t.is(result[0].name, 'Users', 'Get users content type name');
-      t.is(result[0].description, 'A users content model.', 'Get users content type desc');
+      t.is(result[0].description, 'An individual user', 'Get users content type desc');
       t.is(result[0].id, 'users', 'Get users content type id');
       t.is(result[0].attributes[1].name, 'Password', 'Password attribute name');
       t.is(result[0].attributes[1].id, 'password', 'Password attribute id');
