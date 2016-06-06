@@ -16,14 +16,18 @@
 {% if users %}
   <table>
     <tr><th>email</th><th>role</th><th>{{config.actions.edit}}</th><th>{{config.actions.delete}}</th><th>date</th></tr>
-  {% for user in users %}
-    {% if user.email %}
+  {% for u in users %}
+    {% if u.email %}
       <tr>
-        <td>{{user.email}}</td>
-        <td>{{user.role}}</td>
-        <td><a href="{{config.base}}/{{config.actions.edit}}/{{user.id}}">{{config.actions.edit}}</a></td>
-        <td><a href="{{config.base}}/{{config.actions.delete}}/{{user.id}}">{{config.actions.delete}}</a></td>
-        <td>{{user.created}}</td>
+        <td>{{u.email}}</td>
+        <td>{{u.role}}</td>
+        <td><a href="{{config.base}}/{{u.id}}/{{config.actions.edit}}">{{config.actions.edit}}</a></td>
+        <td>
+        {% if u.id != user.id %}
+        <a href="{{config.base}}/{{u.id}}/{{config.actions.delete}}">{{config.actions.delete}}</a>
+        {% endif %}
+        </td>
+        <td>{{u.created}}</td>
       </tr>
     {% endif %}
   {% endfor %}
