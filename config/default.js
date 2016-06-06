@@ -90,6 +90,7 @@ module.exports = {
       errors: {
         edit: 'User does not exist',
         delete: 'User does not exist',
+        current: 'Cannot delete logged-in user',
       },
     },
   },

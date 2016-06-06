@@ -205,7 +205,7 @@ test.cb('Users Add Landing Page', t => {
 
 test.cb('Users Edit Landing Page', t => {
   agent
-    .get(`/users/edit/${accounts[1].id}`)
+    .get(`/users/${accounts[1].id}/edit`)
     .set('cookie', cookie)
     .expect(200)
     .end((err, res) => {
@@ -218,7 +218,7 @@ test.cb('Users Edit Landing Page', t => {
 
 test.cb('Users Delete Landing Page', t => {
   agent
-    .get(`/users/delete/${accounts[1].id}`)
+    .get(`/users/${accounts[1].id}/delete`)
     .set('cookie', cookie)
     .expect(200)
     .end((err, res) => {
