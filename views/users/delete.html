@@ -6,10 +6,10 @@
 
 {% block header %}
   {{ super() }}
-  <h1>{{title}}</h1>
 {% endblock %}
 
 {% block main %}
+<h1>{{title}}</h1>
 <form action="{{action}}" method="post" enctype="multipart/form-data">
 
   <p>Delete {{email}}?</p>

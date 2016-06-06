@@ -1,5 +1,10 @@
-@import 'colors';
+@import 'ibm-colors';
+@import 'fonts';
+@import 'mixins';
 
-body {
-  background-color: $punchcard-lightgray;
-}
+@import 'main';
+
+@import 'forms';
+
+@import 'header';
+@import 'footer';

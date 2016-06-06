@@ -1,0 +1,28 @@
+header {
+  background-color: color('teal', 90);
+  height: 50px;
+}
+
+.main-nav {
+
+  @include vertical-align();
+
+  ul {
+    display: inline-flex;
+    list-style-type: none;
+  }
+
+  li {
+    flex-direction: row;
+  }
+
+  a {
+    color: white;
+    padding: 1em;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
