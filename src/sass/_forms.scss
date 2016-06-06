@@ -1,0 +1,31 @@
+
+// Users Table
+@email-width: 200px;
+@role-width: 100px;
+@edit-width: 50px;
+@delete-width: 50px;
+@created-width: 100px;
+
+.user-row {
+  display: flex;
+  display: -webkit-flex;
+  flex-direction: row;
+  -webkit-flex-direction: row;
+  flex-wrap: no-wrap;
+  -webkit-flex-wrap: no-wrap;
+  width: 100%;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+.user-header {
+  background-color: color('gray', 10);
+}
+
+.user-column {
+  flex-grow: 0; 
+  -webkit-flex-grow: 0;
+  flex-shrink: 0; 
+  -webkit-flex-shrink: 0;
+  vertical-align: top;
+}

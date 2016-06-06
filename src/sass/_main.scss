@@ -1,0 +1,26 @@
+* {
+  margin: 0;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  background-color: white;
+  font-family: $font-stack;
+  margin: 0;
+}
+
+.wrapper {
+  margin: 1em;
+  margin-bottom: -50px;
+  min-height: 100%;
+
+  :after {
+    content: '';
+    display: block;
+    height: 75px;
+  }
+}

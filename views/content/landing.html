@@ -6,11 +6,11 @@
 
 {% block header %}
   {{ super() }}
-  <h1>{{title}}</h1>
 {% endblock %}
 
 {% block main %}
-<p><a href="/{{config.base}}/{{type.id}}/{{config.actions.add}}">{{config.base}} | {{config.actions.add}}</a></p>
+<h1>{{content.type.name}}</h1>
+<p><a href="{{content.base}}/{{content.actions.add}}">Add New {{content.type.name}}</a></p>
 <h2>Content</h2>
 
 {% if content %}
