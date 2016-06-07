@@ -1,10 +1,30 @@
+////////////////////////
+// Compass Extensions
+@import "toolkit";
+@import "toolkit/kickstart";
 @import 'ibm-colors';
-@import 'fonts';
-@import 'mixins';
+////////////////////////
 
-@import 'main';
+//////////////////////////////
+// GLOBALS
+@import "partials/global/variables";
+@import "partials/global/functions";
+@import "partials/global/mixins";
+@import "partials/global/extends";
+//////////////////////////////
 
-@import 'forms';
+//////////////////////////////
+// BASE
+@import "partials/base/content";
+//////////////////////////////
 
-@import 'header';
-@import 'footer';
+//////////////////////////////
+// COMPONENTS
+@import "partials/components/forms";
+//////////////////////////////
+
+//////////////////////////////
+// LAYOUTS
+@import "partials/layouts/header";
+@import "partials/layouts/footer";
+//////////////////////////////
