@@ -1,6 +1,6 @@
 {
   "name": "punchcard-cms",
-  "version": "0.1.0-alpha.3",
+  "version": "0.1.0-alpha.4",
   "description": "Node-based content management system",
   "main": "index.js",
   "keywords": [
