@@ -16,7 +16,8 @@ const initApp = () => {
   return init(application).then(app => {
     return routes(app);
   }).catch(e => {
-    throw new Error(e);
+    // Mean to console.log out, so disabling
+    console.log(e.stack); // eslint-disable-line no-console
   });
 };
 
