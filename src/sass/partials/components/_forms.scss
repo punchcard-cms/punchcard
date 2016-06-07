@@ -1,4 +1,38 @@
 
+// Content Forms
+.content-form {
+  padding: 1em 0;
+
+  label {
+    padding: 5px 0;
+  }
+
+  .form--field {
+    display: grid;
+    grid-template-columns: auto;
+    grid-template-rows: auto;
+    padding: .5em 0;
+  }
+
+  .form--description {
+    font-size: .8em;
+    padding: 5px 0;
+  }
+  @include breakpoint($small) {
+    label,
+    input,
+    .form-description {
+      display: block;
+    }
+  }
+
+  fieldset {
+    margin: 1em 0;
+  }
+}
+
+
+
 // Users Table
 @email-width: 200px;
 @role-width: 100px;
@@ -6,26 +40,27 @@
 @delete-width: 50px;
 @created-width: 100px;
 
-.user-row {
+.table-row {
   display: flex;
-  display: -webkit-flex;
   flex-direction: row;
-  -webkit-flex-direction: row;
   flex-wrap: no-wrap;
-  -webkit-flex-wrap: no-wrap;
-  width: 100%;
+  justify-content: flex-start;
   padding-left: 15px;
   padding-right: 15px;
+  width: 100%;
 }
 
-.user-header {
+.table-header {
   background-color: color('gray', 10);
 }
 
-.user-column {
-  flex-grow: 0; 
-  -webkit-flex-grow: 0;
-  flex-shrink: 0; 
-  -webkit-flex-shrink: 0;
+.table-column {
+  flex-grow: 1;
+  flex-shrink: 0;
+  flex-basis: 0;
   vertical-align: top;
+}
+
+.user-created {
+  flex-grow: 2;
 }

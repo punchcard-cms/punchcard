@@ -13,7 +13,7 @@
 <p><a href="{{content.base}}/{{content.actions.add}}">Add New {{content.type.name}}</a></p>
 <h2>Content</h2>
 
-{# {% if contentTypeContent %}
+{% if contentTypeContent %}
   <table>
     <tr><th>name</th><th>edit</th><th>delete</th><th>date</th></tr>
   {% for entry in contentTypeContent %}
@@ -27,7 +27,7 @@
     {% endif %}
   {% endfor %}
   </table>
-{% endif %} #}
+{% endif %}
 {% endblock %}
 
 {% block footer %}
