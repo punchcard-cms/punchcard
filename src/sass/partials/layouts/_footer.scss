@@ -1,5 +1,26 @@
 .site-footer {
   background: color('gray', 90);
-  color: white;
+  color: $white;
   height: 50px;
+}
+
+.footer-wrapper {
+  @include vertical-center(50%, false);
+
+  @include breakpoint($small) {
+    max-width: $small;
+    padding: 0 1em;
+  }
+
+  @include breakpoint($medium) {
+    max-width: $medium;
+    padding: 0 1em;
+  }
+
+  @include breakpoint($large) {
+    max-width: $large;
+  }
+
+  margin: 0 auto;
+  padding: 0 1em;
 }

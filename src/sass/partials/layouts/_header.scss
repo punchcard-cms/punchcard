@@ -5,11 +5,28 @@ header {
 
 .main-nav {
 
-  @include vertical-align();
+  @include vertical-center(50%, false);
+
+  @include breakpoint($small) {
+    max-width: $small;
+    padding: 0 1em;
+  }
+
+  @include breakpoint($medium) {
+    max-width: $medium;
+    padding: 0 1em;
+  }
+
+  @include breakpoint($large) {
+    max-width: $large;
+  }
+
+  margin: 0 auto;
 
   ul {
     display: inline-flex;
     list-style-type: none;
+    padding: 0px;
   }
 
   li {
@@ -17,7 +34,7 @@ header {
   }
 
   a {
-    color: white;
+    color: $white;
     padding: 1em;
     text-decoration: none;
 

@@ -13,23 +13,23 @@
 <p><a href="{{config.base}}/{{config.actions.add}}">{{config.base}} | {{config.actions.add}}</a></p>
 <h2>Content</h2>
 
-  <div class="user-fluid">
-    <div class="user-row user-header">
-      <div class="user-column user-email">email</div>
-      <div class="user-column user-role">role</div>
-      <div class="user-column user-edit">edit user</div>
-      <div class="user-column user-delete">delete user</div>
-      <div class="user-column user-created">date</div>
+  <div class="table-fluid">
+    <div class="table-row table-header">
+      <div class="table-column user-email">email</div>
+      <div class="table-column user-role">role</div>
+      <div class="table-column user-edit">edit user</div>
+      <div class="table-column user-delete">delete user</div>
+      <div class="table-column user-created">date</div>
     </div>
     {% if users %}
     {% for user in users %}
       {% if user.email %}
-        <div class="user-row">
-          <div class="user-column user-email">{{user.email}}</div>
-          <div class="user-column user-role">{{user.role}}</div>
-          <div class="user-column user-edit"><a href="{{config.base}}/{{config.actions.edit}}/{{user.id}}">{{config.actions.edit}}</a></div>
-          <div class="user-column user-delete"><a href="{{config.base}}/{{config.actions.delete}}/{{user.id}}">{{config.actions.delete}}</a></div>
-          <div class="user-column user-created">{{user.created}}</div>
+        <div class="table-row">
+          <div class="table-column user-email">{{user.email}}</div>
+          <div class="table-column user-role">{{user.role}}</div>
+          <div class="table-column user-edit"><a href="{{config.base}}/{{config.actions.edit}}/{{user.id}}">{{config.actions.edit}}</a></div>
+          <div class="table-column user-delete"><a href="{{config.base}}/{{config.actions.delete}}/{{user.id}}">{{config.actions.delete}}</a></div>
+          <div class="table-column user-created">{{user.created}}</div>
         </div>
       {% endif %}
     {% endfor %}

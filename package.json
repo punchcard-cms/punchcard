@@ -73,6 +73,7 @@
   },
   "devDependencies": {
     "ava": "^0.15.2",
+    "breakpoint-sass": "^2.7.0",
     "coveralls": "^2.11.9",
     "ghooks": "^1.2.3",
     "input-plugin-email": "0.1.0",
@@ -82,6 +83,7 @@
     "nyc": "^6.0.0",
     "punchcard-commit-msg": "^1.0.0",
     "punchcard-runner": "^2.1.2",
+    "sass-toolkit": "^2.10.0",
     "supertest": "^1.2.0",
     "tap-diff": "^0.1.1"
   },

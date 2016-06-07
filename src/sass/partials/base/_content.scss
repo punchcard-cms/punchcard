@@ -1,6 +1,6 @@
-@import "content/variables";
-@import "content/mixins";
-@import "content/extends";
+@import 'content/variables';
+@import 'content/mixins';
+@import 'content/extends';
 
 * {
   margin: 0;
@@ -12,14 +12,31 @@ body {
 }
 
 body {
-  background-color: white;
+  background-color: $white;
   font-family: $font-stack;
   margin: 0;
 }
 
 .wrapper {
-  margin: 1em;
+
+  @include breakpoint($small) {
+    max-width: 600px;
+    padding: 0 1em;
+  }
+
+  @include breakpoint($medium) {
+    max-width: 900px;
+    padding: 0 1em;
+  }
+
+  @include breakpoint($large) {
+    max-width: 1200px;
+    padding: 0 1em;
+  }
+
+  margin: 0 auto;
   margin-bottom: -50px;
+  margin-top: 50px;
   min-height: 100%;
 
   &:after {
