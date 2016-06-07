@@ -66,13 +66,13 @@
     "nunjucks": "^2.3.0",
     "passport": "^0.3.2",
     "passport-local": "^1.0.0",
-    "pg": "^4.5.2",
-    "punchcard-content-types": "^0.5.1",
+    "pg": "^4.5.6",
+    "punchcard-content-types": "^0.5.2",
     "serve-favicon": "^2.3.0",
     "uuid": "^2.0.2"
   },
   "devDependencies": {
-    "ava": "^0.15.1",
+    "ava": "^0.15.2",
     "coveralls": "^2.11.9",
     "input-plugin-email": "0.1.0",
     "input-plugin-text": "0.0.5",
