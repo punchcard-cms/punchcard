@@ -67,7 +67,7 @@
     "passport": "^0.3.2",
     "passport-local": "^1.0.0",
     "pg": "^4.5.2",
-    "punchcard-content-types": "^0.5.1",
+    "punchcard-content-types": "git+ssh://git@github.com/scottnath/content-types.git#feature/required-inputs",
     "serve-favicon": "^2.3.0",
     "uuid": "^2.0.2"
   },
@@ -78,6 +78,8 @@
     "gulp": "^3.9.1",
     "input-plugin-email": "0.1.0",
     "input-plugin-text": "0.0.5",
+    "input-plugin-textarea": "0.0.1",
+    "input-plugin-url": "0.0.1",
     "jsdom": "^9.2.0",
     "mock-express-response": "^0.1.2",
     "nyc": "^6.0.0",

@@ -17,31 +17,54 @@ body {
   margin: 0;
 }
 
+h1,
+h2 {
+  padding: .5em 0;
+}
+
 .wrapper {
 
   @include breakpoint($small) {
     max-width: 600px;
-    padding: 0 1em;
   }
 
   @include breakpoint($medium) {
     max-width: 900px;
-    padding: 0 1em;
   }
 
   @include breakpoint($large) {
     max-width: 1200px;
-    padding: 0 1em;
   }
 
   margin: 0 auto;
   margin-bottom: -50px;
   margin-top: 50px;
   min-height: 100%;
+  padding: 0 1em;
 
   &:after {
     content: '';
     display: block;
     height: 75px;
+  }
+
+  a {
+    color: color('teal', 60);
+    text-decoration: none;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  .punchcard-logomark {
+    width: 250px;
+    margin: 0 auto;
+    display: block;
+    margin-top: 75px;
+  }
+
+  ul.content-type-list {
+    padding: 1em;
+    list-style-type: none;
   }
 }

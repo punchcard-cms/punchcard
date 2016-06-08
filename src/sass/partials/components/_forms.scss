@@ -4,7 +4,13 @@
   padding: 1em 0;
 
   label {
-    padding: 5px 0;
+    display: block;
+    margin: 5px 0;
+  }
+
+  input {
+    display: block;
+    padding: 5px;
   }
 
   .form--field {
@@ -12,6 +18,11 @@
     grid-template-columns: auto;
     grid-template-rows: auto;
     padding: .5em 0;
+  }
+
+  .form--alert {
+    color: red;
+    font-size: .8em;
   }
 
   .form--description {
@@ -55,9 +66,9 @@
 }
 
 .table-column {
+  flex-basis: 0;
   flex-grow: 1;
   flex-shrink: 0;
-  flex-basis: 0;
   vertical-align: top;
 }
 
