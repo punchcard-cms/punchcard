@@ -19,7 +19,7 @@
   {% for c in content %}
     {% if c.value %}
       <tr>
-        <td>{{c.value['service-name--text']}}</td>
+        <td>{{c.value[type.primary]}}</td>
         <td><a href="/{{config.base}}/{{type.id}}/{{c.id}}/{{config.actions.edit}}">{{config.actions.edit}}</a></td>
         <td>{{c.created}}</td>
       </tr>
