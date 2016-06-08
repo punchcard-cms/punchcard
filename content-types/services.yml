@@ -5,6 +5,7 @@ attributes:
   - type: text
     id: service-name
     name: Service Name
+    required: save
     description: Write a really cool name please.
     inputs:
       text:
@@ -22,6 +23,7 @@ attributes:
     inputs:
       text:
         placeholder: add svc url
+        required: save
   - type: email
     id: service-email
     name: Service Email
