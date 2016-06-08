@@ -15,13 +15,12 @@
 
 {% if content %}
   <table>
-    <tr><th>{{config.base}}</th><th>{{config.actions.edit}}</th><th>{{config.actions.delete}}</th><th>date</th></tr>
+    <tr><th>{{config.base}}</th><th>{{config.actions.edit}}</th><th>date</th></tr>
   {% for c in content %}
     {% if c.value %}
       <tr>
         <td>{{c.value['service-name--text']}}</td>
         <td><a href="/{{config.base}}/{{type.id}}/{{c.id}}/{{config.actions.edit}}">{{config.actions.edit}}</a></td>
-        <td><a href="/{{config.base}}/{{type.id}}/{{c.id}}/{{config.actions.delete}}">{{config.actions.delete}}</a></td>
         <td>{{c.created}}</td>
       </tr>
     {% endif %}
