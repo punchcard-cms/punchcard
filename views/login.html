@@ -9,7 +9,7 @@
 {% endblock %}
 
 {% block main %}
-<form action="/login" method="post">
+<form action="/login" method="post" novalidate>
   {{message}}
   <div><label for="email">Email:<input type="text" id="email" name="email"/></label></div>
   <div><label for="password">Password:<input type="password" id="password" name="password"/></label></div>
