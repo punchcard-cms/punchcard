@@ -14,7 +14,7 @@
 <p class="form--alert" role="alert" for="delete">{{ message }}</p>
 {% endif %}
 
-<form action="{{action}}" method="post" enctype="multipart/form-data">
+<form action="{{action}}" method="post" enctype="multipart/form-data" novalidate>
 
   <p>Delete {{email}}?</p>
   <p>This cannot be undone!</p>
