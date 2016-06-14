@@ -227,7 +227,7 @@ test.cb('Invalid Content Type - Edit', t => {
 
 test.cb('Content Type Post data', t => {
   agent
-    .post(`/content/services/save`)
+    .post('/content/services/save')
     .field('language', 'test-dummy-entry')
     .set('cookie', cookie)
     .expect(302)
@@ -241,7 +241,7 @@ test.cb('Content Type Post data', t => {
 
 test.cb('Invalid Content Type - Post data', t => {
   agent
-    .post(`/content/foo/save`)
+    .post('/content/foo/save')
     .field('id', serviceUuid)
     .set('cookie', cookie)
     .expect(404)
