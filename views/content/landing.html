@@ -20,7 +20,7 @@
     {% if c.value %}
       <tr>
         <td>{{c.value[type.primary]}}</td>
-        <td><a href="/{{config.base}}/{{type.id}}/{{c.id}}/{{config.actions.edit}}">{{config.actions.edit}}</a></td>
+        <td><a href="/{{config.base}}/{{type.id}}/{{c.id}}/{{c.revision}}/{{config.actions.edit}}">{{config.actions.edit}}</a></td>
         <td>{{c.created}}</td>
       </tr>
     {% endif %}

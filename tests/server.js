@@ -47,7 +47,7 @@ const userCheck = (usr) => {
 const service = [
   {
     id: serviceUuid,
-    language: 'us-en',
+    language: 'test-dummy-entry',
     publishable: false,
     value: {},
   },
@@ -70,7 +70,7 @@ const serviceCheck = (svc) => {
 };
 
 const deleteService = () => {
-  return database('content-type--services').where('id', '=', serviceUuid).del();
+  return database('content-type--services').where('language', '=', 'test-dummy-entry').del();
 };
 
 // cue up our application for all tests
@@ -203,7 +203,7 @@ test.cb('Invalid Content Type - Add', t => {
 
 test.cb('Content Type Edit Page', t => {
   agent
-    .get(`/content/services/${serviceUuid}/edit`)
+    .get(`/content/services/${serviceUuid}/null/edit`)
     .set('cookie', cookie)
     .expect(200)
     .end((err, res) => {
@@ -227,8 +227,8 @@ test.cb('Invalid Content Type - Edit', t => {
 
 test.cb('Content Type Post data', t => {
   agent
-    .post(`/content/services/${serviceUuid}/save`)
-    .field('id', serviceUuid)
+    .post(`/content/services/save`)
+    .field('language', 'test-dummy-entry')
     .set('cookie', cookie)
     .expect(302)
     .end((err, res) => {
@@ -241,7 +241,7 @@ test.cb('Content Type Post data', t => {
 
 test.cb('Invalid Content Type - Post data', t => {
   agent
-    .post(`/content/foo/${serviceUuid}/save`)
+    .post(`/content/foo/save`)
     .field('id', serviceUuid)
     .set('cookie', cookie)
     .expect(404)
