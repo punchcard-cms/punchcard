@@ -77,7 +77,6 @@
     "breakpoint-sass": "^2.7.0",
     "coveralls": "^2.11.9",
     "ghooks": "^1.2.3",
-    "gulp": "^3.9.1",
     "input-plugin-email": "0.1.0",
     "input-plugin-text": "0.0.5",
     "input-plugin-textarea": "0.0.1",
