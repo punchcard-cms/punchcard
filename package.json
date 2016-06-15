@@ -74,11 +74,13 @@
   "devDependencies": {
     "ava": "^0.15.2",
     "coveralls": "^2.11.9",
+    "ghooks": "^1.2.3",
     "input-plugin-email": "0.1.0",
     "input-plugin-text": "0.0.5",
     "jsdom": "^9.2.0",
     "mock-express-response": "^0.1.2",
     "nyc": "^6.0.0",
+    "punchcard-commit-msg": "^1.0.0",
     "punchcard-runner": "^2.1.2",
     "supertest": "^1.2.0",
     "tap-diff": "^0.1.1"
@@ -101,5 +103,10 @@
     ],
     "failFast": true,
     "tap": true
+  },
+  "config": {
+    "ghooks": {
+      "commit-msg": "punchcard-commit-msg"
+    }
   }
 }
