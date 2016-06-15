@@ -2,12 +2,14 @@ import test from 'ava';
 import request from 'supertest';
 import bcrypt from 'bcrypt-nodejs';
 import Promise from 'bluebird';
+import uuid from 'uuid';
 
 import punchcard from '../';
 import database from '../lib/database';
 
 let agent;
 let cookie;
+const serviceUuid = uuid.v4();
 
 let accounts = [
   {
@@ -42,11 +44,42 @@ const userCheck = (usr) => {
   });
 };
 
+const service = [
+  {
+    id: serviceUuid,
+    language: 'test-dummy-entry',
+    publishable: false,
+    value: {},
+  },
+];
+
+const getService = (svc) => {
+  return database.select('*').from('content-type--services').where({
+    id: svc.id,
+  });
+};
+
+const serviceCheck = (svc) => {
+  return getService(svc).then(srvc => {
+    if (srvc.length < 1) {
+      return database('content-type--services').insert(svc);
+    }
+
+    return [];
+  });
+};
+
+const deleteService = () => {
+  return database('content-type--services').where('language', '=', 'test-dummy-entry').del();
+};
+
 // cue up our application for all tests
 test.cb.before((t) => {
   punchcard().then(app => {
     agent = request.agent(app);
 
+    return Promise.map(service, serviceCheck);
+  }).then(() => {
     return Promise.map(accounts, userCheck);
   }).then(() => {
     return Promise.map(accounts, getUser);
@@ -81,6 +114,14 @@ test.cb.before((t) => {
         cookie = res.headers['set-cookie'];
         t.end();
       });
+  });
+});
+
+test.cb.after((t) => {
+  punchcard().then(() => {
+    return deleteService();
+  }).then(() => {
+    t.end();
   });
 });
 
@@ -160,6 +201,56 @@ test.cb('Invalid Content Type - Add', t => {
     });
 });
 
+test.cb('Content Type Edit Page', t => {
+  agent
+    .get(`/content/services/${serviceUuid}/null/edit`)
+    .set('cookie', cookie)
+    .expect(200)
+    .end((err, res) => {
+      t.is(err, null, 'Should not have an error');
+      t.regex(res.text, /DOCTYPE html/, 'should have an html doctype');
+
+      t.end();
+    });
+});
+
+test.cb('Invalid Content Type - Edit', t => {
+  agent
+    .get(`/content/foo/${serviceUuid}/edit`)
+    .set('cookie', cookie)
+    .expect(404)
+    .end(err => {
+      t.is(err, null, 'Should have an error');
+      t.end();
+    });
+});
+
+test.cb('Content Type Post data', t => {
+  agent
+    .post('/content/services/save')
+    .field('language', 'test-dummy-entry')
+    .set('cookie', cookie)
+    .expect(302)
+    .end((err, res) => {
+      t.is(err, null, 'Should not have an error');
+      t.is(res.text, 'Found. Redirecting to /content/services', 'should have a redirect message');
+
+      t.end();
+    });
+});
+
+test.cb('Invalid Content Type - Post data', t => {
+  agent
+    .post('/content/foo/save')
+    .field('id', serviceUuid)
+    .set('cookie', cookie)
+    .expect(404)
+    .end(err => {
+      t.is(err, null, 'Should have an error');
+      t.end();
+    });
+});
+
 //////////////////////////////
 // 404 Pages
 //////////////////////////////
@@ -205,7 +296,7 @@ test.cb('Users Add Landing Page', t => {
 
 test.cb('Users Edit Landing Page', t => {
   agent
-    .get(`/users/edit/${accounts[1].id}`)
+    .get(`/users/${accounts[1].id}/edit`)
     .set('cookie', cookie)
     .expect(200)
     .end((err, res) => {
@@ -218,7 +309,7 @@ test.cb('Users Edit Landing Page', t => {
 
 test.cb('Users Delete Landing Page', t => {
   agent
-    .get(`/users/delete/${accounts[1].id}`)
+    .get(`/users/${accounts[1].id}/delete`)
     .set('cookie', cookie)
     .expect(200)
     .end((err, res) => {

@@ -19,15 +19,13 @@
 {% block main %}
 <div class="login--wrapper">
   <h1 class="login--title">{{title}}</h1>
-  <form action="/login" method="post">
+  <form action="/login" method="post" novalidate>
     {{message}}
     <div class="login--fields">
-      <label for="email">Email:</label>
-      <input type="text" id="email" name="email"/>
+      <label for="email">Email:<input type="text" id="email" name="email"/></label>
     </div>
     <div class="login--fields">
-      <label for="password">Password:</label>
-      <input type="password" id="password" name="password"/>
+      <label for="password">Password:<input type="password" id="password" name="password"/></label>
     </div>
     <button type="submit">Submit</button>
   </form>

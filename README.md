@@ -11,7 +11,9 @@ npm i punchcard-cms --save
 ```javascript
 const punchcard = require('punchcard');
 
-punchcard.listen(8080);
+punchcard().then(app => {
+  app.listen(8080);
+})
 ```
 
 ## Developing Locally

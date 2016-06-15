@@ -9,20 +9,19 @@
 {% endblock %}
 
 {% block main %}
-<h1>{{content.type.name}}</h1>
-<p><a href="{{content.base}}/{{content.actions.add}}">Add New {{content.type.name}}</a></p>
+<p><a href="/{{config.base}}/{{type.id}}/{{config.actions.add}}">{{config.base}} | {{config.actions.add}}</a></p>
 <h2>Content</h2>
 
-{% if contentTypeContent %}
+{% if content %}
+
   <table>
-    <tr><th>name</th><th>edit</th><th>delete</th><th>date</th></tr>
-  {% for entry in contentTypeContent %}
-    {% if entry['service-name'] %}
+    <tr><th>{{config.base}}</th><th>{{config.actions.edit}}</th><th>date</th></tr>
+  {% for c in content %}
+    {% if c.value %}
       <tr>
-        <td>{{entry['service-name']}}</td>
-        <td><a href="{{contentTypesConfig.contentTypesHome.path}}/{{contentTypeInfo.machine}}/edit/{{entry.id}}">EDIT</a></td>
-        <td><a href="{{contentTypesConfig.contentTypesHome.path}}/{{contentTypeInfo.machine}}/delete/{{entry.id}}">DEL</a></td>
-        <td>{{entry.created}}</td>
+        <td>{{c.value[type.primary]}}</td>
+        <td><a href="/{{config.base}}/{{type.id}}/{{c.id}}/{{c.revision}}/{{config.actions.edit}}">{{config.actions.edit}}</a></td>
+        <td>{{c.created}}</td>
       </tr>
     {% endif %}
   {% endfor %}

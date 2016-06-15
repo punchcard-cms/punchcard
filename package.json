@@ -1,6 +1,6 @@
 {
   "name": "punchcard-cms",
-  "version": "0.1.0-alpha.2",
+  "version": "0.1.0-alpha.5",
   "description": "Node-based content management system",
   "main": "index.js",
   "keywords": [
@@ -67,15 +67,16 @@
     "nunjucks": "^2.3.0",
     "passport": "^0.3.2",
     "passport-local": "^1.0.0",
-    "pg": "^4.5.2",
-    "punchcard-content-types": "git+ssh://git@github.com/scottnath/content-types.git#feature/required-inputs",
+    "pg": "^4.5.6",
+    "punchcard-content-types": "^0.5.2",
     "serve-favicon": "^2.3.0",
     "uuid": "^2.0.2"
   },
   "devDependencies": {
-    "ava": "^0.15.1",
+    "ava": "^0.15.2",
     "breakpoint-sass": "^2.7.0",
     "coveralls": "^2.11.9",
+    "ghooks": "^1.2.3",
     "gulp": "^3.9.1",
     "input-plugin-email": "0.1.0",
     "input-plugin-text": "0.0.5",
@@ -84,6 +85,7 @@
     "jsdom": "^9.2.0",
     "mock-express-response": "^0.1.2",
     "nyc": "^6.0.0",
+    "punchcard-commit-msg": "^1.0.0",
     "punchcard-runner": "^2.1.2",
     "sass-toolkit": "^2.10.0",
     "supertest": "^1.2.0",
@@ -107,5 +109,10 @@
     ],
     "failFast": true,
     "tap": true
+  },
+  "config": {
+    "ghooks": {
+      "commit-msg": "punchcard-commit-msg"
+    }
   }
 }
