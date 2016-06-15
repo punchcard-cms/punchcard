@@ -21,7 +21,11 @@ module.exports = {
     },
     directory: path.join(__dirname, '../content-types'),
     messages: {
-      missing: 'Content Type \'%type\' not found',
+      missing: {
+        type: 'Content Type \'%type\' not found',
+        id: 'Content with ID \'%id\' in Content Type \'%type\' not found',
+        revision: 'Revision for ID \'%id\' in Content Type \'%type\' not found',
+      },
     },
   },
   knex: {
