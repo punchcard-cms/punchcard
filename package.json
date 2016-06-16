@@ -1,6 +1,5 @@
 {
   "name": "punchcard-cms",
-  "version": "0.1.0-alpha.5",
   "description": "Node-based content management system",
   "main": "index.js",
   "keywords": [
@@ -27,11 +26,12 @@
     "dev:database": "postgres -D /usr/local/var/postgres",
     "dev:start": "gulp",
     "dev": "npm run dev:database & npm run dev:start",
-    "coverage": "nyc report --reporter=text-lcov | coveralls"
+    "coverage": "nyc report --reporter=text-lcov | coveralls",
+    "semantic-release": "semantic-release pre && npm publish && semantic-release post"
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:punchcard-cms/punchcard.git"
+    "url": "git+https://github.com/punchcard-cms/punchcard.git"
   },
   "contributors": [
     "Rachel White <whiter@us.ibm.com>",
@@ -49,7 +49,7 @@
     "connect-multiparty": "^2.0.0",
     "connect-session-knex": "^1.0.23",
     "debug": "^2.2.0",
-    "express": "^4.13.4",
+    "express": "^4.14.0",
     "express-session": "^1.13.0",
     "ibm-design-colors": "^1.6.0",
     "input-plugin-password": "0.0.1",
@@ -66,7 +66,7 @@
     "nunjucks": "^2.3.0",
     "passport": "^0.3.2",
     "passport-local": "^1.0.0",
-    "pg": "^4.5.6",
+    "pg": "^5.1.0",
     "punchcard-content-types": "^0.6.0",
     "serve-favicon": "^2.3.0",
     "uuid": "^2.0.2"
@@ -74,14 +74,16 @@
   "devDependencies": {
     "ava": "^0.15.2",
     "coveralls": "^2.11.9",
-    "ghooks": "^1.2.3",
+    "ghooks": "^1.2.4",
     "input-plugin-email": "0.1.0",
     "input-plugin-text": "0.0.5",
     "jsdom": "^9.2.0",
     "mock-express-response": "^0.1.2",
-    "nyc": "^6.0.0",
+    "nyc": "^6.6.1",
     "punchcard-commit-msg": "^1.0.0",
     "punchcard-runner": "^2.1.2",
+    "punchcard-semantic-release": "^2.0.0",
+    "semantic-release": "^4.3.5",
     "supertest": "^1.2.0",
     "tap-diff": "^0.1.1"
   },
@@ -108,5 +110,9 @@
     "ghooks": {
       "commit-msg": "punchcard-commit-msg"
     }
+  },
+  "release": {
+    "analyzeCommits": "punchcard-semantic-release/analyze",
+    "generateNotes": "punchcard-semantic-release/notes"
   }
 }
