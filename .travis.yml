@@ -15,12 +15,20 @@ services:
 before_script:
   - psql -c 'create database travis_ci_test;' -U postgres
 
+before_script:
+  - npm prune
 
-after_success: npm run coverage
+after_success:
+  - npm run coverage
+  - npm run semantic-release
+
+branches:
+  except:
+    - /^v\d+\.\d+\.\d+$/
 #########################
 ## Notifications
 #########################
 notifications:
-  email: fail
+  email: false
   slack:
     secure: XR/vJ53xf+IkDmE/cMj9p2C9w4DVRN7/0/NjRDxYpQD/spqGl9jBz9kkVWCAprKigVhLVCZnYELaFpNPO39GGuxwh44sIkCq8XtnKKtikLKMbTc8CFNKpla8Qf/nHiKts+wxycbEQOCL2apQIFaAEs1nWNpZqKdhemoDtPXLTKRZLxMm0494iDn50klrAnrieqJOMt0Q0/XfC5AfmIM3yZxeRhbq0Oq6IV1uT4IZSIOejaMLV6Y6nQKHaYHHklVrDc1OaBMJO/MiIiDzUt0kONkQREbsZf5tka30MhHyvT660GcgZv8E9EBN/STTZ5pO23cD3JJE72SUCYpcWjguIzDxd9kohi9QMHk2NOfO0G7B5b87lRxlMk3I4ce7z0Gg+ToQ2c5T83i/Zj6B/lbdVzwUlPU+nVopjA2oVsm2GnqLEAbg1a2IY34xtATxBgS2wS68ZRZFD3YnrPYRIJBeddqdEWw95R2OiVQNH2/hUBb4UYnjzynKdhHSiuBAGhgbyYZHjDs1sGpdQvAdpwoBdXSun9jDxRhb5FIg1JOqIBFFe8vjEg1RYqLDjm4VSBVOkUI9Uudpa3TIg8cfGVczr81RJ5yy6fGDoYUfzr9Zq7pim9kE22WLzw7k0XeyKVN/aRTlBZsgfvvIzIijJrSexhKrHJHB/jcMUlcdP9fgGFQ=
