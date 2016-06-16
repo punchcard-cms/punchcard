@@ -15,8 +15,16 @@ services:
 before_script:
   - psql -c 'create database travis_ci_test;' -U postgres
 
+before_script:
+  - npm prune
 
-after_success: npm run coverage
+after_success:
+  - npm run coverage
+  - npm run semantic-release
+
+branches:
+  except:
+    - /^v\d+\.\d+\.\d+$/
 #########################
 ## Notifications
 #########################
