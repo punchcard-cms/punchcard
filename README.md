@@ -45,4 +45,6 @@ Once you are connected you should be able to use psql cli syntax to check tables
 * `select * from "database_name";` Displays all rows in database, replacing database_name with the table you want to see.
 * list all tables for user punchcard: `\c punchcard \dt`
 
+## Changelog
 
+See the [latest release](https://github.com/punchcard-cms/punchcard/releases/latest) for the most recent changelog
