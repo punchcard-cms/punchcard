@@ -10,18 +10,18 @@
 
 {% block main %}
 <h1>{{content.type.name}}</h1>
-<p><a href="{{content.base}}/{{content.actions.add}}">Add New {{content.type.name}}</a></p>
+<p><a href="/{{config.base}}/{{type.id}}/{{config.actions.add}}" class="base--a">{{config.base}} | {{config.actions.add}}</a></p>
 <h2>Content</h2>
 
 {% if content %}
 
-  <table>
+  <table class="base--STYLED">
     <tr><th>{{config.base}}</th><th>{{config.actions.edit}}</th><th>date</th></tr>
   {% for c in content %}
     {% if c.value %}
       <tr>
         <td>{{c.value[type.primary]}}</td>
-        <td><a href="/{{config.base}}/{{type.id}}/{{c.id}}/{{c.revision}}/{{config.actions.edit}}">{{config.actions.edit}}</a></td>
+        <td><a href="/{{config.base}}/{{type.id}}/{{c.id}}/{{c.revision}}/{{config.actions.edit}}" class="base--a">{{config.actions.edit}}</a></td>
         <td>{{c.created}}</td>
       </tr>
     {% endif %}

@@ -10,32 +10,32 @@
 
 {% block main %}
 <h1>{{title}}</h1>
-<p><a href="{{config.base}}/{{config.actions.add}}">{{config.base}} | {{config.actions.add}}</a></p>
+<p><a href="{{config.base}}/{{config.actions.add}}" class="base--a">{{config.base}} | {{config.actions.add}}</a></p>
 <h2>Content</h2>
 
-  <div class="table-fluid">
-    <div class="table-row table-header">
-      <div class="table-column user-email">email</div>
-      <div class="table-column user-role">role</div>
-      <div class="table-column user-edit">edit</div>
-      <div class="table-column user-delete">delete</div>
-      <div class="table-column user-created">date</div>
-    </div>
+  <table class="base--STYLED">
+    <tr>
+      <th>email</th>
+      <th>role</th>
+      <th>edit</th>
+      <th>delete</th>
+      <th>date</th>
+    </tr>
     {% if users %}
     {% for user in users %}
       {% if user.email %}
-        <div class="table-row">
-          <div class="table-column user-email">{{user.email}}</div>
-          <div class="table-column user-role">{{user.role}}</div>
-          <div class="table-column user-edit"><a href="{{config.base}}/{{config.actions.edit}}/{{user.id}}">{{config.actions.edit}}</a></div>
-          <div class="table-column user-delete"><a href="{{config.base}}/{{config.actions.delete}}/{{user.id}}">{{config.actions.delete}}</a></div>
-          <div class="table-column user-created">{{user.created}}</div>
-        </div>
+        <tr>
+          <td>{{user.email}}</td>
+          <td>{{user.role}}</td>
+          <td><a href="{{config.base}}/{{config.actions.edit}}/{{user.id}}" class="base--a">{{config.actions.edit}}</a></td>
+          <td><a href="{{config.base}}/{{config.actions.delete}}/{{user.id}}" class="base--a">{{config.actions.delete}}</a></td>
+          <td>{{user.created}}</td>
+        </tr>
       {% endif %}
     {% endfor %}
     {% endif %}
-    {% endblock %}
-  </div>
+  </table>
+{% endblock %}
 
 {% block footer %}
 {{ super() }}

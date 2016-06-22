@@ -1,18 +1,7 @@
 
 // Content Forms
-.content-form,
-.users-form {
+.base--FORM {
   padding: 1em 0;
-
-  label {
-    display: block;
-    margin: 5px 0;
-  }
-
-  input {
-    display: block;
-    padding: 5px;
-  }
 
   .form--field {
     display: grid;
@@ -22,7 +11,7 @@
   }
 
   .form--alert {
-    color: red;
+    color: #ff0000;
     font-size: .8em;
   }
 
@@ -30,49 +19,8 @@
     font-size: .8em;
     padding: 5px 0;
   }
-  @include breakpoint($small) {
-    label,
-    input,
-    .form-description {
-      display: block;
-    }
-  }
 
   fieldset {
     margin: 1em 0;
   }
-}
-
-
-
-// Users Table
-@email-width: 200px;
-@role-width: 100px;
-@edit-width: 50px;
-@delete-width: 50px;
-@created-width: 100px;
-
-.table-row {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: no-wrap;
-  justify-content: flex-start;
-  padding-left: 15px;
-  padding-right: 15px;
-  width: 100%;
-}
-
-.table-header {
-  background-color: color('gray', 10);
-}
-
-.table-column {
-  flex-basis: 0;
-  flex-grow: 1;
-  flex-shrink: 0;
-  vertical-align: top;
-}
-
-.user-created {
-  flex-grow: 2;
 }

@@ -11,9 +11,9 @@
 
 {% block main %}
 <h1 class="sub-title">{{content.home.title}}</h1>
-<ul class="content-type-list">
+<ul class="base--STYLED">
   {% for type in content.types %}
-    <li><a href="/{{content.base}}/{{type.id}}">{{type.name}}</a></li>
+    <li><a href="/{{content.base}}/{{type.id}}" class="base--a">{{type.name}}</a></li>
   {% endfor %}
 </ul>
 {% endblock %}

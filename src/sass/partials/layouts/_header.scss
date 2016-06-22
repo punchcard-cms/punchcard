@@ -3,7 +3,7 @@ header {
   height: 75px;
 }
 
-.main-nav {
+.nav {
 
   @include vertical-center(50%, false);
 
@@ -27,17 +27,16 @@ header {
     height: 18px;
   }
 
-  ul {
+  .nav--list {
     display: inline-flex;
     list-style-type: none;
-    padding-left: 0px;
   }
 
-  li {
+  .nav--item {
     flex-direction: row;
   }
 
-  a {
+  .nav--a {
     color: $white;
     padding: 1em;
     text-decoration: none;

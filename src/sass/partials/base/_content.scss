@@ -2,39 +2,13 @@
 @import 'content/mixins';
 @import 'content/extends';
 
-* {
-  margin: 0;
-}
-
-html,
-body {
-  height: 100%;
-}
-
 body {
   background-color: $white;
   font-family: $font-stack;
   margin: 0;
 }
 
-h1,
-h2 {
-  padding: .5em 0;
-}
-
 .wrapper {
-
-  @include breakpoint($small) {
-    max-width: 600px;
-  }
-
-  @include breakpoint($medium) {
-    max-width: 900px;
-  }
-
-  @include breakpoint($large) {
-    max-width: 1200px;
-  }
 
   margin: 0 auto;
   margin-bottom: -50px;
@@ -48,23 +22,25 @@ h2 {
     height: 75px;
   }
 
-  a {
-    color: color('teal', 60);
-    text-decoration: none;
-    &:hover {
-      text-decoration: underline;
-    }
-  }
-
   .punchcard-logomark {
-    width: 250px;
-    margin: 0 auto;
     display: block;
+    margin: 0 auto;
     margin-top: 75px;
+    width: 250px;
   }
 
-  ul.content-type-list {
-    padding: 1em;
-    list-style-type: none;
+}
+
+.base--a {
+  color: color('teal', 60);
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
   }
+}
+
+.base--STYLED {
+  list-style-type: none;
+  padding: 1em;
 }
