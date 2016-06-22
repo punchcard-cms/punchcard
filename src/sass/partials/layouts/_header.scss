@@ -7,20 +7,6 @@ header {
 
   @include vertical-center(50%, false);
 
-  @include breakpoint($small) {
-    max-width: $small;
-    padding: 0 1em;
-  }
-
-  @include breakpoint($medium) {
-    max-width: $medium;
-    padding: 0 1em;
-  }
-
-  @include breakpoint($large) {
-    max-width: $large;
-  }
-
   margin: 0 auto;
 
   .punchcard-logo {
