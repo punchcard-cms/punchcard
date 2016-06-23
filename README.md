@@ -20,6 +20,12 @@ punchcard().then(app => {
 
 Make sure PostgresSQL is set up locally (see below)
 
+Install all the things
+
+```bash
+npm install
+```
+
 Run the following to run both the database and get the server running:
 
 ```bash
