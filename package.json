@@ -42,7 +42,7 @@
   "dependencies": {
     "acl": "^0.4.9",
     "bcrypt-nodejs": "0.0.3",
-    "body-parser": "^1.15.1",
+    "body-parser": "^1.15.2",
     "cfenv": "^1.0.3",
     "config": "^1.20.4",
     "connect-ensure-login": "^0.1.1",
@@ -55,7 +55,7 @@
     "input-plugin-password": "0.0.1",
     "input-plugin-select": "^0.1.0",
     "js-yaml": "^3.5.5",
-    "knex": "^0.11.5",
+    "knex": "^0.11.7",
     "lodash": "^4.13.1",
     "moment": "^2.13.0",
     "moment-timezone": "^0.5.4",
@@ -66,8 +66,8 @@
     "nunjucks": "^2.3.0",
     "passport": "^0.3.2",
     "passport-local": "^1.0.0",
-    "pg": "^5.1.0",
-    "punchcard-content-types": "^0.7.0",
+    "pg": "^6.0.0",
+    "punchcard-content-types": "^0.9.0",
     "serve-favicon": "^2.3.0",
     "uuid": "^2.0.2"
   },
@@ -82,7 +82,7 @@
     "nyc": "^6.6.1",
     "punchcard-commit-msg": "^1.0.0",
     "punchcard-runner": "^2.1.2",
-    "punchcard-semantic-release": "^2.0.0",
+    "punchcard-semantic-release": "^2.0.1",
     "semantic-release": "^4.3.5",
     "supertest": "^1.2.0",
     "tap-diff": "^0.1.1"
