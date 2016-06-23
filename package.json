@@ -67,7 +67,7 @@
     "passport": "^0.3.2",
     "passport-local": "^1.0.0",
     "pg": "^5.1.0",
-    "punchcard-content-types": "^0.7.0",
+    "punchcard-content-types": "^0.8.0",
     "serve-favicon": "^2.3.0",
     "uuid": "^2.0.2"
   },
