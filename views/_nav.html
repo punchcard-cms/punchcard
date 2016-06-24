@@ -1,8 +1,9 @@
-<nav>
-  <ul>
+<nav class="nav">
+  <ul class="nav--list">
+    <li class="nav--item"><a href="/"><img src="/images/punchcard-type.svg" alt="punchcard-logo" class="punchcard-logo"></a></li>
     {% for item in nav %}
-    <li><a href="/{{item.path}}">{{item.label}}</a></li>
+    <li class="nav--item"><a href="/{{item.path}}" class="nav--a">{{item.label}}</a></li>
     {% endfor %}
-    <li><a href="/logout">logout</a></li>
+    <li class="nav--item"><a href="/logout" class="nav--a">Logout</a></li>
   </ul>
 </nav>

@@ -1,5 +1,32 @@
+////////////////////////
+// Compass Extensions
+@import 'toolkit/reset';
+@import 'toolkit';
+@import 'breakpoint';
 @import 'ibm-colors';
+////////////////////////
 
-body {
-  background: color('teal');
-}
+//////////////////////////////
+// GLOBALS
+@import 'partials/global/variables';
+@import 'partials/global/functions';
+@import 'partials/global/mixins';
+@import 'partials/global/extends';
+//////////////////////////////
+
+//////////////////////////////
+// BASE
+@import 'partials/base/content';
+//////////////////////////////
+
+//////////////////////////////
+// COMPONENTS
+@import 'partials/components/forms';
+//////////////////////////////
+
+//////////////////////////////
+// LAYOUTS
+@import 'partials/layouts/header';
+@import 'partials/layouts/footer';
+@import 'partials/layouts/login';
+//////////////////////////////

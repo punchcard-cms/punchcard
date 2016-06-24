@@ -7,13 +7,13 @@
 
 {% block header %}
   {{ super() }}
-  <h1>{{content.home.title}}</h1>
 {% endblock %}
 
 {% block main %}
-<ul>
+<h1 class="sub-title">{{content.home.title}}</h1>
+<ul class="base--STYLED">
   {% for type in content.types %}
-    <li><a href="/{{content.base}}/{{type.id}}">{{type.name}}</a></li>
+    <li><a href="/{{content.base}}/{{type.id}}" class="base--a">{{type.name}}</a></li>
   {% endfor %}
 </ul>
 {% endblock %}

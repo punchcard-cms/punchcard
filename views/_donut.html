@@ -11,9 +11,11 @@
     {% include "_header.html" %}
   {% endblock %}
 
-  {% block main %}
-  <div><h1>Original MAIN</h1></div>
-  {% endblock %}
+  <main class="wrapper">
+    {% block main %}
+    <div><h1>Original MAIN</h1></div>
+    {% endblock %}
+  </main>
 
   {% block footer %}
     {% include "_footer.html" %}

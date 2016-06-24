@@ -1,0 +1,26 @@
+
+// Content Forms
+.base--FORM {
+  padding: 1em 0;
+
+  .form--field {
+    display: grid;
+    grid-template-columns: auto;
+    grid-template-rows: auto;
+    padding: .5em 0;
+  }
+
+  .form--alert {
+    color: #ff0000;
+    font-size: .8em;
+  }
+
+  .form--description {
+    font-size: .8em;
+    padding: 5px 0;
+  }
+
+  fieldset {
+    margin: 1em 0;
+  }
+}

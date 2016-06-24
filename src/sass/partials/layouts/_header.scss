@@ -1,0 +1,34 @@
+header {
+  background-color: color('gray', 90);
+  height: 75px;
+}
+
+.nav {
+
+  @include vertical-center(50%, false);
+
+  margin: 0 auto;
+
+  .punchcard-logo {
+    height: 18px;
+  }
+
+  .nav--list {
+    display: inline-flex;
+    list-style-type: none;
+  }
+
+  .nav--item {
+    flex-direction: row;
+  }
+
+  .nav--a {
+    color: $white;
+    padding: 1em;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}

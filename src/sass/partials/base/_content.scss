@@ -1,0 +1,46 @@
+@import 'content/variables';
+@import 'content/mixins';
+@import 'content/extends';
+
+body {
+  background-color: $white;
+  font-family: $font-stack;
+  margin: 0;
+}
+
+.wrapper {
+
+  margin: 0 auto;
+  margin-bottom: -50px;
+  margin-top: 50px;
+  min-height: 100%;
+  padding: 0 1em;
+
+  &:after {
+    content: '';
+    display: block;
+    height: 75px;
+  }
+
+  .punchcard-logomark {
+    display: block;
+    margin: 0 auto;
+    margin-top: 75px;
+    width: 250px;
+  }
+
+}
+
+.base--a {
+  color: color('teal', 60);
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.base--STYLED {
+  list-style-type: none;
+  padding: 1em;
+}
