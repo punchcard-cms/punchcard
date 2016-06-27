@@ -10,10 +10,10 @@
 {% endblock %}
 
 {% block main %}
-<h1 class="sub-title">{{content.home.title}}</h1>
-<ul class="base--STYLED">
+<h1 class="content--title">{{content.home.title}}</h1>
+<ul class="base--ul content--types">
   {% for type in content.types %}
-    <li><a href="/{{content.base}}/{{type.id}}" class="base--a">{{type.name}}</a></li>
+    <li><a href="/{{content.base}}/{{type.id}}" class="base--a content--type-link">{{type.name}}</a></li>
   {% endfor %}
 </ul>
 {% endblock %}
