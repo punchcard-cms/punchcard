@@ -1,10 +1,10 @@
-.site-footer {
+.footer {
   background: color('gray', 90);
   color: $white;
   height: 50px;
 }
 
-.footer-wrapper {
+.footer--content {
   @include vertical-center(50%, false);
 
   margin: 0 auto;

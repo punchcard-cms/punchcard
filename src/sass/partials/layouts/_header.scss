@@ -1,4 +1,4 @@
-header {
+.header {
   background-color: color('gray', 90);
   height: 75px;
 }
@@ -9,7 +9,7 @@ header {
 
   margin: 0 auto;
 
-  .punchcard-logo {
+  .nav--logo {
     height: 18px;
   }
 
