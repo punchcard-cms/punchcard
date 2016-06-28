@@ -11,15 +11,11 @@
     {% include "_header.html" %}
   {% endblock %}
 
-  <main class="wrapper">
+  <main class="_content">
     {% block main %}
     <div><h1>Original MAIN</h1></div>
     {% endblock %}
   </main>
-
-  {% block footer %}
-    {% include "_footer.html" %}
-  {% endblock %}
 
   <script src="/js/app.js"></script>
   {% block pageFoot %}
