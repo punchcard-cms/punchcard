@@ -9,27 +9,27 @@
 {% endblock %}
 
 {% block main %}
-<h1>{{title}}</h1>
-<p><a href="{{config.base}}/{{config.actions.add}}" class="base--a">{{config.base}} | {{config.actions.add}}</a></p>
-<h2>Content</h2>
+<h1 class="base--h1">{{title}}</h1>
+<p class="base--p"><a href="{{config.base}}/{{config.actions.add}}" class="base--a">{{config.base}} | {{config.actions.add}}</a></p>
+<h2 class="base--h2">Content</h2>
 
-  <table class="base--STYLED">
-    <tr>
-      <th>email</th>
-      <th>role</th>
-      <th>edit</th>
-      <th>delete</th>
-      <th>date</th>
+  <table class="table--style">
+    <tr class="table--tr">
+      <th class="table--th">email</th>
+      <th class="table--th">role</th>
+      <th class="table--th">edit</th>
+      <th class="table--th">delete</th>
+      <th class="table--th">date</th>
     </tr>
     {% if users %}
     {% for user in users %}
       {% if user.email %}
-        <tr>
-          <td>{{user.email}}</td>
-          <td>{{user.role}}</td>
-          <td><a href="{{config.base}}/{{config.actions.edit}}/{{user.id}}" class="base--a">{{config.actions.edit}}</a></td>
-          <td><a href="{{config.base}}/{{config.actions.delete}}/{{user.id}}" class="base--a">{{config.actions.delete}}</a></td>
-          <td>{{user.created}}</td>
+        <tr class="table--tr">
+          <td class="table--td">{{user.email}}</td>
+          <td class="table--td">{{user.role}}</td>
+          <td class="table--td"><a href="{{config.base}}/{{config.actions.edit}}/{{user.id}}" class="base--a">{{config.actions.edit}}</a></td>
+          <td class="table--td"><a href="{{config.base}}/{{config.actions.delete}}/{{user.id}}" class="base--a">{{config.actions.delete}}</a></td>
+          <td class="table--td">{{user.created}}</td>
         </tr>
       {% endif %}
     {% endfor %}
