@@ -11,11 +11,11 @@
 @import 'partials/global/variables';
 @import 'partials/global/functions';
 @import 'partials/global/mixins';
-@import 'partials/global/extends';
 //////////////////////////////
 
 //////////////////////////////
 // BASE
+@import 'partials/global/base';
 @import 'partials/base/content';
 //////////////////////////////
 
