@@ -8,7 +8,7 @@ body {
   margin: 0;
 }
 
-.wrapper {
+._content {
 
   margin: 0 auto;
   margin-bottom: -50px;
@@ -22,20 +22,13 @@ body {
     height: 75px;
   }
 
-  .punchcard-logomark {
-    display: block;
-    margin: 0 auto;
-    margin-top: 75px;
-    width: 250px;
-  }
-
 }
 
-.base--a {
-  color: color('teal', 60);
-  text-decoration: none;
 
-  &:hover {
-    text-decoration: underline;
-  }
+.content--logomark {
+  display: block;
+  margin: 0 auto;
+  margin-top: 75px;
+  width: 250px;
 }
+
