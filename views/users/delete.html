@@ -16,10 +16,10 @@
 
 <form action="{{action}}" method="post" enctype="multipart/form-data" novalidate>
 
-  <p>Delete {{email}}?</p>
-  <p>This cannot be undone!</p>
+  <p class="base--p">Delete {{email}}?</p>
+  <p class="base--p">This cannot be undone!</p>
 
-  <button id="delete" type="submit" {% if current %}disabled{% endif %}>Delete</button>
+  <button id="delete" class="base--button" type="submit" {% if current %}disabled{% endif %}>Delete</button>
 </form>
 
 {% endblock %}
