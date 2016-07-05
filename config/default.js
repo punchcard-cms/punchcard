@@ -16,15 +16,36 @@ module.exports = {
     },
     actions: {
       add: 'add',
+      approve: 'approve',
       edit: 'edit',
       save: 'save',
     },
     directory: path.join(__dirname, '../content-types'),
     messages: {
+      workflow: {
+        comments: {
+          add: 'Comment: (required)',
+        },
+        approval: {
+          choice: 'Please choose one:',
+        }
+      },
+      format: {
+        revision: 'Revision must be a number',
+      },
       missing: {
+        data: {
+          type: 'Content Type \'%type\' not found',
+          id: 'Content with ID \'%id\' in Content Type \'%type\' not found',
+          revision: 'Revision \'%revision\' in Content Type \'%type\' not found',
+        },
+        url: {
+          revision: 'URL missing revision number',
+          type: 'URL missing content type',
+        },
         type: 'Content Type \'%type\' not found',
         id: 'Content with ID \'%id\' in Content Type \'%type\' not found',
-        revision: 'Revision for ID \'%id\' in Content Type \'%type\' not found',
+        revision: 'Revision \'%revision\' in Content Type \'%type\' not found',
       },
     },
   },

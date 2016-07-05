@@ -1,0 +1,22 @@
+<form action="{{action}}" method="post" class="base--FORM" novalidate>
+
+  <div>
+    <label for="comment">{{config.messages.workflow.comments.add}}</label>
+    <textarea id="comment"></textarea>
+  </div>
+
+  <fieldset>
+    <legend>{{config.messages.workflow.approval.choice}}</legend>
+    <label for="reject">
+      <input id="reject" type="radio" name="status" value="reject"> REJECT
+    </label>
+    <label for="approve">
+      <input id="approve" type="radio" name="status" value="approve"> APPROVE MESSAGE
+    </label>
+  </fieldset>
+
+
+
+  <button type="submit" class="base--button">Submit</button>
+  <button type="cancel" class="base--button">Cancel</button>
+</form>

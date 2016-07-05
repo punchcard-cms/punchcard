@@ -3,6 +3,7 @@ import request from 'supertest';
 import bcrypt from 'bcrypt-nodejs';
 import Promise from 'bluebird';
 import uuid from 'uuid';
+import includes from 'lodash/includes';
 
 import punchcard from '../';
 import database from '../lib/database';
@@ -202,27 +203,76 @@ test.cb('Invalid Content Type - Add', t => {
 });
 
 test.cb('Content Type Edit Page', t => {
-  agent
-    .get(`/content/services/${serviceUuid}/null/edit`)
-    .set('cookie', cookie)
-    .expect(200)
-    .end((err, res) => {
-      t.is(err, null, 'Should not have an error');
-      t.regex(res.text, /DOCTYPE html/, 'should have an html doctype');
+  getService({ id: serviceUuid }).then(srvc => {
+    agent
+      .get(`/content/services/${srvc[0].revision}/edit`)
+      .set('cookie', cookie)
+      .expect(200)
+      .end((err, res) => {
+        t.is(err, null, 'Should not have an error');
+        t.regex(res.text, /DOCTYPE html/, 'should have an html doctype');
 
+        t.end();
+      });
+  });
+});
+
+test.cb('Invalid Content Type - Edit', t => {
+  getService({ id: serviceUuid }).then(srvc => {
+    agent
+      .get(`/content/foo/${srvc[0].revision}/edit`)
+      .set('cookie', cookie)
+      .expect(404)
+      .end(err => {
+        t.is(err, null, 'Should have an error');
+        t.end();
+      });
+  });
+});
+
+test.cb('Content Type Approval Page', t => {
+  getService({ id: serviceUuid }).then(srvc => {
+    agent
+      .get(`/content/services/${srvc[0].revision}/approve`)
+      .set('cookie', cookie)
+      .expect(200)
+      .end((err, res) => {
+        t.is(err, null, 'Should not have an error');
+        t.regex(res.text, /DOCTYPE html/, 'should have an html doctype');
+
+        t.end();
+      });
+  });
+});
+
+test.cb('Format of Revision ID - Approval', t => {
+  agent
+    .get(`/content/services/foo/approve`)
+    .buffer(true)
+    .set('cookie', cookie)
+    .expect(404)
+    .end((err, res) => {
+      t.is(err, null, 'Should have an error');
+      t.true(includes(res.text, 'Revision must be a number', 'Revision must be a number'));
       t.end();
     });
 });
 
-test.cb('Invalid Content Type - Edit', t => {
-  agent
-    .get(`/content/foo/${serviceUuid}/edit`)
-    .set('cookie', cookie)
-    .expect(404)
-    .end(err => {
-      t.is(err, null, 'Should have an error');
-      t.end();
-    });
+test.cb('Bad Revision ID - Approval', t => {
+  getService({ id: serviceUuid })
+  .orderBy('revision', 'DESC')
+  .then(srvc => {
+    const bad = srvc[0].revision * 1000;
+    agent
+      .get(`/content/services/${bad}/approve`)
+      .set('cookie', cookie)
+      .expect(404)
+      .end((err, res) => {
+        t.is(err, null, 'Should have an error');
+        t.true(includes(res.text, `Revision &#39;${bad}&#39; in Content Type &#39;services&#39; not found`, 'Revision id not in system'));
+        t.end();
+      });
+  });
 });
 
 test.cb('Content Type Post data', t => {

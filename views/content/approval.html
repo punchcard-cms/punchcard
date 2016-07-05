@@ -1,0 +1,33 @@
+{% extends "_donut.html" %}
+
+{% block pageHead %}
+  {{ super() }}
+{% endblock %}
+
+{% block header %}
+  {{ super() }}
+{% endblock %}
+
+{% block main %}
+<h1 class="base--h1">{{title}}</h1>
+
+{% if revision %}
+<h2 class="base--h2">{{config.actions.approve}} :: [TBAdded: Primary Key Contents]</h2>
+
+  {% if values %}
+    <dl>
+    {% for v in values %}
+      <dt>{{v.name}}</dt>
+      <dd>{{v.value}}</dd>
+    {% endfor %}
+    </dl>
+  {% endif %}
+
+  {% include "content/_form-approval.html" %}
+
+{% endif %}
+{% endblock %}
+
+{% block footer %}
+{{ super() }}
+{% endblock %}
