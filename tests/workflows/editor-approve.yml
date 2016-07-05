@@ -2,6 +2,6 @@ name: Editor Approve
 id: editor-approve
 steps:
   -
-    name: Approve
+    name: Publish
   -
     name: Editor Approval

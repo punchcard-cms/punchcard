@@ -50,6 +50,7 @@ const service = [
     id: serviceUuid,
     language: 'test-dummy-entry',
     publishable: false,
+    approval: 1,
     value: {},
   },
 ];
@@ -186,6 +187,7 @@ test.cb('Content Type Add Page', t => {
     .end((err, res) => {
       t.is(err, null, 'Should not have an error');
       t.regex(res.text, /DOCTYPE html/, 'should have an html doctype');
+      t.true(includes(res.text, `<button type="submit" class="base--button">Editor Approval</button>`, 'Approval button text'));
 
       t.end();
     });
@@ -211,6 +213,7 @@ test.cb('Content Type Edit Page', t => {
       .end((err, res) => {
         t.is(err, null, 'Should not have an error');
         t.regex(res.text, /DOCTYPE html/, 'should have an html doctype');
+        t.true(includes(res.text, `<button type="submit" class="base--button">Editor Approval</button>`, 'Approval button text'));
 
         t.end();
       });
