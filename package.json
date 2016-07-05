@@ -43,6 +43,7 @@
     "acl": "^0.4.9",
     "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.15.2",
+    "breakpoint-sass": "^2.7.0",
     "cfenv": "^1.0.3",
     "config": "^1.20.4",
     "connect-ensure-login": "^0.1.1",
@@ -54,7 +55,7 @@
     "ibm-design-colors": "^1.6.0",
     "input-plugin-password": "0.0.1",
     "input-plugin-select": "^0.1.0",
-    "js-yaml": "^3.5.5",
+    "js-yaml": "^3.6.1",
     "knex": "^0.11.7",
     "lodash": "^4.13.1",
     "moment": "^2.13.0",
@@ -68,10 +69,9 @@
     "passport-local": "^1.0.0",
     "pg": "^6.0.0",
     "punchcard-content-types": "^0.10.0",
+    "sass-toolkit": "^2.10.0",
     "serve-favicon": "^2.3.0",
-    "uuid": "^2.0.2",
-    "breakpoint-sass": "^2.7.0",
-    "sass-toolkit": "^2.10.0"
+    "uuid": "^2.0.2"
   },
   "devDependencies": {
     "ava": "^0.15.2",
@@ -80,6 +80,7 @@
     "input-plugin-email": "0.1.0",
     "input-plugin-text": "0.0.5",
     "jsdom": "^9.2.0",
+    "lodash": "^4.13.1",
     "mock-express-response": "^0.1.2",
     "nyc": "^6.6.1",
     "punchcard-commit-msg": "^1.0.0",

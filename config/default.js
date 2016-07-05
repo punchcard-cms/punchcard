@@ -119,4 +119,7 @@ module.exports = {
       },
     },
   },
+  workflows: {
+    directory: path.join(__dirname, '../workflows'),
+  }
 };

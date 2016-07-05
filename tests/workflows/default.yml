@@ -1,0 +1,6 @@
+name: Self Publish
+id: self-publish
+steps:
+  -
+    name: Publish
+    self: true

@@ -1,0 +1,7 @@
+name: Editor Approve
+id: editor-approve
+steps:
+  -
+    name: Approve
+  -
+    name: Editor Approval
