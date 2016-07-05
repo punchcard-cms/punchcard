@@ -120,6 +120,10 @@ module.exports = {
     },
   },
   workflows: {
+    default: 'self-publish',
     directory: path.join(__dirname, '../workflows'),
+    messages: {
+      missing: 'Workflow \'%workflow\' in Content Type \'%type\' not found',
+    }
   }
 };
