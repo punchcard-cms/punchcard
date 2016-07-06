@@ -28,7 +28,7 @@ module.exports = {
         },
         approval: {
           choice: 'Please choose one:',
-        }
+        },
       },
       format: {
         revision: 'Revision must be a number',
@@ -124,6 +124,6 @@ module.exports = {
     directory: path.join(__dirname, '../workflows'),
     messages: {
       missing: 'Workflow \'%workflow\' in Content Type \'%type\' not found',
-    }
-  }
+    },
+  },
 };

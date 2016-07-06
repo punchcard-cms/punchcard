@@ -187,7 +187,9 @@ test.cb('Content Type Add Page', t => {
     .end((err, res) => {
       t.is(err, null, 'Should not have an error');
       t.regex(res.text, /DOCTYPE html/, 'should have an html doctype');
-      t.true(includes(res.text, `<button type="submit" class="base--button">Editor Approval</button>`, 'Approval button text'));
+
+      // eslint disable: quotes are part of what we're checking form
+      t.true(includes(res.text, `<button type="submit" class="base--button">Editor Approval</button>`, 'Approval button text')); // eslint-disable-line quotes
 
       t.end();
     });
@@ -213,7 +215,9 @@ test.cb('Content Type Edit Page', t => {
       .end((err, res) => {
         t.is(err, null, 'Should not have an error');
         t.regex(res.text, /DOCTYPE html/, 'should have an html doctype');
-        t.true(includes(res.text, `<button type="submit" class="base--button">Editor Approval</button>`, 'Approval button text'));
+
+        // eslint disable: quotes are part of what we're checking form
+        t.true(includes(res.text, `<button type="submit" class="base--button">Editor Approval</button>`, 'Approval button text')); // eslint-disable-line quotes
 
         t.end();
       });
@@ -250,7 +254,7 @@ test.cb('Content Type Approval Page', t => {
 
 test.cb('Format of Revision ID - Approval', t => {
   agent
-    .get(`/content/services/foo/approve`)
+    .get('/content/services/foo/approve')
     .buffer(true)
     .set('cookie', cookie)
     .expect(404)
