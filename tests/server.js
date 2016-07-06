@@ -282,6 +282,30 @@ test.cb('Bad Revision ID - Approval', t => {
   });
 });
 
+test.cb('Content Type Post Approval', t => {
+  getService({ id: serviceUuid }).then(srvc => {
+    agent
+      .get(`/content/services/${srvc[0].revision}/approve`)
+      .set('cookie', cookie)
+      .expect(200)
+      .end((err, res) => {
+        t.is(err, null, 'Should not have an error');
+        t.regex(res.text, /DOCTYPE html/, 'should have an html doctype');
+
+        agent
+          .post('/content/services/approve')
+          .set('cookie', cookie)
+          .expect(302)
+          .end((error, response) => {
+            t.is(error, null, 'Should not have an error');
+            t.is(response.text, 'Found. Redirecting to /content/services', 'should have a redirect message');
+
+            t.end();
+          });
+      });
+  });
+});
+
 test.cb('Content Type Post data', t => {
   agent
     .post('/content/services/save')
