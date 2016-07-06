@@ -25,6 +25,28 @@
 
   {% include "content/_form-approval.html" %}
 
+  {% if revision.workflows.entries %}
+    <h2>Previous Comments</h2>
+    <table>
+      <tr>
+        <th>person</th>
+        <th>action</th>
+        <th>step</th>
+        <th>comment</th>
+        <th>date</th>
+      </tr>
+    {% for e in revision.workflows.entries %}
+      <tr>
+        <td>{{e.author}}</td>
+        <td>{{e.action}}</td>
+        <td>{{e.step}}</td>
+        <td>{{e.comment}}</td>
+        <td>{{e.created.date}}</td>
+      </tr>
+    {% endfor %}
+    </table>
+  {% endif %}
+
 {% endif %}
 {% endblock %}
 

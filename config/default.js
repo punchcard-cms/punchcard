@@ -123,6 +123,7 @@ module.exports = {
     default: 'self-publish',
     directory: path.join(__dirname, '../workflows'),
     messages: {
+      array: 'Workflows need to be an array',
       missing: 'Workflow \'%workflow\' in Content Type \'%type\' not found',
     },
   },

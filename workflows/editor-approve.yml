@@ -2,6 +2,6 @@ name: Editor Approve
 id: editor-approve
 steps:
   -
-    name: Publish
-  -
     name: Send to Editor
+  -
+    name: Publish
