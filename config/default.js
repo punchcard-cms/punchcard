@@ -16,20 +16,11 @@ module.exports = {
     },
     actions: {
       add: 'add',
-      approve: 'approve',
       edit: 'edit',
       save: 'save',
     },
     directory: path.join(__dirname, '../content-types'),
     messages: {
-      workflow: {
-        comments: {
-          add: 'Comment: (required)',
-        },
-        approval: {
-          choice: 'Please choose one:',
-        },
-      },
       format: {
         revision: 'Revision must be a number',
       },
@@ -120,6 +111,9 @@ module.exports = {
     },
   },
   workflows: {
+    actions: {
+      approve: 'approve',
+    },
     default: 'self-publish',
     directory: path.join(__dirname, '../workflows'),
     messages: {
