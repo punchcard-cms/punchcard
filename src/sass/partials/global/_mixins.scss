@@ -1,0 +1,126 @@
+@mixin button ($border-color, $color, $border-color-hover, $color-hover) {
+  background-color: setting-get('white');
+  border-color: $border-color;
+  border-radius: 45px;
+  border-style: solid;
+  border-width: setting-get('input border width');
+  color: $color;
+  padding: .5em 2em;
+
+  &:hover {
+    border-color: $border-color-hover;
+    color: $color-hover;
+  }
+}
+
+@mixin checkbox {
+  display: none;
+
+  + label {
+    position: relative;
+
+    &::before {
+      border: setting-get('input border width') solid setting-get('input border color');
+      content: '';
+      display: inline-block;
+      height: 1em;
+      margin-right: setting-get('rhythm') / 2;
+      transform: translateY(-.125em);
+      vertical-align: middle;
+      width: 1em;
+    }
+  }
+
+  &:checked + label::before {
+    background: setting-get('secondary color');
+    box-shadow: inset 0 0 0 setting-get('input border width') / 1.5 setting-get('white');
+  }
+}
+
+@mixin hyphens($hyphen-type) {
+  hyphens: $hyphen-type;
+  -moz-hyphens: $hyphen-type;
+  -ms-hyphens: $hyphen-type;
+  -webkit-hyphens: $hyphen-type;
+}
+
+@mixin input {
+  border: setting-get('input border width') solid setting-get('input border color');
+  color: setting-get('black');
+  display: block;
+  margin-top: setting-get('rhythm') / 2;
+  padding: .3em .5em;
+  width: 100%;
+
+  @media (min-width: 600px) {
+    width: 400px;
+  }
+
+  &:focus {
+    background-color: setting-get('primary support color');
+    border-color: setting-get('primary color');
+    outline: setting-get('primary color');
+  }
+
+  &:disabled {
+    background-color: color('neutral-white', 40);
+  }
+}
+
+@mixin radio {
+  display: none;
+
+  + label {
+    position: relative;
+
+    &::before {
+      border: setting-get('input border width') solid setting-get('input border color');
+      border-radius: 50%;
+      content: '';
+      display: inline-block;
+      height: 1em;
+      margin-right: setting-get('rhythm') / 2;
+      transform: translateY(-.125em);
+      vertical-align: middle;
+      width: 1em;
+    }
+  }
+
+  &:checked + label::before {
+    background: radial-gradient(color('grey', 80) 40%, transparent 40%);
+  }
+}
+
+@mixin range--thumb($prefix: null, $range: null) {
+  @if $prefix != null {
+    $prefix: '-#{$prefix}-';
+  }
+
+  &::#{$prefix}#{$range}-thumb {
+    #{$prefix}appearance: none;
+    background: color('white');
+    border-radius: setting-get('range thumb size');
+    box-shadow: inset 0 0 0 setting-get('range outline width') * 1.5 setting-get('input border color');
+    height: setting-get('range thumb size');
+    transition-duration: .5s;
+    width: setting-get('range thumb size');
+  }
+
+  &:active::#{$prefix}#{$range}-thumb {
+    box-shadow: inset 0 0 0 setting-get('range outline width') * 10 setting-get('primary color');
+    height: setting-get('range thumb size') * 1.25;
+    width: setting-get('range thumb size') * 1.25;
+  }
+}
+
+@mixin wrapper {
+  margin: 0 auto;
+  max-width: setting-get('fixed container');
+  padding: setting-get('rhythm') / .5;
+  padding-bottom: 0;
+  padding-top: 0;
+
+  @include breakpoint(setting-get('fixed container')) {
+    padding: 0;
+  }
+}

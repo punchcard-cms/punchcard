@@ -1,6 +1,6 @@
+<a href="/" class="nav--home"><img src="/images/punchcard-type.svg" class="nav--logo" alt="punchcard-logo"></a>
 <nav class="nav">
   <ul class="nav--list">
-    <li class="nav--item"><a href="/" class="nav--home"><img src="/images/punchcard-type.svg" class="nav--logo" alt="punchcard-logo"></a></li>
     {% for item in nav %}
     <li class="nav--item"><a href="/{{item.path}}" class="nav--a">{{item.label}}</a></li>
     {% endfor %}

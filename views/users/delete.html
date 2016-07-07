@@ -9,17 +9,17 @@
 {% endblock %}
 
 {% block main %}
-<h1>{{title}}</h1>
+<h1 class="base--h1">{{title}}</h1>
 {% if message %}
-<p class="form--alert" role="alert" for="delete">{{ message }}</p>
+<p class="base--p form--alert" role="alert" for="delete">{{ message }}</p>
 {% endif %}
 
-<form action="{{action}}" method="post" enctype="multipart/form-data" novalidate>
-
-  <p>Delete {{email}}?</p>
-  <p>This cannot be undone!</p>
-
-  <button id="delete" type="submit" {% if current %}disabled{% endif %}>Delete</button>
+<form action="{{action}}" method="post" enctype="multipart/form-data" novalidate class="base--form">
+  <p class="base--p">Delete {{email}}?</p>
+  <p class="base--p">This cannot be undone!</p>
+  <div class="form--submit">
+    <button id="delete" class="base--button" type="submit" {% if current %}disabled{% endif %}>Delete</button>
+  </div>
 </form>
 
 {% endblock %}

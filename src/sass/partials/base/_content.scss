@@ -3,27 +3,35 @@
 @import 'content/extends';
 
 body {
-  background-color: $white;
-  font-family: $font-stack;
+  background-color: setting-get('white');
+  font-family: setting-get('sans serif font');
+  font-size: setting-get('small font');
   margin: 0;
+
+  * {
+    line-height: setting-get('base line height');
+  }
+
+  * + * {
+    margin-top: setting-get('rhythm');
+  }
+
+  @media (min-width: 1200px) {
+    font-size: setting-get('base font');
+  }
 }
 
 ._content {
-
-  margin: 0 auto;
-  margin-bottom: -50px;
+  @include wrapper;
   margin-top: 50px;
   min-height: 100%;
-  padding: 0 1em;
 
-  &:after {
+  &::after {
     content: '';
     display: block;
     height: 75px;
   }
-
 }
-
 
 .content--logomark {
   display: block;
