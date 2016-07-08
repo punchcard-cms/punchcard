@@ -21,10 +21,20 @@ module.exports = {
     },
     directory: path.join(__dirname, '../content-types'),
     messages: {
+      content: {
+        title: 'Revisions for \'%id\'',
+      },
+      format: {
+        id: 'Content ID must be in UUID format',
+        revision: 'Revision must be a number',
+      },
       missing: {
         type: 'Content Type \'%type\' not found',
         id: 'Content with ID \'%id\' in Content Type \'%type\' not found',
-        revision: 'Revision for ID \'%id\' in Content Type \'%type\' not found',
+        revision: 'Revision \'%revision\' for ID \'%id\' in Content Type \'%type\' not found',
+      },
+      revisions: {
+        title: 'Revision \'%revision\' for \'%id\'',
       },
     },
   },
