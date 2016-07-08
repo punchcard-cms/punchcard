@@ -343,8 +343,9 @@ test.cb('Bad revision number - Content Type Edit Page', t => {
   agent
     .get(`/content/services/${serviceUuid}/1/edit`)
     .set('cookie', cookie)
-    .expect(404)
+    .expect(500)
     .end((err, res) => {
+      console.log(err);
       t.is(err, null, 'Should not have an error');
       t.true(includes(res.text, `Revision &#39;1&#39; for ID &#39;${serviceUuid}&#39; in Content Type &#39;services&#39; not found`, 'Bad revision or id'));
       t.end();
