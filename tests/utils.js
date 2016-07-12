@@ -132,6 +132,7 @@ test('Request Format', t => {
     'service-name--text': 'bar',
     'service-email--email--0': 'foo@test.com',
     'service-email--email--1': 'bar@test.com',
+    'service-email--email--2': '',
   };
 
   const expected = {
