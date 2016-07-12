@@ -29,3 +29,15 @@ attributes:
     inputs:
       text:
         placeholder: add svc email
+  - type: checkbox
+    id: service-checkbox
+    name: Service Checkbox
+    inputs:
+      checkbox:
+        options:
+          - label: Uno
+            value: one
+          - label: Dos
+            value: two
+          - label: Tres
+            value: three

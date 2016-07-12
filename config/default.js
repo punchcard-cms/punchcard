@@ -21,22 +21,20 @@ module.exports = {
     },
     directory: path.join(__dirname, '../content-types'),
     messages: {
+      content: {
+        title: 'Revisions for \'%id\'',
+      },
       format: {
+        id: 'Content ID must be in UUID format',
         revision: 'Revision must be a number',
       },
       missing: {
-        data: {
-          type: 'Content Type \'%type\' not found',
-          id: 'Content with ID \'%id\' in Content Type \'%type\' not found',
-          revision: 'Revision \'%revision\' in Content Type \'%type\' not found',
-        },
-        url: {
-          revision: 'URL missing revision number',
-          type: 'URL missing content type',
-        },
         type: 'Content Type \'%type\' not found',
         id: 'Content with ID \'%id\' in Content Type \'%type\' not found',
-        revision: 'Revision \'%revision\' in Content Type \'%type\' not found',
+        revision: 'Revision \'%revision\' for ID \'%id\' in Content Type \'%type\' not found',
+      },
+      revisions: {
+        title: 'Revision \'%revision\' for \'%id\'',
       },
     },
   },
@@ -108,17 +106,6 @@ module.exports = {
         delete: 'User does not exist',
         current: 'Cannot delete logged-in user',
       },
-    },
-  },
-  workflows: {
-    actions: {
-      approve: 'approve',
-    },
-    default: 'self-publish',
-    directory: path.join(__dirname, '../workflows'),
-    messages: {
-      array: 'Workflows need to be an array',
-      missing: 'Workflow \'%workflow\' in Content Type \'%type\' not found',
     },
   },
 };

@@ -54,6 +54,7 @@
     "express": "^4.14.0",
     "express-session": "^1.13.0",
     "ibm-design-colors": "^1.6.0",
+    "input-plugin-checkbox": "^0.1.0",
     "input-plugin-password": "0.0.1",
     "input-plugin-radio": "0.0.1",
     "input-plugin-select": "^0.1.0",
@@ -71,10 +72,11 @@
     "passport": "^0.3.2",
     "passport-local": "^1.0.0",
     "pg": "^6.0.0",
-    "punchcard-content-types": "^0.10.0",
+    "punchcard-content-types": "^2.0.1",
     "sass-toolkit": "^2.10.0",
     "serve-favicon": "^2.3.0",
-    "uuid": "^2.0.2"
+    "uuid": "^2.0.2",
+    "validator": "^5.4.0"
   },
   "devDependencies": {
     "ava": "^0.15.2",
@@ -91,7 +93,8 @@
     "punchcard-semantic-release": "^2.0.1",
     "semantic-release": "^4.3.5",
     "supertest": "^1.2.0",
-    "tap-diff": "^0.1.1"
+    "tap-diff": "^0.1.1",
+    "uuid": "^2.0.2"
   },
   "engines": {
     "node": "5.7"
