@@ -129,10 +129,12 @@ test('Request Format', t => {
     'sunset-time': '',
     'sunrise-date': '2016-06-23',
     'sunrise-time': '00:00',
-    'service-name--text': 'bar',
+    'service-name--text--0': 'bar',
+    'service-name--text--1': '',
     'service-email--email--0': 'foo@test.com',
-    'service-email--email--1': 'bar@test.com',
-    'service-email--email--2': '',
+    'service-email--email--1': '',
+    'service-email--email--2': 'bar@test.com',
+    'service-email--email--3': '',
   };
 
   const expected = {
