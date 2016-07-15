@@ -122,3 +122,39 @@ test('Config', t => {
 
   t.deepEqual(result, expected, 'Transforms input name:value in to object');
 });
+
+test('Request Format', t => {
+  const input = {
+    'sunset-date': '',
+    'sunset-time': '',
+    'sunrise-date': '2016-06-23',
+    'sunrise-time': '00:00',
+    'service-name--text--0': 'bar',
+    'service-name--text--1': '',
+    'service-email--email--0': 'foo@test.com',
+    'service-email--email--1': '',
+    'service-email--email--2': 'bar@test.com',
+    'service-email--email--3': '',
+  };
+
+  const expected = {
+    'sunset-date': { value: '' },
+    'sunset-time': { value: '' },
+    'sunrise-date': { value: '2016-06-23' },
+    'sunrise-time': { value: '00:00' },
+    'service-name': {
+      text: { value: 'bar' },
+    },
+    'service-email': [
+      {
+        email: { 'value': 'foo@test.com' },
+      },
+      {
+        email: { 'value': 'bar@test.com' },
+      },
+    ],
+  };
+  const result = utils.format(input);
+  t.is(JSON.stringify(result), JSON.stringify(expected), 'A single object is retrieved from array based on key/value');
+  t.deepEqual(result, expected, 'A single object is retrieved from array based on key/value');
+});

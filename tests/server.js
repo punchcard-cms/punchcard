@@ -3,6 +3,7 @@ import request from 'supertest';
 import bcrypt from 'bcrypt-nodejs';
 import Promise from 'bluebird';
 import uuid from 'uuid';
+import includes from 'lodash/includes';
 
 import punchcard from '../';
 import database from '../lib/database';
@@ -57,6 +58,10 @@ const getService = (svc) => {
   return database.select('*').from('content-type--services').where({
     id: svc.id,
   });
+};
+
+const addService = (svc) => {
+  return database('content-type--services').insert(svc).returning('revision');
 };
 
 const serviceCheck = (svc) => {
@@ -153,6 +158,10 @@ test.cb('Content Landing Page', t => {
     });
 });
 
+
+//////////////////////////////
+// Content Pages - type landing page
+//////////////////////////////
 test.cb('Content Type Landing Page', t => {
   agent
     .get('/content/services')
@@ -177,6 +186,10 @@ test.cb('Invalid Content Type - Landing', t => {
     });
 });
 
+
+//////////////////////////////
+// Content Pages - type add-content page
+//////////////////////////////
 test.cb('Content Type Add Page', t => {
   agent
     .get('/content/services/add')
@@ -201,43 +214,191 @@ test.cb('Invalid Content Type - Add', t => {
     });
 });
 
-test.cb('Content Type Edit Page', t => {
+//////////////////////////////
+// Content Pages - individual piece of content page
+//////////////////////////////
+test.cb('Content Type Individual Landing ', t => {
   agent
-    .get(`/content/services/${serviceUuid}/null/edit`)
+    .get(`/content/services/${serviceUuid}`)
     .set('cookie', cookie)
     .expect(200)
     .end((err, res) => {
       t.is(err, null, 'Should not have an error');
       t.regex(res.text, /DOCTYPE html/, 'should have an html doctype');
-
       t.end();
     });
 });
 
-test.cb('Invalid Content Type - Edit', t => {
+test.cb('Content Type Individual Landing - non UUID', t => {
   agent
-    .get(`/content/foo/${serviceUuid}/edit`)
+    .get('/content/services/foo')
     .set('cookie', cookie)
     .expect(404)
-    .end(err => {
+    .end((err, res) => {
       t.is(err, null, 'Should have an error');
+      t.true(includes(res.text, 'Content ID must be in UUID format', 'Content url requires an ID'));
       t.end();
     });
 });
 
-test.cb('Content Type Post data', t => {
+test.cb('Content Type Individual Landing - bad UUID', t => {
+  const badUuid = uuid.v4();
   agent
-    .post('/content/services/save')
-    .field('language', 'test-dummy-entry')
+    .get(`/content/services/${badUuid}`)
     .set('cookie', cookie)
-    .expect(302)
+    .expect(404)
+    .end((err, res) => {
+      t.is(err, null, 'Should have an error');
+      t.true(includes(res.text, `Content with ID &#39;${badUuid}&#39; in Content Type &#39;services&#39; not found`, 'Content url requires an ID'));
+      t.end();
+    });
+});
+
+//////////////////////////////
+// Content Pages - individual revision page
+//////////////////////////////
+
+test.cb('Invalid Content Type - individual revision', t => {
+  addService(service).then(revision => {
+    agent
+      .get(`/content/foo/${serviceUuid}/${revision}`)
+      .set('cookie', cookie)
+      .expect(404)
+      .end(err => {
+        t.is(err, null, 'Should not have an error');
+        t.end();
+      });
+  });
+});
+
+test.cb('Non UUID - individual revision', t => {
+  agent
+    .get('/content/services/foo/123')
+    .set('cookie', cookie)
+    .expect(404)
     .end((err, res) => {
       t.is(err, null, 'Should not have an error');
-      t.is(res.text, 'Found. Redirecting to /content/services', 'should have a redirect message');
-
+      t.true(includes(res.text, 'Content ID must be in UUID format', 'Content url requires an ID'));
       t.end();
     });
 });
+
+test.cb('Content Type Revision View - non number', t => {
+  agent
+    .get(`/content/services/${serviceUuid}/foo`)
+    .set('cookie', cookie)
+    .expect(404)
+    .end((err, res) => {
+      t.is(err, null, 'Should have an error');
+      t.true(includes(res.text, 'Revision must be a number', 'Revision must be a number'));
+      t.end();
+    });
+});
+
+test.cb('Content Type Revision View', t => {
+  addService(service).then(revision => {
+    agent
+      .get(`/content/services/${serviceUuid}/${revision}`)
+      .set('cookie', cookie)
+      .expect(200)
+      .end((err, res) => {
+        t.is(err, null, 'Should not have an error');
+        t.regex(res.text, /DOCTYPE html/, 'should have an html doctype');
+
+        t.end();
+      });
+  });
+});
+
+//////////////////////////////
+// Content Pages - content edit page
+//////////////////////////////
+
+test.cb('Invalid Content Type - Content Type Edit Page', t => {
+  addService().then(revision => {
+    agent
+      .get(`/content/foo/${serviceUuid}/${revision}/edit`)
+      .set('cookie', cookie)
+      .expect(404)
+      .end(err => {
+        t.is(err, null, 'Should not have an error');
+        t.end();
+      });
+  });
+});
+
+test.cb('Non UUID - Content Type Edit Page', t => {
+  agent
+    .get('/content/services/foo/123/edit')
+    .set('cookie', cookie)
+    .expect(404)
+    .end((err, res) => {
+      t.is(err, null, 'Should not have an error');
+      t.true(includes(res.text, 'Content ID must be in UUID format', 'Content url requires an ID'));
+      t.end();
+    });
+});
+
+test.cb('Bad revision number - Content Type Edit Page', t => {
+  agent
+    .get(`/content/services/${serviceUuid}/0/edit`)
+    .set('cookie', cookie)
+    .expect(404)
+    .end((err, res) => {
+      t.is(err, null, 'Should not have an error');
+      t.true(includes(res.text, `Revision &#39;0&#39; for ID &#39;${serviceUuid}&#39; in Content Type &#39;services&#39; not found`, 'Bad revision or id'));
+      t.end();
+    });
+});
+
+test.cb('Non number for revision - Content Type Edit Page', t => {
+  agent
+    .get(`/content/services/${serviceUuid}/foo/edit`)
+    .set('cookie', cookie)
+    .expect(404)
+    .end((err, res) => {
+      t.is(err, null, 'Should have an error');
+      t.true(includes(res.text, 'Revision must be a number', 'Revision must be a number'));
+      t.end();
+    });
+});
+
+test.cb('Content Type Post data - testing session', t => {
+  service[0].value = {
+    'service-name--text': 'thing',
+    'sunset-date': 'another thing',
+  };
+  addService(service).then(revision => {
+    agent
+      .get(`/content/services/${serviceUuid}/${revision}/edit`)
+      .set('cookie', cookie)
+      .expect(200)
+      .end((err, res) => {
+        t.is(err, null, 'Should not have an error');
+        t.regex(res.text, /DOCTYPE html/, 'should have an html doctype');
+
+        t.end();
+      });
+  });
+});
+test.cb('Content Type Edit Page', t => {
+  getService({ id: serviceUuid }).then(srvc => {
+    agent
+      .get(`/content/services/${serviceUuid}/${srvc[0].revision}/edit`)
+      .set('cookie', cookie)
+      .expect(200)
+      .end((err, res) => {
+        t.is(err, null, 'Should not have an error');
+        t.regex(res.text, /DOCTYPE html/, 'should have an html doctype');
+
+        t.end();
+      });
+  });
+});
+
+//////////////////////////////
+// Content Pages - content Post data
+//////////////////////////////
 
 test.cb('Invalid Content Type - Post data', t => {
   agent
@@ -249,6 +410,61 @@ test.cb('Invalid Content Type - Post data', t => {
       t.is(err, null, 'Should have an error');
       t.end();
     });
+});
+
+test.cb('Database error - Content Type Post data', t => {
+  agent
+    .post('/content/services/save')
+    .field('language', 'test-dummy-entry')
+    .field('approval', 'test')
+    .set('cookie', cookie)
+    .expect(500)
+    .end((err, res) => {
+      t.is(err, null, 'Should have an error');
+      t.true(includes(res.text, 'error: insert into &quot;content-type--services&quot;', 'should have an error message'));
+
+      t.end();
+    });
+});
+
+test.cb('Content Type Post data', t => {
+  agent
+    .post('/content/services/save')
+    .field('language', 'test-dummy-entry')
+    .field('approval', 1)
+    .field('service-name--text', 'Picachu')
+    .set('cookie', cookie)
+    .expect(302)
+    .end((err, res) => {
+      t.is(err, null, 'Should not have an error');
+      t.is(res.text, 'Found. Redirecting to /content/services', 'should have a redirect message');
+
+      t.end();
+    });
+});
+
+test.cb('Content Type Post data - testing session', t => {
+  addService(service).then(revision => {
+    agent
+      .get(`/content/services/${serviceUuid}/${revision}/edit`)
+      .set('cookie', cookie)
+      .expect(200)
+      .end((err) => {
+        t.is(err, null, 'Should not have an error');
+        agent
+          .post('/content/services/save')
+          .field('language', 'test-dummy-entry')
+          .field('service-email--email', 'not an email')
+          .set('cookie', cookie)
+          .expect(302)
+          .end((error, res) => {
+            t.is(error, null, 'Should not have an error');
+            t.true(includes(res.text, 'Found. Redirecting to', 'should have a redirect message'));
+
+            t.end();
+          });
+      });
+  });
 });
 
 //////////////////////////////
