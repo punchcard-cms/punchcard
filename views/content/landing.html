@@ -9,32 +9,32 @@
 {% endblock %}
 
 {% block main %}
-<h1 class="base--h1">{{content.type.name}}</h1>
-<p class="base--p"><a href="/{{config.base}}/{{type.id}}/{{config.actions.add}}" class="base--a">{{config.base}} | {{config.actions.add}}</a></p>
-<h2 class="base--h2">Content</h2>
+<div class="introduction">
+  <h1 class="introduction--h1">{{type.name|capitalize}}</h1>
+  <a href="/{{config.base}}/{{type.id}}/{{config.actions.add}}" class="introduction--button">{{config.actions.add|capitalize}} {{config.base}}</a>
+</div>
 
 {% if content %}
-
-  <table class="base--table">
-    <thead class="base--thead">
-      <tr class="base--tr">
-        <th class="base--th">{{config.base}}</th>
-        <th class="base--th">{{config.actions.edit}}</th>
-        <th class="base--th">date</th>
-      </tr>
-    </thead>
+<table class="base--table">
+  <thead class="base--thead">
+    <tr class="base--tr">
+      <th class="base--th">{{config.base}}</th>
+      <th class="base--th">Date</th>
+      <th class="base--th">{{config.actions.edit}}</th>
+    </tr>
+  </thead>
+  <tbody class="base--tbody">
   {% for c in content %}
     {% if c.value %}
-      <tbody class="base--tbody">
-        <tr class="base--tr">
-          <td data-th="{{config.base}}" class="base--td">{{c.value[type.primary]}}</td>
-          <td data-th="{{config.actions.edit}}" class="base--td"><a href="/{{config.base}}/{{type.id}}/{{c.id}}/{{c.revision}}/{{config.actions.edit}}" class="base--a">{{config.actions.edit}}</a></td>
-          <td data-th="date" class="base--td">{{c.created}}</td>
-        </tr>
-      </tbody>
+    <tr class="base--tr">
+      <td data-th="{{config.base}}" class="base--td">{{c.value[type.primary]}}</td>
+      <td data-th="date" class="base--td">{{c.created}}</td>
+      <td data-th="{{config.actions.edit}}" class="base--td"><a href="/{{config.base}}/{{type.id}}/{{c.id}}/{{c.revision}}/{{config.actions.edit}}" class="base--a">{{config.actions.edit|capitalize}}</a></td>
+    </tr>
     {% endif %}
   {% endfor %}
-  </table>
+  </tbody>
+</table>
 {% endif %}
 {% endblock %}
 

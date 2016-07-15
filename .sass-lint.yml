@@ -36,7 +36,10 @@ rules:
   no-transition-all: 2
   no-universal-selectors: 0
   no-url-protocols: 2
-  no-vendor-prefixes: 2
+  no-vendor-prefixes:
+    - 2
+    -
+      ignore-non-standard: true
   no-warn: 1
   property-units: 0
 
@@ -88,7 +91,11 @@ rules:
   hex-notation: 2
   indentation: 2
   leading-zero: 2
-  nesting-depth: 2
+  # TODO: Revert to 2 once https://github.com/sasstools/sass-lint/pull/677 lands
+  nesting-depth:
+    - 2
+    -
+      max-depth: 3
   property-sort-order: 2
   pseudo-element: 2
   quotes: 2

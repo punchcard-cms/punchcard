@@ -5,32 +5,35 @@
 {% endblock %}
 
 {% block header %}
-<header class="header">
-  <nav class="nav">
-  <ul class="nav--list">
-    <li class="nav--item"><a href="/"><img src="/images/punchcard-type.svg" alt="punchcard-logo" class="nav--logo"></a></li>
-  </ul>
-</nav>
-
-</header>
+<div class="_header">
+  <header class="site-header">
+    <nav class="nav">
+      <ul class="nav--list">
+        <li class="nav--item"><a href="/"><img src="/images/punchcard-type.svg" alt="punchcard-logo" class="nav--logo"></a></li>
+      </ul>
+    </nav>
+  </header>
+</div>
 
 {% endblock %}
 
 {% block main %}
-<div class="login--wrapper">
-  <h1 class="base--h1 login--title">{{title}}</h1>
-  <form action="/login" method="post" novalidate class="base--FORM">
-    {{message}}
-    <div class="form--field">
-      <label for="email">Email:</label>
-      <input type="text" id="email" name="email"/>
-    </div>
-    <div class="form--field">
-      <label for="password">Password:</label>
-      <input type="password" id="password" name="password"/>
-    </div>
-    <div class="form--submit">
-      <button type="submit" class="base--submit">Submit</button>
+<div class="_login">
+  <h1 class="_login--h1">{{title}}</h1>
+  <form action="/login" method="post" novalidate class="form">
+    <div class="form--field-container">
+      {{message}}
+      <div class="form--field">
+        <label for="email">Email:</label>
+        <input type="text" id="email" name="email"/>
+      </div>
+      <div class="form--field">
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password"/>
+      </div>
+      <div class="form--actions">
+        <button type="submit" class="form--submit">Submit</button>
+      </div>
     </div>
   </form>
 </div>

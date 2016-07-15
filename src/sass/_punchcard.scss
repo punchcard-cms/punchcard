@@ -4,6 +4,7 @@
 @import 'toolkit';
 @import 'breakpoint';
 @import 'ibm-colors';
+@import 'modular-scale';
 ////////////////////////
 
 //////////////////////////////
@@ -21,7 +22,11 @@
 
 //////////////////////////////
 // COMPONENTS
+@import 'partials/components/fourohfour';
 @import 'partials/components/forms';
+@import 'partials/components/introduction';
+@import 'partials/components/nav';
+@import 'partials/components/siteheader';
 //////////////////////////////
 
 //////////////////////////////

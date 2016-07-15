@@ -16,15 +16,19 @@ body {
     margin-top: setting-get('rhythm');
   }
 
-  @media (min-width: 1200px) {
+  @include breakpoint(setting-get('fixed container')) {
     font-size: setting-get('base font');
   }
 }
 
 ._content {
   @include wrapper;
-  margin-top: 50px;
+  margin-top: setting-get('rhythm') / .5;
   min-height: 100%;
+  padding: 0 setting-get('rhythm') / .75;
+  @include breakpoint(setting-get('fixed container break')) {
+    padding: 0;
+  }
 
   &::after {
     content: '';
@@ -33,7 +37,7 @@ body {
   }
 }
 
-.content--logomark {
+.home--logomark {
   display: block;
   margin: 0 auto;
   margin-top: 75px;

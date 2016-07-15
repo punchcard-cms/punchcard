@@ -1,15 +1,31 @@
-@mixin button ($border-color, $color, $border-color-hover, $color-hover) {
-  background-color: setting-get('white');
-  border-color: $border-color;
+@mixin button ($background, $border, $color, $background-hover, $border-hover, $color-hover, $shadow) {
+  background-color: $background;
+  border-color: $border;
   border-radius: 45px;
   border-style: solid;
   border-width: setting-get('input border width');
   color: $color;
-  padding: .5em 2em;
+  display: inline-block;
+  font-size: ms(-1);
+  font-weight: setting-get('bold font weight');
+  letter-spacing: 1px;
+  padding: .5em 1.5em;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: setting-get('translate transition');
 
-  &:hover {
-    border-color: $border-color-hover;
+  &:hover,
+  &:focus {
+    background-color: $background-hover;
+    border-color: $border-hover;
+    box-shadow: -5px 5px 0 0 $shadow;
     color: $color-hover;
+    transform: translate(setting-get('rhythm') / 4, setting-get('rhythm') / -4);
+  }
+
+  &:active {
+    box-shadow: 0 0 0 0 transparent;
+    transform: translate(0, 0);
   }
 }
 
@@ -20,7 +36,8 @@
     position: relative;
 
     &::before {
-      border: setting-get('input border width') solid setting-get('input border color');
+      background: setting-get('white');
+      border: setting-get('input border width') solid setting-get('primary color');
       content: '';
       display: inline-block;
       height: 1em;
@@ -31,39 +48,60 @@
     }
   }
 
-  &:checked + label::before {
-    background: setting-get('secondary color');
-    box-shadow: inset 0 0 0 setting-get('input border width') / 1.5 setting-get('white');
+  &:checked + label {
+    border-color: setting-get('primary color');
+
+    &::before {
+      background: setting-get('primary color');
+      box-shadow: inset 0 0 0 setting-get('input border width') / 1.5 setting-get('white');
+    }
   }
 }
 
-@mixin hyphens($hyphen-type) {
-  hyphens: $hyphen-type;
-  -moz-hyphens: $hyphen-type;
-  -ms-hyphens: $hyphen-type;
-  -webkit-hyphens: $hyphen-type;
+@mixin h1 {
+  font-size: ms(4);
+  font-weight: 200;
+}
+
+@mixin h2 {
+  font-size: ms(3);
+  font-weight: 200;
 }
 
 @mixin input {
-  border: setting-get('input border width') solid setting-get('input border color');
+  background: setting-get('white');
+  border: setting-get('input border width') solid setting-get('white');
+  border-radius: setting-get('input border radius');
   color: setting-get('black');
   display: block;
   margin-top: setting-get('rhythm') / 2;
   padding: .3em .5em;
+  transform: translate(0, 0);
+  transition: setting-get('translate transition');
   width: 100%;
 
-  @media (min-width: 600px) {
-    width: 400px;
-  }
-
   &:focus {
-    background-color: setting-get('primary support color');
     border-color: setting-get('primary color');
+    box-shadow: -7px 7px 0 0 setting-get('primary color');
     outline: setting-get('primary color');
+    transform: translate(setting-get('rhythm') / 4, setting-get('rhythm') / -4);
   }
 
   &:disabled {
-    background-color: color('neutral-white', 40);
+    background-color: color('grey', 20);
+    border-color: color('grey', 20);
+  }
+}
+
+@mixin link ($border-color, $color, $border-color-hover, $color-hover) {
+  border-bottom: 2px solid $border-color;
+  color: $color;
+  text-decoration: none;
+
+  &:hover {
+    border-color: $border-color-hover;
+    color: $color-hover;
+    transition: setting-get('fade');
   }
 }
 
@@ -74,7 +112,8 @@
     position: relative;
 
     &::before {
-      border: setting-get('input border width') solid setting-get('input border color');
+      background: setting-get('white');
+      border: setting-get('input border width') solid setting-get('primary color');
       border-radius: 50%;
       content: '';
       display: inline-block;
@@ -86,8 +125,10 @@
     }
   }
 
-  &:checked + label::before {
-    background: radial-gradient(color('grey', 80) 40%, transparent 40%);
+  &:checked + label {
+    &::before {
+      background: radial-gradient(color('grey', 80) 40%, transparent 40%);
+    }
   }
 }
 
@@ -100,27 +141,64 @@
     #{$prefix}appearance: none;
     background: color('white');
     border-radius: setting-get('range thumb size');
-    box-shadow: inset 0 0 0 setting-get('range outline width') * 1.5 setting-get('input border color');
+    box-shadow: inset 0 0 0 setting-get('range outline width') * 1.5 setting-get('primary color');
     height: setting-get('range thumb size');
     transition-duration: .5s;
     width: setting-get('range thumb size');
   }
 
-  &:active::#{$prefix}#{$range}-thumb {
-    box-shadow: inset 0 0 0 setting-get('range outline width') * 10 setting-get('primary color');
-    height: setting-get('range thumb size') * 1.25;
-    width: setting-get('range thumb size') * 1.25;
+  &:focus,
+  &:active {
+    &::#{$prefix}#{$range}-thumb {
+      box-shadow: inset 0 0 0 setting-get('range outline width') * 10 setting-get('primary color');
+      height: setting-get('range thumb size') * 1.25;
+      width: setting-get('range thumb size') * 1.25;
+    }
+  }
+}
+
+@mixin range {
+  @include input;
+  background: setting-get('primary accent color');
+  border: 5px solid setting-get('primary accent color');
+  border-radius: setting-get('range height');
+  box-shadow: inset 0 0 0 0 transparent;
+  height: setting-get('range height');
+  margin-top: setting-get('rhythm');
+  padding: 0;
+
+  &:focus {
+    background-color: setting-get('primary color');
+    box-shadow: inset 0 0 0 setting-get('range outline width') setting-get('primary color');
+    outline: 0;
+    transform: none;
+
+    &::-moz-range-track {
+      appearance: none;
+      background-color: setting-get('primary color');
+      box-shadow: inset 0 0 0 setting-get('range outline width') setting-get('primary color');
+    }
+  }
+
+  &:disabled {
+    opacity: .5;
+  }
+
+  &::-moz-range-track {
+    appearance: none;
+    background-color: setting-get('primary accent color');
+    border-radius: setting-get('range height');
+    height: setting-get('range height');
+    padding: 0;
   }
 }
 
 @mixin wrapper {
   margin: 0 auto;
   max-width: setting-get('fixed container');
-  padding: setting-get('rhythm') / .5;
-  padding-bottom: 0;
-  padding-top: 0;
+  padding: 0 setting-get('rhythm') / .5;
 
-  @include breakpoint(setting-get('fixed container')) {
+  @include breakpoint(setting-get('fixed container break')) {
     padding: 0;
   }
 }

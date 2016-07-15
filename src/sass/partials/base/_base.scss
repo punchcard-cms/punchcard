@@ -5,36 +5,24 @@
 
 .base {
   &--a {
-    border-bottom: 2px solid setting-get('primary color');
-    color: setting-get('primary color');
-    text-decoration: none;
-
-    &:hover {
-      border-color: setting-get('secondary color');
-      color: setting-get('secondary color');
-      transition: setting-get('fade');
-    }
+    @include link(setting-get('active link color'), setting-get('active link color'), setting-get('secondary link color'), setting-get('secondary link color'));
   }
 
-  // Major Third Type Scale
-
   &--h1 {
-    font-size: 2.441em;
-    font-weight: setting-get('normal font weight');
+    @include h1;
   }
 
   &--h2 {
-    font-size: 1.953em;
-    font-weight: setting-get('normal font weight');
+    @include h2;
   }
 
   &--h3 {
-    font-size: 1.563em;
+    font-size: ms(2);
     font-weight: setting-get('normal font weight');
   }
 
   &--h4 {
-    font-size: 1.25em;
+    font-size: ms(1);
     font-weight: setting-get('normal font weight');
   }
 
@@ -44,15 +32,8 @@
   }
 
   &--h6 {
-    font-size: .8em;
+    font-size: ms(-1);
     font-weight: setting-get('normal font weight');
-  }
-
-  &--p {
-    font-weight: setting-get('normal font weight');
-    @include breakpoint(setting-get('max paragraph length')) {
-      max-width: 40em;
-    }
   }
 
   &--blockquote {
@@ -69,41 +50,25 @@
     font-weight: setting-get('bold font weight');
   }
 
-  &--dd {
-    @include breakpoint(setting-get('max paragraph length')) {
-      max-width: 40em;
-    }
-  }
-
   &--li {
     margin-top: 0;
-
-    &::before {
-      content: '•';
-      margin-left: -1em;
-      padding-right: .8em;
-      text-align: right;
-    }
-
-    @include breakpoint(setting-get('max paragraph length')) {
-      max-width: 40em;
-    }
   }
 
   &--ul {
-    display: table;
-    list-style: none;
-    margin-left: 0;
-    padding-left: 0;
+    display: block;
+    list-style: circle;
+    margin-left: setting-get('rhythm');
+
+    @include breakpoint(setting-get('fixed container')) {
+      margin-left: 0;
+    }
   }
 
   &--ol {
-    .base--li {
-      padding-left: .2em;
+    margin-left: setting-get('rhythm');
 
-      &::before {
-        display: none;
-      }
+    @include breakpoint(setting-get('fixed container')) {
+      margin-left: 0;
     }
   }
 
@@ -117,6 +82,7 @@
   }
 
   &--table {
+    margin-top: setting-get('rhythm') / .5;
     width: 100%;
   }
 
@@ -131,51 +97,53 @@
   }
 
   &--thead {
-
     color: setting-get('white');
   }
 
   &--tr {
     &:nth-of-type(even) {
       background-color: color('neutral-white', 30);
-
-      & .base--td::before {
-        background-color: color('teal', 60);
-        // responsive table zebra striping
-      }
     }
   }
 
+  // TODO: Re-enable and disable nesting for this specifically and revert nesting depth rule once https://github.com/sasstools/sass-lint/pull/677 lands
+  // &--tr:nth-of-type(even) .base--td::before {
+  //   background-color: color('teal', 70);
+  //   color: setting-get('white');.
+  // }
+
   &--th {
     display: none;
-    font-size: .8em;
-    font-weight: setting-get('normal font weight');
+    font-size: ms(-1);
+    font-weight: setting-get('bold font weight');
+    letter-spacing: 1px;
     padding: setting-get('rhythm');
     text-align: left;
-    @media (min-width: 600px) {
+    text-transform: uppercase;
+    @include breakpoint(setting-get('responsive table')) {
       background-color: setting-get('primary color');
+      color: setting-get('primary accent color');
       display: table-cell;
-      font-size: 1em;
     }
   }
 
   &--td {
     display: flex;
-    font-size: .8em;
+    font-size: ms(-1);
     margin: 0;
     padding: setting-get('rhythm') / 2;
-    @media (min-width: 600px) {
+    @include breakpoint(setting-get('responsive table')) {
       display: table-cell;
       font-size: 1em;
       padding: setting-get('rhythm');
     }
 
     &::before {
-      @include hyphens(auto);
       background-color: setting-get('primary color');
-      color: setting-get('white');
+      color: setting-get('primary accent color');
       content: attr(data-th)': ';
       display: inline-block;
+      font-weight: setting-get('bold font weight');
       margin: -.5rem .5em -.5rem -.5rem;
       min-width: 6.5em;
       padding: setting-get('rhythm') / 2;
@@ -183,7 +151,7 @@
       width: 6.5em;
       word-break: break-all;
 
-      @media (min-width: 600px) {
+      @include breakpoint(setting-get('responsive table')) {
         display: none;
       }
     }
@@ -193,15 +161,25 @@
     background-color: color('neutral-white', 40);
     border: 1px solid color('gray', 10);
     border-radius: 3px;
-    font-size: .8em;
+    font-size: ms(-1);
     padding: .2em .5em;
   }
 
   &--code {
-    background-color: setting-get('black');
-    color: setting-get('secondary accent color');
-    font-size: .8em;
-    padding: .4em .5em;
+    background: color('neutral-white', 40);
+    direction: ltr;
+    font-family: setting-get('monospace font');
+    font-size: ms(-1);
+    hyphens: none;
+    outline: 0;
+    overflow-y: overlay;
+    padding: .05rem .5rem;
+    tab-size: 2;
+    text-align: left;
+    white-space: pre;
+    word-break: normal;
+    word-spacing: normal;
+    word-wrap: normal;
   }
 
   &--samp {
@@ -211,6 +189,7 @@
   &--pre {
     direction: ltr;
     display: block;
+    font-family: setting-get('monospace font');
     hyphens: none;
     overflow-y: overlay;
     tab-size: 2;
@@ -243,14 +222,14 @@
   }
 
   &--sup {
-    font-size: .8em;
+    font-size: ms(-1);
     position: relative;
     top: -.4em;
     vertical-align: baseline;
   }
 
   &--sub {
-    font-size: .8em;
+    font-size: ms(-1);
     position: relative;
     top: .4em;
     vertical-align: baseline;
@@ -258,7 +237,7 @@
 
   &--small {
     color: color('grey', 50);
-    font-size: .8em;
+    font-size: ms(-1);
   }
 
   &--abbr {
@@ -296,17 +275,19 @@
     font-weight: setting-get('bold font weight');
   }
 
-  &--fieldset {
-    margin-top: setting-get('rhythm') / .5;
+  &--button {
+    @include button(setting-get('primary accent color'), setting-get('primary accent color'), setting-get('primary color'), setting-get('primary accent color'), setting-get('primary color'), setting-get('primary color'), setting-get('primary color'));
   }
+}
 
-  &--button,
-  &--submit {
-    @include button(setting-get('primary color'), setting-get('primary color'), setting-get('secondary color'), setting-get('secondary color'));
-  }
-
-  &--cancel,
-  &--reset {
-    @include button(color('black'), color('black'), setting-get('secondary color'), setting-get('secondary color'));
+// TODO: Remove once https://github.com/sasstools/sass-lint/pull/677 lands
+.base--tr {
+  &:nth-of-type(even) {
+    .base--td {
+      &::before {
+        background-color: color('teal', 70);
+        color: setting-get('white');
+      }
+    }
   }
 }

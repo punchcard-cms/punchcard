@@ -1,0 +1,16 @@
+.fourohfour {
+  @include breakpoint(setting-get('404 container')) {
+    margin: 0 auto;
+  }
+
+  &--svg {
+    display: block;
+    margin: 0 auto;
+    width: 300px;
+  }
+
+  &--h1 {
+    @include h1;
+    text-align: center;
+  }
+}
