@@ -4,7 +4,7 @@
 }
 
 .base {
-  &--a {
+  &--link {
     @include link(setting-get('active link color'), setting-get('active link color'), setting-get('secondary link color'), setting-get('secondary link color'));
   }
 
@@ -75,9 +75,7 @@
   &--hr {
     border: 0 none;
     border-top: 2px solid color('grey', 20);
-    margin: setting-get('rhythm') / .25;
-    margin-left: 0;
-    margin-right: 0;
+    margin: setting-get('rhythm') / .25 0;
     width: 15%;
   }
 
@@ -89,10 +87,7 @@
   &--caption {
     color: color('gray', 50);
     font-size: .8em;
-    padding: setting-get('rhythm') / 2;
-    padding-left: 0;
-    padding-right: 0;
-    padding-top: 0;
+    padding: 0 0 setting-get('rhythm') / 2;
     text-align: right;
   }
 

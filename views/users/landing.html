@@ -31,8 +31,8 @@
         <td data-th="Email" class="base--td">{{user.email}}</td>
         <td data-th="Role" class="base--td">{{user.role}}</td>
         <td data-th="Date" class="base--td">{{user.created}}</td>
-        <td data-th="Edit" class="base--td"><a href="{{config.base}}/{{config.actions.edit}}/{{user.id}}" class="base--a">{{config.actions.edit|capitalize}}</a></td>
-        <td data-th="Delete" class="base--td"><a href="{{config.base}}/{{config.actions.delete}}/{{user.id}}" class="base--a">{{config.actions.delete|capitalize}}</a></td>
+        <td data-th="Edit" class="base--td"><a href="{{config.base}}/{{config.actions.edit}}/{{user.id}}" class="base--link">{{config.actions.edit|capitalize}}</a></td>
+        <td data-th="Delete" class="base--td"><a href="{{config.base}}/{{config.actions.delete}}/{{user.id}}" class="base--link">{{config.actions.delete|capitalize}}</a></td>
       </tr>
     {% endif %}
   {% endfor %}

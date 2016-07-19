@@ -2,8 +2,8 @@
 <nav class="nav">
   <ul class="nav--list">
     {% for item in nav %}
-    <li class="nav--item"><a href="/{{item.path}}" class="nav--a">{{item.label}}</a></li>
+    <li class="nav--item"><a href="/{{item.path}}" class="nav--link">{{item.label}}</a></li>
     {% endfor %}
-    <li class="nav--item"><a href="/logout" class="nav--a">Logout</a></li>
+    <li class="nav--item"><a href="/logout" class="nav--link">Logout</a></li>
   </ul>
 </nav>

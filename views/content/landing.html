@@ -29,7 +29,7 @@
     <tr class="base--tr">
       <td data-th="{{config.base}}" class="base--td">{{c.value[type.primary]}}</td>
       <td data-th="date" class="base--td">{{c.created}}</td>
-      <td data-th="{{config.actions.edit}}" class="base--td"><a href="/{{config.base}}/{{type.id}}/{{c.id}}/{{c.revision}}/{{config.actions.edit}}" class="base--a">{{config.actions.edit|capitalize}}</a></td>
+      <td data-th="{{config.actions.edit}}" class="base--td"><a href="/{{config.base}}/{{type.id}}/{{c.id}}/{{c.revision}}/{{config.actions.edit}}" class="base--link">{{config.actions.edit|capitalize}}</a></td>
     </tr>
     {% endif %}
   {% endfor %}
