@@ -1,3 +1,71 @@
-$font-stack:  'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif;
+// Colors
 
-$white: #fff;
+$ColorScheme: (
+  'primary color': color('teal', 80),
+  'secondary color': color('purple', 80),
+  'primary accent color': color('teal', 20),
+  'secondary accent color': color('purple', 20),
+  'primary support color': color('teal', 10),
+  'secondary support color': color('purple', 10),
+  'active link color': color('teal', 50),
+  'secondary link color': color('purple', 50),
+  'background color': color('white'),
+  'text color': color('gray', 90),
+  'black': color('gray', 90),
+  'white': color('white')
+);
+
+$GlobalSettings: map-merge($GlobalSettings, $ColorScheme);
+
+// Typography
+
+$TypographySettings: (
+  'large typography breakpoint': 800px,
+  'base font': 18px,
+  'small font': 16px,
+  'base line height': 1.5em,
+  'sans serif font': ('Helvetica Neue', Helvetica, 'Open Sans', Arial, 'Lucida Grande', 'Roboto', sans-serif),
+  'monospace font': ('Courier New', 'Lucida Console', monospace),
+  'normal font weight': 400,
+  'bold font weight': 600,
+  'fade': (background .2s ease-in-out, color .2s ease-in-out, border-color .2s ease-in-out),
+  'translate transition': (box-shadow .2s ease, transform .2s ease)
+);
+
+$GlobalSettings: map-merge($GlobalSettings, $TypographySettings);
+
+$ms-base: 1em;
+$ms-ratio: $major-third;
+
+// Layout
+
+$LayoutSettings: (
+  'rhythm': 1rem,
+  'fixed container': 1200px,
+  'fixed container break': 1264px,
+  'max character legnth': 800px,
+  'max character legnth break': 1000px,
+  'responsive form': 800px,
+  'responsive table': 700px,
+  '404 contianer': 600px
+);
+
+$GlobalSettings: map-merge($GlobalSettings, $LayoutSettings);
+
+// Forms
+
+$FormSettings: (
+  'input border color': setting-get('white'),
+  'input border width': 3px,
+  'input border radius': 5px
+);
+
+$GlobalSettings: map-merge($GlobalSettings, $FormSettings);
+
+$RangeSettings: (
+  'range height': .5em,
+  'range thumb size': 1.5em,
+  'range outline width': .125em
+);
+
+$GlobalSettings: map-merge($GlobalSettings, $RangeSettings);

@@ -1,0 +1,12 @@
+.site-header {
+  @include wrapper;
+  align-items: center;
+  padding: setting-get('rhythm') / .75;
+  @include breakpoint(setting-get('responsive form')) {
+    display: flex;
+    justify-content: space-between;
+  }
+  @include breakpoint(setting-get('fixed container break')) {
+    padding: setting-get('rhythm') / .75 0;
+  }
+}

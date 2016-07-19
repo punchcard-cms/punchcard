@@ -1,0 +1,335 @@
+{% extends "_donut.html" %}
+
+{% block pageTitle %}{{pageTitle}}{% endblock %}
+
+{% block pageHead %}
+  {{ super() }}
+{% endblock %}
+
+{% block main %}
+  <section class="base--section">
+    <header class="base--header">
+      <h1 class="base--h1">Text</h1>
+    </header>
+    <article class="base--article">
+      <header class="base--header">
+        <h2 class="base--h2">Headings</h2>
+      </header>
+      <div class="base--div">
+        <h1 class="base--h1">Heading 1</h1>
+        <h2 class="base--h2">Heading 2</h2>
+        <h3 class="base--h3">Heading 3</h3>
+        <h4 class="base--h4">Heading 4</h4>
+        <h5 class="base--h5">Heading 5</h5>
+        <h6 class="base--h6">Heading 6</h6>
+      </div>
+    </article>
+    <hr class="base--hr" />
+    <article class="base--article">
+      <header class="base--header">
+        <h2 class="base--h2">Paragraphs</h2>
+      </header>
+      <div class="base--div">
+        <p class="base--p">A paragraph (from the Greek paragraphos, “to write beside” or “written beside”) is a self-contained unit of a discourse in writing dealing with a particular point or idea. A paragraph consists of one or more sentences. Though not required by the syntax of any language, paragraphs are usually an expected part of formal writing, used to organize longer prose.</p>
+      </div>
+    </article>
+    <hr class="base--hr" />
+    <article class="base--article">
+      <header class="base--header">
+        <h2 class="base--h2">Blockquotes</h2>
+      </header>
+      <div class="base--div">
+        <blockquote class="base--blockquote">
+          <p class="base--p">A block quotation (also known as a long quotation or extract) is a quotation in a written document, that is set off from the main text as a paragraph, or block of text.</p>
+          <p class="base--p">It is typically distinguished visually using indentation and a different typeface or smaller size quotation. It may or may not include a citation, usually placed at the bottom.</p>
+          <cite class="base--cite"><a href="#!" class="base--link">Said no one, ever.</a></cite>
+        </blockquote>
+      </div>
+    </article>
+    <hr class="base--hr" />
+    <article class="base--div">
+      <header class="base--header">
+        <h1 class="base--h1">Lists</h1>
+      </header>
+      <div class="base--div">
+        <h3 class="base--h3">Definition list</h3>
+        <dl class="base--dl">
+          <dt class="base--dt">Definition List Title</dt>
+          <dd class="base--dd">This is a definition list division.</dd>
+          <dt class="base--dt">Definition List Title</dt>
+          <dd class="base--dd">
+            <ul class="base--ul">
+              <li class="base--li">Unordered list item inside definition list</li>
+              <li class="base--li">Unordered list item inside definition list</li>
+              <li class="base--li">Unordered list item inside definition list</li>
+            </ul>
+          </dd>
+        </dl>
+        <h3 class="base--h3">Ordered List</h3>
+        <ol class="base--ol">
+          <li class="base--li">List Item 1</li>
+          <li class="base--li">List Item 2</li>
+          <li class="base--li">List Item 3</li>
+        </ol>
+        <h3 class="base--h3">Unordered List</h3>
+        <ul class="base--ul">
+          <li class="base--li">List Item 1</li>
+          <li class="base--li">List Item 2</li>
+          <li class="base--li">List Item 3</li>
+        </ul>
+      </div>
+    </article>
+    <hr class="base--hr" />
+    <article class="base--article">
+      <header class="base--header">
+        <h1 class="base--h1">Tabular data</h1>
+      </header>
+      <table class="base--table">
+        <caption class="base--caption">Table Caption</caption>
+        <thead class="base--thead">
+          <tr class="base--tr">
+            <th class="base--th">Heading 1</th>
+            <th class="base--th">Heading 2</th>
+            <th class="base--th">Heading3LongOneWord</th>
+            <th class="base--th">Heading 4 That Is Super Long</th>
+            <th class="base--th">Heading 5</th>
+          </tr>
+        </thead>
+        <tbody class="base--tbody">
+          <tr class="base--tr">
+            <td data-th="Heading 1" class="base--td">Table Cell 1</td>
+            <td data-th="Heading 2" class="base--td">Table Cell 2</td>
+            <td data-th="Heading3LongOneWord" class="base--td">Table Cell 3</td>
+            <td data-th="Heading 4" class="base--td">Table Cell 4</td>
+            <td data-th="Heading 5" class="base--td">Table Cell 5</td>
+          </tr>
+          <tr class="base--tr">
+            <td data-th="Heading 1" class="base--td">Table Cell 1</td>
+            <td data-th="Heading 2" class="base--td">Table Cell 2</td>
+            <td data-th="Heading3LongOneWord" class="base--td">Table Cell 3</td>
+            <td data-th="Heading 4" class="base--td">Table Cell 4</td>
+            <td data-th="Heading 5" class="base--td">Table Cell 5</td>
+          </tr>
+          <tr class="base--tr">
+            <td data-th="Heading 1" class="base--td">Table Cell 1</td>
+            <td data-th="Heading 2" class="base--td">Table Cell 2</td>
+            <td data-th="Heading3LongOneWord" class="base--td">Table Cell 3</td>
+            <td data-th="Heading 4" class="base--td">Table Cell 4</td>
+            <td data-th="Heading 5" class="base--td">Table Cell 5</td>
+          </tr>
+          <tr class="base--tr">
+            <td data-th="Heading 1" class="base--td">Table Cell 1</td>
+            <td data-th="Heading 2" class="base--td">Table Cell 2</td>
+            <td data-th="Heading3LongOneWord" class="base--td">Table Cell 3</td>
+            <td data-th="Heading 4" class="base--td">Table Cell 4</td>
+            <td data-th="Heading 5" class="base--td">Table Cell 5</td>
+          </tr>
+        </tbody>
+      </table>
+    </article>
+    <hr class="base--hr" />
+    <article class="base--article">
+      <header class="base--header">
+        <h1 class="base--h1">Code</h1>
+      </header>
+      <div class="base--div">
+        <p class="base--p"><strong class="base--strong">Keyboard input:</strong> <kbd class="base--kbd">Cmd</kbd></p>
+        <p class="base--p"><strong class="base--strong">Inline code:</strong> <code class="base--code">&lt;div&gt;code&lt;/div&gt;</code></p>
+        <p class="base--p"><strong class="base--strong">Sample output:</strong> <samp class="base--samp">This is sample output from a computer program.</samp></p>
+        <h2 class="base--h2">Pre-formatted text</h2>
+<pre class="base--pre">P R E F O R M A T T E D T E X T
+! " # $ % &amp; ' ( ) * + , - . /
+0 1 2 3 4 5 6 7 8 9 : ; &lt; = &gt; ?
+@ A B C D E F G H I J K L M N O
+P Q R S T U V W X Y Z [ \ ] ^ _
+` a b c d e f g h i j k l m n o
+p q r s t u v w x y z { | } ~ </pre>
+      </div>
+    </article>
+    <hr class="base--hr" />
+    <article class="base--article">
+      <header class="base--header">
+        <h1 class="base--h1">Inline elements</h1>
+      </header>
+      <div class="base--div">
+        <p class="base--p"><a href="#!" class="base--link">This is a text link</a>.</p>
+        <p class="base--p"><strong class="base--strong">Strong is used to indicate strong importance.</strong></p>
+        <p class="base--p"><em class="base--em">This text has added emphasis.</em></p>
+        <p class="base--p">The <b class="base--b">b element</b> is stylistically different text from normal text, without any special importance.</p>
+        <p class="base--p">The <i class="base--i">i element</i> is text that is offset from the normal text.</p>
+        <p class="base--p">The <u class="base--u">u element</u> is text with an unarticulated, though explicitly rendered, non-textual annotation.</p>
+        <p class="base--p"><del class="base--del">This text is deleted</del> and <ins class="base--ins">This text is inserted</ins>.</p>
+        <p class="base--p"><s class="base--s">This text has a strikethrough</s>.</p>
+        <p class="base--p">Superscript<sup class="base--sup">®</sup>.</p>
+        <p class="base--p">Subscript for things like H<sub class="base--sub">2</sub>O.</p>
+        <p class="base--p"><small class="base--small">This small text is small for for fine print, etc.</small></p>
+        <p class="base--p">Abbreviation: <abbr title="HyperText Markup Language" class="base--abbr">HTML</abbr></p>
+        <p class="base--p"><q cite="https://developer.mozilla.org/en-US/docs/HTML/Element/q" class="base--q">This text is a short inline quotation.</q></p>
+        <p class="base--p"><cite class="base--cite">This is a citation.</cite></p>
+        <p class="base--p">The <dfn class="base--dfn">dfn element</dfn> indicates a definition.</p>
+        <p class="base--p">The <mark class="base--mark">mark element</mark> indicates a highlight.</p>
+        <p class="base--p">The <var class="base--var">variable element</var>, such as <var>x</var> = <var>y</var>.</p>
+        <p class="base--p">The time element: <time datetime="2013-04-06T12:32+00:00" class="base--time">2 weeks ago</time></p>
+      </div>
+    </article>
+  </section>
+  <hr class="base--hr" />
+  <section class="base--section">
+    <header class="base--header">
+      <h1 class="base--h2">Form elements</h1>
+    </header>
+    <form class="form">
+      <div class="form--field-container">
+        <fieldset class="form--fieldset">
+          <legend class="form--legend">Input fields</legend>
+          <div class="form--field">
+            <label for="input__text">Text Input</label>
+            <input id="input__text" type="text" placeholder="Text Input">
+            <p class="form--description">This is a description of the input above</p>
+          </div>
+          <div class="form--field">
+            <label for="input__text">Disabled Input</label>
+            <input id="input__text" type="text" placeholder="Text Input" disabled>
+            <p class="form--description">This is a description of the input above</p>
+          </div>
+          <div class="form--field">
+            <label for="input__password">Password</label>
+            <input id="input__password" type="password" placeholder="Type your Password" >
+            <p class="form--description">This is a description of the input above</p>
+          </div>
+          <div class="form--field">
+            <label for="input__webaddress">Web Address</label>
+            <input id="input__webaddress" type="url" placeholder="http://yoursite.com">
+            <p class="form--description">This is a description of the input above</p>
+          </div>
+          <div class="form--field">
+            <label for="input__emailaddress">Email Address</label>
+            <input id="input__emailaddress" type="email" placeholder="name@email.com">
+          </div>
+          <div class="form--field">
+            <label for="input__phone">Phone Number</label>
+            <input id="input__phone" type="tel" placeholder="(999) 999-9999">
+          </div>
+          <div class="form--field">
+            <label for="input__search">Search</label>
+            <input id="input__search" type="search" placeholder="Enter Search Term">
+          </div>
+          <div class="form--field">
+            <label for="input__text2">Number Input</label>
+            <input id="input__text2" type="number" placeholder="Enter a Number">
+          </div>
+        </fieldset>
+      </div>
+      <div class="form--field-container">
+        <fieldset class="form--fieldset">
+          <legend class="form--legend">Select dropdown</legend>
+          <div class="form--field">
+            <label for="select">Select</label>
+            <select id="select">
+              <optgroup label="Option Group" class="base--optgroup">
+                <option>Option One</option>
+                <option>Option Two</option>
+                <option>Option Three</option>
+              </optgroup>
+            </select>
+          </div>
+        </fieldset>
+      </div>
+      <div class="form--field-container">
+        <fieldset class="form--fieldset">
+          <legend class="form--legend">Checkboxes</legend>
+          <div class="form--field">
+            <ul>
+              <li>
+                <input id="checkbox1" name="checkbox" type="checkbox" checked="checked">
+                <label for="checkbox1">Choice A</label>
+              </li>
+              <li>
+                <input id="checkbox2" name="checkbox" type="checkbox">
+                <label for="checkbox2" class="form--label">Choice B</label>
+              </li>
+              <li>
+                <input id="checkbox3" name="checkbox" type="checkbox">
+                <label for="checkbox3">Choice C</label>
+              </li>
+            </ul>
+          </div>
+        </fieldset>
+      </div>
+      <div class="form--field-container">
+        <fieldset class="form--fieldset">
+          <legend class="form--legend">Radio buttons</legend>
+          <div class="form--field">
+            <ul>
+              <li>
+                <input id="radio1" name="radio" type="radio" checked="checked">
+                <label for="radio1">Option 1</label>
+              </li>
+              <li>
+                <input id="radio2" name="radio" type="radio" class="radio">
+                <label for="radio2">Option 2</label>
+              </li>
+              <li>
+                <input id="radio3" name="radio" type="radio" class="radio">
+                <label for="radio3">Option 3</label>
+              </li>
+            </ul>
+          </div>
+        </fieldset>
+      </div>
+      <div class="form--field-container">
+        <fieldset class="form--fieldset">
+          <legend class="form--legend">Textareas</legend>
+          <div class="form--field">
+            <label for="textarea">Textarea</label>
+            <textarea id="textarea" rows="8" cols="48" placeholder="Enter your message here"></textarea>
+          </div>
+        </fieldset>
+      </div>
+      <div class="form--field-container">
+        <fieldset class="form--fieldset">
+          <legend class="form--legend">HTML5 inputs</legend>
+          <div class="form--field">
+            <label for="ic">Color input</label>
+            <input type="color" id="ic" value="#000000">
+          </div>
+          <div class="form--field">
+            <label for="in">Number input</label>
+            <input type="number" id="in" min="0" max="10" value="5">
+          </div>
+          <div class="form--field">
+            <label for="ir">Range input</label>
+            <input type="range" id="ir" value="10">
+          </div>
+          <div class="form--field">
+            <label for="idd">Date input</label>
+            <input type="date" id="idd" value="1970-01-01">
+          </div>
+          <div class="form--field">
+            <label for="idm">Month input</label>
+            <input type="month" id="idm" value="1970-01">
+          </div>
+          <div class="form--field">
+            <label for="idw">Week input</label>
+            <input type="week" id="idw" value="1970-W01">
+          </div>
+          <div class="form--field">
+            <label for="idt">Datetime input</label>
+            <input type="datetime" id="idt" value="1970-01-01T00:00:00Z">
+          </div>
+          <div class="form--field">
+            <label for="idtl">Datetime-local input</label>
+            <input type="datetime-local" id="idtl" value="1970-01-01T00:00">
+          </div>
+        </fieldset>
+      </div>
+      <div class="form--actions">
+        <button type="submit" class="form--submit">button type = submit</button>
+        <button type="button" class="form--button">button type = button</button>
+        <button type="reset" class="form--reset">button type = reset</button>
+        <a href="#" class="form--cancel">link type = cancel</a>
+      </div>
+    </form>
+  </section>
+</main>
+{% endblock %}
