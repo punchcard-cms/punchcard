@@ -18,6 +18,7 @@
   <table class="table--style">
     <tr class="table--tr">
       <th class="table--th">{{config.base}}</th>
+      <th class="table--th">{{config.actions.revisions}}</th>
       <th class="table--th">{{config.actions.edit}}</th>
       <th class="table--th">{{config.actions.approve}}</th>
       <th class="table--th">date</th>
@@ -26,6 +27,7 @@
     {% if c.value %}
       <tr class="table--tr">
         <td class="table--td">{{c.value[type.primary]}}</td>
+        <td class="table--td"><a href="/{{config.base}}/{{type.id}}/{{c.id}}" class="table--a">{{config.actions.revisions}}</a></td>
         <td class="table--td"><a href="/{{config.base}}/{{type.id}}/{{c.id}}/{{c.revision}}/{{config.actions.edit}}" class="table--a">{{config.actions.edit}}</a></td>
         <td class="table--td"><a href="/{{config.base}}/{{type.id}}/{{c.id}}/{{c.revision}}/{{config.actions.approve}}" class="table--a">{{config.actions.approve}}</a></td>
         <td class="table--td">{{c.created}}</td>

@@ -16,7 +16,9 @@ module.exports = {
     },
     actions: {
       add: 'add',
+      approve: 'approve',
       edit: 'edit',
+      revisions: 'revisions',
       save: 'save',
     },
     directory: path.join(__dirname, '../content-types'),

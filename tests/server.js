@@ -364,11 +364,12 @@ test.cb('Non number for revision - Content Type Edit Page', t => {
 });
 
 test.cb('Content Type Post data - testing session', t => {
-  service[0].value = {
+  const svc = (JSON.parse(JSON.stringify(service)));
+  svc[0].value = {
     'service-name--text': 'thing',
     'sunset-date': 'another thing',
   };
-  addService(service).then(revision => {
+  addService(svc).then(revision => {
     agent
       .get(`/content/services/${serviceUuid}/${revision}/edit`)
       .set('cookie', cookie)
@@ -381,6 +382,7 @@ test.cb('Content Type Post data - testing session', t => {
       });
   });
 });
+
 test.cb('Content Type Edit Page', t => {
   getService({ id: serviceUuid }).then(srvc => {
     agent
@@ -462,6 +464,211 @@ test.cb('Content Type Post data - testing session', t => {
             t.true(includes(res.text, 'Found. Redirecting to', 'should have a redirect message'));
 
             t.end();
+          });
+      });
+  });
+});
+
+//////////////////////////////
+// Content Approval - approve page
+//////////////////////////////
+
+test.cb('Invalid Content Type - Content Approval Page', t => {
+  addService().then(revision => {
+    agent
+      .get(`/content/foo/${serviceUuid}/${revision}/approve`)
+      .set('cookie', cookie)
+      .expect(404)
+      .end(err => {
+        t.is(err, null, 'Should not have an error');
+        t.end();
+      });
+  });
+});
+
+test.cb('Non UUID - Content Approval Page', t => {
+  agent
+    .get('/content/services/foo/123/approve')
+    .set('cookie', cookie)
+    .expect(404)
+    .end((err, res) => {
+      t.is(err, null, 'Should not have an error');
+      t.true(includes(res.text, 'Content ID must be in UUID format', 'Content url requires an ID'));
+      t.end();
+    });
+});
+
+test.cb('Bad revision number - Content Approval Page', t => {
+  agent
+    .get(`/content/services/${serviceUuid}/0/approve`)
+    .set('cookie', cookie)
+    .expect(404)
+    .end((err, res) => {
+      t.is(err, null, 'Should not have an error');
+      t.true(includes(res.text, `Revision &#39;0&#39; for ID &#39;${serviceUuid}&#39; in Content Type &#39;services&#39; not found`, 'Bad revision or id'));
+      t.end();
+    });
+});
+
+test.cb('Non number for revision - Content Approval Page', t => {
+  agent
+    .get(`/content/services/${serviceUuid}/foo/approve`)
+    .set('cookie', cookie)
+    .expect(404)
+    .end((err, res) => {
+      t.is(err, null, 'Should have an error');
+      t.true(includes(res.text, 'Revision must be a number', 'Revision must be a number'));
+      t.end();
+    });
+});
+
+test.cb('Content Approval Page', t => {
+  getService({ id: serviceUuid }).then(srvc => {
+    agent
+      .get(`/content/services/${serviceUuid}/${srvc[0].revision}/approve`)
+      .set('cookie', cookie)
+      .expect(200)
+      .end((err, res) => {
+        t.is(err, null, 'Should not have an error');
+        t.regex(res.text, /DOCTYPE html/, 'should have an html doctype');
+
+        t.end();
+      });
+  });
+});
+
+//////////////////////////////
+// Content Approval - approve Post data
+//////////////////////////////
+
+test.cb('Invalid Content Approval - Post data', t => {
+  agent
+    .post('/content/foo/approve')
+    .field('id', serviceUuid)
+    .set('cookie', cookie)
+    .expect(404)
+    .end(err => {
+      t.is(err, null, 'Should have an error');
+      t.end();
+    });
+});
+
+test.skip('Database error - Content Approval Post data', t => {
+  agent
+    .post('/content/services/approve')
+    .field('language', 'test-dummy-entry')
+    .field('approval', 'test')
+    .set('cookie', cookie)
+    .expect(500)
+    .end((err, res) => {
+      t.is(err, null, 'Should have an error');
+      t.true(includes(res.text, 'error: insert into &quot;content-type--services&quot;', 'should have an error message'));
+
+      t.end();
+    });
+});
+
+test.skip('Content Type Approval data', t => {
+  agent
+    .post('/content/services/save')
+    .field('language', 'test-dummy-entry')
+    .field('approval', 1)
+    .field('service-name--text', 'Picachu')
+    .set('cookie', cookie)
+    .expect(302)
+    .end((err, res) => {
+      t.is(err, null, 'Should not have an error');
+      t.is(res.text, 'Found. Redirecting to /content/services', 'should have a redirect message');
+
+      t.end();
+    });
+});
+
+test.cb('Content Type Approval data - missing data: comment', t => {
+  addService(service).then(revision => {
+    agent
+      .post('/content/services/approve')
+      .send({
+        'language': 'test-dummy-entry',
+        'comment--textarea': '',
+        'action--select': 'approve',
+      })
+      .set('cookie', cookie)
+      .set('Referrer', `/content/services/${serviceUuid}/${revision}/approve`)
+      .expect(302)
+      .end((error, res) => {
+        t.is(error, null, 'Should not have an error');
+        t.true(includes(res.text, `Found. Redirecting to /content/services/${serviceUuid}/${revision}/approve`, 'should have a redirect message'));
+
+        t.end();
+      });
+  });
+});
+
+test.cb('Content Type Approval data - missing data: action', t => {
+  addService(service).then(revision => {
+    agent
+      .post('/content/services/approve')
+      .send({
+        'language': 'test-dummy-entry',
+        'comment--textarea': 'I like it, kinda',
+        'action--select': '',
+      })
+      .set('cookie', cookie)
+      .set('Referrer', `/content/services/${serviceUuid}/${revision}/approve`)
+      .expect(302)
+      .end((error, res) => {
+        t.is(error, null, 'Should not have an error');
+        t.true(includes(res.text, `Found. Redirecting to /content/services/${serviceUuid}/${revision}/approve`, 'should have a redirect message'));
+
+        t.end();
+      });
+  });
+});
+
+test.cb('Content Approval Post data', t => {
+  addService(service).then(revision => {
+    agent
+      .get(`/content/services/${serviceUuid}/${revision}/approve`)
+      .set('cookie', cookie)
+      .expect(200)
+      .end((err) => {
+        t.is(err, null, 'Should not have an error');
+        agent
+          .post('/content/services/approve')
+          .send({
+            'language': 'test-dummy-entry',
+            'comment--textarea': 'I like it, you are a winner.',
+            'action--select': 'approve',
+          })
+          .set('cookie', cookie)
+          .expect(302)
+          .end((error, res) => {
+            t.is(error, null, 'Should not have an error');
+            t.true(includes(res.text, 'Found. Redirecting to', 'should have a redirect message'));
+
+            agent
+              .get(`/content/services/${serviceUuid}/${revision}/approve`)
+              .set('cookie', cookie)
+              .expect(200)
+              .end((er) => {
+                t.is(er, null, 'Should not have an error');
+                agent
+                  .post('/content/services/approve')
+                  .send({
+                    'language': 'test-dummy-entry',
+                    'comment--textarea': 'I like it, you are a winner.',
+                    'action--select': 'approve',
+                  })
+                  .set('cookie', cookie)
+                  .expect(302)
+                  .end((eor, resp) => {
+                    t.is(eor, null, 'Should not have an error');
+                    t.true(includes(resp.text, 'Found. Redirecting to', 'should have a redirect message'));
+
+                    t.end();
+                  });
+              });
           });
       });
   });

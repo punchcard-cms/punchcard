@@ -1,7 +1,7 @@
-name: Services
-description: I am services
-id: services
-workflow: editor-approve
+name: Bar
+description: I am bar
+id: bar
+workflow: self-publish
 attributes:
   - type: text
     id: service-name

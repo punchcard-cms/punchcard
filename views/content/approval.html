@@ -15,10 +15,31 @@
 <h2 class="base--h2">{{config.actions.approve}} :: [TBAdded: Primary Key Contents]</h2>
 
   {% if values %}
-    <dl>
     {% for v in values %}
-      <dt>{{v.name}}</dt>
-      <dd>{{v.value}}</dd>
+      <h3>{{v.name}}</h3>
+      {% if v.value.length %}
+
+        {# repeatable content #}
+        {% for rpt in v.value %}
+          {% for val in rpt %}
+            {% if loop.first %}
+              <dl class="base--dl">
+            {% endif %}
+
+            <dt class="base--dt">{{val.input}}</dt>
+            <dd class="base--dd">{{val.value}}</dd>
+
+            {% if loop.last %}
+              </dl>
+            {% endif %}
+          {% endfor %}
+        {% endfor %}
+      {% else %}
+        <dl class="base--dl">
+          <dt class="base--dt">{{v.value.input}}</dt>
+          <dd class="base--dd">{{v.value.value}}</dd>
+        </dl>
+      {% endif %}
     {% endfor %}
     </dl>
   {% endif %}
@@ -35,7 +56,7 @@
         <th>comment</th>
         <th>date</th>
       </tr>
-    {% for e in revision.workflows.entries %}
+    {% for e in revision.audit.entries %}
       <tr>
         <td>{{e.author}}</td>
         <td>{{e.action}}</td>
