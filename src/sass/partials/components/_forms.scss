@@ -1,26 +1,150 @@
-
-// Content Forms
-.base--FORM {
-  padding: 1em 0;
-
-  .form--field {
-    display: grid;
-    grid-template-columns: auto;
-    grid-template-rows: auto;
-    padding: .5em 0;
+.form {
+  margin-top: 0;
+  @include breakpoint(setting-get('responsive form')) {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
   }
 
-  .form--alert {
-    color: color('red');
-    font-size: .8em;
+  &--alert {
+    background-color: color('red', 10);
+    border-radius: 5px;
+    color: color('red', 60);
+    font-size: ms(-1);
+    margin-bottom: .5em;
+    padding: .5em .8em;
+    position: relative;
+
+    &::after {
+      @include triangle(color('red', 10), 1em, 2em, 180);
+      bottom: -10px;
+      content: '';
+      position: absolute;
+      right: 1em;
+    }
   }
 
-  .form--description {
-    font-size: .8em;
-    padding: 5px 0;
+  &--description {
+    color: color('grey', 60);
+    font-size: ms(-1);
+    font-style: italic;
+    margin-top: setting-get('rhythm') / 2;
   }
 
-  fieldset {
-    margin: 1em 0;
+  &--field {
+    margin-top: setting-get('rhythm') / .5;
+  }
+
+  &--fieldset {
+    border: setting-get('input border width') solid setting-get('primary accent color');
+    padding: 0 setting-get('rhythm') / .75 setting-get('rhythm') / .75 setting-get('rhythm') / .75;
+    @include breakpoint(setting-get('responsive form')) {
+      padding: 0 setting-get('rhythm') / .5 setting-get('rhythm') / .5 setting-get('rhythm') / .5;
+    }
+
+    +:first-child {
+      margin-top: setting-get('rhythm') / 2;
+    }
+  }
+
+  &--field-container {
+    background-color: color('neutral-white', 40);
+    margin-top: setting-get('rhythm') / .5;
+    padding: setting-get('rhythm') / .75;
+    @include breakpoint(setting-get('responsive form')) {
+      padding: setting-get('rhythm') / .5;
+      width: 48%;
+    }
+
+    :first-child {
+      margin-top: 0;
+    }
+  }
+
+  &--legend {
+    background-color: color('neutral-white', 40);
+    border: setting-get('input border width') solid color('neutral-white', 40);
+    border-radius: setting-get('input border radius');
+    color: color('black');
+    font-weight: setting-get('bold font weight');
+    padding: 0 setting-get('rhythm');
+    transform: translateX(setting-get('rhythm') / -1);
+  }
+
+  &--actions {
+    margin-top: setting-get('rhythm') / .5;
+    width: 100%;
+    @include breakpoint(setting-get('responsive form')) {
+      flex-grow: 1;
+    }
+  }
+
+  [type='date'],
+  [type='datetime'],
+  [type='datetime-local'],
+  [type='email'],
+  [type='month'],
+  [type='number'],
+  [type='password'],
+  [type='search'],
+  [type='tel'],
+  [type='text'],
+  [type='time'],
+  [type='url'],
+  [type='week'] {
+    @include input;
+  }
+
+  [type='checkbox'] {
+    @include checkbox;
+  }
+
+  [type='color'] {
+    @include input;
+    min-height: 2em;
+    padding: 0;
+    width: 5em;
+  }
+
+  label {
+    font-weight: setting-get('bold font weight');
+  }
+
+  option {
+    margin-top: 0;
+  }
+
+  select {
+    @include input;
+    border-radius: 0;
+  }
+
+  [type='radio'] {
+    @include radio;
+  }
+
+  [type='range'] {
+    @include range;
+    @include range--thumb('webkit', 'slider');
+    @include range--thumb('moz', 'range');
+  }
+
+  textarea {
+    @include input;
+  }
+
+  &--button,
+  &--submit {
+    @include button(setting-get('primary accent color'), setting-get('primary accent color'), setting-get('primary color'), setting-get('primary accent color'), setting-get('primary color'), setting-get('primary color'), setting-get('primary color'));
+  }
+
+  &--cancel {
+    @include link(setting-get('primary color'), setting-get('primary color'), setting-get('secondary link color'), setting-get('secondary link color'));
+    margin: setting-get('rhythm') / 2 0 0 setting-get('rhythm');
+  }
+
+  &--reset {
+    @include button(setting-get('primary color'), setting-get('primary color'), setting-get('primary accent color'), setting-get('primary color'), setting-get('primary accent color'), setting-get('primary accent color'), setting-get('primary color'));
   }
 }
+

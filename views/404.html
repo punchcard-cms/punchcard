@@ -1,5 +1,8 @@
-<h1>{{message}}</h1>
+<div class="not-found">
+  <img src="/images/punchcard-404.svg" class="not-found--svg" alt="Punchcard 404, Page Not Found">
+  <h2 class="not-found--h2">{{message}}</h1>
 
-{% if safe %}
-<p>You could try <a href="{{safe}}">{{safe}}</a></p>
-{% endif %}
+  {% if safe %}
+  <p class="not-found--p">You could try <a href="{{safe}}" class="not-found--link">{{safe}}</a></p>
+  {% endif %}
+</div>

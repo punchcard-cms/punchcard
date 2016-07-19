@@ -1,0 +1,20 @@
+.not-found {
+  @include breakpoint(setting-get('404 container')) {
+    margin: 0 auto;
+  }
+
+  &--svg {
+    display: block;
+    margin: 0 auto;
+    width: 300px;
+  }
+
+  &--h1 {
+    @include h1;
+    text-align: center;
+  }
+
+  &--link {
+    @include link(setting-get('active link color'), setting-get('active link color'), setting-get('secondary link color'), setting-get('secondary link color'));
+  }
+}
