@@ -1,0 +1,43 @@
+.nav {
+  margin-top: setting-get('rhythm') / .5;
+  @include breakpoint(setting-get('responsive form')) {
+    margin: 0;
+  }
+
+  &--link {
+    color: setting-get('white');
+    font-size: ms(-1);
+    font-weight: setting-get('bold font weight');
+    letter-spacing: 1px;
+    text-decoration: none;
+    text-transform: uppercase;
+
+    &:hover {
+      color: setting-get('primary accent color');
+      transition: setting-get('fade');
+    }
+  }
+
+  &--list {
+    display: inline-flex;
+    list-style-type: none;
+  }
+
+  &--logo {
+    display: block;
+    height: 14px;
+  }
+
+  &--home {
+    display: block;
+  }
+
+  &--item {
+    flex-direction: row;
+    margin: 0 1.5em 0 0;
+
+    &:last-of-type {
+      margin: 0;
+    }
+  }
+}

@@ -9,8 +9,10 @@
 {% endblock %}
 
 {% block main %}
-  <h1 class="base--h1">{{type.name}}</h1>
-  <p class="base--p">{{type.description}}</p>
+  <div class="introduction">
+    <h1 class="introduction--h1">{{type.name}}</h1>
+    <p class="introduction--p">{{type.description}}</p>
+  </div>
   {% include "content/_form-content.html" %}
 {% endblock %}
 
