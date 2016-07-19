@@ -24,6 +24,6 @@ module.exports = {
   knex,
   workflows: {
     default: 'self-publish',
-    directory: path.join(__dirname, '..', 'tests/fixtures/workflows'),
+    directory: path.join(__dirname, '..', 'tests/workflows'),
   },
 };

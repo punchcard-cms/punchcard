@@ -158,3 +158,74 @@ test('Request Format', t => {
   t.is(JSON.stringify(result), JSON.stringify(expected), 'A single object is retrieved from array based on key/value');
   t.deepEqual(result, expected, 'A single object is retrieved from array based on key/value');
 });
+
+test('workflows in type', t => {
+  const type = {
+    workflow: 'editor-approve',
+  };
+
+  const allFlows = [
+    {
+      "name": "Editor Approve",
+      "id": "editor-approve",
+      "steps": [
+        {
+          "name": "Publish",
+          "self": true
+        },
+        {
+          "name": "Editor Approval"
+        }
+      ]
+    },
+  ];
+
+  const globalConfig = {
+    content: {
+      base: '/',
+    },
+    workflows: {
+      default: 'self-publish',
+      messages: {
+        missing: 'Workflow \'%workf\' for Content Type \'%type\' not found',
+      }
+    }
+  }
+  const expected = {
+    name: 'Editor Approve',
+    id: 'editor-approve',
+    steps: [
+      {
+        name: 'Publish',
+        self: true
+      },
+      {
+        name: 'Editor Approval',
+      },
+    ],
+  };
+  const req = {
+    params: {
+      type: 'services',
+    },
+    workflow: 'editor-approve',
+  };
+  const workflow = utils.workflow(type, allFlows, globalConfig, req);
+
+  // get type workflow
+  t.is(JSON.stringify(workflow), JSON.stringify(expected), 'Grabs an existing workflow');
+
+  // bad workflow in type
+  const badtype = (JSON.parse(JSON.stringify(type)));
+  badtype.workflow = 'nope';
+  const badflow = utils.workflow(badtype, allFlows, globalConfig, req);
+  t.is(badflow, false, 'Returns false on workflow missing from global flows');
+
+  // no flow in type
+  const noflow = (JSON.parse(JSON.stringify(type)));
+  noflow.workflow = '';
+  const nopeflow = utils.workflow(noflow, allFlows, globalConfig, req);
+
+  t.is(nopeflow, false, 'Returns false on workflow missing from global flows');
+
+});

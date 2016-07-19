@@ -110,4 +110,9 @@ module.exports = {
       },
     },
   },
+  workflows: {
+    messages: {
+      missing: 'Workflow \'%workf\' for Content Type \'%type\' not found',
+    }
+  }
 };
