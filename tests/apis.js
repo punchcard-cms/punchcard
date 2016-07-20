@@ -163,5 +163,8 @@ test.cb.after(t => {
     return database('live').where('type', type).del();
   }).then(() => {
     t.end();
+  }).catch(e => {
+    console.error(e);
+    t.end();
   });
 });
