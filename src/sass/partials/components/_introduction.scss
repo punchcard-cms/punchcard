@@ -7,6 +7,10 @@
     @include h1;
   }
 
+  &--h2 {
+    @include h2;
+  }
+
   &--button {
     @include button(setting-get('primary accent color'), setting-get('primary accent color'), setting-get('primary color'), setting-get('primary accent color'), setting-get('primary color'), setting-get('primary color'), setting-get('primary color'));
   }

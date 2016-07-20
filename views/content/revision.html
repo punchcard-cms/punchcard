@@ -9,29 +9,34 @@
 {% endblock %}
 
 {% block main %}
-<h1 class="base--h1">{{title}}</h1>
-
-<h2 class="base--h2">Revisions</h2>
+<div class="introduction">
+  <h1 class="introduction--h1">{{title}}</h1>
+  <h2 class="introduction--h2">Revisions</h2>
+</div>
 
 {% if content %}
 
-  <table class="table--style">
-    <tr class="table--tr">
-      <th class="table--th">revision</th>
-      <th class="table--th">{{config.base}}</th>
-      <th class="table--th">{{config.actions.edit}}</th>
-      <th class="table--th">date</th>
-    </tr>
+  <table class="base--table">
+    <thead class="base--thead">
+      <tr class="base--tr">
+        <th class="base--th">revision</th>
+        <th class="base--th">{{config.base}}</th>
+        <th class="base--th">date</th>
+        <th class="base--th">{{config.actions.edit}}</th>
+      </tr>
+    </thead>
+    <tbody class="base--tbody">
   {% for c in content %}
     {% if c.value %}
-      <tr class="table--tr">
-        <td class="table--td">{{c.revision}}</td>
-        <td class="table--td">{{c.value[type.primary]}}</td>
-        <td class="table--td"><a href="/{{config.base}}/{{type.id}}/{{c.id}}/{{c.type}}/{{c.revision}}/{{config.actions.edit}}" class="table--link">{{config.actions.edit}}</a></td>
-        <td class="table--td">{{c.created}}</td>
+      <tr class="base--tr">
+        <td data-th="Revision" class="base--td">{{c.revision}}</td>
+        <td data-th="{{config.base}}" class="base--td">{{c.value[type.primary]}}</td>
+        <td data-th="Date" class="base--td">{{c.created}}</td>
+        <td data-th="{{config.actions.edit}}" class="base--td"><a href="/{{config.base}}/{{type.id}}/{{c.id}}/{{c.type}}/{{c.revision}}/{{config.actions.edit}}" class="base--link">{{config.actions.edit|capitalize}}</a></td>
       </tr>
     {% endif %}
   {% endfor %}
+    </tbody>
   </table>
 {% endif %}
 {% endblock %}
