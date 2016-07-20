@@ -12,22 +12,22 @@
 <h1 class="base--h1">{{title}}</h1>
 
 {% if revision %}
-<h2 class="base--h2">{{config.actions.approve}} :: [TBAdded: Primary Key Contents]</h2>
+  <h2 class="base--h2">{{config.actions.approve}} :: [TBAdded: Primary Key Contents]</h2>
 
-  {% if values %}
-    {% for v in values %}
-      <h3>{{v.name}}</h3>
-      {% if v.value.length %}
+  {% if data %}
+    {% for attr, inputs in data %}
+      <h3>{{attr}}</h3>
 
+      {% if inputs.length %}
         {# repeatable content #}
-        {% for rpt in v.value %}
-          {% for val in rpt %}
+        {% for rpt in inputs %}
+          {% for input, value in rpt %}
             {% if loop.first %}
               <dl class="base--dl">
             {% endif %}
 
-            <dt class="base--dt">{{val.input}}</dt>
-            <dd class="base--dd">{{val.value}}</dd>
+            <dt class="base--dt">{{input}}</dt>
+            <dd class="base--dd">{{value.value}}</dd>
 
             {% if loop.last %}
               </dl>
@@ -35,10 +35,12 @@
           {% endfor %}
         {% endfor %}
       {% else %}
-        <dl class="base--dl">
-          <dt class="base--dt">{{v.value.input}}</dt>
-          <dd class="base--dd">{{v.value.value}}</dd>
-        </dl>
+        {% for input, value in inputs %}
+          <dl class="base--dl">
+            <dt class="base--dt">{{input}}</dt>
+            <dd class="base--dd">{{value.value}}</dd>
+          </dl>
+        {% endfor %}
       {% endif %}
     {% endfor %}
     </dl>

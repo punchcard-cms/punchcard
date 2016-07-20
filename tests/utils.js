@@ -166,17 +166,17 @@ test('workflows in type', t => {
 
   const allFlows = [
     {
-      "name": "Editor Approve",
-      "id": "editor-approve",
-      "steps": [
+      'name': 'Editor Approve',
+      'id': 'editor-approve',
+      'steps': [
         {
-          "name": "Publish",
-          "self": true
+          'name': 'Publish',
+          'self': true,
         },
         {
-          "name": "Editor Approval"
-        }
-      ]
+          'name': 'Editor Approval',
+        },
+      ],
     },
   ];
 
@@ -188,16 +188,17 @@ test('workflows in type', t => {
       default: 'self-publish',
       messages: {
         missing: 'Workflow \'%workf\' for Content Type \'%type\' not found',
-      }
-    }
-  }
+      },
+    },
+  };
+
   const expected = {
     name: 'Editor Approve',
     id: 'editor-approve',
     steps: [
       {
         name: 'Publish',
-        self: true
+        self: true,
       },
       {
         name: 'Editor Approval',
@@ -227,5 +228,4 @@ test('workflows in type', t => {
   const nopeflow = utils.workflow(noflow, allFlows, globalConfig, req);
 
   t.is(nopeflow, false, 'Returns false on workflow missing from global flows');
-
 });

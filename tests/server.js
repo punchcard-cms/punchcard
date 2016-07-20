@@ -50,6 +50,7 @@ const service = [
     id: serviceUuid,
     language: 'test-dummy-entry',
     publishable: false,
+    approval: 2,
     value: {},
   },
 ];
@@ -417,8 +418,7 @@ test.cb('Invalid Content Type - Post data', t => {
 test.cb('Database error - Content Type Post data', t => {
   agent
     .post('/content/services/save')
-    .field('language', 'test-dummy-entry')
-    .field('approval', 'test')
+    .field('language', 'Character Character Character Character Character Character Character Character Character Character Character Character Character Character Character Character Character Character Character Character Character Character Character Character Character Character Character Character')
     .set('cookie', cookie)
     .expect(500)
     .end((err, res) => {
