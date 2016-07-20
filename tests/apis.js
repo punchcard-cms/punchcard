@@ -157,6 +157,89 @@ test('Organize - Wrong', t => {
   t.deepEqual(actual, expected, 'Returns defaults');
 });
 
+test('Page - First', t => {
+  const organized = apiUtils.organize({});
+  const actual = apiUtils.page('api', organized, 100);
+
+  const expected = {
+    first: '/api?sort=key&sort_dir=asc&per_page=30&page=1',
+    prev: false,
+    next: '/api?sort=key&sort_dir=asc&per_page=30&page=2',
+    last: '/api?sort=key&sort_dir=asc&per_page=30&page=4',
+  };
+
+
+  t.deepEqual(actual, expected);
+});
+
+test('Page - Middle', t => {
+  const organized = apiUtils.organize({
+    page: 2,
+  });
+  const actual = apiUtils.page('api', organized, 100);
+
+  const expected = {
+    first: '/api?sort=key&sort_dir=asc&per_page=30&page=1',
+    prev: '/api?sort=key&sort_dir=asc&per_page=30&page=1',
+    next: '/api?sort=key&sort_dir=asc&per_page=30&page=3',
+    last: '/api?sort=key&sort_dir=asc&per_page=30&page=4',
+  };
+
+
+  t.deepEqual(actual, expected);
+});
+
+test('Page - End', t => {
+  const organized = apiUtils.organize({
+    page: 4,
+  });
+  const actual = apiUtils.page('api', organized, 100);
+
+  const expected = {
+    first: '/api?sort=key&sort_dir=asc&per_page=30&page=1',
+    prev: '/api?sort=key&sort_dir=asc&per_page=30&page=3',
+    next: false,
+    last: '/api?sort=key&sort_dir=asc&per_page=30&page=4',
+  };
+
+
+  t.deepEqual(actual, expected);
+});
+
+test('Page - One', t => {
+  const organized = apiUtils.organize({
+    page: 1,
+  });
+  const actual = apiUtils.page('api', organized, 30);
+
+  const expected = {
+    first: false,
+    prev: false,
+    next: false,
+    last: false,
+  };
+
+
+  t.deepEqual(actual, expected);
+});
+
+test('Page - None', t => {
+  const organized = apiUtils.organize({
+    page: 4,
+  });
+  const actual = apiUtils.page('api', organized, 0);
+
+  const expected = {
+    first: false,
+    prev: false,
+    next: false,
+    last: false,
+  };
+
+
+  t.deepEqual(actual, expected);
+});
+
 
 test.cb.after(t => {
   Promise.map(types, type => {
