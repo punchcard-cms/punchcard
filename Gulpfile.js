@@ -9,7 +9,8 @@ require('punchcard-runner')(gulp, {
       src: [
         'lib',
         'config',
-        'content-types'
+        'content-types',
+        'workflows'
       ],
     }
   },
