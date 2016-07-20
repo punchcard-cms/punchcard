@@ -54,7 +54,6 @@ for (let i = 0; i < 200; i++) {
 }
 
 test.cb.before(t => {
-
   Promise.map(content, item => {
     return database('live').insert(item);
   }).then(() => {
@@ -115,9 +114,9 @@ test('Organize - Default', t => {
 test('Organize - Custom', t => {
   const actual = apiUtils.organize({
     sort: 'type',
-    sort_dir: 'desc',
+    sort_dir: 'desc', // eslint-disable-line camelcase
     page: 2,
-    per_page: 50,
+    per_page: 50, // eslint-disable-line camelcase
   });
 
   const expected = {
@@ -138,9 +137,9 @@ test('Organize - Custom', t => {
 test('Organize - Wrong', t => {
   const actual = apiUtils.organize({
     sort: 'foo',
-    sort_dir: 'banana',
+    sort_dir: 'banana', // eslint-disable-line camelcase
     page: 0,
-    per_page: 200,
+    per_page: 200, // eslint-disable-line camelcase
   });
 
   const expected = {
@@ -157,7 +156,6 @@ test('Organize - Wrong', t => {
 
   t.deepEqual(actual, expected, 'Returns defaults');
 });
-
 
 
 test.cb.after(t => {
