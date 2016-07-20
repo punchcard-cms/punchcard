@@ -95,6 +95,69 @@ test('Format Results - Attributes', t => {
   });
 });
 
+test('Organize - Default', t => {
+  const actual = apiUtils.organize({});
+  const expected = {
+    sort: {
+      by: 'key',
+      dir: 'asc',
+    },
+    page: {
+      offset: 0,
+      limit: 30,
+      page: 1,
+    },
+  };
+
+  t.deepEqual(actual, expected, 'Returns defaults');
+});
+
+test('Organize - Custom', t => {
+  const actual = apiUtils.organize({
+    sort: 'type',
+    sort_dir: 'desc',
+    page: 2,
+    per_page: 50,
+  });
+
+  const expected = {
+    sort: {
+      by: 'type',
+      dir: 'desc',
+    },
+    page: {
+      offset: 50,
+      limit: 50,
+      page: 2,
+    },
+  };
+
+  t.deepEqual(actual, expected, 'Returns defaults');
+});
+
+test('Organize - Wrong', t => {
+  const actual = apiUtils.organize({
+    sort: 'foo',
+    sort_dir: 'banana',
+    page: 0,
+    per_page: 200,
+  });
+
+  const expected = {
+    sort: {
+      by: 'key',
+      dir: 'asc',
+    },
+    page: {
+      offset: 0,
+      limit: 100,
+      page: 1,
+    },
+  };
+
+  t.deepEqual(actual, expected, 'Returns defaults');
+});
+
 
 
 test.cb.after(t => {
