@@ -111,6 +111,27 @@ test('Organize - Default', t => {
   t.deepEqual(actual, expected, 'Returns defaults');
 });
 
+test('Organize - Lookup', t => {
+  const actual = apiUtils.organize({}, [
+    'foo',
+    'bar',
+    'baz',
+  ]);
+  const expected = {
+    sort: {
+      by: 'foo',
+      dir: 'asc',
+    },
+    page: {
+      offset: 0,
+      limit: 30,
+      page: 1,
+    },
+  };
+
+  t.deepEqual(actual, expected, 'Returns defaults');
+});
+
 test('Organize - Custom', t => {
   const actual = apiUtils.organize({
     sort: 'type',
@@ -150,6 +171,27 @@ test('Organize - Wrong', t => {
     page: {
       offset: 0,
       limit: 100,
+      page: 1,
+    },
+  };
+
+  t.deepEqual(actual, expected, 'Returns defaults');
+});
+
+test('Organize - Wrong Pages', t => {
+  const actual = apiUtils.organize({
+    page: -1,
+    per_page: -1, // eslint-disable-line camelcase
+  });
+
+  const expected = {
+    sort: {
+      by: 'key',
+      dir: 'asc',
+    },
+    page: {
+      offset: 0,
+      limit: 1,
       page: 1,
     },
   };
