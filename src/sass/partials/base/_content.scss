@@ -3,29 +3,41 @@
 @import 'content/extends';
 
 body {
-  background-color: $white;
-  font-family: $font-stack;
+  background-color: setting-get('white');
+  font-family: setting-get('sans serif font');
+  font-size: setting-get('small font');
   margin: 0;
+
+  * {
+    line-height: setting-get('base line height');
+  }
+
+  * + * {
+    margin-top: setting-get('rhythm');
+  }
+
+  @include breakpoint(setting-get('fixed container')) {
+    font-size: setting-get('base font');
+  }
 }
 
 ._content {
-
-  margin: 0 auto;
-  margin-bottom: -50px;
-  margin-top: 50px;
+  @include wrapper;
+  margin-top: setting-get('rhythm') / .5;
   min-height: 100%;
-  padding: 0 1em;
+  padding: 0 setting-get('rhythm') / .75;
+  @include breakpoint(setting-get('fixed container break')) {
+    padding: 0;
+  }
 
   &::after {
     content: '';
     display: block;
     height: 75px;
   }
-
 }
 
-
-.content--logomark {
+.home--logomark {
   display: block;
   margin: 0 auto;
   margin-top: 75px;

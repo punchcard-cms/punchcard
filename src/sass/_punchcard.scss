@@ -4,6 +4,7 @@
 @import 'toolkit';
 @import 'breakpoint';
 @import 'ibm-colors';
+@import 'modular-scale';
 ////////////////////////
 
 //////////////////////////////
@@ -11,17 +12,21 @@
 @import 'partials/global/variables';
 @import 'partials/global/functions';
 @import 'partials/global/mixins';
-@import 'partials/global/extends';
 //////////////////////////////
 
 //////////////////////////////
 // BASE
+@import 'partials/base/base';
 @import 'partials/base/content';
 //////////////////////////////
 
 //////////////////////////////
 // COMPONENTS
+@import 'partials/components/404';
 @import 'partials/components/forms';
+@import 'partials/components/introduction';
+@import 'partials/components/nav';
+@import 'partials/components/siteheader';
 //////////////////////////////
 
 //////////////////////////////

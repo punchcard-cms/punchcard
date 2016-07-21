@@ -1,0 +1,288 @@
+
+._wrapper {
+  @include wrapper;
+}
+
+.base {
+  &--link {
+    @include link(setting-get('active link color'), setting-get('active link color'), setting-get('secondary link color'), setting-get('secondary link color'));
+  }
+
+  &--h1 {
+    @include h1;
+  }
+
+  &--h2 {
+    @include h2;
+  }
+
+  &--h3 {
+    font-size: ms(2);
+    font-weight: setting-get('normal font weight');
+  }
+
+  &--h4 {
+    font-size: ms(1);
+    font-weight: setting-get('normal font weight');
+  }
+
+  &--h5 {
+    font-size: 1em;
+    font-weight: setting-get('normal font weight');
+  }
+
+  &--h6 {
+    font-size: ms(-1);
+    font-weight: setting-get('normal font weight');
+  }
+
+  &--blockquote {
+    border-left: .25em solid setting-get('primary accent color');
+    color: color('gray', 80);
+    font-style: italic;
+    margin-left: 2em;
+    margin-right: 1em;
+    padding: 0 1.5em;
+  }
+
+  &--dt {
+    color: setting-get('secondary color');
+    font-weight: setting-get('bold font weight');
+  }
+
+  &--li {
+    margin-top: 0;
+  }
+
+  &--ul {
+    display: block;
+    list-style: circle;
+    margin-left: setting-get('rhythm');
+
+    @include breakpoint(setting-get('fixed container')) {
+      margin-left: 0;
+    }
+  }
+
+  &--ol {
+    margin-left: setting-get('rhythm');
+
+    @include breakpoint(setting-get('fixed container')) {
+      margin-left: 0;
+    }
+  }
+
+  &--hr {
+    border: 0 none;
+    border-top: 2px solid color('grey', 20);
+    margin: setting-get('rhythm') / .25 0;
+    width: 15%;
+  }
+
+  &--table {
+    margin-top: setting-get('rhythm') / .5;
+    width: 100%;
+  }
+
+  &--caption {
+    color: color('gray', 50);
+    font-size: .8em;
+    padding: 0 0 setting-get('rhythm') / 2;
+    text-align: right;
+  }
+
+  &--thead {
+    color: setting-get('white');
+  }
+
+  &--tr {
+    &:nth-of-type(even) {
+      background-color: color('neutral-white', 30);
+    }
+  }
+
+  // TODO: Re-enable and disable nesting for this specifically and revert nesting depth rule once https://github.com/sasstools/sass-lint/pull/677 lands
+  // &--tr:nth-of-type(even) .base--td::before {
+  //   background-color: color('teal', 70);
+  //   color: setting-get('white');.
+  // }
+
+  &--th {
+    display: none;
+    font-size: ms(-1);
+    font-weight: setting-get('bold font weight');
+    letter-spacing: 1px;
+    padding: setting-get('rhythm');
+    text-align: left;
+    text-transform: uppercase;
+    @include breakpoint(setting-get('responsive table')) {
+      background-color: setting-get('primary color');
+      color: setting-get('primary accent color');
+      display: table-cell;
+    }
+  }
+
+  &--td {
+    display: flex;
+    font-size: ms(-1);
+    margin: 0;
+    padding: setting-get('rhythm') / 2;
+    @include breakpoint(setting-get('responsive table')) {
+      display: table-cell;
+      font-size: 1em;
+      padding: setting-get('rhythm');
+    }
+
+    &::before {
+      background-color: setting-get('primary color');
+      color: setting-get('primary accent color');
+      content: attr(data-th)': ';
+      display: inline-block;
+      font-weight: setting-get('bold font weight');
+      margin: -.5rem .5em -.5rem -.5rem;
+      min-width: 6.5em;
+      padding: setting-get('rhythm') / 2;
+      text-align: right;
+      width: 6.5em;
+      word-break: break-all;
+
+      @include breakpoint(setting-get('responsive table')) {
+        display: none;
+      }
+    }
+  }
+
+  &--kbd {
+    background-color: color('neutral-white', 40);
+    border: 1px solid color('gray', 10);
+    border-radius: 3px;
+    font-size: ms(-1);
+    padding: .2em .5em;
+  }
+
+  &--code {
+    background: color('neutral-white', 40);
+    direction: ltr;
+    font-family: setting-get('monospace font');
+    font-size: ms(-1);
+    hyphens: none;
+    outline: 0;
+    overflow-y: overlay;
+    padding: .05rem .5rem;
+    tab-size: 2;
+    text-align: left;
+    white-space: pre;
+    word-break: normal;
+    word-spacing: normal;
+    word-wrap: normal;
+  }
+
+  &--samp {
+    color: setting-get('secondary color');
+  }
+
+  &--pre {
+    direction: ltr;
+    display: block;
+    font-family: setting-get('monospace font');
+    hyphens: none;
+    overflow-y: overlay;
+    tab-size: 2;
+    text-align: left;
+    white-space: pre;
+    word-break: normal;
+    word-spacing: normal;
+    word-wrap: normal;
+  }
+
+  &--em {
+    font-weight: setting-get('bold font weight');
+  }
+
+  &--b {
+    font-weight: setting-get('bold font weight');
+  }
+
+  &--i {
+    font-style: italic;
+  }
+
+  &--u {
+    border-bottom: 2px solid setting-get('text color');
+    text-decoration: none;
+  }
+
+  &--strong {
+    font-weight: setting-get('bold font weight');
+  }
+
+  &--sup {
+    font-size: ms(-1);
+    position: relative;
+    top: -.4em;
+    vertical-align: baseline;
+  }
+
+  &--sub {
+    font-size: ms(-1);
+    position: relative;
+    top: .4em;
+    vertical-align: baseline;
+  }
+
+  &--small {
+    color: color('grey', 50);
+    font-size: ms(-1);
+  }
+
+  &--abbr {
+    border-bottom: 1px dotted setting-get('text color');
+    text-decoration: none;
+  }
+
+  &--q {
+    quotes: '“' '”' '‘' '’';
+
+    &::before {
+      content: open-quote;
+    }
+
+    &::after {
+      content: close-quote;
+    }
+  }
+
+  &--cite {
+    &::before {
+      content: '- ';
+    }
+  }
+
+  &--mark {
+    background-color: setting-get('primary support color');
+  }
+
+  &--dfn {
+    font-style: italic;
+  }
+
+  &--var {
+    font-weight: setting-get('bold font weight');
+  }
+
+  &--button {
+    @include button(setting-get('primary accent color'), setting-get('primary accent color'), setting-get('primary color'), setting-get('primary accent color'), setting-get('primary color'), setting-get('primary color'), setting-get('primary color'));
+  }
+}
+
+// TODO: Remove once https://github.com/sasstools/sass-lint/pull/677 lands
+.base--tr {
+  &:nth-of-type(even) {
+    .base--td {
+      &::before {
+        background-color: color('teal', 70);
+        color: setting-get('white');
+      }
+    }
+  }
+}

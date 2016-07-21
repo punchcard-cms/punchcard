@@ -1,18 +1,14 @@
-.login--wrapper {
+._login {
   margin: 0 auto;
-  position: relative;
-  width: 300px;
-}
+  @include breakpoint(setting-get('responsive form')) {
+    width: 400px;
+  }
 
-.login--title {
-  padding: .5em 0;
-}
+  &--h1 {
+    @include h1;
+  }
 
-.login--fields {
-  display: block;
-  padding: .5em 0;
-
-  > * {
+  .form--field-container {
     width: 100%;
   }
 }

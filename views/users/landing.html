@@ -9,32 +9,36 @@
 {% endblock %}
 
 {% block main %}
-<h1 class="base--h1">{{title}}</h1>
-<p class="base--p"><a href="{{config.base}}/{{config.actions.add}}" class="base--a">{{config.base}} | {{config.actions.add}}</a></p>
-<h2 class="base--h2">Content</h2>
-
-  <table class="table--style">
-    <tr class="table--tr">
-      <th class="table--th">email</th>
-      <th class="table--th">role</th>
-      <th class="table--th">edit</th>
-      <th class="table--th">delete</th>
-      <th class="table--th">date</th>
+<div class="introduction">
+  <h1 class="introduction--h1">{{title|capitalize}}</h1>
+  <a href="{{config.base}}/{{config.actions.add}}" class="introduction--button">{{config.actions.add|capitalize}} {{config.base}}</a>
+</div>
+<table class="base--table">
+  <thead class="base--thead">
+    <tr class="base--tr">
+      <th class="base--th">Email</th>
+      <th class="base--th">Role</th>
+      <th class="base--th">Date</th>
+      <th class="base--th">{{config.actions.edit}}</th>
+      <th class="base--th">{{config.actions.delete}}</th>
     </tr>
-    {% if users %}
-    {% for user in users %}
-      {% if user.email %}
-        <tr class="table--tr">
-          <td class="table--td">{{user.email}}</td>
-          <td class="table--td">{{user.role}}</td>
-          <td class="table--td"><a href="{{config.base}}/{{config.actions.edit}}/{{user.id}}" class="base--a">{{config.actions.edit}}</a></td>
-          <td class="table--td"><a href="{{config.base}}/{{config.actions.delete}}/{{user.id}}" class="base--a">{{config.actions.delete}}</a></td>
-          <td class="table--td">{{user.created}}</td>
-        </tr>
-      {% endif %}
-    {% endfor %}
+  </thead>
+  <tbody class="base--tbody">
+  {% if users %}
+  {% for user in users %}
+    {% if user.email %}
+      <tr class="base--tr">
+        <td data-th="Email" class="base--td">{{user.email}}</td>
+        <td data-th="Role" class="base--td">{{user.role}}</td>
+        <td data-th="Date" class="base--td">{{user.created}}</td>
+        <td data-th="Edit" class="base--td"><a href="{{config.base}}/{{config.actions.edit}}/{{user.id}}" class="base--link">{{config.actions.edit|capitalize}}</a></td>
+        <td data-th="Delete" class="base--td"><a href="{{config.base}}/{{config.actions.delete}}/{{user.id}}" class="base--link">{{config.actions.delete|capitalize}}</a></td>
+      </tr>
     {% endif %}
-  </table>
+  {% endfor %}
+  {% endif %}
+  </tbody>
+</table>
 {% endblock %}
 
 {% block footer %}

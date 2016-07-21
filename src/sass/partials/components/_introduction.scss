@@ -1,0 +1,13 @@
+.introduction {
+  @include breakpoint(setting-get('max character legnth break')) {
+    max-width: setting-get('max character legnth');
+  }
+
+  &--h1 {
+    @include h1;
+  }
+
+  &--button {
+    @include button(setting-get('primary accent color'), setting-get('primary accent color'), setting-get('primary color'), setting-get('primary accent color'), setting-get('primary color'), setting-get('primary color'), setting-get('primary color'));
+  }
+}
