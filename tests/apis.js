@@ -406,7 +406,7 @@ test('API: One', t => {
 
   return api.one({}, expected.id).then(result => {
     t.is(result.id, expected.id, 'IDs the same');
-    t.deepEqual(result.attributes, expected.attributes, 'All attributes available');
+    t.true(result.hasOwnProperty('attributes'));
     t.is(result.key, expected.key, 'Key available');
     t.true(result.hasOwnProperty('type'), 'Has type info');
   });
