@@ -647,11 +647,6 @@ test.cb('Content Approval Post data', t => {
           .set('cookie', cookie)
           .expect(302)
           .end((err2, res2) => {
-            console.log('Content Approval Post data BUG:');
-            console.log('err2');
-            console.log(err2);
-            console.log('res2');
-            console.log(res2);
             t.is(err2, null, 'Should not have an error');
             t.true(includes(res2.text, 'Found. Redirecting to /content/services', 'should have a redirect message'));
 
@@ -660,6 +655,11 @@ test.cb('Content Approval Post data', t => {
               .set('cookie', cookie)
               .expect(200)
               .end((err3, res3) => {
+            console.log('Content Approval Post data BUG2:');
+            console.log('err3');
+            console.log(err3);
+            console.log('res3');
+            console.log(res3);
                 t.is(err3, null, 'Should not have an error');
                 t.true(includes(res3.text, 'action="/content/services/approve"'), 'should have correct form action url');
                 t.true(includes(res3.text, 'Publish</button>'), 'Should have the final button in approval step');
@@ -678,6 +678,45 @@ test.cb('Content Approval Post data', t => {
 
                     t.end();
                   });
+              });
+          });
+      });
+  });
+});
+
+test.cb('Content Approval Rejection', t => {
+  addService(service).then(revision => {
+    agent
+      .get(`/content/services/${serviceUuid}/${revision}/approve`)
+      .set('cookie', cookie)
+      .expect(200)
+      .end((err1, res1) => {
+        t.is(err1, null, 'Should not have an error');
+        t.true(includes(res1.text, 'action="/content/services/approve"'), 'should have correct form action url');
+        t.true(includes(res1.text, 'Send to Editor</button>'), 'Should have the first button in approval step');
+
+        agent
+          .post('/content/services/approve')
+          .send({
+            'comment--textarea': 'I do not like it, you are a loser.',
+            'action--select': 'reject',
+          })
+          .set('cookie', cookie)
+          .expect(302)
+          .end((err2, res2) => {
+            t.is(err2, null, 'Should not have an error');
+            t.true(includes(res2.text, 'Found. Redirecting to /content/services', 'should have a redirect message'));
+
+            agent
+              .get(`/content/services/${serviceUuid}/${revision}/approve`)
+              .set('cookie', cookie)
+              .expect(200)
+              .end((err3, res3) => {
+                t.is(err3, null, 'Should not have an error');
+                t.true(includes(res3.text, 'action="/content/services/approve"'), 'should have correct form action url');
+                t.true(includes(res3.text, 'Send to Editor</button>'), 'Should still have the first button in approval step');
+
+                t.end();
               });
           });
       });
