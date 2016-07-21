@@ -3,18 +3,32 @@ import uuid from 'uuid';
 import ipsum from 'lorem-ipsum';
 import Promise from 'bluebird';
 import slugify from 'underscore.string/slugify';
+import _ from 'lodash/cloneDeep';
 import apiUtils from '../lib/api/utils';
+import api from '../lib/api';
 import utils from '../lib/utils';
 import database from '../lib/database';
 
 const content = [];
 const types = [];
+const eachOfType = {};
+const allTypes = [];
 
 for (let i = 0; i < 5; i++) {
   types.push(`Test Type ${ipsum({
     count: 1,
-    units: 'word',
+    units: 'words',
   })}`);
+  eachOfType[types[i]] = 0;
+  allTypes.push({
+    name: types[i],
+    id: slugify(types[i]),
+    description: ipsum({
+      count: Math.round(Math.random() * 6 + 1),
+      units: 'words',
+    }),
+    attributes: [],
+  });
 }
 
 for (let i = 0; i < 50; i++) {
@@ -28,6 +42,8 @@ for (let i = 0; i < 50; i++) {
   const sunset = `${Math.round(Math.random() * 3 + 2016)}-${Math.round(Math.random() * 11 + 1)}-${Math.round(Math.random() * 25 + 1)}`;
 
   const type = types[Math.round(Math.random() * 4)];
+
+  eachOfType[type] += 1;
 
   const item = {
     'id': uuid.v4(),
@@ -64,8 +80,10 @@ test.cb.before(t => {
   });
 });
 
-
-test('Format Results - List', t => {
+//////////////////////////////
+// Utils
+//////////////////////////////
+test('Utils: Format Results - List', t => {
   const formatted = apiUtils.format(content.slice(0, 9));
 
   formatted.forEach(item => {
@@ -80,7 +98,7 @@ test('Format Results - List', t => {
   });
 });
 
-test('Format Results - Attributes', t => {
+test('Utils: Format Results - Attributes', t => {
   const formatted = apiUtils.format(content.slice(0, 9), true);
 
   formatted.forEach(item => {
@@ -94,7 +112,7 @@ test('Format Results - Attributes', t => {
   });
 });
 
-test('Organize - Default', t => {
+test('Utils: Organize - Default', t => {
   const actual = apiUtils.organize({});
   const expected = {
     sort: {
@@ -111,7 +129,7 @@ test('Organize - Default', t => {
   t.deepEqual(actual, expected, 'Returns defaults');
 });
 
-test('Organize - Lookup', t => {
+test('Utils: Organize - Lookup', t => {
   const actual = apiUtils.organize({}, [
     'foo',
     'bar',
@@ -132,7 +150,7 @@ test('Organize - Lookup', t => {
   t.deepEqual(actual, expected, 'Returns defaults');
 });
 
-test('Organize - Custom', t => {
+test('Utils: Organize - Custom', t => {
   const actual = apiUtils.organize({
     sort: 'type',
     sort_dir: 'desc', // eslint-disable-line camelcase
@@ -155,7 +173,7 @@ test('Organize - Custom', t => {
   t.deepEqual(actual, expected, 'Returns defaults');
 });
 
-test('Organize - Wrong', t => {
+test('Utils: Organize - Wrong', t => {
   const actual = apiUtils.organize({
     sort: 'foo',
     sort_dir: 'banana', // eslint-disable-line camelcase
@@ -178,7 +196,7 @@ test('Organize - Wrong', t => {
   t.deepEqual(actual, expected, 'Returns defaults');
 });
 
-test('Organize - Wrong Pages', t => {
+test('Utils: Organize - Wrong Pages', t => {
   const actual = apiUtils.organize({
     page: -1,
     per_page: -1, // eslint-disable-line camelcase
@@ -199,7 +217,7 @@ test('Organize - Wrong Pages', t => {
   t.deepEqual(actual, expected, 'Returns defaults');
 });
 
-test('Page - First', t => {
+test('Utils: Page - First', t => {
   const organized = apiUtils.organize({});
   const actual = apiUtils.page('api', organized, 100);
 
@@ -214,7 +232,7 @@ test('Page - First', t => {
   t.deepEqual(actual, expected);
 });
 
-test('Page - Middle', t => {
+test('Utils: Page - Middle', t => {
   const organized = apiUtils.organize({
     page: 2,
   });
@@ -231,7 +249,7 @@ test('Page - Middle', t => {
   t.deepEqual(actual, expected);
 });
 
-test('Page - End', t => {
+test('Utils: Page - End', t => {
   const organized = apiUtils.organize({
     page: 4,
   });
@@ -248,7 +266,7 @@ test('Page - End', t => {
   t.deepEqual(actual, expected);
 });
 
-test('Page - One', t => {
+test('Utils: Page - One', t => {
   const organized = apiUtils.organize({
     page: 1,
   });
@@ -265,7 +283,7 @@ test('Page - One', t => {
   t.deepEqual(actual, expected);
 });
 
-test('Page - None', t => {
+test('Utils: Page - None', t => {
   const organized = apiUtils.organize({
     page: 4,
   });
@@ -282,6 +300,97 @@ test('Page - None', t => {
   t.deepEqual(actual, expected);
 });
 
+//////////////////////////////
+// APIs
+//////////////////////////////
+test('APIs: Types', t => {
+  const app = {
+    get: word => {
+      console.log(word); // eslint-disable-line no-console
+
+      return allTypes;
+    },
+  };
+
+  const keys = [
+    'name',
+    'description',
+    'id',
+  ];
+
+  const expectedAll = _(allTypes).map(ct => {
+    const finalCT = ct;
+    delete finalCT.attributes;
+
+    finalCT.meta = {
+      url: `/api/types/${ct.id}`,
+      count: eachOfType[ct.name],
+    };
+
+    return finalCT;
+  });
+
+  return api.types(app).then(apiTypes => {
+    t.true(apiTypes.hasOwnProperty('keys'), 'Has keys');
+    t.true(apiTypes.hasOwnProperty('all'), 'Has All Content Types');
+    t.deepEqual(apiTypes.keys, keys, 'Keys are as expected');
+    t.deepEqual(apiTypes.all, expectedAll, 'All types are as expected');
+  });
+});
+
+test('API: All', t => {
+  return api.all({}).then(results => {
+    t.true(results.hasOwnProperty('items'), 'Has Items');
+    t.true(results.hasOwnProperty('pages'), 'Has Pagination');
+    t.is(results.items.length, 30, 'Has all 30 items in it');
+  });
+});
+
+test('API: Content', t => {
+  const app = {
+    get: word => {
+      console.log(word); // eslint-disable-line no-console
+
+      return allTypes;
+    },
+  };
+
+  return api.types(app).then(apiTypes => {
+    const formatted = api.content({}, apiTypes);
+
+    t.true(formatted.hasOwnProperty('items'), 'Has Items');
+    t.true(formatted.hasOwnProperty('pages'), 'Has Pagination');
+    t.is(formatted.items.length, allTypes.length, 'All content types exist');
+  });
+});
+
+test('API: ofType', t => {
+  const item = Math.round(Math.random() * types.length);
+
+  return api.ofType({}, slugify(types[item])).then(formatted => {
+    t.true(formatted.hasOwnProperty('items'), 'Has Items');
+    t.true(formatted.hasOwnProperty('pages'), 'Has Pagination');
+
+    if (eachOfType[types[item]] > 30) {
+      t.is(formatted.items.length, 30, 'Has all available items');
+    }
+    else {
+      t.is(formatted.items.length, eachOfType[types[item]], 'Has all available items');
+    }
+  });
+});
+
+test('API: One', t => {
+  const item = Math.round(Math.random() * content.length);
+  const expected = content[item];
+
+  return api.one({}, expected.id).then(result => {
+    t.is(result.id, expected.id, 'IDs the same');
+    t.deepEqual(result.attributes, expected.attributes, 'All attributes available');
+    t.is(result.key, expected.key, 'Key available');
+    t.true(result.hasOwnProperty('type'), 'Has type info');
+  });
+});
 
 test.cb.after(t => {
   Promise.map(types, type => {
