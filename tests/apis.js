@@ -348,9 +348,6 @@ test('APIs: Types', t => {
   });
 
   return api.types(app).then(apiTypes => {
-    console.log(apiTypes.all);  // eslint-disable-line no-console
-    console.log('-----');  // eslint-disable-line no-console
-    console.log(expectedAll);  // eslint-disable-line no-console
     t.true(apiTypes.hasOwnProperty('keys'), 'Has keys');
     t.true(apiTypes.hasOwnProperty('all'), 'Has All Content Types');
     t.deepEqual(apiTypes.keys, keys, 'Keys are as expected');
