@@ -113,7 +113,7 @@ test('Utils: Format Results - Attributes', t => {
 });
 
 test('Utils: Organize - Default', t => {
-  const actual = apiUtils.organize({});
+  const actual = apiUtils.organize();
   const expected = {
     sort: {
       by: 'key',
@@ -138,6 +138,23 @@ test('Utils: Organize - Lookup', t => {
   const expected = {
     sort: {
       by: 'foo',
+      dir: 'asc',
+    },
+    page: {
+      offset: 0,
+      limit: 30,
+      page: 1,
+    },
+  };
+
+  t.deepEqual(actual, expected, 'Returns defaults');
+});
+
+test('Utils: Organize - Bad Lookup', t => {
+  const actual = apiUtils.organize({}, {});
+  const expected = {
+    sort: {
+      by: 'key',
       dir: 'asc',
     },
     page: {
@@ -218,7 +235,7 @@ test('Utils: Organize - Wrong Pages', t => {
 });
 
 test('Utils: Page - First', t => {
-  const organized = apiUtils.organize({});
+  const organized = apiUtils.organize();
   const actual = apiUtils.page('api', organized, 100);
 
   const expected = {
