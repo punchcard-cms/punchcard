@@ -3,7 +3,7 @@ import uuid from 'uuid';
 import ipsum from 'lorem-ipsum';
 import Promise from 'bluebird';
 import slugify from 'underscore.string/slugify';
-import _ from 'lodash/cloneDeep';
+import cloneDeep from 'lodash/cloneDeep';
 import apiUtils from '../lib/api/utils';
 import api from '../lib/api';
 import utils from '../lib/utils';
@@ -318,7 +318,7 @@ test('APIs: Types', t => {
     'id',
   ];
 
-  const expectedAll = _(allTypes).map(ct => {
+  const expectedAll = cloneDeep(allTypes).map(ct => {
     const finalCT = ct;
     delete finalCT.attributes;
 
