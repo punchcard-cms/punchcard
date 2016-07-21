@@ -655,11 +655,11 @@ test.cb('Content Approval Post data', t => {
               .set('cookie', cookie)
               .expect(200)
               .end((err3, res3) => {
-            console.log('Content Approval Post data BUG2:');
-            console.log('err3');
-            console.log(err3);
-            console.log('res3');
-            console.log(res3);
+                console.log('Content Approval Post data BUG2:');
+                console.log('err3');
+                console.log(err3);
+                console.log('res3');
+                console.log(res3);
                 t.is(err3, null, 'Should not have an error');
                 t.true(includes(res3.text, 'action="/content/services/approve"'), 'should have correct form action url');
                 t.true(includes(res3.text, 'Publish</button>'), 'Should have the final button in approval step');
