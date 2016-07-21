@@ -647,6 +647,8 @@ test.cb('Content Approval Post data', t => {
           .set('cookie', cookie)
           .expect(302)
           .end((err2, res2) => {
+            console.log(err2);
+            console.log(res2);
             t.is(err2, null, 'Should not have an error');
             t.true(includes(res2.text, 'Found. Redirecting to /content/services', 'should have a redirect message'));
 
