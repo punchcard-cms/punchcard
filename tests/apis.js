@@ -364,6 +364,26 @@ test('API: Content', t => {
   });
 });
 
+test('API: Content - Descending', t => {
+  const app = {
+    get: word => {
+      console.log(word); // eslint-disable-line no-console
+
+      return allTypes;
+    },
+  };
+
+  return api.types(app).then(apiTypes => {
+    const formatted = api.content({
+      sort_dir: 'desc', // eslint-disable-line camelcase
+    }, apiTypes);
+
+    t.true(formatted.hasOwnProperty('items'), 'Has Items');
+    t.true(formatted.hasOwnProperty('pages'), 'Has Pagination');
+    t.is(formatted.items.length, allTypes.length, 'All content types exist');
+  });
+});
+
 test('API: ofType', t => {
   const item = Math.round(Math.random() * types.length);
 
@@ -389,6 +409,12 @@ test('API: One', t => {
     t.deepEqual(result.attributes, expected.attributes, 'All attributes available');
     t.is(result.key, expected.key, 'Key available');
     t.true(result.hasOwnProperty('type'), 'Has type info');
+  });
+});
+
+test('API: One - Not There', t => {
+  return api.one({}, `Test ${Math.round(Math.random() * content.length)}`).then(result => {
+    t.deepEqual(result, {}, 'Empty object returned');
   });
 });
 
