@@ -52,6 +52,7 @@ const service = [
     publishable: false,
     approval: 2,
     value: {},
+    audit: { entries: [] },
   },
 ];
 
@@ -68,7 +69,7 @@ const addService = (svc) => {
 const serviceCheck = (svc) => {
   return getService(svc).then(srvc => {
     if (srvc.length < 1) {
-      return database('content-type--services').insert(svc);
+      return addService(svc);
     }
 
     return [];
@@ -632,39 +633,43 @@ test.cb('Content Approval Post data', t => {
       .get(`/content/services/${serviceUuid}/${revision}/approve`)
       .set('cookie', cookie)
       .expect(200)
-      .end((err) => {
-        t.is(err, null, 'Should not have an error');
+      .end((err1, res1) => {
+        t.is(err1, null, 'Should not have an error');
+        t.true(includes(res1.text, 'action="/content/services/approve"'), 'should have correct form action url');
+        t.true(includes(res1.text, 'Send to Editor</button>'), 'Should have the first button in approval step');
+
         agent
           .post('/content/services/approve')
           .send({
-            'language': 'test-dummy-entry',
             'comment--textarea': 'I like it, you are a winner.',
             'action--select': 'approve',
           })
           .set('cookie', cookie)
           .expect(302)
-          .end((error, res) => {
-            t.is(error, null, 'Should not have an error');
-            t.true(includes(res.text, 'Found. Redirecting to', 'should have a redirect message'));
+          .end((err2, res2) => {
+            t.is(err2, null, 'Should not have an error');
+            t.true(includes(res2.text, 'Found. Redirecting to /content/services', 'should have a redirect message'));
 
             agent
               .get(`/content/services/${serviceUuid}/${revision}/approve`)
               .set('cookie', cookie)
               .expect(200)
-              .end((er) => {
-                t.is(er, null, 'Should not have an error');
+              .end((err3, res3) => {
+                t.is(err3, null, 'Should not have an error');
+                t.true(includes(res3.text, 'action="/content/services/approve"'), 'should have correct form action url');
+                t.true(includes(res3.text, 'Publish</button>'), 'Should have the final button in approval step');
+
                 agent
                   .post('/content/services/approve')
                   .send({
-                    'language': 'test-dummy-entry',
-                    'comment--textarea': 'I like it, you are a winner.',
+                    'comment--textarea': 'I like it too, you are a winner.',
                     'action--select': 'approve',
                   })
                   .set('cookie', cookie)
                   .expect(302)
-                  .end((eor, resp) => {
-                    t.is(eor, null, 'Should not have an error');
-                    t.true(includes(resp.text, 'Found. Redirecting to', 'should have a redirect message'));
+                  .end((err4, res4) => {
+                    t.is(err4, null, 'Should not have an error');
+                    t.true(includes(res4.text, 'Found. Redirecting to /content/services', 'should have a redirect message'));
 
                     t.end();
                   });

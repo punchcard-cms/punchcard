@@ -2,7 +2,8 @@ name: Editor Approve
 id: editor-approve
 steps:
   -
-    name: Publish
-    self: true
+    name: Send to Legal
   -
-    name: Editor Approval
+    name: Send to Editor
+  -
+    name: Publish
