@@ -1,9 +1,9 @@
 import test from 'ava';
 import moment from 'moment';
+import path from 'path';
 import content from 'punchcard-content-types';
 
 import workflows from '../lib/workflows';
-
 
 const revision = {
   audit: '',
@@ -38,8 +38,12 @@ const workflow = {
 };
 
 test('Workflow functions', t => {
-  // t.is(typeof workflows, 'function', 'Workflows exports a function');
-  t.is(typeof workflows.raw, 'function', 'Submodule `raw` exists and is a function');
+  t.is(typeof workflows.audits, 'function', '`audits` exists and is a function');
+  t.is(typeof workflows.check, 'function', '`check` exists and is a function');
+  t.is(typeof workflows.entry, 'function', '`entry` exists and is a function');
+  t.is(typeof workflows.model, 'function', '`model` exists and is a function');
+  t.is(typeof workflows.raw, 'function', '`raw` exists and is a function');
+  t.is(typeof workflows.structure, 'object', '`raw` exists and is an object');
 });
 
 test('Workflows compiled into content type', t => {
@@ -72,6 +76,85 @@ test('Workflow model from config', t => {
   return workflows.model(structure).then(model => {
     t.true(model[0].hasOwnProperty('name'), 'Should have a workflow attribute');
     t.is(model[0].name, 'Other', 'Structure has name');
+  });
+});
+
+test('Workflow config check name', t => {
+  const check = workflows.check({});
+  t.is(check, 'Workflows require a name', 'Workflows require a name');
+});
+
+test('Workflow config check name string', t => {
+  const wf = {
+    name: [],
+  };
+  const check = workflows.check(wf);
+  t.is(check, 'Workflows name must be string', 'Workflows name must be string');
+});
+
+test('Workflow config check name', t => {
+  const wf = {
+    name: 'test',
+  };
+  const check = workflows.check(wf);
+  t.is(check, 'Workflows require an id', 'Workflows require an id');
+});
+
+test('Workflow config check name', t => {
+  const wf = {
+    name: 'test',
+    id: 'kebabThingy',
+  };
+  const check = workflows.check(wf);
+  t.is(check, 'kebabThingy needs to be written in kebab case (e.g. kebab-thingy)', 'Workflows id needs to be kebab');
+});
+
+test('Workflow config check name', t => {
+  const wf = {
+    name: 'test',
+    id: 'test',
+  };
+  const check = workflows.check(wf);
+  t.is(check, 'A workflow must have steps', 'A workflow must have steps');
+});
+
+test('Workflow config check name', t => {
+  const wf = {
+    name: 'test',
+    id: 'test',
+    steps: 'steps',
+  };
+  const check = workflows.check(wf);
+  t.is(check, 'Workflow steps must be an array', 'Workflow steps must be an array');
+});
+
+test('Workflow config check name', t => {
+  const wf = {
+    name: 'test',
+    id: 'test',
+    steps: [],
+  };
+  const check = workflows.check(wf);
+  t.true(check, 'Accept good workflow');
+});
+
+test('Workflows rejects bad config', t => {
+  const badpath = path.join(__dirname, './fixtures/workflows/bad-name');
+
+  return workflows.raw(badpath).then(() => {
+    t.fail('Raw should fail');
+  }).catch(e => {
+    t.is(e.message, 'Workflows name must be string', 'Workflows name must be string');
+  });
+});
+
+test('Workflows cannot share id', t => {
+  const badpath = path.join(__dirname, './fixtures/workflows/same-id');
+
+  return workflows.raw(badpath).then(() => {
+    t.fail('Raw should fail');
+  }).catch(e => {
+    t.is(e.message, 'Workflow samesame is duplicated!', 'No same id on workflows');
   });
 });
 

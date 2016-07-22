@@ -1,0 +1,5 @@
+name: Bar
+id: samesame
+steps:
+  -
+    name: Publish

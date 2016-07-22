@@ -115,7 +115,7 @@
   },
   "ava": {
     "files": [
-      "tests/*.js"
+      "tests/workflows.js"
     ],
     "failFast": true,
     "tap": true
