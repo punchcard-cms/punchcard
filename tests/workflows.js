@@ -20,20 +20,6 @@ const rejectedBody = {
   'comment--textarea': 'No, just, no.',
 };
 
-const oneEntry = [
-  {
-    'comment': 'I approve this',
-    'action': 'approve',
-    'step': 2,
-    'author': 123,
-    'created': {
-      'date': '2016-07-21',
-      'time': '17:20',
-      'zone': 'America/New_York'
-    }
-  }
-]
-
 const request = {
   body: approvedBody,
   user: {
@@ -59,6 +45,33 @@ test('Workflow functions', t => {
 test('Workflows compiled into content type', t => {
   return content.raw().then(types => {
     t.true(types[0].hasOwnProperty('workflow'), 'Should have a workflow attribute');
+  });
+});
+
+test('Workflow structure object', t => {
+  const structure = workflows.structure;
+
+  t.is(typeof structure, 'object', 'Structure is an object');
+  t.is(structure.name, 'Workflow', 'Structure has name');
+  t.is(structure.description, 'A workflow entry', 'Structure has description');
+  t.is(structure.id, 'workflow', 'Structure has id');
+  t.true(Array.isArray(structure.attributes), 'attributes is an array');
+});
+
+test('Workflow model', t => {
+  return workflows.model().then(model => {
+    t.true(model[0].hasOwnProperty('name'), 'Should have a workflow attribute');
+    t.is(model[0].name, 'Workflow', 'Structure has name');
+  });
+});
+
+test('Workflow model from config', t => {
+  const structure = workflows.structure;
+  structure.name = 'Other';
+
+  return workflows.model(structure).then(model => {
+    t.true(model[0].hasOwnProperty('name'), 'Should have a workflow attribute');
+    t.is(model[0].name, 'Other', 'Structure has name');
   });
 });
 
