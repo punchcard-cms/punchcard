@@ -42,7 +42,7 @@ const workflow = {
 
 test('Workflow functions', t => {
   t.is(typeof workflows.audits, 'function', '`audits` exists and is a function');
-  t.is(typeof workflows.check, 'function', '`check` exists and is a function');
+  t.is(typeof workflows.utils.check, 'function', '`check` exists and is a function');
   t.is(typeof workflows.entry, 'function', '`entry` exists and is a function');
   t.is(typeof workflows.model, 'function', '`model` exists and is a function');
   t.is(typeof workflows.raw, 'function', '`raw` exists and is a function');
@@ -83,7 +83,7 @@ test('Workflow model from config', t => {
 });
 
 test('Workflow config check name', t => {
-  const check = workflows.check({});
+  const check = workflows.utils.check({});
   t.is(check, 'Workflows require a name', 'Workflows require a name');
 });
 
@@ -91,7 +91,7 @@ test('Workflow config check name string', t => {
   const wf = {
     name: [],
   };
-  const check = workflows.check(wf);
+  const check = workflows.utils.check(wf);
   t.is(check, 'Workflows name must be string', 'Workflows name must be string');
 });
 
@@ -99,7 +99,7 @@ test('Workflow config check name', t => {
   const wf = {
     name: 'test',
   };
-  const check = workflows.check(wf);
+  const check = workflows.utils.check(wf);
   t.is(check, 'Workflows require an id', 'Workflows require an id');
 });
 
@@ -108,8 +108,8 @@ test('Workflow config check name', t => {
     name: 'test',
     id: 'kebabThingy',
   };
-  const check = workflows.check(wf);
-  t.is(check, 'kebabThingy needs to be written in kebab case (e.g. kebab-thingy)', 'Workflows id needs to be kebab');
+  const check = workflows.utils.check(wf);
+  t.is(check, 'kebabThingy needs to be written in kebab case (e.g. kebabthingy)', 'Workflows id needs to be kebab');
 });
 
 test('Workflow config check name', t => {
@@ -117,7 +117,7 @@ test('Workflow config check name', t => {
     name: 'test',
     id: 'test',
   };
-  const check = workflows.check(wf);
+  const check = workflows.utils.check(wf);
   t.is(check, 'A workflow must have steps', 'A workflow must have steps');
 });
 
@@ -127,7 +127,7 @@ test('Workflow config check name', t => {
     id: 'test',
     steps: 'steps',
   };
-  const check = workflows.check(wf);
+  const check = workflows.utils.check(wf);
   t.is(check, 'Workflow steps must be an array', 'Workflow steps must be an array');
 });
 
@@ -137,7 +137,7 @@ test('Workflow config check name', t => {
     id: 'test',
     steps: [],
   };
-  const check = workflows.check(wf);
+  const check = workflows.utils.check(wf);
   t.true(check, 'Accept good workflow');
 });
 
@@ -255,4 +255,77 @@ test('Audit on content with one approval', t => {
   t.is(typeof audits.audit.entries[0].author, 'object', 'Author should be an object');
   t.is(audits.audit.entries[0].author.id, 123, 'Should be an author id');
   t.is(typeof audits.audit.entries[0].created, 'object', 'Should have created object');
+});
+
+
+test('workflows in type', t => {
+  const type = {
+    workflow: 'editor-approve',
+  };
+
+  const allFlows = [
+    {
+      'name': 'Editor Approve',
+      'id': 'editor-approve',
+      'steps': [
+        {
+          'name': 'Publish',
+          'self': true,
+        },
+        {
+          'name': 'Editor Approval',
+        },
+      ],
+    },
+  ];
+
+  const globalConfig = {
+    content: {
+      base: '/',
+    },
+    workflows: {
+      default: 'self-publish',
+      messages: {
+        missing: 'Workflow \'%workf\' for Content Type \'%type\' not found',
+      },
+    },
+  };
+
+  const expected = {
+    name: 'Editor Approve',
+    id: 'editor-approve',
+    steps: [
+      {
+        name: 'Publish',
+        self: true,
+      },
+      {
+        name: 'Editor Approval',
+      },
+    ],
+  };
+  const req = {
+    params: {
+      type: 'services',
+    },
+    session: {},
+    workflow: 'editor-approve',
+  };
+  const wf = workflows.workflow(type, allFlows, globalConfig, req);
+
+  // get type workflow
+  t.is(JSON.stringify(wf), JSON.stringify(expected), 'Grabs an existing workflow');
+
+  // bad workflow in type
+  const badtype = (JSON.parse(JSON.stringify(type)));
+  badtype.workflow = 'nope';
+  const badflow = workflows.workflow(badtype, allFlows, globalConfig, req);
+  t.is(badflow, false, 'Returns false on workflow missing from global flows');
+
+  // no flow in type
+  const noflow = (JSON.parse(JSON.stringify(type)));
+  noflow.workflow = '';
+  const nopeflow = workflows.workflow(noflow, allFlows, globalConfig, req);
+
+  t.is(nopeflow, false, 'Returns false on workflow missing from global flows');
 });

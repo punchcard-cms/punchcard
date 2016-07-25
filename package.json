@@ -88,7 +88,6 @@
     "input-plugin-email": "0.1.0",
     "input-plugin-text": "0.0.5",
     "jsdom": "^9.2.0",
-    "lodash": "^4.13.1",
     "lorem-ipsum": "^1.0.3",
     "mock-express-response": "^0.1.2",
     "nyc": "^6.6.1",
