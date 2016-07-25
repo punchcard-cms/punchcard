@@ -19,7 +19,6 @@
     "test": "NODE_APP_INSTANCE=test npm run nyc",
     "posttest": "gulp build",
     "start": "nodemon -e html,js ./index.js",
-    "debug": "nodemon -e html,js --debug ./index.js",
     "lint": "gulp lint",
     "ava:watch": "NODE_CONFIG_DIR=../config ava --watch | tap-diff",
     "ava": "NODE_CONFIG_DIR=../config ava | tap-diff",

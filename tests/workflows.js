@@ -46,7 +46,7 @@ test('Workflow functions', t => {
   t.is(typeof workflows.entry, 'function', '`entry` exists and is a function');
   t.is(typeof workflows.model, 'function', '`model` exists and is a function');
   t.is(typeof workflows.raw, 'function', '`raw` exists and is a function');
-  t.is(typeof workflows.structure, 'object', '`raw` exists and is an object');
+  t.is(typeof workflows.model.structure, 'object', '`raw` exists and is an object');
 });
 
 test('Workflows compiled into content type', t => {
@@ -56,7 +56,7 @@ test('Workflows compiled into content type', t => {
 });
 
 test('Workflow structure object', t => {
-  const structure = workflows.structure;
+  const structure = workflows.model.structure;
 
   t.is(typeof structure, 'object', 'Structure is an object');
   t.is(structure.name, 'Workflow', 'Structure has name');
@@ -73,7 +73,7 @@ test('Workflow model', t => {
 });
 
 test('Workflow model from config', t => {
-  const structure = workflows.structure;
+  const structure = workflows.model.structure;
   structure.name = 'Other';
 
   return workflows.model(structure).then(model => {
