@@ -24,6 +24,9 @@ const request = {
   body: approvedBody,
   user: {
     id: 123,
+    role: 'admin',
+    access: null,
+    email: 'important@person.com',
   },
 };
 
@@ -176,7 +179,11 @@ test('create a default audit entry', t => {
   t.is(entry.comment, 'No comment', 'Should have comment');
   t.is(entry.action, 'No action', 'Should have action');
   t.is(entry.step, '', 'Should have no step number');
-  t.is(entry.author, 123, 'Should be author id');
+  t.is(typeof entry.author, 'object', 'Author should be an object');
+  t.is(entry.author.id, 123, 'Should be an author id');
+  t.is(entry.author.role, 'admin', 'Should be an author role');
+  t.is(entry.author.email, 'important@person.com', 'Should be an author email');
+  t.is(entry.author.access, null, 'Should be an author role');
   t.is(typeof entry.created, 'object', 'Created should be an object');
   t.true(moment(entry.created.date, 'YYYY-MM-DD', true).isValid(), 'Should have a date');
   t.true(moment(entry.created.time, 'HH:mm', true).isValid(), 'Should have a time');
@@ -188,7 +195,8 @@ test('create an audit entry with variables', t => {
   t.is(entry.comment, 'I love it', 'Should have comment');
   t.is(entry.action, 'approve', 'Should have action');
   t.is(entry.step, 2, 'Should have no step number');
-  t.is(entry.author, 123, 'Should be author id');
+  t.is(typeof entry.author, 'object', 'Author should be an object');
+  t.is(entry.author.id, 123, 'Should be an author id');
   t.is(typeof entry.created, 'object', 'Created should be an object');
   t.true(moment(entry.created.date, 'YYYY-MM-DD', true).isValid(), 'Should have a date');
   t.true(moment(entry.created.time, 'HH:mm', true).isValid(), 'Should have a time');
@@ -206,7 +214,8 @@ test('Audit created from approval submission', t => {
   t.is(audits.audit.entries[0].comment, 'I approve this', 'Should retain comment');
   t.is(audits.audit.entries[0].action, 'approve', 'Should have action');
   t.is(audits.audit.entries[0].step, 1, 'Should be the step number');
-  t.is(audits.audit.entries[0].author, 123, 'Should be author id');
+  t.is(typeof audits.audit.entries[0].author, 'object', 'Author should be an object');
+  t.is(audits.audit.entries[0].author.id, 123, 'Should be an author id');
   t.is(typeof audits.audit.entries[0].created, 'object', 'Should have created object');
 });
 
@@ -224,7 +233,8 @@ test('Audit created from rejection', t => {
   t.is(audits.audit.entries[0].comment, 'No, just, no.', 'Should retain comment');
   t.is(audits.audit.entries[0].action, 'reject', 'Should have action');
   t.is(audits.audit.entries[0].step, 2, 'Should be the step number');
-  t.is(audits.audit.entries[0].author, 123, 'Should be author id');
+  t.is(typeof audits.audit.entries[0].author, 'object', 'Author should be an object');
+  t.is(audits.audit.entries[0].author.id, 123, 'Should be an author id');
   t.is(typeof audits.audit.entries[0].created, 'object', 'Should have created object');
 });
 
@@ -242,6 +252,7 @@ test('Audit on content with one approval', t => {
   t.is(audits.audit.entries[0].comment, 'I approve this', 'Should retain comment');
   t.is(audits.audit.entries[0].action, 'approve', 'Should have action');
   t.is(audits.audit.entries[0].step, 0, 'Should be the step number');
-  t.is(audits.audit.entries[0].author, 123, 'Should be author id');
+  t.is(typeof audits.audit.entries[0].author, 'object', 'Author should be an object');
+  t.is(audits.audit.entries[0].author.id, 123, 'Should be an author id');
   t.is(typeof audits.audit.entries[0].created, 'object', 'Should have created object');
 });

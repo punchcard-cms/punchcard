@@ -48,7 +48,7 @@
 
   {% include "content/_form-approval.html" %}
 
-  {% if revision.workflows.entries %}
+  {% if revision.audit.entries %}
     <h2>Previous Comments</h2>
     <table>
       <tr>
@@ -60,7 +60,7 @@
       </tr>
     {% for e in revision.audit.entries %}
       <tr>
-        <td>{{e.author}}</td>
+        <td>{{e.author.email}}</td>
         <td>{{e.action}}</td>
         <td>{{e.step}}</td>
         <td>{{e.comment}}</td>
