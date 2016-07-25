@@ -2,6 +2,8 @@
 
 const path = require('path');
 
+const defaultCfg = require('./default');
+
 let knex = {};
 
 if (process.env.CI === 'true') {
@@ -18,6 +20,7 @@ if (process.env.CI === 'true') {
 }
 
 module.exports = {
+  content: defaultCfg.content,
   contentTypes: {
     directory: path.join(__dirname, '..', 'content-types'),
   },

@@ -55,6 +55,9 @@ test('Workflows compiled into content type', t => {
   });
 });
 
+//////////////////////////////
+// Workflows - workflow object structure
+//////////////////////////////
 test('Workflow structure object', t => {
   const structure = workflows.model.structure;
 
@@ -65,6 +68,9 @@ test('Workflow structure object', t => {
   t.true(Array.isArray(structure.attributes), 'attributes is an array');
 });
 
+//////////////////////////////
+// Workflows - model
+//////////////////////////////
 test('Workflow model', t => {
   return workflows.model().then(model => {
     t.true(model[0].hasOwnProperty('name'), 'Should have a workflow attribute');
@@ -82,6 +88,9 @@ test('Workflow model from config', t => {
   });
 });
 
+//////////////////////////////
+// Workflows - workflow object checking
+//////////////////////////////
 test('Workflow config check name', t => {
   const check = workflows.utils.check({});
   t.is(check, 'Workflows require a name', 'Workflows require a name');
