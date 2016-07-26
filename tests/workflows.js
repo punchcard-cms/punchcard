@@ -112,7 +112,7 @@ test('Workflow config check name', t => {
   t.is(check, 'Workflows require an id', 'Workflows require an id');
 });
 
-test('Workflow config check name', t => {
+test('Workflow config id kebab', t => {
   const wf = {
     name: 'test',
     id: 'kebabThingy',
@@ -121,16 +121,16 @@ test('Workflow config check name', t => {
   t.is(check, 'kebabThingy needs to be written in kebab case (e.g. kebabthingy)', 'Workflows id needs to be kebab');
 });
 
-test('Workflow config check name', t => {
+test('Workflow config check steps exists', t => {
   const wf = {
-    name: 'test',
-    id: 'test',
+    name: 'test foo',
+    id: 'test-foo',
   };
   const check = workflows.utils.check(wf);
   t.is(check, 'A workflow must have steps', 'A workflow must have steps');
 });
 
-test('Workflow config check name', t => {
+test('Workflow config check steps is an array', t => {
   const wf = {
     name: 'test',
     id: 'test',
@@ -140,16 +140,60 @@ test('Workflow config check name', t => {
   t.is(check, 'Workflow steps must be an array', 'Workflow steps must be an array');
 });
 
-test('Workflow config check name', t => {
+test('Workflow config check at least one step', t => {
   const wf = {
     name: 'test',
     id: 'test',
     steps: [],
   };
   const check = workflows.utils.check(wf);
-  t.true(check, 'Accept good workflow');
+  t.is(check, 'Workflow must have at least one step', 'Workflow should have at least one step');
 });
 
+test('Workflow config check step requires name', t => {
+  const wf = {
+    name: 'test',
+    id: 'test',
+    steps: [{}],
+  };
+  let check = workflows.utils.check(wf);
+  t.is(check, 'Step must have a name', 'Workflow steps require a name');
+
+  wf.steps = [{
+    name: 'foo',
+  }, {
+    name: '',
+  }];
+  check = workflows.utils.check(wf);
+  t.is(check, 'Step must have a name', 'Workflow steps require a name');
+});
+
+test('Workflow config check step self is boolean', t => {
+  const wf = {
+    name: 'test',
+    id: 'test',
+    steps: [{
+      name: 'foo',
+      self: 'foo',
+    }],
+  };
+  let check = workflows.utils.check(wf);
+  t.is(check, 'Self-publish must be a boolean', 'Workflow self-publish must be boolean');
+
+  wf.steps = [{
+    name: 'foo',
+    self: true,
+  }, {
+    name: 'foo',
+    self: 'foo',
+  }];
+  check = workflows.utils.check(wf);
+  t.is(check, 'Self-publish must be a boolean', 'Workflow self-publish must be boolean');
+});
+
+//////////////////////////////
+// Workflows - loading workflow files
+//////////////////////////////
 test('Workflows rejects bad config', t => {
   const badpath = path.join(__dirname, './fixtures/workflows/bad-name');
 
@@ -182,6 +226,9 @@ test('Workflows grabbed from yaml config', t => {
   });
 });
 
+//////////////////////////////
+// Workflows - entry
+//////////////////////////////
 test('create a default audit entry', t => {
   const entry = workflows.entry('', '', '', request);
 
@@ -211,6 +258,9 @@ test('create an audit entry with variables', t => {
   t.true(moment(entry.created.time, 'HH:mm', true).isValid(), 'Should have a time');
 });
 
+//////////////////////////////
+// Workflows - audits
+//////////////////////////////
 test('Audit created from approval submission', t => {
   const audits = workflows.audits(revision, workflow, request);
 

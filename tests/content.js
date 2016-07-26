@@ -2,28 +2,6 @@ import test from 'ava';
 import uuid from 'uuid';
 import utils from '../lib/content/utils';
 
-const config = {
-  content: {
-    messages: {
-      content: {
-        title: 'Revisions for \'%id\'',
-      },
-      format: {
-        id: 'Content ID must be in UUID format',
-        revision: 'Revision must be a number',
-      },
-      missing: {
-        type: 'Content Type \'%type\' not found',
-        id: 'Content with ID \'%id\' in Content Type \'%type\' not found',
-        revision: 'Revision \'%revision\' for ID \'%id\' in Content Type \'%type\' not found',
-      },
-      revisions: {
-        title: 'Revision \'%revision\' for \'%id\'',
-      },
-    },
-  },
-};
-
 const req = {
   params: {
     id: '',
