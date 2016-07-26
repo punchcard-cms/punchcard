@@ -16,22 +16,28 @@
 {% if content %}
 
   <table class="table--style">
-    <tr class="table--tr">
-      <th class="table--th">revision</th>
-      <th class="table--th">{{config.base}}</th>
-      <th class="table--th">{{config.actions.edit}}</th>
-      <th class="table--th">date</th>
-    </tr>
-  {% for c in content %}
-    {% if c.value %}
-      <tr class="table--tr">
-        <td class="table--td">{{c.revision}}</td>
-        <td class="table--td">{{c.value[type.primary]}}</td>
-        <td class="table--td"><a href="/{{config.base}}/{{type.id}}/{{c.id}}/{{c.revision}}/{{config.actions.edit}}" class="table--link">{{config.actions.edit}}</a></td>
-        <td class="table--td">{{c.created}}</td>
+    <thead class="base--thead">
+      <tr class="base--tr">
+        <th class="base--th">revision</th>
+        <th class="base--th">date</th>
+        <th class="base--th">{{config.base}}</th>
+        <th class="base--th">{{config.actions.edit}}</th>
+        <th class="base--th">{{config.actions.approve}}</th>
       </tr>
-    {% endif %}
-  {% endfor %}
+    </thead>
+    <tbody class="base--tbody">
+    {% for c in content %}
+      {% if c.value %}
+        <tr class="base--tr">
+          <td class="base--td">{{c.revision}}</td>
+          <td data-th="date" class="base--td">{{c.created}}</td>
+          <td data-th="{{config.base}}" class="base--td">{{c.value[type.primary]}}</td>
+          <td data-th="{{config.actions.edit}}" class="base--td"><a href="/{{config.base}}/{{type.id}}/{{c.id}}/{{c.revision}}/{{config.actions.edit}}" class="base--link">{{config.actions.edit|capitalize}}</a></td>
+          <td data-th="{{config.actions.approve}}" class="base--td"><a href="/{{config.base}}/{{type.id}}/{{c.id}}/{{c.revision}}/{{config.actions.approve}}" class="base--link">{{config.actions.approve|capitalize}}</a></td>
+        </tr>
+      {% endif %}
+    {% endfor %}
+    </tbody>
   </table>
 {% endif %}
 {% endblock %}

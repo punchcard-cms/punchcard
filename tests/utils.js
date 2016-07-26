@@ -158,3 +158,4 @@ test('Request Format', t => {
   t.is(JSON.stringify(result), JSON.stringify(expected), 'A single object is retrieved from array based on key/value');
   t.deepEqual(result, expected, 'A single object is retrieved from array based on key/value');
 });
+
