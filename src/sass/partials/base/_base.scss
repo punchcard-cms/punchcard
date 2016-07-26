@@ -45,9 +45,22 @@
     padding: 0 1.5em;
   }
 
+  &--dl {
+    display: block;
+    margin-left: setting-get('rhythm');
+
+    @include breakpoint(setting-get('fixed container')) {
+      margin-left: 0;
+    }
+  }
+
   &--dt {
     color: setting-get('secondary color');
     font-weight: setting-get('bold font weight');
+  }
+
+  &--dd {
+    margin-left: setting-get('rhythm');
   }
 
   &--li {

@@ -1,0 +1,9 @@
+name: Editor Approve
+id: editor-approve
+steps:
+  -
+    name: Send to Legal
+  -
+    name: Send to Editor
+  -
+    name: Publish

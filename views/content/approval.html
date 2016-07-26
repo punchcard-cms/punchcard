@@ -1,0 +1,78 @@
+{% extends "_donut.html" %}
+
+{% block pageHead %}
+  {{ super() }}
+{% endblock %}
+
+{% block header %}
+  {{ super() }}
+{% endblock %}
+
+{% block main %}
+<h1 class="base--h1">{{title}}</h1>
+
+{% if revision %}
+  <h2 class="base--h2">{{config.actions.approve}} :: [TBAdded: Primary Key Contents]</h2>
+
+  {% if data %}
+    {% for attr, inputs in data %}
+      <h3>{{attr}}</h3>
+
+      {% if inputs.length %}
+        {# repeatable content #}
+        {% for rpt in inputs %}
+          {% for input, value in rpt %}
+            {% if loop.first %}
+              <dl class="base--dl">
+            {% endif %}
+
+            <dt class="base--dt">{{input}}</dt>
+            <dd class="base--dd">{{value.value}}</dd>
+
+            {% if loop.last %}
+              </dl>
+            {% endif %}
+          {% endfor %}
+        {% endfor %}
+      {% else %}
+        {% for input, value in inputs %}
+          <dl class="base--dl">
+            <dt class="base--dt">{{input}}</dt>
+            <dd class="base--dd">{{value.value}}</dd>
+          </dl>
+        {% endfor %}
+      {% endif %}
+    {% endfor %}
+    </dl>
+  {% endif %}
+
+  {% include "content/_form-approval.html" %}
+
+  {% if revision.audit.entries %}
+    <h2>Previous Comments</h2>
+    <table>
+      <tr>
+        <th>person</th>
+        <th>action</th>
+        <th>step</th>
+        <th>comment</th>
+        <th>date</th>
+      </tr>
+    {% for e in revision.audit.entries %}
+      <tr>
+        <td>{{e.author.email}}</td>
+        <td>{{e.action}}</td>
+        <td>{{e.step}}</td>
+        <td>{{e.comment}}</td>
+        <td>{{e.created.date}}</td>
+      </tr>
+    {% endfor %}
+    </table>
+  {% endif %}
+
+{% endif %}
+{% endblock %}
+
+{% block footer %}
+{{ super() }}
+{% endblock %}

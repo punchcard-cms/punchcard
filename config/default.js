@@ -16,7 +16,9 @@ module.exports = {
     },
     actions: {
       add: 'add',
+      approve: 'approve',
       edit: 'edit',
+      revisions: 'revisions',
       save: 'save',
     },
     directory: path.join(__dirname, '../content-types'),
@@ -106,6 +108,12 @@ module.exports = {
         delete: 'User does not exist',
         current: 'Cannot delete logged-in user',
       },
+    },
+  },
+  workflows: {
+    messages: {
+      approved: 'This content has already completed the approval process',
+      missing: 'Workflow \'%workf\' for Content Type \'%type\' not found',
     },
   },
 };
