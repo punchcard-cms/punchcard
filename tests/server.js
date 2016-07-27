@@ -689,17 +689,7 @@ test.cb('Content Approval Rejection', t => {
             t.is(err2, null, 'Should not have an error');
             t.true(includes(res2.text, 'Found. Redirecting to /content/services', 'should have a redirect message'));
 
-            agent
-              .get(`/content/services/${serviceUuid}/${revision}/approve`)
-              .set('cookie', cookie)
-              .expect(200)
-              .end((err3, res3) => {
-                t.is(err3, null, 'Should not have an error');
-                t.true(includes(res3.text, 'action="/content/services/approve"'), 'should have correct form action url');
-                t.true(includes(res3.text, 'Send to Editor</button>'), 'Should still have the first button in approval step');
-
-                t.end();
-              });
+            t.end();
           });
       });
   });
