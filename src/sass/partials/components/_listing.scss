@@ -1,0 +1,27 @@
+.listing {
+
+  @include breakpoint(setting-get('max character legnth')) {
+    width: 75%;
+  }
+
+  &--h3 {
+    color: setting-get('active link color');
+    font-size: ms(-1);
+    font-weight: setting-get('bold font weight');
+    letter-spacing: 1px;
+    margin-top: setting-get('rhythm') / .5;
+    text-transform: uppercase;
+  }
+
+  &--dl {
+    @include dl;
+  }
+
+  &--dt {
+    @include dt;
+  }
+
+  &--dd {
+    @include dd;
+  }
+}

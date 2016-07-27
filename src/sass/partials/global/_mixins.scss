@@ -29,6 +29,28 @@
   }
 }
 
+@mixin dl {
+  display: block;
+}
+
+@mixin dd {
+  margin-left: setting-get('rhythm') / .75;
+
+  @include breakpoint(setting-get('fixed container')) {
+    margin-left: setting-get('rhythm') / .5;
+  }
+}
+
+@mixin dt {
+  background-color: color('neutral-white', 40);
+  font-weight: setting-get('bold font weight');
+  padding: setting-get('rhythm') / 2 setting-get('rhythm') / .75;
+
+  @include breakpoint(setting-get('fixed container')) {
+    padding: setting-get('rhythm') / 2 setting-get('rhythm') / .5;
+  }
+}
+
 @mixin checkbox {
   display: none;
 

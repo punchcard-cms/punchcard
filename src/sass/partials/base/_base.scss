@@ -46,21 +46,15 @@
   }
 
   &--dl {
-    display: block;
-    margin-left: setting-get('rhythm');
-
-    @include breakpoint(setting-get('fixed container')) {
-      margin-left: 0;
-    }
+    @include dl;
   }
 
   &--dt {
-    color: setting-get('secondary color');
-    font-weight: setting-get('bold font weight');
+    @include dt;
   }
 
   &--dd {
-    margin-left: setting-get('rhythm');
+    @include dd;
   }
 
   &--li {
@@ -139,7 +133,7 @@
     display: flex;
     font-size: ms(-1);
     margin: 0;
-    padding: setting-get('rhythm') / 2;
+    padding: setting-get('rhythm') / 4 setting-get('rhythm') / 2;
     @include breakpoint(setting-get('responsive table')) {
       display: table-cell;
       font-size: 1em;
@@ -149,7 +143,7 @@
     &::before {
       background-color: setting-get('primary color');
       color: setting-get('primary accent color');
-      content: attr(data-th)': ';
+      content: attr(data-th)'';
       display: inline-block;
       font-weight: setting-get('bold font weight');
       margin: -.5rem .5em -.5rem -.5rem;
