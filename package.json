@@ -103,6 +103,9 @@
   },
   "nyc": {
     "exclude": [
+      "lib/api.js",
+      "lib/routes/api.js",
+      "lib/api/**/*",
       "tests/**/*",
       "config/**/*",
       "public/**/*",
@@ -113,7 +116,8 @@
   },
   "ava": {
     "files": [
-      "tests/*.js"
+      "tests/*.js",
+      "!tests/apis.js"
     ],
     "failFast": true,
     "tap": true
