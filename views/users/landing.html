@@ -19,8 +19,7 @@
       <th class="base--th">Email</th>
       <th class="base--th">Role</th>
       <th class="base--th">Date</th>
-      <th class="base--th">{{config.actions.edit}}</th>
-      <th class="base--th">{{config.actions.delete}}</th>
+      <th class="base--th" colspan="2">Actions</th>
     </tr>
   </thead>
   <tbody class="base--tbody">
@@ -31,8 +30,8 @@
         <td data-th="Email" class="base--td">{{user.email}}</td>
         <td data-th="Role" class="base--td">{{user.role}}</td>
         <td data-th="Date" class="base--td">{{user.created}}</td>
-        <td data-th="Edit" class="base--td"><a href="{{config.base}}/{{config.actions.edit}}/{{user.id}}" class="base--link">{{config.actions.edit|capitalize}}</a></td>
-        <td data-th="Delete" class="base--td"><a href="{{config.base}}/{{config.actions.delete}}/{{user.id}}" class="base--link">{{config.actions.delete|capitalize}}</a></td>
+        <td data-th="Actions" class="base--td"><a href="{{config.base}}/{{config.actions.edit}}/{{user.id}}" class="base--link">{{config.actions.edit|capitalize}}</a></td>
+        <td data-th="" class="base--td"><a href="{{config.base}}/{{config.actions.delete}}/{{user.id}}" class="base--link">{{config.actions.delete|capitalize}}</a></td>
       </tr>
     {% endif %}
   {% endfor %}

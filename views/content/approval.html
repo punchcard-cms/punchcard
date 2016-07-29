@@ -12,22 +12,23 @@
 <h1 class="base--h1">{{title}}</h1>
 
 {% if revision %}
-  <h2 class="base--h2">{{config.actions.approve}} :: [TBAdded: Primary Key Contents]</h2>
+  <h2 class="base--h2">{{config.actions.approve|capitalize}} :: [TBAdded: Primary Key Contents]</h2>
 
   {% if data %}
+    <div class="listing">
     {% for attr, inputs in data %}
-      <h3>{{attr}}</h3>
+      <h3 class="listing--h3">{{attr|capitalize}}</h3>
 
       {% if inputs.length %}
         {# repeatable content #}
         {% for rpt in inputs %}
           {% for input, value in rpt %}
             {% if loop.first %}
-              <dl class="base--dl">
+              <dl class="listing--dl">
             {% endif %}
 
-            <dt class="base--dt">{{input}}</dt>
-            <dd class="base--dd">{{value.value}}</dd>
+            <dt class="listing--dt">{{input}}</dt>
+            <dd class="listing--dd">{{value.value}}</dd>
 
             {% if loop.last %}
               </dl>
@@ -36,37 +37,42 @@
         {% endfor %}
       {% else %}
         {% for input, value in inputs %}
-          <dl class="base--dl">
-            <dt class="base--dt">{{input}}</dt>
-            <dd class="base--dd">{{value.value}}</dd>
+          <dl class="listing--dl">
+            <dt class="listing--dt">{{input}}</dt>
+            <dd class="listing--dd">{{value.value}}</dd>
           </dl>
         {% endfor %}
       {% endif %}
     {% endfor %}
-    </dl>
+    </div>
   {% endif %}
 
   {% include "content/_form-approval.html" %}
 
   {% if revision.audit.entries %}
-    <h2>Previous Comments</h2>
-    <table>
-      <tr>
-        <th>person</th>
-        <th>action</th>
-        <th>step</th>
-        <th>comment</th>
-        <th>date</th>
-      </tr>
-    {% for e in revision.audit.entries %}
-      <tr>
-        <td>{{e.author.email}}</td>
-        <td>{{e.action}}</td>
-        <td>{{e.step}}</td>
-        <td>{{e.comment}}</td>
-        <td>{{e.created.date}}</td>
-      </tr>
-    {% endfor %}
+    <hr class="base--hr" />
+    <h2 class="base--h2">Previous Comments</h2>
+    <table class="base--table">
+      <thead class="base--thead">
+        <tr class="base--tr">
+          <th class="base--th">Person</th>
+          <th class="base--th">Action</th>
+          <th class="base--th">Step</th>
+          <th class="base--th">Comment</th>
+          <th class="base--th">Date</th>
+        </tr>
+      </thead>
+      <tbody class="base--tbody">
+      {% for e in revision.audit.entries %}
+        <tr class="base--tr">
+          <td data-th="Person" class="base--td">{{e.author.email}}</td>
+          <td data-th="Action" class="base--td">{{e.action}}</td>
+          <td data-th="Step" class="base--td">{{e.step}}</td>
+          <td data-th="Comment" class="base--td">{{e.comment}}</td>
+          <td data-th="Date" class="base--td">{{e.created.date}}</td>
+        </tr>
+      {% endfor %}
+      </tbody>
     </table>
   {% endif %}
 
