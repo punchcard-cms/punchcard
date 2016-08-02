@@ -84,20 +84,34 @@ By making a contribution to this project, I certify that:
 * Pull requests must be made back in to the `master` branch for a repository
 * The following branch prefixes should be used when creating a new branch:
   * `hotfix/` - bug fixes that got through and need to be squashed
-  * `release/` - for releases
   * `feature/` - update to or new functionality
 
-## Creating a New Version
+## Creating a Release
 
-Versioning is done through [SEMVER](http://semver.org/). When issuing a new version, create a [release branch](#branching-model) with the version's name in to the `master` branch. The release branch should bump the version number accordingly and [update the changelog](#maintaining-the-changelog). Once merged, create a new tag with `v` prefixed with the version's name from that branch.
+Versioning is done through [SEMVER](http://semver.org/). Whenever new code is merged in to the `master` branch, a new semantic release will automatically be created on NPM and in the project's GitHub Releases. The GitHub Release will also include a changelog based off of the commit messages of that release. The release version and changelog are determined by the [punchcard-semantic-release](https://github.com/punchcard-cms/semantic-release) module, and released using the [semantic-release](https://github.com/semantic-release/semantic-release) module based off of the [emoji](#emoji-cheatsheet) used in the commit messages for each commit. The following emoji correspond to different semantic versions, all other emoji are considered non-semantic:
 
-For instance, when creating version `1.1.0`, start by creating a release branch `release/1.1.0` that includes the version bump and changelog updates, merge it in to `master` and create a tag `v1.1.0` from branch `release/1.1.0`.
+**Major Version**
+Backwards-incompatible changes
+- :boom: `:boom:`
 
-### Maintaining the Changelog
+**Minor Version**
+Backwards-compatible new functionality
+- :new: `:new:`
+- :racehorse: `:racehorse:`
+- :lock: `:lock:`
 
-The Changelog should have a list of changes made for each version. They should be organized so additions come first, changes come second, and deletions come third. Version numbers should be 2nd level headers with the `v` in front (like a tag) and the date of the version's most recent update should be underneath in italics.
+**Patch Version**
+Backwards-compatible changes that do not add new functionality
+- :bug: `:bug:`
+- :shirt: `:shirt:`
+- :art: `:art:`
+- :unamused: `:unamused:`
 
-Changelog messages do not need to cover each individual commit made, but rather should have individual summaries of the changes made. Changelog messages should be written in the same style as [commit messages](#git-commit-messages).
+**Pre-Release Version**
+In-progress release
+- :crystal_ball: `:crystal_ball:`
+
+The version that gets generated is based on the highest type of change identified; i.e. if there were five _patch_ commits and one _minor_ commit, the _minor_ commit takes precedence and a new _minor_ release will be generated. All contributing commits will be included in the changelog.
 
 ## Issue Guidelines
 
@@ -120,21 +134,21 @@ The following can be copied as a templates to follow:
 **Body**
 
     {{long description}}
-    
+
     ```gherkin
     Feature: {{feature}}
       As a {{persona}}
       I want {{need}}
       So that {{rationale}}
-    
+
       Scenario: {{scenario}}
         Given {{thing}}
         When {{action}}
         Then {{result}}
     ```
-    
+
     ---
-    
+
     - [ ] {{feature}}/{{scenario}}
 
 
@@ -162,39 +176,39 @@ The following can be copied as a templates to follow:
 **Body**
 
     {{long description}}
-    
+
     ## Steps for Reproducing
-    
+
     - {{Step 1}}
     - {{Step 2}}
     - {{Step 3}}
-    
+
     ## Screenshots
-    
+
     ### {{Step 1}}
-    
+
     ![Screenshot of Step 1](url/to/screenshot)
-    
+
     ### {{Step 2}}
-    
+
     ![Screenshot of Step 2](url/to/screenshot)
-    
+
     ### {{Step 3}}
-    
+
     ![Screenshot of Step 3](url/to/screenshot)
-    
+
     ## Affected Browsers
-    
+
     - [ ] {{Chrome 47 on Mac 10.11}} / {{Production, Development}}
     - [ ] {{Chrome 47 on Windows 10}} / {{Production, Development}}
     - [ ] {{Firefox 38.4 on Mac 10.11}} / {{Development}}
-    
+
     ## Runtime Version
-    
+
     {{runtime version}}
-    
+
     ## Code Version
-    
+
     {{code version}}
 
 ## Emoji Cheatsheet
@@ -205,7 +219,7 @@ When creating creating commits or updating the CHANGELOG, please **start** the c
 * :bug: `:bug:` when fixing a bug
 * :memo: `:memo:` when writing documentation
 * :shirt: `:shirt:` when removing linter warnings
-* :art: `:art:` when improving the format/structure of the code
+* :art: `:art:` when improving the format/structure of the code or visual style
 * :fire: `:fire:` when removing code or files
 * :racehorse: `:racehorse:` when improving performance
 * :white_check_mark: `:white_check_mark:` when adding tests
@@ -214,4 +228,3 @@ When creating creating commits or updating the CHANGELOG, please **start** the c
 * :crystal_ball: `:crystal_ball:` when experimenting
 * :unamused: `:unamused:` when doing chore work (updating dependencies, etc…)
 * :boom: `:boom:` when changing in a non-backwards-compatible way current functionality
-* :shipit: `:shipit:` when creating a new release
