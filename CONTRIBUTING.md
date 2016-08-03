@@ -72,10 +72,21 @@ By making a contribution to this project, I certify that:
 
 ### Git Commit Messages
 
+Commit message should follow the template `:<emoji>: <subject>` with `<emoji>` being the name of the relevant [emoji](#emoji-cheatsheet) describing the changes (without wrapping `::`) and `subject` being the description of changes. Commit messages may have multiple emoji. Commit messages should follow the following guidelines:
+
 * Use the present tense (`"Add feature"` not `"Added Feature"`)
 * Use the imperative mood (`"Move cursor to…"` not `"Moves cursor to…"`)
-* Limit the first line to 72 characters or less
-* Include relevant Emoji from our [Emoji cheatsheet](#emoji-cheatsheet)
+* Limit the first line (not including emoji) to 72 characters or less
+
+Example commits may look something like the following:
+
+`git commit -m ":art: Refactor lookup system"`
+
+`git commit -m ":lock: Fix XSS vulnerability"`
+
+`git commit -m ":new::boom: Require author in content types" -m "Previously working content types will now throw if author is not present, so this is a breaking change"`
+
+When using [ghooks](https://www.npmjs.com/package/ghooks) with [punchcard-commit-msg](https://github.com/punchcard-cms/commit-msg), this convention will be enforced for you when using command-line git.
 
 ### Branching Model
 
