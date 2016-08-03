@@ -126,42 +126,17 @@ The version that gets generated is based on the highest type of change identifie
 
 ## Issue Guidelines
 
-There are generally two kinds of issues: requests functionality or bugs. Each is treated slightly differently, and there is a template for each.
+There are generally two kinds of issues: functionality requests and bugs. Each is treated slightly differently, and there is a template for each.
 
-#### New Functionality
+#### Functionality Requests
 
-[Request New Functionality](https://github.com/punchcard-cms/punchcard/issues/new?body=%7B%7Blong%20description%7D%7D%0A%0A%60%60%60gherkin%0AFeature%3A%20%7B%7Bfeature%7D%7D%0A%20%20As%20a%20%7B%7Bpersona%7D%7D%0A%20%20I%20want%20%7B%7Bneed%7D%7D%0A%20%20So%20that%20%7B%7Brationale%7D%7D%0A%0A%20%20Scenario%3A%20%7B%7Bscenario%7D%7D%0A%20%20%20%20Given%20%7B%7Bthing%7D%7D%0A%20%20%20%20When%20%7B%7Baction%7D%7D%0A%20%20%20%20Then%20%7B%7Bresult%7D%7D%0A%60%60%60%0A%0A---%0A%0A-%20%5B%20%5D%20%7B%7Bfeature%7D%7D%2F%7B%7Bscenario%7D%7D&title=%7B%7Bpersona%7D%7D%3A%20%7B%7Bneed%7D%7D)
+[Request New Functionality](https://github.com/punchcard-cms/punchcard/issues/new)
 
-New functionality always exists in relation to a specific type of user. When requesting new functionality, include the user persona the functionality relates to, the need, and the version of the codebase. Titles should be written with the user persona first, then the a short description of their need (5-10 words).
+New functionality always exists in relation to a specific type of user. When requesting new functionality, include the user persona the functionality relates to, the need for that functionality, and the rationale as to why this is needed. Titles should be written with the user persona first, then the a short description of their need (5-10 words).
 
-New functionality also needs their requirements for being considered complete written out. To do so, features and scenarios should be written to describe the expected behavior in [Gherkin](https://github.com/cucumber/cucumber/wiki/Gherkin) syntax. Each feature and scenario par should have a [task list](https://github.com/blog/1375%0A-task-lists-in-gfm-issues-pulls-comments) created to track their completion. The issue is considered **done** when all feature/scenario pairs defined have been completed with passing tests written.
+New functionality also needs their requirements for being considered complete written out. To do so, features and scenarios should be written to describe the expected behavior in [Gherkin](https://github.com/cucumber/cucumber/wiki/Gherkin) syntax. Each feature and scenario par should have a [task list](https://github.com/blog/1375%0A-task-lists-in-gfm-issues-pulls-comments) created to track their completion. The issue is considered **done** when all scenarios defined have been completed with passing tests written.
 
-The following can be copied as a templates to follow:
-
-**Title**
-
-    {{persona}}: {{need}}
-
-**Body**
-
-    {{long description}}
-
-    ```gherkin
-    Feature: {{feature}}
-      As a {{persona}}
-      I want {{need}}
-      So that {{rationale}}
-
-      Scenario: {{scenario}}
-        Given {{thing}}
-        When {{action}}
-        Then {{result}}
-    ```
-
-    ---
-
-    - [ ] {{feature}}/{{scenario}}
-
+A new request for functionality can be created by opening a new issue directly, [copying our Issue Template](https://raw.githubusercontent.com/punchcard-cms/punchcard/master/.github/ISSUE_TEMPLATE.md#) in to the body of a new issue, or clicking the **Request New Functionality** link above.
 
 ### Bug Report
 
@@ -178,49 +153,7 @@ Bug reports should all include the following information:
 * Runtime version affected (for non-browser bugs, _i.e._ Node version)
 * Code version being used
 
-The following can be copied as a templates to follow:
-
-**Title**
-
-    Bug: {{short description}}
-
-**Body**
-
-    {{long description}}
-
-    ## Steps for Reproducing
-
-    - {{Step 1}}
-    - {{Step 2}}
-    - {{Step 3}}
-
-    ## Screenshots
-
-    ### {{Step 1}}
-
-    ![Screenshot of Step 1](url/to/screenshot)
-
-    ### {{Step 2}}
-
-    ![Screenshot of Step 2](url/to/screenshot)
-
-    ### {{Step 3}}
-
-    ![Screenshot of Step 3](url/to/screenshot)
-
-    ## Affected Browsers
-
-    - [ ] {{Chrome 47 on Mac 10.11}} / {{Production, Development}}
-    - [ ] {{Chrome 47 on Windows 10}} / {{Production, Development}}
-    - [ ] {{Firefox 38.4 on Mac 10.11}} / {{Development}}
-
-    ## Runtime Version
-
-    {{runtime version}}
-
-    ## Code Version
-
-    {{code version}}
+A new bug report can be created either by opening a new issue and [copying our Bug Template](https://raw.githubusercontent.com/punchcard-cms/punchcard/master/.github/BUG_TEMPLATE.md#) in to the body of the issue, or clicking the **File a Bug Report** link above.
 
 ## Emoji Cheatsheet
 
