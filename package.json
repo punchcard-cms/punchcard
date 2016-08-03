@@ -74,7 +74,7 @@
     "passport": "^0.3.2",
     "passport-local": "^1.0.0",
     "pg": "^6.0.0",
-    "punchcard-content-types": "^2.0.3",
+    "punchcard-content-types": "^3.0.0",
     "sass-toolkit": "^2.10.0",
     "serve-favicon": "^2.3.0",
     "underscore.string": "^3.3.4",
