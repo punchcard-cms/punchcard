@@ -19,18 +19,36 @@ Punchcard is a headless CMS designed with content strategy at its heart. With a 
 
 * **DO NOT ISSUE A PULL REQUEST WITHOUT FIRST [SUBMITTING AN ISSUE](#submitting-issues)**
 * **ALL PULL REQUESTS MUST INCLUDE A [DEVELOPER CERTIFICATE OF ORIGIN](#developer-certificate-of-origin)**
+* Please follow our [Pull Request Guidelines](#issue-guidelines) when creating a new issue.
 * Pull requests should reference their related issues. If the pull request closes an issue, [please reference its closing from a commit messages](https://help.github.com/articles/closing-issues-via-commit-messages/). Pull requests not referencing any issues will be closed.
 * Commit messages _must_ begin with the [relevant emoji](#emoji-cheatsheet) describing what the commit does.
 * Pull request titles should be descriptive, explaining at the high level what it is doing, and should be written in the same style as [commit messages](#git-commit-messages).
-* Include a summarized list of changes, additions, and deletions in the body of the pull request in the same style as [commit messages](#git-commit-messages).
-* Follow our JavaScript and CSS styleguides. We have linters set up to catch most of it.
-* Ensure that [EditorConfig](http://editorconfig.org/) installed in the editor used to work on the site and that it is functioning properly.
-* Do not squash or rebase commits when submitting a Pull Request. It makes it much harder to follow work and make incremental changes.
+* Do not squash or rebase commits when submitting a Pull Request
 * Ensure no Emoji tags are used in the title of the Pull Request
+
+## Pull Request Guidelines
+
+In order to expedite the process of reviewing and merging pull requests, we request the following guidelines are followed.
+
+### Tips for Submitting Great PRs
+
+Beyond just writing the code needed to resolve an issue, there are a few best practices that should be followed to submit a great PR:
+
+* We have [EditorConfig](http://editorconfig.org/) files set up for Punchcard. Having EditorConfig installed and used will help ensure that editors are configured to follow our conventions.
+* We have JavaScript and Sass linting set up (where appropriate). Before committing code, make sure that linting has been run locally and passes by running `npm run lint`
+* We have automated testing set up. It can be run locally by by running `npm run test`. This will run linting, our test suite, and show code coverage.
+* For consistency, follow the conventions that the team has in place that aren't necessarily covered by our automated test suite. For instance, the team may be using `map` instead of `forEach`, or partial conventions in Sass.
+* When writing browser code, ensure it works cross-browser in all Evergreen (auto-updating, not tied to a operating system version, not referred to by version number) browsers, as well as the latest version of Safari on iOS devices.
+* When writing browser code, we adhere to the principles of [progressive enhancement](http://alistapart.com/article/understandingprogressiveenhancement) and expect new code to follow the same principles.
+* Solve the issue in as few lines of code, with as few external dependencies, as possible. The most maintainable lines of code are the ones that don't exist, so keeping PRs as small, clear, and concise as possible will aid in overall project maintainability, stability, and make it easier for us to do code review.
+* Commit tests separately from implementation code.
+* Commit early and often. Small, atomic commits help us understand the thought process that went in to creating a pull request and make it easier for us to review.
+* Do not [refactor](http://blog.codeclimate.com/blog/2014/01/09/when-is-it-time-to-refactor/) existing code unless it is _absolutely necessary_ to resolve the issue being worked on. If there is an opportunity to refactor, please file a separate issue to discuss and implement instead.
+* Only include code that resolves the scenarios in the issue being worked on. While appreciated, work that goes above-and-beyond the scenarios outlined in an issue is out-of-scope and we will not be able to accept it. Please either work with the Punchcard team to get scenarios written for the issue being worked on, or split up the work across multiple issues and pull requests.
 
 ### Developer Certificate of Origin
 
-All contributions to the Watson Design Guideline must be accompanied by acknowledgment of, and agreement to, the [Developer Certificate of Origin](http://elinux.org/Developer_Certificate_Of_Origin), reproduced below. Acknowledgment of and agreement to the Developer Certificate of Origin _must_ be included in the comment section of each contribution and _must_ take the form of `DCO 1.1 Signed-off-by: {{Full Name}} <{{email address}}>` (without the `{{}}`). Contributions without this acknowledgment will be required to add it before being accepted. If a contributor is unable or unwilling to agree to the Developer Certificate of Origin, their contribution will not be included.
+All contributions to Punchcard projects must be accompanied by acknowledgment of, and agreement to, the [Developer Certificate of Origin](http://elinux.org/Developer_Certificate_Of_Origin), reproduced below. Acknowledgment of and agreement to the Developer Certificate of Origin _must_ be included in the comment section of each contribution and _must_ take the form of `DCO 1.1 Signed-off-by: {{Full Name}} <{{email address}}>` (without the `{{}}`). Contributions without this acknowledgment will be required to add it before being accepted. If a contributor is unable or unwilling to agree to the Developer Certificate of Origin, their contribution will not be included.
 
 ```
 Developer Certificate of Origin
@@ -94,8 +112,16 @@ When using [ghooks](https://www.npmjs.com/package/ghooks) with [punchcard-commit
 * Branch names should be descriptive, describing what is being done in that branch
 * Pull requests must be made back in to the `master` branch for a repository
 * The following branch prefixes should be used when creating a new branch:
-  * `hotfix/` - bug fixes that got through and need to be squashed
-  * `feature/` - update to or new functionality
+  * `hotfix/` - [bug fixes](#bug-repott) for bugs got through and need to be squashed
+  * `feature/` - update to or [new functionality](#functionality-requests)
+
+### Time to Merge
+
+In order for a pull request to be merged, it must meet the following criteria:
+
+* The author(s) of the code have signed off on the [Developer Certificate of Origin](#developer-certificate-of-origin) for this pull request
+* All required integrations have passed
+* The code has been reviewed by at least one non-authoring member of the [@punchcard-cms/maintainers](https://github.com/orgs/punchcard-cms/teams/maintainers) GitHub team and all comments from the review have been addressed. This may include comments related to our [tips for submitting great PRs](#tips-for-submitting-great-prs).
 
 ## Creating a Release
 
