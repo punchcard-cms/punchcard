@@ -2,6 +2,7 @@ name: Services
 description: I am services
 id: services
 workflow: editor-approve
+identifier: service-name
 attributes:
   - type: text
     id: service-name

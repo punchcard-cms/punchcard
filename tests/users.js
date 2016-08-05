@@ -7,6 +7,7 @@ const model = {
   'name': 'Users',
   'description': 'Test users description',
   'id': 'users',
+  'identifier': 'email',
   'attributes': [
     {
       'type': 'email',
