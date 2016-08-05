@@ -21,6 +21,9 @@ module.exports = {
       revisions: 'revisions',
       save: 'save',
     },
+    plugins: {
+      directory: [],
+    },
     directory: path.join(__dirname, '../content-types'),
     messages: {
       content: {
