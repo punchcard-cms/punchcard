@@ -114,7 +114,7 @@ When using [ghooks](https://www.npmjs.com/package/ghooks) with [punchcard-commit
 * Branch names should be descriptive, describing what is being done in that branch
 * Pull requests must be made back in to the `master` branch for a repository
 * The following branch prefixes should be used when creating a new branch:
-  * `hotfix/` - [bug fixes](#bug-repott) for bugs got through and need to be squashed
+  * `hotfix/` - [bug fixes](#bug-report) for bugs got through and need to be squashed
   * `feature/` - update to or [new functionality](#functionality-requests)
 
 ### Time to Merge
