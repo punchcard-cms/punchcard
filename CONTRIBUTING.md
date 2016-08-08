@@ -160,7 +160,7 @@ There are generally two kinds of issues: functionality requests and bugs. Each i
 
 [Request New Functionality](https://github.com/punchcard-cms/punchcard/issues/new)
 
-New functionality always exists in relation to a specific type of user. When requesting new functionality, include the user persona the functionality relates to, the need for that functionality, and the rationale as to why this is needed. Titles should be written with the user persona first, then the a short description of their need (5-10 words).
+New functionality always exists in relation to a specific type of user. When requesting new functionality, include the user persona the request relates to, why the user needs it, including the user's rationale for needing it. Titles should be written with the user persona first, then the a short description of their need (5-10 words).
 
 New functionality also needs their requirements for being considered complete written out. To do so, features and scenarios should be written to describe the expected behavior in [Gherkin](https://github.com/cucumber/cucumber/wiki/Gherkin) syntax. Each feature and scenario par should have a [task list](https://github.com/blog/1375%0A-task-lists-in-gfm-issues-pulls-comments) created to track their completion. The issue is considered **done** when all scenarios defined have been completed with passing tests written.
 
