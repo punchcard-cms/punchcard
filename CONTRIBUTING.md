@@ -191,7 +191,7 @@ When writing commits, please **start** the [commit message](#git-commit-messages
 * :bug: `:bug:` when fixing a bug
 * :memo: `:memo:` when writing documentation
 * :shirt: `:shirt:` when removing linter warnings
-* :art: `:art:` when improving the format/structure of the code, documentation, or visual style
+* :art: `:art:` when improving the format/structure of the code, documentation, or visual styling
 * :fire: `:fire:` when removing code or files
 * :racehorse: `:racehorse:` when improving performance
 * :white_check_mark: `:white_check_mark:` when adding tests
