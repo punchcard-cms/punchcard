@@ -30,7 +30,7 @@ Participation in the Punchcard community, including contributing to the Punchcar
 
 ## Pull Request Guidelines
 
-In order to expedite the process of reviewing and merging pull requests, we request the following guidelines are followed.
+In order to expedite the process of reviewing and merging pull requests, we request the following guidelines are adhered to.
 
 ### Tips for Submitting Great PRs
 
