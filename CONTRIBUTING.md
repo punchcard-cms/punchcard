@@ -38,7 +38,7 @@ Beyond just writing the code needed to resolve an issue, there are a few best pr
 
 * We have [EditorConfig](http://editorconfig.org/) files set up for Punchcard. Having EditorConfig installed and used will help ensure that editors are configured to follow our conventions.
 * We have JavaScript and Sass linting set up (where appropriate). Before committing code, make sure that linting has been run locally and passes by running `npm run lint`
-* We have automated testing set up. It can be run locally by by running `npm run test`. This will run linting, our test suite, and show code coverage.
+* We have automated testing set up. They can be run locally by by running `npm test` from the command line. This will run linting, our test suite, and show code coverage. These same tests are run as part of our automated test suite and must pass for all pull requests.
 * For consistency, follow the conventions that the team has in place that aren't necessarily covered by our automated test suite. For instance, the team may be using `map` instead of `forEach`, or partial conventions in Sass.
 * When writing browser code, ensure it works cross-browser in all Evergreen (auto-updating, not tied to a operating system version, not referred to by version number) browsers, as well as the latest version of Safari on iOS devices.
 * When writing browser code, we adhere to the principles of [progressive enhancement](http://alistapart.com/article/understandingprogressiveenhancement) and expect new code to follow the same principles.
