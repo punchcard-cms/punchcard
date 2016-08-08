@@ -44,7 +44,7 @@ Beyond just writing the code needed to resolve an issue, there are a few best pr
 * When writing browser code, we adhere to the principles of [progressive enhancement](http://alistapart.com/article/understandingprogressiveenhancement) and expect new code to follow the same principles.
 * Solve the issue in as few lines of code, with as few external dependencies, as possible. The most maintainable lines of code are the ones that don't exist, so keeping PRs as small, clear, and concise as possible will aid in overall project maintainability, stability, and make it easier for us to do code review.
 * Commit tests separately from implementation code.
-* Commit early and often. Small, atomic commits help us understand the thought process that went in to creating a pull request and make it easier for us to review.
+* Commit early and often. Small, atomic commits help us understand the thought process that went in to creating a pull request and make it easier for us to review. Do not squash or rebase your commits when submitting pull requests.
 * Do not [refactor](http://blog.codeclimate.com/blog/2014/01/09/when-is-it-time-to-refactor/) existing code unless it is _absolutely necessary_ to resolve the issue being worked on. If there is an opportunity to refactor, please file a separate issue to discuss and implement instead.
 * Only include code that resolves the scenarios in the issue being worked on. While appreciated, work that goes above-and-beyond the scenarios outlined in an issue is out-of-scope and we will not be able to accept it. Please either work with the Punchcard team to get scenarios written for the issue being worked on, or split up the work across multiple issues and pull requests.
 
