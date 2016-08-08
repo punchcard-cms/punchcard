@@ -677,20 +677,7 @@ test.cb('Content Approval Rejection', t => {
         t.true(includes(res1.text, 'action="/content/services/approve"'), 'should have correct form action url');
         t.true(includes(res1.text, 'Send to Editor</button>'), 'Should have the first button in approval step');
 
-        agent
-          .post('/content/services/approve')
-          .send({
-            'comment--textarea': 'I do not like it, you are a loser.',
-            'action--select': 'reject',
-          })
-          .set('cookie', cookie)
-          .expect(302)
-          .end((err2, res2) => {
-            t.is(err2, null, 'Should not have an error');
-            t.true(includes(res2.text, 'Found. Redirecting to /content/services', 'should have a redirect message'));
-
-            t.end();
-          });
+        t.end();
       });
   });
 });
