@@ -2,6 +2,8 @@
 
 Punchcard is a headless CMS designed with content strategy at its heart. With a focus on content management and content management only, it reinforces at its heart the [create once, publish everywhere](http://www.programmableweb.com/news/cope-create-once-publish-everywhere/2009/10/13) mentality of reusable content.
 
+Participation in the Punchcard community, including contributing to the Punchcard codebases, is governed by our [Code of Conduct](https://github.com/punchcard-cms/punchcard/blob/master/CODE_OF_CONDUCT.md). By participating, you agree to abide by it.
+
  Punchcard, and its [related components](https://github.com/punchcard-cms), are all covered by these contributing guidelines, as well as the [Apache License 2.0](http://spdx.org/licenses/Apache-2.0).
 
 ## Submitting Issues
