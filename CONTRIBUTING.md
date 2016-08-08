@@ -46,7 +46,7 @@ Beyond just writing the code needed to resolve an issue, there are a few best pr
 * Commit tests separately from implementation code.
 * Commit early and often. Small, atomic commits help us understand the thought process that went in to creating a pull request and make it easier for us to review. Do not squash or rebase your commits when submitting pull requests.
 * Do not [refactor](http://blog.codeclimate.com/blog/2014/01/09/when-is-it-time-to-refactor/) existing code unless it is _absolutely necessary_ to resolve the issue being worked on. If there is an opportunity to refactor, please file a separate issue to discuss and implement instead.
-* Only include code that resolves the scenarios in the issue being worked on. While appreciated, work that goes above-and-beyond the scenarios outlined in an issue is out-of-scope and we will not be able to accept it. Please either work with the Punchcard team to get scenarios written for the issue being worked on, or split up the work across multiple issues and pull requests.
+* Only include code that resolves the [scenarios](https://github.com/punchcard-cms/punchcard/blob/master/CONTRIBUTING.md#issue-guidelines) in the issue being worked on (or the specific bug being fixed). While appreciated, work that goes above-and-beyond the scenarios outlined in an issue is out-of-scope and we will not be able to accept it. Please either work with the Punchcard team to get scenarios written for the issue being worked on, or split up the work across multiple issues and pull requests.
 
 ### Developer Certificate of Origin
 
