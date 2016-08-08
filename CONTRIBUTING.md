@@ -92,7 +92,7 @@ By making a contribution to this project, I certify that:
 
 ### Git Commit Messages
 
-Commit message should follow the template `:<emoji>: <subject>` with `<emoji>` being the name of the relevant [emoji](#emoji-cheatsheet) describing the changes (without wrapping `::`) and `subject` being the description of changes. Commit messages may have multiple emoji. Commit messages should follow the following guidelines:
+Commit message should follow the template `:<emoji>: <subject>` with `<emoji>` being the name of the relevant [emoji](#emoji-cheatsheet) describing the changes (without wrapping `::`) and `subject` being the description of changes. Commit messages may have multiple emoji. Some emoji have [semantic meaning for releases](#creating-a-release), so please those are used properly. Commit messages should follow the following guidelines:
 
 * Use the present tense (`"Add feature"` not `"Added Feature"`)
 * Use the imperative mood (`"Move cursor to…"` not `"Moves cursor to…"`)
@@ -185,7 +185,7 @@ A new bug report can be created either by opening a new issue and [copying our B
 
 ## Emoji Cheatsheet
 
-When creating creating commits or updating the CHANGELOG, please **start** the commit message or update with one of the following applicable Emoji. Emoji should not be used at the start of issue or pull request titles.
+When writing commits, please **start** the [commit message](#git-commit-messages) with one of the following applicable Emoji, keeping in mind that some emoji have [semantic meaning for releases](#creating-a-release). Emoji should not be used at the start of issue or pull request titles.
 
 * :new: `:new:` when adding new functionality
 * :bug: `:bug:` when fixing a bug
