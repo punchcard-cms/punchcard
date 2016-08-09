@@ -432,7 +432,7 @@ test.cb('Invalid Content Type - Post data', t => {
     });
 });
 
-test.cb('Database error - Content Type Post data', t => {
+test.skip('Database error - Content Type Post data', t => {
   agent
     .post('/content/services/save')
     .field('language', 'Character Character Character Character Character Character Character Character Character Character Character Character Character Character Character Character Character Character Character Character Character Character Character Character Character Character Character Character')
@@ -462,7 +462,7 @@ test.cb('Content Type Post data', t => {
     });
 });
 
-test.cb('Content Type Post data - testing session', t => {
+test.skip('Content Type Post data - testing session', t => {
   addService(service).then(revision => {
     agent
       .get(`/content/services/${serviceUuid}/${revision}/edit`)
@@ -671,7 +671,7 @@ test.skip('Content Approval Post data', t => {
   });
 });
 
-test.cb('Content Approval Rejection', t => {
+test.skip('Content Approval Rejection', t => {
   addService(service).then(revision => {
     agent
       .get(`/content/services/${serviceUuid}/${revision}/approve`)

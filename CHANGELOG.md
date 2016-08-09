@@ -1,3 +1,9 @@
+# This Changelog Has Been Deprecated
+
+Releases are rolled automatically, and each release has its own full changelog. Please refer to our [releases](https://github.com/punchcard-cms/punchcard/releases) for the changelog for each version. Please refer to our [contributing guidelines](https://github.com/punchcard-cms/punchcard/blob/master/CONTRIBUTING.md) to understand how we handle releases.
+
+---
+
 ## v0.0.8
 **May 12, 2016**
 
