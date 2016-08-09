@@ -12,7 +12,7 @@
 <h1 class="base--h1">{{title}}</h1>
 
 {% if revision %}
-  <h2 class="base--h2">{{config.actions.approve|capitalize}} :: {{data[type.identity].value}}</h2>
+  <h2 class="base--h2">{{config.actions.approve|capitalize}} :: {{revision.identifier}}</h2>
 
   {% if data %}
     <div class="listing">

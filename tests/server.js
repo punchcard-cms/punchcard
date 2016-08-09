@@ -54,9 +54,9 @@ const service = [
     value: {
       'service-name': {
 	'text':
-	  {
-	    'value': 'This is the test title',
-	  },
+	{
+	  'value': 'This is the test title',
+	},
       },
     },
     audit: { entries: [] },
@@ -376,16 +376,16 @@ test.cb('Content Type Post data - testing session', t => {
   const svc = (JSON.parse(JSON.stringify(service)));
   svc[0].value = {
     'service-name':
+    {
+      'text':
       {
-	'text':
-	  {
-	    'value': 'This is the test title',
-	  },
+	'value': 'This is the test title',
       },
+    },
     'sunset-date':
-      {
-	'value': '2016-08-08',
-      },
+    {
+      'value': '2016-08-08',
+    },
   };
   addService(svc).then(revision => {
     agent
