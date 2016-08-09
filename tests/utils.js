@@ -159,3 +159,68 @@ test('Request Format', t => {
   t.deepEqual(result, expected, 'A single object is retrieved from array based on key/value');
 });
 
+test('Get identifier', t => {
+  const rows = [
+    {
+      'value': {
+        'service-name': {
+          'text': {
+            'value': 'This is the test title',
+          },
+        },
+      },
+    },
+  ];
+  const type = {
+    'identifier': 'service-name',
+    'attributes':
+    [
+      {
+        'name': 'Service Name',
+        'description': 'Write a really cool name please.',
+        'inputs': {
+          'text': {
+            'name': 'service-name--text',
+          },
+        },
+        'id': 'service-name',
+        'type': 'text',
+      },
+    ],
+  };
+  const result = utils.routes.identifier(rows, type);
+  t.is(result[0].identifier, 'This is the test title', 'Should have title as identifier');
+});
+
+test('Sad empty identifier value', t => {
+  const rows = [
+    {
+      'value': {
+        'service-name': {
+          'text': {
+            'value': '',
+          },
+        },
+      },
+    },
+  ];
+  const type = {
+    'identifier': 'service-name',
+    'attributes':
+    [
+      {
+        'name': 'Service Name',
+        'description': 'Write a really cool name please.',
+        'inputs': {
+          'text': {
+            'name': 'service-name--text',
+          },
+        },
+        'id': 'service-name',
+        'type': 'text',
+      },
+    ],
+  };
+  const result = utils.routes.identifier(rows, type);
+  t.is(result[0].identifier, '(No identifier available)', 'Should have title as identifier');
+});
