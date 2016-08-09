@@ -162,29 +162,29 @@ test('Request Format', t => {
 test('Get identifier', t => {
   const rows = [
     {
-      'value': {
+      value: {
         'service-name': {
-          'text': {
-            'value': 'This is the test title',
+          text: {
+            value: 'This is the test title',
           },
         },
       },
     },
   ];
   const type = {
-    'identifier': 'service-name',
-    'attributes':
+    identifier: 'service-name',
+    attributes:
     [
       {
-        'name': 'Service Name',
-        'description': 'Write a really cool name please.',
-        'inputs': {
-          'text': {
-            'name': 'service-name--text',
+        name: 'Service Name',
+        description: 'Write a really cool name please.',
+        inputs: {
+          text: {
+            name: 'service-name--text',
           },
         },
-        'id': 'service-name',
-        'type': 'text',
+        id: 'service-name',
+        type: 'text',
       },
     ],
   };
@@ -195,32 +195,33 @@ test('Get identifier', t => {
 test('Sad empty identifier value', t => {
   const rows = [
     {
-      'value': {
+      revision: 1234,
+      value: {
         'service-name': {
-          'text': {
-            'value': '',
+          text: {
+            value: '',
           },
         },
       },
     },
   ];
   const type = {
-    'identifier': 'service-name',
-    'attributes':
+    identifier: 'service-name',
+    attributes:
     [
       {
-        'name': 'Service Name',
-        'description': 'Write a really cool name please.',
-        'inputs': {
-          'text': {
-            'name': 'service-name--text',
+        name: 'Service Name',
+        description: 'Write a really cool name please.',
+        inputs: {
+          text: {
+            name: 'service-name--text',
           },
         },
-        'id': 'service-name',
-        'type': 'text',
+        id: 'service-name',
+        type: 'text',
       },
     ],
   };
   const result = utils.routes.identifier(rows, type);
-  t.is(result[0].identifier, '(No identifier available)', 'Should have title as identifier');
+  t.is(result[0].identifier, 'Revision: 1234', 'Should have title as identifier');
 });
