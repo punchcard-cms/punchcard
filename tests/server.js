@@ -611,7 +611,7 @@ test.skip('Content Type Approval data - missing data: comment', t => {
   });
 });
 
-test.cb('Content Type Approval data - missing data: action', t => {
+test.skip('Content Type Approval data - missing data: action', t => {
   addService(service).then(revision => {
     agent
       .post('/content/services/approve')
