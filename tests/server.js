@@ -372,7 +372,7 @@ test.cb('Non number for revision - Content Type Edit Page', t => {
     });
 });
 
-test.cb('Content Type Post data - testing session', t => {
+test.skip('Content Type Post data - testing session', t => {
   const svc = (JSON.parse(JSON.stringify(service)));
   svc[0].value = {
     'service-name':
@@ -401,7 +401,7 @@ test.cb('Content Type Post data - testing session', t => {
   });
 });
 
-test.cb('Content Type Edit Page', t => {
+test.skip('Content Type Edit Page', t => {
   getService({ id: serviceUuid }).then(srvc => {
     agent
       .get(`/content/services/${serviceUuid}/${srvc[0].revision}/edit`)
