@@ -64,23 +64,22 @@
   &--publish-container {
     background-color: color('neutral-white', 40);
     margin-top: setting-get('rhythm') / .5;
-    padding: setting-get('rhythm') / .75;
     order: 0;
+    padding: setting-get('rhythm') / .75;
 
     @include breakpoint(setting-get('responsive form')) {
-      background-color: white;
+      background-color: transparent;
       padding: 0;
       width: 48%;
     }
   }
 
   &--publish-fields {
-    background-color: color('neutral-white', 40);
-    // padding: setting-get('rhythm') / .75;
 
     @include breakpoint(setting-get('responsive form')) {
-      padding: setting-get('rhythm') / .5;
+      background-color: color('neutral-white', 40);
       order: 1;
+      padding: setting-get('rhythm') / .5;
     }
 
     :first-child {
