@@ -53,8 +53,7 @@ const service = [
     approval: 2,
     value: {
       'service-name': {
-        'text':
-        {
+        'text': {
           'value': 'This is the test title',
         },
       },
