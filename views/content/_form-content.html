@@ -2,30 +2,36 @@
   <div class="form--field-container">
     {{form.html | safe}}
   </div>
-  <div class="form--field-container">
-    <fieldset class="form--fieldset">
-      <legend class="form--legend">Select Sunrise and Sunset</legend>
-      <div id="sunrise-sunset" class="form--field">
-        <label for="sunrise-date">Sunrise date</label>
-        <input type="date" name="sunrise-date" id="sunrise-date" value="{{data['sunrise-date'].value}}">
-      </div>
-      <div id="sunrise-sunset" class="form--field">
-        <label for="sunrise-time">Sunrise time</label>
-        <input type="time" name="sunrise-time" id="sunrise-time" value="{{data['sunrise-time'].value}}">
-      </div>
-      <div id="sunrise-sunset" class="form--field">
-        <label for="sunset-date">Sunset date</label>
-        <input type="date" name="sunset-date" id="sunset-date" value="{{data['sunset-date'].value}}">
-      </div>
-      <div id="sunrise-sunset" class="form--field">
-        <label for="sunset-time">Sunset time</label>
-        <input type="time" name="sunset-time" id="sunset-time" value="{{data['sunset-time'].value}}">
-      </div>
-    </fieldset>
-  </div>
+
   <div class="form--actions">
     <input type="submit" name="submit" value="Save Revision" class="form--submit">
-    <input type="submit" name="submit" value="{{step.name}}" class="form--submit">
     <a href="../" class="form--cancel">Cancel</a>
   </div>
+
+  <section class="form--publish-container">
+    <div class="form--publish-fields">
+      <fieldset class="form--fieldset">
+	<legend class="form--legend">Select Sunrise and Sunset</legend>
+	<div id="sunrise-sunset" class="form--field">
+	  <label for="sunrise-date">Sunrise date</label>
+	  <input type="date" name="sunrise-date" id="sunrise-date" value="{{data['sunrise-date'].value}}">
+	</div>
+	<div id="sunrise-sunset" class="form--field">
+	  <label for="sunrise-time">Sunrise time</label>
+	  <input type="time" name="sunrise-time" id="sunrise-time" value="{{data['sunrise-time'].value}}">
+	</div>
+	<div id="sunrise-sunset" class="form--field">
+	  <label for="sunset-date">Sunset date</label>
+	  <input type="date" name="sunset-date" id="sunset-date" value="{{data['sunset-date'].value}}">
+	</div>
+	<div id="sunrise-sunset" class="form--field">
+	  <label for="sunset-time">Sunset time</label>
+	  <input type="time" name="sunset-time" id="sunset-time" value="{{data['sunset-time'].value}}">
+	</div>
+      </fieldset>
+    </div>
+    <div class="form--actions">
+      <input type="submit" name="submit" value="{{step.name}}" class="form--submit">
+    </div>
+  </section>
 </form>

@@ -61,6 +61,33 @@
     }
   }
 
+  &--publish-container {
+    background-color: color('neutral-white', 40);
+    margin-top: setting-get('rhythm') / .5;
+    padding: setting-get('rhythm') / .75;
+    order: 0;
+
+    @include breakpoint(setting-get('responsive form')) {
+      background-color: white;
+      padding: 0;
+      width: 48%;
+    }
+  }
+
+  &--publish-fields {
+    background-color: color('neutral-white', 40);
+    // padding: setting-get('rhythm') / .75;
+
+    @include breakpoint(setting-get('responsive form')) {
+      padding: setting-get('rhythm') / .5;
+      order: 1;
+    }
+
+    :first-child {
+      margin-top: 0;
+    }
+  }
+
   &--legend {
     background-color: color('neutral-white', 40);
     border: setting-get('input border width') solid color('neutral-white', 40);
@@ -76,6 +103,7 @@
     width: 100%;
     @include breakpoint(setting-get('responsive form')) {
       flex-grow: 1;
+      order: 2;
     }
   }
 
@@ -136,6 +164,8 @@
   &--button,
   &--submit {
     @include button(setting-get('primary accent color'), setting-get('primary accent color'), setting-get('primary color'), setting-get('primary accent color'), setting-get('primary color'), setting-get('primary color'), setting-get('primary color'));
+
+    margin-top: 0;
   }
 
   &--cancel {
