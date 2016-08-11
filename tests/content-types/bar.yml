@@ -2,6 +2,7 @@ name: Bar
 description: I am bar
 id: bar
 workflow: self-publish
+identifier: service-name
 attributes:
   - type: text
     id: service-name
