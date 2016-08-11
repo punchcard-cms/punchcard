@@ -20,6 +20,7 @@ module.exports = {
       edit: 'edit',
       revisions: 'revisions',
       save: 'save',
+      new: 'Save Revision',
     },
     directory: path.join(__dirname, '../content-types'),
     messages: {

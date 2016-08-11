@@ -8,6 +8,7 @@ attributes:
     id: service-name
     name: Service Name
     description: Write a really cool name please.
+    required: save
     inputs:
       text:
         placeholder: add svc name
@@ -15,12 +16,14 @@ attributes:
     id: service-desciption
     name: Service Desc
     description: Write your brief desciption
+    required: publish
     inputs:
       text:
         placeholder: add svc desc
   - type: text
     id: service-url
     name: Service URL
+    required: publish
     inputs:
       text:
         placeholder: add svc url
