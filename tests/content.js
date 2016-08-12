@@ -1,6 +1,13 @@
 import test from 'ava';
 import uuid from 'uuid';
+import events from 'events';
+import httpMocks from 'node-mocks-http';
+
 import utils from '../lib/content/utils';
+import routes from '../lib/content/routes';
+import typesMock from './fixtures/types-post-merge';
+
+const EventEmitter = events.EventEmitter;
 
 const req = {
   params: {
@@ -108,3 +115,29 @@ test('Check accept a type object', t => {
   const result = utils.check.type(req, typ);
   t.true(result, 'Should be happy with a type object');
 });
+
+
+//////////////////////////////
+// Routes
+//////////////////////////////
+test.skip('All content home route', t => {
+  const request = httpMocks.createRequest({
+    method: 'GET',
+    url: '/content'
+  });
+
+  const response = httpMocks.createResponse({eventEmitter: EventEmitter});
+  routes.content(request, response, typesMock);
+
+  response.on('end', () => {
+    const data = response._getRenderData();
+
+    t.is(response.statusCode, 200, 'Should be a 200 response');
+    t.is(data.content.home.title, 'All Content Types');
+    t.is(data.content.base, 'content');
+    t.is(data.content.types, typesMock);
+    t.end();
+  });
+  response.render();
+});
+
