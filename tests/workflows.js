@@ -268,8 +268,6 @@ test('Audit created from approval submission', t => {
   t.true(Array.isArray(audits.audit.entries), 'Entries should be an array');
   t.is(typeof audits.approval, 'number', 'Approval should be a number');
   t.is(audits.approval, 1, 'Approval should reflect approval stage');
-  t.is(typeof audits.publishable, 'boolean', 'Publishable should be boolean');
-  t.is(audits.publishable, false, 'Publishable should be false');
   t.is(audits.audit.entries[0].comment, 'I approve this', 'Should retain comment');
   t.is(audits.audit.entries[0].action, 'approve', 'Should have action');
   t.is(audits.audit.entries[0].step, 1, 'Should be the step number');
@@ -287,8 +285,6 @@ test('Audit created from rejection', t => {
   t.true(Array.isArray(audits.audit.entries), 'Entries should be an array');
   t.is(typeof audits.approval, 'number', 'Approval should be a number');
   t.is(audits.approval, 2, 'Approval should reflect approval stage');
-  t.is(typeof audits.publishable, 'boolean', 'Publishable should be boolean');
-  t.is(audits.publishable, false, 'Publishable should be false');
   t.is(audits.audit.entries[0].comment, 'No, just, no.', 'Should retain comment');
   t.is(audits.audit.entries[0].action, 'reject', 'Should have action');
   t.is(audits.audit.entries[0].step, 2, 'Should be the step number');
@@ -306,8 +302,6 @@ test('Audit on content with one approval', t => {
   t.true(Array.isArray(audits.audit.entries), 'Entries should be an array');
   t.is(typeof audits.approval, 'number', 'Approval should be a number');
   t.is(audits.approval, 0, 'Approval should reflect approval stage');
-  t.is(typeof audits.publishable, 'boolean', 'Publishable should be boolean');
-  t.is(audits.publishable, true, 'Publishable should be false');
   t.is(audits.audit.entries[0].comment, 'I approve this', 'Should retain comment');
   t.is(audits.audit.entries[0].action, 'approve', 'Should have action');
   t.is(audits.audit.entries[0].step, 0, 'Should be the step number');
