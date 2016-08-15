@@ -30,8 +30,7 @@
       <td data-th="{{config.base}}" class="base--td">{{c.identifier}}</td>
       <td data-th="date" class="base--td">{{c.created}}</td>
       <td data-th="Actions" class="base--td"><a href="/{{config.base}}/{{type.id}}/{{c.id}}" class="base--link">{{config.actions.revisions|capitalize}}</a></td>
-      <td data-th="" class="base--td"><a href="/{{config.base}}/{{type.id}}/{{c.id}}/{{c.revision}}/{{config.actions.edit}}" class="base--link">{{config.actions.edit|capitalize}}</a></td>
-      <td data-th="" class="base--td"><a href="/{{config.base}}/{{type.id}}/{{c.id}}/{{c.revision}}/{{config.actions.approve}}" class="base--link">{{config.actions.approve|capitalize}}</a></td>
+      <td data-th="" class="base--td"><a href="/{{config.base}}/{{type.id}}/{{c.id}}/{{c.revision}}/{{config.actions.edit}}" class="base--link">{{config.actions.edit|capitalize}} Latest Revision</a></td>
     </tr>
     {% endif %}
   {% endfor %}

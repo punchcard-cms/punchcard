@@ -32,7 +32,16 @@
           <td data-th="date" class="base--td">{{c.created}}</td>
           <td data-th="{{config.base}}" class="base--td">{{c.identifier}}</td>
           <td data-th="Actions" class="base--td"><a href="/{{config.base}}/{{type.id}}/{{c.id}}/{{c.revision}}/{{config.actions.edit}}" class="base--link">{{config.actions.edit|capitalize}}</a></td>
-          <td data-th="" class="base--td"><a href="/{{config.base}}/{{type.id}}/{{c.id}}/{{c.revision}}/{{config.actions.approve}}" class="base--link">{{config.actions.approve|capitalize}}</a></td>
+          {% if c.approval != 0 %}
+          {% if c.publishable %}
+          <td data-th="" class="base--td"><a href="/{{config.base}}/{{type.id}}/{{c.id}}/{{c.revision}}/{{config.actions.approve}}" class="base--link">{{workflow[c.approval].name}}</a></td>
+          {% else %}
+          <td class="base--td" data-th="">Incomplete</td>
+          {% endif %}
+          {% else %}
+          <td class="base--td" data-th="">Approved</td>
+          {% endif %}
+
         </tr>
       {% endif %}
     {% endfor %}
