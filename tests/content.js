@@ -1,23 +1,16 @@
 import test from 'ava';
-import uuid from 'uuid';
 import events from 'events';
 import httpMocks from 'node-mocks-http';
+import includes from 'lodash/includes';
+import cloneDeep from 'lodash/cloneDeep';
+import uuid from 'uuid';
 
 import utils from '../lib/content/utils';
 import routes from '../lib/content/routes';
 import typesMock from './fixtures/types-post-merge';
+import allFlows from './fixtures/workflows/all-flows';
 
 const EventEmitter = events.EventEmitter;
-let nextCalled;
-
-/**
- * Express next mock
- */
-const next = () => {
-  nextCalled = true;
-
-  return;
-};
 
 const req = {
   params: {
@@ -161,7 +154,16 @@ test.cb('Bad single content landing route', t => {
       type: 'foo',
     },
   });
-  nextCalled = false;
+  let nextCalled = false;
+
+  /**
+   * Express next mock
+   */
+  const next = () => {
+    nextCalled = true;
+
+    return;
+  };
 
   const response = httpMocks.createResponse({ eventEmitter: EventEmitter });
 
@@ -179,7 +181,16 @@ test.cb('Working single content landing route', t => {
       type: 'services',
     },
   });
-  nextCalled = false;
+  let nextCalled = false;
+
+  /**
+   * Express next mock
+   */
+  const next = () => {
+    nextCalled = true;
+
+    return;
+  };
 
   const response = httpMocks.createResponse({ eventEmitter: EventEmitter });
 
@@ -197,3 +208,163 @@ test.cb('Working single content landing route', t => {
   });
 });
 
+//////////////////////////////
+// Routes - One content type's add-content route
+//////////////////////////////
+test.cb('Content Add-new route - bad content type', t => {
+  const request = httpMocks.createRequest({
+    method: 'GET',
+    url: '/content/foo/add',
+    params: {
+      type: 'foo',
+    },
+  });
+  let nextCalled = false;
+
+  /**
+   * Express next mock
+   */
+  const next = () => {
+    nextCalled = true;
+
+    return;
+  };
+
+  const response = httpMocks.createResponse({ eventEmitter: EventEmitter });
+
+  routes.add(request, response, next, typesMock, allFlows);
+
+  t.true(nextCalled, 'Should call next');
+  t.end();
+});
+
+test.cb('Content Add-new route - bad workflow in content type', t => {
+  const request = httpMocks.createRequest({
+    method: 'GET',
+    url: '/content/services/add',
+    params: {
+      type: 'services',
+    },
+  });
+  let nextCalled = false;
+
+  /**
+   * Express next mock
+   */
+  const next = () => {
+    nextCalled = true;
+
+    return;
+  };
+
+  const response = httpMocks.createResponse({ eventEmitter: EventEmitter });
+
+  const types = cloneDeep(typesMock);
+  types[0].workflow = 'bar';
+
+  routes.add(request, response, next, types, allFlows);
+
+  t.true(nextCalled, 'Should call next');
+  t.end();
+});
+
+test.cb('Content Add-new route - missing workflow in workflows', t => {
+  const request = httpMocks.createRequest({
+    method: 'GET',
+    url: '/content/services/add',
+    params: {
+      type: 'services',
+    },
+  });
+  let nextCalled = false;
+
+  /**
+   * Express next mock
+   */
+  const next = () => {
+    nextCalled = true;
+
+    return;
+  };
+
+  const response = httpMocks.createResponse({ eventEmitter: EventEmitter });
+
+  const flows = cloneDeep(allFlows);
+  flows[0].id = 'bar';
+
+  routes.add(request, response, next, typesMock, flows);
+
+  t.true(nextCalled, 'Should call next');
+  t.end();
+});
+
+test.skip('Content Add-new route - missmatch mess sent to content-types', t => {
+  const request = httpMocks.createRequest({
+    method: 'GET',
+    url: '/content/services/add',
+    params: {
+      type: 'services',
+    },
+  });
+
+  /**
+   * Express next mock
+   */
+  const next = () => {
+    return;
+  };
+
+  const response = httpMocks.createResponse({ eventEmitter: EventEmitter });
+
+  const types = cloneDeep(typesMock);
+  types[0].attributes[0].inputs.text.id = 'not a uuid';
+
+  const res = routes.add(request, response, next, types, allFlows);
+
+  return res()
+    .catch(() => {
+      // currently no errors available in chain to catch
+      t.pass();
+    });
+});
+
+test.cb('Content Add-new route - working route', t => {
+  const request = httpMocks.createRequest({
+    method: 'GET',
+    url: '/content/services/add',
+    params: {
+      type: 'services',
+    },
+  });
+  let nextCalled = false;
+
+  /**
+   * Express next mock
+   */
+  const next = () => {
+    nextCalled = true;
+
+    return;
+  };
+
+  const response = httpMocks.createResponse({ eventEmitter: EventEmitter });
+
+  routes.add(request, response, next, typesMock, allFlows);
+  response.render();
+
+  response.on('end', () => {
+    const data = response._getRenderData();
+
+    t.false(nextCalled, 'Should not call next');
+    t.is(data.config.base, 'content', 'Should have content configuration');
+    t.is(data.type, typesMock[0], 'Should discern content type\'s merged config');
+    t.true(data.hasOwnProperty('form'), 'Has form data');
+    t.true(data.form.hasOwnProperty('html'), 'Has form html');
+    t.true(data.form.hasOwnProperty('scripts'), 'Has form scripts');
+    t.true(includes(data.form.html, '<div id="service-name" class="form--field required--save">', 'has html form elements'));
+    t.true(includes(data.form.scripts, '@module emailValidation', 'has form validation scripts'));
+    t.is(data.step.name, 'Send to Legal', 'knows workflow step');
+
+    t.end();
+  });
+});

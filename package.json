@@ -117,8 +117,7 @@
   "ava": {
     "files": [
       "tests/*.js",
-      "!tests/apis.js",
-      "!tests/server.js"
+      "!tests/apis.js"
     ],
     "failFast": true,
     "tap": true
