@@ -1,0 +1,60 @@
+name: Services
+description: I am services
+id: services-1
+workflow: editor-approve
+identifier: service-name
+attributes:
+  - type: text
+    id: service-name
+    name: Service Name
+    description: Write a really cool name please.
+    required: save
+    inputs:
+      text:
+        placeholder: add svc name
+  - type: text
+    id: service-desciption
+    name: Service Desc
+    description: Write your brief desciption
+    required: publish
+    inputs:
+      text:
+        placeholder: add svc desc
+  - type: text
+    id: service-url
+    name: Service URL
+    required: publish
+    inputs:
+      text:
+        placeholder: add svc url
+  - type: email
+    id: service-email
+    name: Service Email
+    inputs:
+      text:
+        placeholder: add svc email
+  - type: checkbox
+    id: service-checkbox
+    name: Service Checkbox
+    required: save
+    inputs:
+      checkbox:
+        options:
+          - label: Uno
+            value: one
+          - label: Dos
+            value: two
+          - label: Tres
+            value: three
+  - type: quote
+    id: service-quote
+    name: Service Quote
+  - type: reference
+    id: service-abc
+    name: Service reference
+    repeatable: true
+    inputs:
+      reference: 
+        settings: 
+          contentType: services
+          view: select
