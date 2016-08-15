@@ -1,6 +1,9 @@
-// NATH: clean this up!!!
+'use strict';
 
-
+/**
+ * Mock of all content types array for the CMS
+ * @type {Array}
+ */
 module.exports = [
   {
     'name': 'Services',
