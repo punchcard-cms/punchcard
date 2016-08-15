@@ -1,5 +1,3 @@
-'use strict';
-
 /**
  * Mock of all content types array for the CMS
  * @type {Array}
