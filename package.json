@@ -86,7 +86,7 @@
     "coveralls": "^2.11.9",
     "ghooks": "^1.2.4",
     "input-plugin-text": "0.0.5",
-    "jsdom": "^9.2.0",
+    "jsdom": "^9.4.2",
     "lorem-ipsum": "^1.0.3",
     "mock-express-response": "^0.1.2",
     "nyc": "^6.6.1",
