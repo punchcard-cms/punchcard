@@ -234,33 +234,16 @@ test('Sad empty identifier value', t => {
 
 
 test('Reference array has values', t => {
-  const types = [{
-    id: 'test-reference',
-    attributes: [
-      {
-        name: 'Service Reference',
-        description: 'Add a reference',
-        inputs: {
-          reference: {
-            name: 'service-reference--reference',
-            options: [],
-            settings: {
-              contentType: 'test-service',
-              view: 'select',
-            },
-            reference: true,
-          },
-        },
-        id: 'service-reference',
-        type: 'select',
-      },
-      {
-        name: 'Service Reference',
-        description: 'Add a reference',
-        inputs: [
-          {
+  const types = [
+    {
+      id: 'test-reference',
+      attributes: [
+        {
+          name: 'Service Reference',
+          description: 'Add a reference',
+          inputs: {
             reference: {
-              name: 'service-reference--reference--0',
+              name: 'service-reference--reference',
               options: [],
               settings: {
                 contentType: 'test-service',
@@ -268,30 +251,49 @@ test('Reference array has values', t => {
               },
               reference: true,
             },
-            id: 'service-reference-0',
-            type: 'select',
           },
-        ],
-      },
-    ],
-  },
-  {
-    id: 'test-service',
-    identifier: 'service-name',
-    attributes: [
-      {
-        name: 'Service Name',
-        description: 'Write a really cool name please.',
-        inputs: {
-          text: {
-            name: 'service-name--text',
-          },
+          id: 'service-reference',
+          type: 'select',
         },
-        id: 'service-name',
-        type: 'text',
-      },
-    ],
-  }];
+        {
+          name: 'Service Reference',
+          description: 'Add a reference',
+          inputs: [
+            {
+              reference: {
+                name: 'service-reference--reference--0',
+                options: [],
+                settings: {
+                  contentType: 'test-service',
+                  view: 'select',
+                },
+                reference: true,
+              },
+              id: 'service-reference-0',
+              type: 'select',
+            },
+          ],
+        },
+      ],
+    },
+    {
+      id: 'test-service',
+      identifier: 'service-name',
+      attributes: [
+        {
+          name: 'Service Name',
+          description: 'Write a really cool name please.',
+          inputs: {
+            text: {
+              name: 'service-name--text',
+            },
+          },
+          id: 'service-name',
+          type: 'text',
+        },
+      ],
+    },
+  ];
   const expected = [
     {
       type: 'test-reference',
@@ -311,7 +313,7 @@ test('Reference array has values', t => {
         index: 1,
         id: 'test-service',
       },
-    }
+    },
   ];
   const result = utils.references(types);
   t.is(result.length, expected.length, 'length of arrays is equal');
