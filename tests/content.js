@@ -192,7 +192,7 @@ test.cb('Working single content landing route', t => {
     t.false(nextCalled, 'Should not call next');
     t.is(data.config.base, 'content', 'Should have content configuration');
     t.is(data.type, typesMock[0], 'Should discern content type\'s merged config');
-    t.true(data.content.length > 0, 'Should have content');
+    t.true(Array.isArray(data.content), 'Content should be an array');
     t.end();
   });
 });
