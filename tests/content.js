@@ -1,8 +1,7 @@
 import test from 'ava';
 import events from 'events';
 import httpMocks from 'node-mocks-http';
-import includes from 'lodash/includes';
-import cloneDeep from 'lodash/cloneDeep';
+import _ from 'lodash';
 import uuid from 'uuid';
 
 import utils from '../lib/content/utils';
@@ -259,7 +258,7 @@ test.cb('Content Add-new route - bad workflow in content type', t => {
 
   const response = httpMocks.createResponse({ eventEmitter: EventEmitter });
 
-  const types = cloneDeep(typesMock);
+  const types = _.cloneDeep(typesMock);
   types[0].workflow = 'bar';
 
   routes.add(request, response, next, types, allFlows);
@@ -289,7 +288,7 @@ test.cb('Content Add-new route - missing workflow in workflows', t => {
 
   const response = httpMocks.createResponse({ eventEmitter: EventEmitter });
 
-  const flows = cloneDeep(allFlows);
+  const flows = _.cloneDeep(allFlows);
   flows[0].id = 'bar';
 
   routes.add(request, response, next, typesMock, flows);
@@ -316,7 +315,7 @@ test.skip('Content Add-new route - missmatch mess sent to content-types', t => {
 
   const response = httpMocks.createResponse({ eventEmitter: EventEmitter });
 
-  const types = cloneDeep(typesMock);
+  const types = _.cloneDeep(typesMock);
   types[0].attributes[0].inputs.text.id = 'not a uuid';
 
   const res = routes.add(request, response, next, types, allFlows);
@@ -361,8 +360,77 @@ test.cb('Content Add-new route - working route', t => {
     t.true(data.hasOwnProperty('form'), 'Has form data');
     t.true(data.form.hasOwnProperty('html'), 'Has form html');
     t.true(data.form.hasOwnProperty('scripts'), 'Has form scripts');
-    t.true(includes(data.form.html, '<div id="service-name" class="form--field required--save">', 'has html form elements'));
-    t.true(includes(data.form.scripts, '@module emailValidation', 'has form validation scripts'));
+    t.true(_.includes(data.form.html, '<div id="service-name" class="form--field required--save">', 'has html form elements'));
+    t.true(_.includes(data.form.scripts, '@module emailValidation', 'has form validation scripts'));
+    t.is(data.step.name, 'Send to Legal', 'knows workflow step');
+
+    t.end();
+  });
+});
+
+test.skip('Content Add-new route - form has errors', t => {
+  const errors = {
+    'service-name--text': 'Field is required to be saved!',
+    'service-email--email': 'Not a valid e-mail address.',
+  };
+  const values = {
+    'service-name': {
+      text: {
+        value: 'New service Foo',
+      },
+    },
+    'service-email': {
+      email: {
+        value: 'test',
+      },
+    },
+  };
+  const request = httpMocks.createRequest({
+    method: 'GET',
+    url: '/content/services/add',
+    params: {
+      type: 'services',
+    },
+  });
+
+  request._setSessionVariable('form', {});
+
+  _.set(request.session, 'form.content.add.services', {
+    errors,
+    content: values,
+  });
+
+  let nextCalled = false;
+
+  /**
+   * Express next mock
+   *
+   */
+  const next = () => {
+    nextCalled = true;
+
+    return;
+  };
+
+  const response = httpMocks.createResponse({ eventEmitter: EventEmitter });
+
+  routes.add(request, response, next, typesMock, allFlows);
+  response.render();
+
+  response.on('end', () => {
+    const data = response._getRenderData();
+
+    t.false(nextCalled, 'Should not call next');
+
+    t.is(data.config.base, 'content', 'Should have content configuration');
+    t.is(data.type, typesMock[0], 'Should discern content type\'s merged config');
+    t.true(data.hasOwnProperty('form'), 'Has form data');
+    t.true(data.form.hasOwnProperty('html'), 'Has form html');
+    t.true(data.form.hasOwnProperty('scripts'), 'Has form scripts');
+    t.true(_.includes(data.form.html, 'value="New service Foo"', 'has retained form data'));
+    t.true(_.includes(data.form.html, 'name="service-email--email" aria-invalid="true" value="test"', 'has retained form data'));
+    t.true(_.includes(data.form.html, 'Not a valid e-mail address.</p>', 'contains error message'));
+    t.true(_.includes(data.form.scripts, '@module emailValidation', 'has form validation scripts'));
     t.is(data.step.name, 'Send to Legal', 'knows workflow step');
 
     t.end();

@@ -49,7 +49,7 @@ module.exports = {
       database: 'punchcard',
     },
     debug: false,
-    acquireConnectionTimeout: 1000,
+    acquireConnectionTimeout: 2000,
   },
   site: {
     name: 'Punchcard CMS',

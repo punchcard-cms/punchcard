@@ -3,7 +3,6 @@ import request from 'supertest';
 import bcrypt from 'bcrypt-nodejs';
 import Promise from 'bluebird';
 import uuid from 'uuid';
-import includes from 'lodash/includes';
 
 import punchcard from '../';
 import database from '../lib/database';
