@@ -8,6 +8,16 @@ import routes from '../lib/content/routes';
 import typesMock from './fixtures/types-post-merge';
 
 const EventEmitter = events.EventEmitter;
+let nextCalled;
+
+/**
+ * Express next mock
+ */
+const next = () => {
+  nextCalled = true;
+
+  return;
+};
 
 const req = {
   params: {
@@ -116,18 +126,17 @@ test('Check accept a type object', t => {
   t.true(result, 'Should be happy with a type object');
 });
 
-
 //////////////////////////////
-// Routes
+// Routes - All Content Types landing
 //////////////////////////////
-test.skip('All content home route', t => {
+test.cb('All content home route', t => {
   const request = httpMocks.createRequest({
     method: 'GET',
-    url: '/content'
+    url: '/content',
   });
 
-  const response = httpMocks.createResponse({eventEmitter: EventEmitter});
-  routes.content(request, response, typesMock);
+  const response = httpMocks.createResponse({ eventEmitter: EventEmitter });
+  routes.all(request, response, typesMock);
 
   response.on('end', () => {
     const data = response._getRenderData();
@@ -139,5 +148,52 @@ test.skip('All content home route', t => {
     t.end();
   });
   response.render();
+});
+
+//////////////////////////////
+// Routes - One content type's landing route
+//////////////////////////////
+test.cb('Bad single content landing route', t => {
+  const request = httpMocks.createRequest({
+    method: 'GET',
+    url: '/content/foo',
+    params: {
+      type: 'foo',
+    },
+  });
+  nextCalled = false;
+
+  const response = httpMocks.createResponse({ eventEmitter: EventEmitter });
+
+  routes.one(request, response, next, typesMock);
+
+  t.true(nextCalled, 'Should call next');
+  t.end();
+});
+
+test.cb('Working single content landing route', t => {
+  const request = httpMocks.createRequest({
+    method: 'GET',
+    url: '/content/services',
+    params: {
+      type: 'services',
+    },
+  });
+  nextCalled = false;
+
+  const response = httpMocks.createResponse({ eventEmitter: EventEmitter });
+
+  routes.one(request, response, next, typesMock);
+  response.render();
+
+  response.on('end', () => {
+    const data = response._getRenderData();
+
+    t.false(nextCalled, 'Should not call next');
+    t.is(data.config.base, 'content', 'Should have content configuration');
+    t.is(data.type, typesMock[0], 'Should discern content type\'s merged config');
+    t.true(data.content.length > 0, 'Should have content');
+    t.end();
+  });
 });
 
