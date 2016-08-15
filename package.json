@@ -82,7 +82,7 @@
     "validator": "^5.4.0"
   },
   "devDependencies": {
-    "ava": "^0.15.2",
+    "ava": "^0.16.0",
     "coveralls": "^2.11.9",
     "ghooks": "^1.2.4",
     "input-plugin-text": "0.0.5",
