@@ -188,7 +188,7 @@ test.cb('Invalid Content Type - Landing', t => {
     .set('cookie', cookie)
     .expect(404)
     .end(err => {
-      t.is(err, null, 'Should not have an error');
+      t.is(err, null, 'Should 404 out.');
       t.end();
     });
 });
@@ -197,29 +197,30 @@ test.cb('Invalid Content Type - Landing', t => {
 //////////////////////////////
 // Content Pages - type add-content page
 //////////////////////////////
-test.cb('Content Type Add Page', t => {
-  agent
-    .get('/content/services/add')
-    .set('cookie', cookie)
-    .expect(200)
-    .end((err, res) => {
-      t.is(err, null, 'Should not have an error');
-      t.regex(res.text, /DOCTYPE html/, 'should have an html doctype');
+// test.cb('Content Type Add Page', t => {
+//   agent
+//     .get('/content/services/add')
+//     .set('cookie', cookie)
+//     .expect(200)
+//     .end((err, res) => {
+//       t.is(err, null, 'Should not have an error');
+//       t.regex(res.text, /DOCTYPE html/, 'should have an html doctype');
 
-      t.end();
-    });
-});
+//       t.end();
+//     });
+// });
 
-test.cb('Invalid Content Type - Add', t => {
-  agent
-    .get('/content/foo/add')
-    .set('cookie', cookie)
-    .expect(404)
-    .end(err => {
-      t.is(err, null, 'Should trigger a 404');
-      t.end();
-    });
-});
+// test.cb('Invalid Content Type - Add', t => {
+//   agent
+//     .get('/content/foo/add')
+//     .set('cookie', cookie)
+//     .expect(404)
+//     .end(err => {
+//       console.log(err);
+//       t.is(err, null, 'Should trigger a 404');
+//       t.end();
+//     });
+// });
 
 //////////////////////////////
 // Content Pages - individual piece of content page
