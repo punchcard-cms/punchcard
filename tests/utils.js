@@ -319,3 +319,70 @@ test('Reference array has values', t => {
   t.is(result.length, expected.length, 'length of arrays is equal');
   t.is(JSON.stringify(result, null, 2), JSON.stringify(expected, null, 2), 'Reference array created');
 });
+
+test('Reference array - Invalid Content type - Fail', t => {
+  const types = [
+    {
+      id: 'test-reference',
+      attributes: [
+        {
+          name: 'Service Reference',
+          description: 'Add a reference',
+          inputs: {
+            reference: {
+              name: 'service-reference--reference',
+              options: [],
+              settings: {
+                contentType: 'foo',
+                view: 'select',
+              },
+              reference: true,
+            },
+          },
+          id: 'service-reference',
+          type: 'select',
+        },
+      ],
+    },
+  ];
+  try {
+    utils.references(types);
+    t.fail();
+  }
+  catch (e) {
+    t.is(e.message, 'Content Type foo is not valid');
+  }
+});
+
+test('Reference array - Missing Content type - Fail', t => {
+  const types = [
+    {
+      id: 'test-reference',
+      attributes: [
+        {
+          name: 'Service Reference',
+          description: 'Add a reference',
+          inputs: {
+            reference: {
+              name: 'service-reference--reference',
+              options: [],
+              settings: {
+                view: 'select',
+              },
+              reference: true,
+            },
+          },
+          id: 'service-reference',
+          type: 'select',
+        },
+      ],
+    },
+  ];
+  try {
+    utils.references(types);
+    t.fail();
+  }
+  catch (e) {
+    t.is(e.message, 'Reference must have a content type');
+  }
+});

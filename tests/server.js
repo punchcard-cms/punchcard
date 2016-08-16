@@ -206,7 +206,6 @@ test.cb('Content Type Add Page', t => {
     .end((err, res) => {
       t.is(err, null, 'Should not have an error');
       t.regex(res.text, /DOCTYPE html/, 'should have an html doctype');
-
       t.end();
     });
 });
