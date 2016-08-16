@@ -28,4 +28,4 @@ attributes:
       reference: 
         settings: 
           contentType: services
-          view: select
+          view: radio
