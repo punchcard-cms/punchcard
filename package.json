@@ -93,6 +93,7 @@
     "punchcard-commit-msg": "^1.0.0",
     "punchcard-runner": "^2.1.2",
     "punchcard-semantic-release": "^2.0.1",
+    "punchcard-shared-tests": "^1.0.2",
     "semantic-release": "^4.3.5",
     "supertest": "^1.2.0",
     "tap-diff": "^0.1.1",
