@@ -88,7 +88,7 @@
     "input-plugin-text": "0.1.0",
     "lorem-ipsum": "^1.0.3",
     "mock-express-response": "^0.1.2",
-    "nyc": "^6.6.1",
+    "nyc": "^6.6.0",
     "punchcard-commit-msg": "^1.0.0",
     "punchcard-runner": "^2.1.2",
     "punchcard-semantic-release": "^2.0.1",
