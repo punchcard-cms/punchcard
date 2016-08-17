@@ -372,7 +372,6 @@ test('Reference array has values', t => {
     ],
   };
   const result = utils.references(types);
-  console.log(JSON.stringify(result, null, 2));
   t.is(result.length, expected.length, 'reference equal length');
   t.is(JSON.stringify(result), JSON.stringify(expected), 'cts and reference exists');
 });
