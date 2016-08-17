@@ -360,20 +360,14 @@ test('Reference array has values', t => {
         type: 'test-reference',
         attr: 0,
         input: 'reference',
-        ct: {
-          index: 1,
-          id: 'test-service',
-        },
+        ct: 'test-service',
       },
       {
         type: 'test-reference',
         attr: 1,
         input: 'reference',
         length: 1,
-        ct: {
-          index: 1,
-          id: 'test-service',
-        },
+        ct: 'test-service',
       },
     ],
   };
