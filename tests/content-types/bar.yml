@@ -45,3 +45,21 @@ attributes:
   - type: quote
     id: service-quote
     name: Service Quote
+  - type: reference
+    id: bar-reference
+    name: Bar reference
+    repeatable: true
+    inputs:
+      reference: 
+        settings: 
+          contentType: services
+          view: select
+  - type: reference
+    id: foo-reference
+    name: Foo reference
+    inputs:
+      reference: 
+        settings: 
+          contentType: services
+          view: radio
+

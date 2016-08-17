@@ -7,6 +7,22 @@ import routes from '../lib/content/routes';
 import typesMock from './fixtures/types-post-merge';
 import allFlows from './fixtures/workflows/all-flows';
 
+const references = [
+  {
+    type: 'test-reference',
+    attr: 0,
+    input: 'reference',
+    ct: 'test-service',
+  },
+  {
+    type: 'test-reference',
+    attr: 1,
+    input: 'reference',
+    length: 1,
+    ct: 'test-service',
+  },
+];
+
 const EventEmitter = events.EventEmitter;
 
 //////////////////////////////
@@ -61,7 +77,7 @@ test.cb('Content Add-new route - working route', t => {
 
   const response = httpMocks.createResponse({ eventEmitter: EventEmitter });
 
-  routes.add(request, response, typesMock[0], allFlows[0]);
+  routes.add(request, response, typesMock[0], allFlows[0], references, typesMock);
   response.render();
 
   response.on('end', () => {
@@ -114,7 +130,7 @@ test.cb('Content Add-new route - form has errors', t => {
 
   const response = httpMocks.createResponse({ eventEmitter: EventEmitter });
 
-  routes.add(request, response, typesMock[0], allFlows[0]);
+  routes.add(request, response, typesMock[0], allFlows[0], references, typesMock);
   response.render();
 
   response.on('end', () => {
