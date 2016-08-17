@@ -231,3 +231,214 @@ test('Sad empty identifier value', t => {
   const result = utils.routes.identifier(rows, type);
   t.is(result[0].identifier, 'Revision: 1234', 'Should have title as identifier');
 });
+
+
+test('Reference array has values', t => {
+  const types = [
+    {
+      id: 'test-reference',
+      attributes: [
+        {
+          name: 'Service Reference',
+          description: 'Add a reference',
+          inputs: {
+            reference: {
+              name: 'service-reference--reference',
+              options: [],
+              settings: {
+                contentType: 'test-service',
+                view: 'radio',
+              },
+              reference: true,
+              type: 'radio',
+            },
+          },
+          id: 'service-reference',
+        },
+        {
+          name: 'Service Reference',
+          description: 'Add a reference',
+          inputs: [
+            {
+              reference: {
+                name: 'service-reference--reference--0',
+                options: [],
+                settings: {
+                  contentType: 'test-service',
+                  view: 'select',
+                },
+                reference: true,
+                type: 'select',
+              },
+              id: 'service-reference-0',
+            },
+          ],
+        },
+      ],
+    },
+    {
+      id: 'test-service',
+      identifier: 'service-name',
+      attributes: [
+        {
+          name: 'Service Name',
+          description: 'Write a really cool name please.',
+          inputs: {
+            text: {
+              name: 'service-name--text',
+            },
+          },
+          id: 'service-name',
+          type: 'text',
+        },
+      ],
+    },
+  ];
+  const expected = {
+    cts: [
+      {
+        id: 'test-reference',
+        attributes: [
+          {
+            name: 'Service Reference',
+            description: 'Add a reference',
+            inputs: {
+              reference: {
+                name: 'service-reference--reference',
+                options: [],
+                settings: {
+                  contentType: 'test-service',
+                  view: 'radio',
+                },
+                reference: true,
+                type: 'radio',
+              },
+            },
+            id: 'service-reference',
+          },
+          {
+            name: 'Service Reference',
+            description: 'Add a reference',
+            inputs: [
+              {
+                reference: {
+                  name: 'service-reference--reference--0',
+                  options: [],
+                  settings: {
+                    contentType: 'test-service',
+                    view: 'select',
+                  },
+                  reference: true,
+                  type: 'select',
+                },
+                id: 'service-reference-0',
+              },
+            ],
+          },
+        ],
+      },
+      {
+        id: 'test-service',
+        identifier: 'service-name',
+        attributes: [
+          {
+            name: 'Service Name',
+            description: 'Write a really cool name please.',
+            inputs: {
+              text: {
+                name: 'service-name--text',
+              },
+            },
+            id: 'service-name',
+            type: 'text',
+          },
+        ],
+      },
+    ],
+    references: [
+      {
+        type: 'test-reference',
+        attr: 0,
+        input: 'reference',
+        ct: 'test-service',
+      },
+      {
+        type: 'test-reference',
+        attr: 1,
+        input: 'reference',
+        length: 1,
+        ct: 'test-service',
+      },
+    ],
+  };
+  const result = utils.references(types);
+  t.is(result.length, expected.length, 'reference equal length');
+  t.is(JSON.stringify(result), JSON.stringify(expected), 'cts and reference exists');
+});
+
+test('Reference array - Invalid Content type - Fail', t => {
+  const types = [
+    {
+      id: 'test-reference',
+      attributes: [
+        {
+          name: 'Service Reference',
+          description: 'Add a reference',
+          inputs: {
+            reference: {
+              name: 'service-reference--reference',
+              options: [],
+              settings: {
+                contentType: 'foo',
+                view: 'select',
+              },
+              reference: true,
+            },
+          },
+          id: 'service-reference',
+          type: 'select',
+        },
+      ],
+    },
+  ];
+  try {
+    utils.references(types);
+    t.fail();
+  }
+  catch (e) {
+    t.is(e.message, 'Content Type foo is not valid');
+  }
+});
+
+test('Reference array - Missing Content type - Fail', t => {
+  const types = [
+    {
+      id: 'test-reference',
+      attributes: [
+        {
+          name: 'Service Reference',
+          description: 'Add a reference',
+          inputs: {
+            reference: {
+              name: 'service-reference--reference',
+              options: [],
+              settings: {
+                view: 'select',
+              },
+              reference: true,
+            },
+          },
+          id: 'service-reference',
+          type: 'select',
+        },
+      ],
+    },
+  ];
+  try {
+    utils.references(types);
+    t.fail();
+  }
+  catch (e) {
+    t.is(e.message, 'Reference must have a content type');
+  }
+});
