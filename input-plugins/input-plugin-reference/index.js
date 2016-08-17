@@ -2,16 +2,16 @@
 'use strict';
 
 /**
- * checkbox Input Plugin
+ * Reference Input Plugin
  *
  *
- * An input plugin with multiple checkboxes
+ * An input plugin with reference
  */
 const validation = require('./lib/validation.js');
 
 /**
- * Single checkbox Input Plugin
- * @module checkboxInputPlugin
+ * Reference Input Plugin
+ * @module referenceInputPlugin
  */
 module.exports = {
   name: 'reference',
