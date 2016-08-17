@@ -113,7 +113,7 @@ test('URL checks type exists in CMS', t => {
 test('URL checks type has existing workflow in CMS', t => {
   const rq = cloneDeep(req);
   const atypes = cloneDeep(allTypes);
-  atypes[0].workflow = 'foo'
+  atypes[0].workflow = 'foo';
   const result = utils.check.url(rq, atypes, allFlows);
 
   t.is(typeof result, 'string', 'Non-existent workflow fails');
@@ -122,7 +122,7 @@ test('URL checks type has existing workflow in CMS', t => {
 
 test('URL checks id is uuid', t => {
   const rq = cloneDeep(req);
-  rq.params.id = 'foo'
+  rq.params.id = 'foo';
   const result = utils.check.url(rq, allTypes, allFlows);
 
   t.is(typeof result, 'string', 'Bad id-type fails');

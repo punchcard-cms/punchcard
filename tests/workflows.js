@@ -43,6 +43,7 @@ const workflow = {
 
 test('Workflow functions', t => {
   t.is(typeof workflows.audits, 'function', '`audits` exists and is a function');
+  t.is(typeof workflows.utils.workflow, 'function', '`workflow` exists and is a function');
   t.is(typeof workflows.utils.check, 'function', '`check` exists and is a function');
   t.is(typeof workflows.entry, 'function', '`entry` exists and is a function');
   t.is(typeof workflows.model, 'function', '`model` exists and is a function');
@@ -348,7 +349,7 @@ test('workflows in type', t => {
     ],
   };
 
-  const wf = workflows.workflow(type, allFlows);
+  const wf = workflows.utils.workflow(type, allFlows);
 
   // get type workflow
   t.is(JSON.stringify(wf), JSON.stringify(expected), 'Grabs an existing workflow');
@@ -356,7 +357,7 @@ test('workflows in type', t => {
   // bad workflow in type
   const badtype = cloneDeep(type);
   badtype.workflow = 'nope';
-  const badflow = workflows.workflow(badtype, allFlows);
+  const badflow = workflows.utils.workflow(badtype, allFlows);
 
   t.is(typeof badflow, 'string', 'Non-existent workflow fails');
   t.is(badflow, 'Workflow \'nope\' for Content Type \'Services\' not found', 'Should fail with message');
@@ -364,7 +365,7 @@ test('workflows in type', t => {
   // no flow in type
   const noflow = cloneDeep(type);
   noflow.workflow = '';
-  const nopeflow = workflows.workflow(noflow, allFlows);
+  const nopeflow = workflows.utils.workflow(noflow, allFlows);
 
   t.is(typeof nopeflow, 'string', 'Non-existent workflow fails');
   t.is(nopeflow, 'Workflow \'\' for Content Type \'Services\' not found', 'Should fail with message');
