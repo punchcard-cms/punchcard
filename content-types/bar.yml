@@ -20,7 +20,6 @@ attributes:
       reference: 
         settings: 
           contentType: services
-          view: select
   - type: reference
     id: foo-reference
     name: Foo reference
