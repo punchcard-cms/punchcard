@@ -36,7 +36,8 @@
   "contributors": [
     "Rachel White <whiter@us.ibm.com>",
     "Sam Richard <snugug@us.ibm.com>",
-    "Scott Nath <snath@us.ibm.com>"
+    "Scott Nath <snath@us.ibm.com>",
+    "Ayush Gupta <ayush2k@gmail.com>"
   ],
   "license": "Apache-2.0",
   "dependencies": {
