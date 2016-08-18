@@ -1,6 +1,7 @@
 import test from 'ava';
 import moment from 'moment';
 import path from 'path';
+import cloneDeep from 'lodash/cloneDeep';
 import content from 'punchcard-content-types';
 
 import workflows from '../lib/workflows';
@@ -42,6 +43,7 @@ const workflow = {
 
 test('Workflow functions', t => {
   t.is(typeof workflows.audits, 'function', '`audits` exists and is a function');
+  t.is(typeof workflows.utils.workflow, 'function', '`workflow` exists and is a function');
   t.is(typeof workflows.utils.check, 'function', '`check` exists and is a function');
   t.is(typeof workflows.entry, 'function', '`entry` exists and is a function');
   t.is(typeof workflows.model, 'function', '`model` exists and is a function');
@@ -313,6 +315,7 @@ test('Audit on content with one approval', t => {
 
 test('workflows in type', t => {
   const type = {
+    name: 'Services',
     workflow: 'editor-approve',
   };
 
@@ -332,18 +335,6 @@ test('workflows in type', t => {
     },
   ];
 
-  const globalConfig = {
-    content: {
-      base: '/',
-    },
-    workflows: {
-      default: 'self-publish',
-      messages: {
-        missing: 'Workflow \'%workf\' for Content Type \'%type\' not found',
-      },
-    },
-  };
-
   const expected = {
     name: 'Editor Approve',
     id: 'editor-approve',
@@ -357,28 +348,25 @@ test('workflows in type', t => {
       },
     ],
   };
-  const req = {
-    params: {
-      type: 'services',
-    },
-    session: {},
-    workflow: 'editor-approve',
-  };
-  const wf = workflows.workflow(type, allFlows, globalConfig, req);
+
+  const wf = workflows.utils.workflow(type, allFlows);
 
   // get type workflow
   t.is(JSON.stringify(wf), JSON.stringify(expected), 'Grabs an existing workflow');
 
   // bad workflow in type
-  const badtype = (JSON.parse(JSON.stringify(type)));
+  const badtype = cloneDeep(type);
   badtype.workflow = 'nope';
-  const badflow = workflows.workflow(badtype, allFlows, globalConfig, req);
-  t.is(badflow, false, 'Returns false on workflow missing from global flows');
+  const badflow = workflows.utils.workflow(badtype, allFlows);
+
+  t.is(typeof badflow, 'string', 'Non-existent workflow fails');
+  t.is(badflow, 'Workflow \'nope\' for Content Type \'Services\' not found', 'Should fail with message');
 
   // no flow in type
-  const noflow = (JSON.parse(JSON.stringify(type)));
+  const noflow = cloneDeep(type);
   noflow.workflow = '';
-  const nopeflow = workflows.workflow(noflow, allFlows, globalConfig, req);
+  const nopeflow = workflows.utils.workflow(noflow, allFlows);
 
-  t.is(nopeflow, false, 'Returns false on workflow missing from global flows');
+  t.is(typeof nopeflow, 'string', 'Non-existent workflow fails');
+  t.is(nopeflow, 'Workflow \'\' for Content Type \'Services\' not found', 'Should fail with message');
 });
