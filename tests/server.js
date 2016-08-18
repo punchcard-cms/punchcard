@@ -206,7 +206,6 @@ test.cb('Content Type Add Page', t => {
     .end((err, res) => {
       t.is(err, null, 'Should not have an error');
       t.regex(res.text, /DOCTYPE html/, 'should have an html doctype');
-
       t.end();
     });
 });
@@ -261,6 +260,20 @@ test.cb('Content Type Individual Landing - bad UUID', t => {
       t.end();
     });
 });
+
+test.cb('Landing Page with Reference', t => {
+  addService(service).then(() => {
+    agent
+      .get('/content/bar/add')
+      .set('cookie', cookie)
+      .expect(200)
+      .end(err => {
+        t.is(err, null, 'Should not have an error');
+        t.end();
+      });
+  });
+});
+
 
 //////////////////////////////
 // Content Pages - individual revision page
