@@ -729,7 +729,7 @@ test.cb('Users Landing Page', t => {
     });
 });
 
-test.cb('Users Add Landing Page', t => {
+test.skip('Users Add Landing Page', t => {
   agent
     .get('/users/add')
     .set('cookie', cookie)
