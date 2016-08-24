@@ -1,8 +1,11 @@
-<h1 class="base--h1">I'm error!</h1>
+<div class="not-found">
+  <img src="/images/punchcard-404.svg" class="not-found--svg" alt="Punchcard 404, Page Not Found">
+  <h2 class="not-found--h2">{{message}}</h1>
+  {% if error %}
+  <div class="not-found--error">{{error | dump}}</div>
+  {% endif %}
 
-<dl class="base--dl">
-  <dt class="base--dt">Error Message</dt>
-  <dd class="base--dd">{{message}}</dd>
-  <dt class="base--dd">Full Error</dt>
-  <dd class="base--dd">{{error}}</dd>
-</dl>
+  {% if safe %}
+  <p class="not-found--p">You could try <a href="{{safe}}" class="not-found--link">{{safe}}</a></p>
+  {% endif %}
+</div>
