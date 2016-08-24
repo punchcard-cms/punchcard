@@ -360,7 +360,7 @@ test.cb('Non UUID - Content Type Edit Page', t => {
     });
 });
 
-test.cb('Bad revision number - Content Type Edit Page', t => {
+test.skip('Bad revision number - Content Type Edit Page', t => {
   agent
     .get(`/content/services/${serviceUuid}/0/edit`)
     .set('cookie', cookie)
@@ -372,7 +372,7 @@ test.cb('Bad revision number - Content Type Edit Page', t => {
     });
 });
 
-test.cb('Non number for revision - Content Type Edit Page', t => {
+test.skip('Non number for revision - Content Type Edit Page', t => {
   agent
     .get(`/content/services/${serviceUuid}/foo/edit`)
     .set('cookie', cookie)
@@ -742,7 +742,7 @@ test.cb('Users Add Landing Page', t => {
     });
 });
 
-test.cb('Users Edit Landing Page', t => {
+test.skip('Users Edit Landing Page', t => {
   agent
     .get(`/users/${accounts[1].id}/edit`)
     .set('cookie', cookie)
@@ -755,7 +755,7 @@ test.cb('Users Edit Landing Page', t => {
     });
 });
 
-test.cb('Users Delete Landing Page', t => {
+test.skip('Users Delete Landing Page', t => {
   agent
     .get(`/users/${accounts[1].id}/delete`)
     .set('cookie', cookie)
