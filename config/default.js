@@ -117,7 +117,7 @@ module.exports = {
   workflows: {
     messages: {
       approved: 'This content has already completed the approval process',
-      missing: 'Workflow \'%workf\' for Content Type \'%type\' not found',
+      missing: 'Workflow \'%workflow\' for Content Type \'%type\' not found',
     },
   },
 };
