@@ -166,6 +166,14 @@ test('Workflow config check step requires name', t => {
   }];
   check = workflows.utils.check(wf);
   t.is(check, 'Step must have a name', 'Workflow steps require a name');
+
+  wf.steps = [{
+    name: 'foo',
+  }, {
+    name: [],
+  }];
+  check = workflows.utils.check(wf);
+  t.is(check, 'Step name must be a string', 'Workflow name must be string');
 });
 
 test('Workflow config check step self is boolean', t => {
@@ -313,6 +321,7 @@ test('Audit on content with one approval', t => {
 
 test('workflows in type', t => {
   const type = {
+    name: 'Bar',
     workflow: 'editor-approve',
   };
 
@@ -364,7 +373,7 @@ test('workflows in type', t => {
     session: {},
     workflow: 'editor-approve',
   };
-  const wf = workflows.workflow(type, allFlows, globalConfig, req);
+  const wf = workflows.utils.workflow(type, allFlows);
 
   // get type workflow
   t.is(JSON.stringify(wf), JSON.stringify(expected), 'Grabs an existing workflow');
@@ -372,13 +381,13 @@ test('workflows in type', t => {
   // bad workflow in type
   const badtype = (JSON.parse(JSON.stringify(type)));
   badtype.workflow = 'nope';
-  const badflow = workflows.workflow(badtype, allFlows, globalConfig, req);
-  t.is(badflow, false, 'Returns false on workflow missing from global flows');
+  const badflow = workflows.utils.workflow(badtype, allFlows, globalConfig, req);
+  t.is(badflow, 'Workflow \'nope\' for Content Type \'Bar\' not found', 'Returns false on workflow missing from global flows');
 
   // no flow in type
   const noflow = (JSON.parse(JSON.stringify(type)));
   noflow.workflow = '';
-  const nopeflow = workflows.workflow(noflow, allFlows, globalConfig, req);
+  const nopeflow = workflows.utils.workflow(noflow, allFlows, globalConfig, req);
 
-  t.is(nopeflow, false, 'Returns false on workflow missing from global flows');
+  t.is(nopeflow, 'Workflow \'\' for Content Type \'Bar\' not found', 'Returns false on workflow missing from global flows');
 });
