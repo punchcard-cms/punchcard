@@ -22,7 +22,7 @@ if (process.env.CI === 'true') {
   };
 }
 
-config.content.directory = path.join(__dirname, '../tests/fixtures/content-types')
+config.content.directory = path.join(__dirname, '../tests/fixtures/content-types');
 
 module.exports = {
   content: config.content,
