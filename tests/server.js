@@ -555,9 +555,9 @@ test.cb('Content Approval Page', t => {
   });
 });
 
-// //////////////////////////////
-// // Content Approval - approve Post data
-// //////////////////////////////
+//////////////////////////////
+// Content Approval - approve Post data
+//////////////////////////////
 
 test.cb('Invalid Content Approval - Post data', t => {
   agent
