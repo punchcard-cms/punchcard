@@ -1,8 +1,11 @@
 'use strict';
 
+const _ = require('lodash');
 const path = require('path');
 
 const defaultCfg = require('./default');
+
+const config = _.cloneDeep(defaultCfg);
 
 let knex = {};
 
@@ -19,14 +22,13 @@ if (process.env.CI === 'true') {
   };
 }
 
+config.content.directory = path.join(__dirname, '../tests/fixtures/content-types')
+
 module.exports = {
-  content: defaultCfg.content,
-  contentTypes: {
-    directory: path.join(__dirname, '..', 'content-types'),
-  },
+  content: config.content,
   knex,
   workflows: {
     default: 'self-publish',
-    directory: path.join(__dirname, '..', 'tests/workflows'),
+    directory: path.join(__dirname, '../tests/fixtures/workflows'),
   },
 };
