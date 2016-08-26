@@ -74,7 +74,7 @@ module.exports = {
   authentication: {
     messages: {
       login: {
-        error: 'Email and/or passowrd incorrect',
+        error: 'Email and/or password incorrect',
       },
     },
     login: {
