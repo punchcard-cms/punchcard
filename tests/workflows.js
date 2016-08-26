@@ -4,6 +4,7 @@ import path from 'path';
 import content from 'punchcard-content-types';
 
 import workflows from '../lib/workflows';
+import allFlows from './fixtures/workflows/all-flows';
 
 const revision = {
   audit: '',
@@ -166,6 +167,14 @@ test('Workflow config check step requires name', t => {
   }];
   check = workflows.utils.check(wf);
   t.is(check, 'Step must have a name', 'Workflow steps require a name');
+
+  wf.steps = [{
+    name: 'foo',
+  }, {
+    name: [],
+  }];
+  check = workflows.utils.check(wf);
+  t.is(check, 'Step name must be a string', 'Workflow name must be string');
 });
 
 test('Workflow config check step self is boolean', t => {
@@ -311,74 +320,36 @@ test('Audit on content with one approval', t => {
 });
 
 
+test('workflows in type - bad workflow', t => {
+  const type = {
+    name: 'Bar',
+    workflow: 'nope',
+  };
+
+  return workflows.utils.workflow(type, allFlows).catch(err => {
+    t.is(err, 'Workflow \'nope\' for Content Type \'Bar\' not found', 'Returns false on workflow missing from global flows');
+  });
+});
+
+test('workflows in type - ', t => {
+  const type = {
+    name: 'Bar',
+    workflow: '',
+  };
+
+  return workflows.utils.workflow(type, allFlows).catch(err => {
+    t.is(err, 'Workflow \'\' for Content Type \'Bar\' not found', 'Returns false on workflow missing from global flows');
+  });
+});
+
 test('workflows in type', t => {
   const type = {
+    name: 'Bar',
     workflow: 'editor-approve',
   };
 
-  const allFlows = [
-    {
-      'name': 'Editor Approve',
-      'id': 'editor-approve',
-      'steps': [
-        {
-          'name': 'Publish',
-          'self': true,
-        },
-        {
-          'name': 'Editor Approval',
-        },
-      ],
-    },
-  ];
-
-  const globalConfig = {
-    content: {
-      base: '/',
-    },
-    workflows: {
-      default: 'self-publish',
-      messages: {
-        missing: 'Workflow \'%workf\' for Content Type \'%type\' not found',
-      },
-    },
-  };
-
-  const expected = {
-    name: 'Editor Approve',
-    id: 'editor-approve',
-    steps: [
-      {
-        name: 'Publish',
-        self: true,
-      },
-      {
-        name: 'Editor Approval',
-      },
-    ],
-  };
-  const req = {
-    params: {
-      type: 'services',
-    },
-    session: {},
-    workflow: 'editor-approve',
-  };
-  const wf = workflows.workflow(type, allFlows, globalConfig, req);
-
-  // get type workflow
-  t.is(JSON.stringify(wf), JSON.stringify(expected), 'Grabs an existing workflow');
-
-  // bad workflow in type
-  const badtype = (JSON.parse(JSON.stringify(type)));
-  badtype.workflow = 'nope';
-  const badflow = workflows.workflow(badtype, allFlows, globalConfig, req);
-  t.is(badflow, false, 'Returns false on workflow missing from global flows');
-
-  // no flow in type
-  const noflow = (JSON.parse(JSON.stringify(type)));
-  noflow.workflow = '';
-  const nopeflow = workflows.workflow(noflow, allFlows, globalConfig, req);
-
-  t.is(nopeflow, false, 'Returns false on workflow missing from global flows');
+  return workflows.utils.workflow(type, allFlows).then(result => {
+    // get type workflow
+    t.is(result, allFlows[0], 'Grabs an existing workflow');
+  });
 });
