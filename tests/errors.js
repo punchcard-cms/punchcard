@@ -7,9 +7,6 @@ import routes from '../lib/errors/routes';
 
 const EventEmitter = events.EventEmitter;
 
-// used in a promise below
-let nextCalled = false; // eslint-disable-line no-unused-vars
-
 const get = (req) => {
   if (req === 'env') {
     return 'development';
@@ -25,13 +22,13 @@ const app = {
 
 /**
  * Next
- * @param  {object} err - the error object
- * @returns {object} nextCalled - the error object
+ *
+ * @param {object} value object send to next
+ *
+ * @returns {object} whatever the function received
  */
-const next = (err) => {
-  nextCalled = err;
-
-  return nextCalled;
+const next = (value) => {
+  return value;
 };
 
 const err = {
@@ -44,20 +41,18 @@ const err = {
 // Routes - 404
 //////////////////////////////
 test.cb('404 error route', t => {
+  const response = httpMocks.createResponse({ eventEmitter: EventEmitter });
   const request = httpMocks.createRequest({
     method: 'GET',
     url: '/some/madeup/icky/path',
   });
 
-  request._setSessionVariable('404', {});
-
-  _.set(request.session, '404', {
+  request._setSessionVariable('404', {
     message: 'Something bad happened',
     safe: '/refreshing/safe/path',
   });
 
-  const response = httpMocks.createResponse({ eventEmitter: EventEmitter });
-  routes.notFound(request, response);
+  routes.missing(request, response);
 
   response.on('end', () => {
     const data = response._getRenderData();
@@ -75,16 +70,16 @@ test.cb('404 error route', t => {
 // Routes - error
 //////////////////////////////
 test.cb('General error', t => {
+  const response = httpMocks.createResponse({ eventEmitter: EventEmitter });
   const error = _.cloneDeep(err);
-  error.message = 'Something bad happened';
-  error.safe = '/refreshing/safe/path';
-
   const request = httpMocks.createRequest({
     method: 'GET',
     url: '/some/madeup/icky/path',
   });
 
-  const response = httpMocks.createResponse({ eventEmitter: EventEmitter });
+  error.message = 'Something bad happened';
+  error.safe = '/refreshing/safe/path';
+
   routes.errors(error, request, response, next, app);
 
   response.on('end', () => {
@@ -99,12 +94,12 @@ test.cb('General error', t => {
 });
 
 test.cb('Unknown error', t => {
+  const response = httpMocks.createResponse({ eventEmitter: EventEmitter });
   const request = httpMocks.createRequest({
     method: 'GET',
     url: '/some/madeup/icky/path',
   });
 
-  const response = httpMocks.createResponse({ eventEmitter: EventEmitter });
   routes.errors('', request, response, next, app);
 
   response.on('end', () => {
@@ -119,12 +114,12 @@ test.cb('Unknown error', t => {
 });
 
 test.cb('Message into error', t => {
+  const response = httpMocks.createResponse({ eventEmitter: EventEmitter });
   const request = httpMocks.createRequest({
     method: 'GET',
     url: '/some/madeup/icky/path',
   });
 
-  const response = httpMocks.createResponse({ eventEmitter: EventEmitter });
   routes.errors('I am error', request, response, next, app);
 
   response.on('end', () => {
