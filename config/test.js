@@ -21,7 +21,7 @@ module.exports = {
     directory: path.join(__dirname, '../tests/fixtures/content-types/good'),
   },
   knex,
-  workflows:{
+  workflows: {
     directory: path.join(__dirname, '../tests/fixtures/workflows/good'),
   },
 };
