@@ -1,8 +1,8 @@
 import test from 'ava';
 import _ from 'lodash';
 
-import types from './fixtures/content-types/all-types-merged';
-import typesRef from './fixtures/content-types/types-reference';
+import types from './fixtures/content-types/objects/all-merged';
+import typesRef from './fixtures/content-types/objects/types-reference';
 import utils from '../lib/utils';
 
 test('Single Item - Pass', t => {

@@ -5,7 +5,7 @@ const path = require('path');
 
 const defaultCfg = require('./default');
 
-const config = _.cloneDeep(defaultCfg);
+const content = _.cloneDeep(defaultCfg.content);
 
 let knex = {};
 
@@ -22,13 +22,13 @@ if (process.env.CI === 'true') {
   };
 }
 
-config.content.directory = path.join(__dirname, '../tests/fixtures/content-types');
+content.directory = path.join(__dirname, '../tests/fixtures/content-types/good');
 
 module.exports = {
-  content: config.content,
+  content,
   knex,
   workflows: {
     default: 'self-publish',
-    directory: path.join(__dirname, '../tests/fixtures/workflows'),
+    directory: path.join(__dirname, '../tests/fixtures/workflows/good'),
   },
 };

@@ -4,7 +4,7 @@ import path from 'path';
 import content from 'punchcard-content-types';
 
 import workflows from '../lib/workflows';
-import allFlows from './fixtures/workflows/all-flows';
+import allFlows from './fixtures/workflows/objects/all-flows';
 
 const revision = {
   audit: '',
@@ -186,7 +186,7 @@ test('Workflow config check step self is boolean', t => {
 // Workflows - loading workflow files
 //////////////////////////////
 test('Workflows rejects bad config', t => {
-  const badpath = path.join(__dirname, './fixtures/workflows/bad-name');
+  const badpath = path.join(__dirname, './fixtures/workflows/breaking/bad-name');
 
   return workflows.raw(badpath).then(() => {
     t.fail('Raw should fail');
@@ -196,7 +196,7 @@ test('Workflows rejects bad config', t => {
 });
 
 test('Workflows cannot share id', t => {
-  const badpath = path.join(__dirname, './fixtures/workflows/same-id');
+  const badpath = path.join(__dirname, './fixtures/workflows/breaking/same-id');
 
   return workflows.raw(badpath).then(() => {
     t.fail('Raw should fail');
@@ -328,8 +328,8 @@ test('workflows in type', t => {
   };
   const wf = workflows.workflow(type, allFlows, globalConfig, req);
 
-  // get type workflow
-  t.is(JSON.stringify(wf), JSON.stringify(allFlows[0]), 'Grabs an existing workflow');
+  // workflows.workflow should get the first flow in out fixture, `editor-approve`
+  t.is(wf, allFlows[0], 'Grabs an existing workflow');
 
   // bad workflow in type
   const badtype = (JSON.parse(JSON.stringify(type)));
@@ -342,5 +342,6 @@ test('workflows in type', t => {
   noflow.workflow = '';
   const nopeflow = workflows.workflow(noflow, allFlows, globalConfig, req);
 
+  // workflows.workflow should get the second flow in out fixture, `self-approve`, also the default workflow
   t.is(nopeflow, allFlows[1], 'Returns false on workflow missing from global flows');
 });
