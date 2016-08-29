@@ -1,4 +1,8 @@
 import test from 'ava';
+import _ from 'lodash';
+
+import types from './fixtures/content-types/objects/all-merged';
+import typesRef from './fixtures/content-types/objects/types-reference';
 import utils from '../lib/utils';
 
 test('Single Item - Pass', t => {
@@ -177,24 +181,8 @@ test('Get identifier', t => {
       },
     },
   ];
-  const type = {
-    identifier: 'service-name',
-    attributes:
-    [
-      {
-        name: 'Service Name',
-        description: 'Write a really cool name please.',
-        inputs: {
-          text: {
-            name: 'service-name--text',
-          },
-        },
-        id: 'service-name',
-        type: 'text',
-      },
-    ],
-  };
-  const result = utils.routes.identifier(rows, type);
+
+  const result = utils.routes.identifier(rows, types[0]);
   t.is(result[0].identifier, 'This is the test title', 'Should have title as identifier');
 });
 
@@ -211,89 +199,13 @@ test('Sad empty identifier value', t => {
       },
     },
   ];
-  const type = {
-    identifier: 'service-name',
-    attributes:
-    [
-      {
-        name: 'Service Name',
-        description: 'Write a really cool name please.',
-        inputs: {
-          text: {
-            name: 'service-name--text',
-          },
-        },
-        id: 'service-name',
-        type: 'text',
-      },
-    ],
-  };
-  const result = utils.routes.identifier(rows, type);
+
+  const result = utils.routes.identifier(rows, types[0]);
   t.is(result[0].identifier, 'Revision: 1234', 'Should have title as identifier');
 });
 
 
 test('Reference array has values', t => {
-  const types = [
-    {
-      id: 'test-reference',
-      attributes: [
-        {
-          name: 'Service Reference',
-          description: 'Add a reference',
-          inputs: {
-            reference: {
-              name: 'service-reference--reference',
-              options: [],
-              settings: {
-                contentType: 'test-service',
-                view: 'radio',
-              },
-              reference: true,
-              type: 'radio',
-            },
-          },
-          id: 'service-reference',
-        },
-        {
-          name: 'Service Reference',
-          description: 'Add a reference',
-          inputs: [
-            {
-              reference: {
-                name: 'service-reference--reference--0',
-                options: [],
-                settings: {
-                  contentType: 'test-service',
-                  view: 'select',
-                },
-                reference: true,
-                type: 'select',
-              },
-              id: 'service-reference-0',
-            },
-          ],
-        },
-      ],
-    },
-    {
-      id: 'test-service',
-      identifier: 'service-name',
-      attributes: [
-        {
-          name: 'Service Name',
-          description: 'Write a really cool name please.',
-          inputs: {
-            text: {
-              name: 'service-name--text',
-            },
-          },
-          id: 'service-name',
-          type: 'text',
-        },
-      ],
-    },
-  ];
   const expected = {
     cts: [
       {
@@ -371,38 +283,17 @@ test('Reference array has values', t => {
       },
     ],
   };
-  const result = utils.references(types);
+  const result = utils.references(typesRef);
   t.is(result.length, expected.length, 'reference equal length');
   t.is(JSON.stringify(result), JSON.stringify(expected), 'cts and reference exists');
 });
 
 test('Reference array - Invalid Content type - Fail', t => {
-  const types = [
-    {
-      id: 'test-reference',
-      attributes: [
-        {
-          name: 'Service Reference',
-          description: 'Add a reference',
-          inputs: {
-            reference: {
-              name: 'service-reference--reference',
-              options: [],
-              settings: {
-                contentType: 'foo',
-                view: 'select',
-              },
-              reference: true,
-            },
-          },
-          id: 'service-reference',
-          type: 'select',
-        },
-      ],
-    },
-  ];
+  const refs = _.cloneDeep(typesRef);
+  refs[0].attributes[0].inputs.reference.settings.contentType = 'foo';
+
   try {
-    utils.references(types);
+    utils.references(refs);
     t.fail();
   }
   catch (e) {
@@ -411,31 +302,11 @@ test('Reference array - Invalid Content type - Fail', t => {
 });
 
 test('Reference array - Missing Content type - Fail', t => {
-  const types = [
-    {
-      id: 'test-reference',
-      attributes: [
-        {
-          name: 'Service Reference',
-          description: 'Add a reference',
-          inputs: {
-            reference: {
-              name: 'service-reference--reference',
-              options: [],
-              settings: {
-                view: 'select',
-              },
-              reference: true,
-            },
-          },
-          id: 'service-reference',
-          type: 'select',
-        },
-      ],
-    },
-  ];
+  const refs = _.cloneDeep(typesRef);
+  delete refs[0].attributes[0].inputs.reference.settings.contentType;
+
   try {
-    utils.references(types);
+    utils.references(refs);
     t.fail();
   }
   catch (e) {

@@ -2,8 +2,6 @@
 
 const path = require('path');
 
-const defaultCfg = require('./default');
-
 let knex = {};
 
 if (process.env.CI === 'true') {
@@ -15,18 +13,15 @@ if (process.env.CI === 'true') {
       database: 'travis_ci_test',
     },
     debug: false,
-    acquireConnectionTimeout: 2000,
   };
 }
 
 module.exports = {
-  content: defaultCfg.content,
-  contentTypes: {
-    directory: path.join(__dirname, '..', 'content-types'),
+  content: {
+    directory: path.join(__dirname, '../tests/fixtures/content-types/good'),
   },
   knex,
   workflows: {
-    default: 'self-publish',
-    directory: path.join(__dirname, '..', 'tests/workflows'),
+    directory: path.join(__dirname, '../tests/fixtures/workflows/good'),
   },
 };
