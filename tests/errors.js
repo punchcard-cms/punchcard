@@ -1,6 +1,6 @@
 import test from 'ava';
 import events from 'events';
-import httpMocks from 'node-mocks-http';
+import mocks from 'node-mocks-http';
 import _ from 'lodash';
 
 import routes from '../lib/errors/routes';
@@ -41,8 +41,8 @@ const err = {
 // Routes - 404
 //////////////////////////////
 test.cb('404 error route', t => {
-  const response = httpMocks.createResponse({ eventEmitter: EventEmitter });
-  const request = httpMocks.createRequest({
+  const response = mocks.createResponse({ eventEmitter: EventEmitter });
+  const request = mocks.createRequest({
     method: 'GET',
     url: '/some/madeup/icky/path',
   });
@@ -70,9 +70,9 @@ test.cb('404 error route', t => {
 // Routes - error
 //////////////////////////////
 test.cb('General error', t => {
-  const response = httpMocks.createResponse({ eventEmitter: EventEmitter });
+  const response = mocks.createResponse({ eventEmitter: EventEmitter });
   const error = _.cloneDeep(err);
-  const request = httpMocks.createRequest({
+  const request = mocks.createRequest({
     method: 'GET',
     url: '/some/madeup/icky/path',
   });
@@ -94,8 +94,8 @@ test.cb('General error', t => {
 });
 
 test.cb('Unknown error', t => {
-  const response = httpMocks.createResponse({ eventEmitter: EventEmitter });
-  const request = httpMocks.createRequest({
+  const response = mocks.createResponse({ eventEmitter: EventEmitter });
+  const request = mocks.createRequest({
     method: 'GET',
     url: '/some/madeup/icky/path',
   });
@@ -114,8 +114,8 @@ test.cb('Unknown error', t => {
 });
 
 test.cb('Message into error', t => {
-  const response = httpMocks.createResponse({ eventEmitter: EventEmitter });
-  const request = httpMocks.createRequest({
+  const response = mocks.createResponse({ eventEmitter: EventEmitter });
+  const request = mocks.createRequest({
     method: 'GET',
     url: '/some/madeup/icky/path',
   });
