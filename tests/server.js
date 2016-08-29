@@ -755,7 +755,7 @@ test.cb('Users Edit Landing Page', t => {
     });
 });
 
-test.skip('Users Delete Landing Page', t => {
+test.cb('Users Delete Landing Page', t => {
   agent
     .get(`/users/${accounts[1].id}/delete`)
     .set('cookie', cookie)
