@@ -11,7 +11,6 @@ section:
     - api
     - routing
     - database
-  text: black
 problem:
   description: 'Issues that make Punchcard feel broken or prevent us from doing further work, but otherwise work as designed. High priority.'
   color: '#ff5050'
@@ -21,7 +20,6 @@ problem:
     - bug
     - externally blocked
     - hotfix
-  text: black
 experience:
   description: Issues that affect a user's comprehension or overall enjoyment of Punchcard.
   color: '#ffa573'
@@ -30,14 +28,12 @@ experience:
     - microcopy
     - user experience
     - developer experience
-  text: black
 environment:
   description: 'Environment that the issue is present in, either Punchcard core or its use as a module'
   color: '#e9e0e0'
   labels:
     - core
     - module
-  text: black
 mindless:
   description: Issues that are necessary but less impactful for our users.
   color: '#ffd4a0'
@@ -47,7 +43,6 @@ mindless:
     - technical debt
     - experience debt
     - tests
-  text: black
 feedback:
   description: Issues that require further conversation to figure out how to proceed or what action steps are needed.
   color: '#db2780'
@@ -59,27 +54,23 @@ feedback:
     - strategy
     - stub
     - prototype
-  text: white
 addition:
   description: Issues that will result in new functionality or releases.
   color: '#b4e051'
   labels:
     - feature
-  text: black
 improvement:
   description: Issues that will iterate on existing functionality.
   color: '#41d6c3'
   labels:
     - enhancement
     - optimization
-  text: black
 pending:
   description: 'Issues where action can be taken, but has not yet.'
   color: '#fdd600'
   labels:
     - under consideration
     - consumable
-  text: black
 inactive:
   description: Issues where no actions are needed or possible. The issue is either fixed or addressed better by other issues.
   color: '#dfe9e9'
@@ -88,10 +79,8 @@ inactive:
     - won't fix
     - duplicate
     - on hold
-  text: black
 epic:
   description: 'Epics track multiple stories together towards a desired outcome. Each epic should get a label unique to the core concept of the epic, usually 2-3 words. Epics should be labeled with their epic label and the `epic` label. Each story related to an epic should be labeled with that epic''s label.'
   color: '#9855d4'
   labels:
     - epic
-  text: white
