@@ -18,7 +18,7 @@ if (process.env.CI === 'true') {
       database: 'travis_ci_test',
     },
     debug: false,
-    acquireConnectionTimeout: 1000,
+    acquireConnectionTimeout: 2000,
   };
 }
 
