@@ -4,6 +4,7 @@ import path from 'path';
 import content from 'punchcard-content-types';
 
 import workflows from '../lib/workflows';
+import allFlows from './fixtures/workflows/objects/all-flows';
 
 const revision = {
   audit: '',
@@ -28,16 +29,6 @@ const request = {
     access: null,
     email: 'important@person.com',
   },
-};
-
-const workflow = {
-  name: 'Editor Approve',
-  id: 'editor-approve',
-  steps: [
-    { name: 'Send to Legal' },
-    { name: 'Send to Editor' },
-    { name: 'Publish' },
-  ],
 };
 
 test('Workflow functions', t => {
@@ -166,6 +157,14 @@ test('Workflow config check step requires name', t => {
   }];
   check = workflows.utils.check(wf);
   t.is(check, 'Step must have a name', 'Workflow steps require a name');
+
+  wf.steps = [{
+    name: 'foo',
+  }, {
+    name: [],
+  }];
+  check = workflows.utils.check(wf);
+  t.is(check, 'Step name must be a string', 'Workflow name must be string');
 });
 
 test('Workflow config check step self is boolean', t => {
@@ -195,7 +194,7 @@ test('Workflow config check step self is boolean', t => {
 // Workflows - loading workflow files
 //////////////////////////////
 test('Workflows rejects bad config', t => {
-  const badpath = path.join(__dirname, './fixtures/workflows/bad-name');
+  const badpath = path.join(__dirname, './fixtures/workflows/breaking/bad-name');
 
   return workflows.raw(badpath).then(() => {
     t.fail('Raw should fail');
@@ -205,7 +204,7 @@ test('Workflows rejects bad config', t => {
 });
 
 test('Workflows cannot share id', t => {
-  const badpath = path.join(__dirname, './fixtures/workflows/same-id');
+  const badpath = path.join(__dirname, './fixtures/workflows/breaking/same-id');
 
   return workflows.raw(badpath).then(() => {
     t.fail('Raw should fail');
@@ -262,7 +261,7 @@ test('create an audit entry with variables', t => {
 // Workflows - audits
 //////////////////////////////
 test('Audit created from approval submission', t => {
-  const audits = workflows.audits(revision, workflow, request);
+  const audits = workflows.audits(revision, allFlows[0], request);
 
   t.is(typeof audits.audit, 'object', 'Audit should be an object');
   t.true(Array.isArray(audits.audit.entries), 'Entries should be an array');
@@ -279,7 +278,7 @@ test('Audit created from approval submission', t => {
 test('Audit created from rejection', t => {
   const req = (JSON.parse(JSON.stringify(request)));
   req.body = rejectedBody;
-  const audits = workflows.audits(revision, workflow, req);
+  const audits = workflows.audits(revision, allFlows[0], req);
 
   t.is(typeof audits.audit, 'object', 'Audit should be an object');
   t.true(Array.isArray(audits.audit.entries), 'Entries should be an array');
@@ -296,7 +295,7 @@ test('Audit created from rejection', t => {
 test('Audit on content with one approval', t => {
   const rev = (JSON.parse(JSON.stringify(revision)));
   rev.approval = 1;
-  const audits = workflows.audits(rev, workflow, request);
+  const audits = workflows.audits(rev, allFlows[0], request);
 
   t.is(typeof audits.audit, 'object', 'Audit should be an object');
   t.true(Array.isArray(audits.audit.entries), 'Entries should be an array');
@@ -316,22 +315,6 @@ test('workflows in type', t => {
     workflow: 'editor-approve',
   };
 
-  const allFlows = [
-    {
-      'name': 'Editor Approve',
-      'id': 'editor-approve',
-      'steps': [
-        {
-          'name': 'Publish',
-          'self': true,
-        },
-        {
-          'name': 'Editor Approval',
-        },
-      ],
-    },
-  ];
-
   const globalConfig = {
     content: {
       base: '/',
@@ -344,19 +327,6 @@ test('workflows in type', t => {
     },
   };
 
-  const expected = {
-    name: 'Editor Approve',
-    id: 'editor-approve',
-    steps: [
-      {
-        name: 'Publish',
-        self: true,
-      },
-      {
-        name: 'Editor Approval',
-      },
-    ],
-  };
   const req = {
     params: {
       type: 'services',
@@ -366,8 +336,8 @@ test('workflows in type', t => {
   };
   const wf = workflows.workflow(type, allFlows, globalConfig, req);
 
-  // get type workflow
-  t.is(JSON.stringify(wf), JSON.stringify(expected), 'Grabs an existing workflow');
+  // workflows.workflow should get the first flow in out fixture, `editor-approve`
+  t.is(wf, allFlows[0], 'Grabs an existing workflow');
 
   // bad workflow in type
   const badtype = (JSON.parse(JSON.stringify(type)));
@@ -380,5 +350,40 @@ test('workflows in type', t => {
   noflow.workflow = '';
   const nopeflow = workflows.workflow(noflow, allFlows, globalConfig, req);
 
-  t.is(nopeflow, false, 'Returns false on workflow missing from global flows');
+  // workflows.workflow should get the second flow in out fixture, `self-approve`, also the default workflow
+  t.is(nopeflow, allFlows[1], 'Returns false on workflow missing from global flows');
+});
+
+test('workflows in type - bad workflow', t => {
+  const type = {
+    name: 'Bar',
+    workflow: 'nope',
+  };
+
+  return workflows.utils.workflow(type, allFlows).catch(err => {
+    t.is(err, 'Workflow \'nope\' for Content Type \'Bar\' not found', 'Returns false on workflow missing from global flows');
+  });
+});
+
+test('workflows in type - ', t => {
+  const type = {
+    name: 'Bar',
+    workflow: '',
+  };
+
+  return workflows.utils.workflow(type, allFlows).catch(err => {
+    t.is(err, 'Workflow \'\' for Content Type \'Bar\' not found', 'Returns false on workflow missing from global flows');
+  });
+});
+
+test('workflows in type', t => {
+  const type = {
+    name: 'Bar',
+    workflow: 'editor-approve',
+  };
+
+  return workflows.utils.workflow(type, allFlows).then(result => {
+    // get type workflow
+    t.is(result, allFlows[0], 'Grabs an existing workflow');
+  });
 });

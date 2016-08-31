@@ -23,6 +23,18 @@ after_success:
 branches:
   except:
     - /^v\d+\.\d+\.\d+$/
+
+#########################
+## Deploy
+#########################
+before_depoy: npm install -g reparo
+deploy:
+  - provider: script
+    script: reparo
+    skip_cleanup: true
+    on:
+      branch: master
+
 #########################
 ## Notifications
 #########################
