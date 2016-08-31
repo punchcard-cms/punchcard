@@ -157,6 +157,14 @@ test('Workflow config check step requires name', t => {
   }];
   check = workflows.utils.check(wf);
   t.is(check, 'Step must have a name', 'Workflow steps require a name');
+
+  wf.steps = [{
+    name: 'foo',
+  }, {
+    name: [],
+  }];
+  check = workflows.utils.check(wf);
+  t.is(check, 'Step name must be a string', 'Workflow name must be string');
 });
 
 test('Workflow config check step self is boolean', t => {
@@ -344,4 +352,38 @@ test('workflows in type', t => {
 
   // workflows.workflow should get the second flow in out fixture, `self-approve`, also the default workflow
   t.is(nopeflow, allFlows[1], 'Returns false on workflow missing from global flows');
+});
+
+test('workflows in type - bad workflow', t => {
+  const type = {
+    name: 'Bar',
+    workflow: 'nope',
+  };
+
+  return workflows.utils.workflow(type, allFlows).catch(err => {
+    t.is(err, 'Workflow \'nope\' for Content Type \'Bar\' not found', 'Returns false on workflow missing from global flows');
+  });
+});
+
+test('workflows in type - ', t => {
+  const type = {
+    name: 'Bar',
+    workflow: '',
+  };
+
+  return workflows.utils.workflow(type, allFlows).catch(err => {
+    t.is(err, 'Workflow \'\' for Content Type \'Bar\' not found', 'Returns false on workflow missing from global flows');
+  });
+});
+
+test('workflows in type', t => {
+  const type = {
+    name: 'Bar',
+    workflow: 'editor-approve',
+  };
+
+  return workflows.utils.workflow(type, allFlows).then(result => {
+    // get type workflow
+    t.is(result, allFlows[0], 'Grabs an existing workflow');
+  });
 });
