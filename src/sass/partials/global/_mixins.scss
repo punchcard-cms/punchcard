@@ -63,8 +63,8 @@
       content: '';
       display: inline-block;
       height: 1.25em;
-      margin-right: setting-get('rhythm') / 4;
-      transform: translateX(-.8rem);
+      //margin-right: setting-get('rhythm') / 4;
+      transform: translateX(setting-get('rhythm') / -1.25);
       vertical-align: middle;
       width: 1.25em;
     }
@@ -85,7 +85,7 @@
     + label {
 
       &::before {
-        outline: 4px solid setting-get('primary accent color');
+        outline: setting-get('input border width') solid setting-get('primary accent color');
       }
     }
   }
@@ -151,7 +151,7 @@
       content: '';
       display: inline-block;
       height: 1.25em;
-      transform: translateX(-.9rem) translateY(-.125em);
+      transform: translateX(setting-get('rhythm') / -1.25) translateY(setting-get('rhythm') / -7);
       vertical-align: middle;
       width: 1.25em;
     }
@@ -169,7 +169,7 @@
     + label {
 
       &::before {
-        box-shadow: 0 0 0 5px setting-get('primary accent color');
+        box-shadow: 0 0 0 setting-get('input border width') setting-get('primary accent color');
       }
     }
   }
