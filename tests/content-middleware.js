@@ -172,6 +172,16 @@ test('Check revision id-not blank', t => {
   });
 });
 
+test('Check revision id-not missing', t => {
+  const rq = cloneDeep(req);
+  delete rq.params.revision;
+
+  return utils.revision(rq).catch(err => {
+    t.is(typeof err, 'string', 'Non-number revision fails');
+    t.is(err, 'Revision must be a number', 'Should fail with a message');
+  });
+});
+
 test('Check revision id-not number', t => {
   const rq = cloneDeep(req);
   rq.params.revision = 'foo';
