@@ -218,7 +218,7 @@ test('URL checks type exists in CMS', t => {
   const rq = cloneDeep(req);
   rq.params.type = 'foo';
 
-  return middleware.url(rq, {}, next).then(err => {
+  return middleware(rq, {}, next).then(err => {
     t.is(err.message, 'Content Type \'foo\' not found', 'Should fail with error object');
     t.is(err.safe, '/content', 'Should have a safe url');
     t.is(err.status, 404, 'Should be a 404');
@@ -229,7 +229,7 @@ test('URL checks id is uuid', t => {
   const rq = cloneDeep(req);
   rq.params.id = 'foo';
 
-  return middleware.url(rq, {}, next).then(err => {
+  return middleware(rq, {}, next).then(err => {
     t.is(err.message, 'Content ID must be in UUID format', 'Should fail with message');
     t.is(err.safe, '/content', 'Should have a safe url');
     t.is(err.status, 404, 'Should be a 404');
@@ -241,7 +241,7 @@ test('URL checks revision is number', t => {
   rq.params.id = uuid.v4();
   rq.params.revision = 'foo';
 
-  return middleware.url(rq, {}, next).then(err => {
+  return middleware(rq, {}, next).then(err => {
     t.is(err.message, 'Revision must be a number', 'Should fail with message');
     t.is(err.safe, '/content', 'Should have a safe url');
     t.is(err.status, 404, 'Should be a 404');
@@ -253,7 +253,7 @@ test('URL works with CMS as it is configured', t => {
   rq2.params.id = uuid.v4();
   rq2.params.revision = 2345;
 
-  return middleware.url(rq2, {}, next).then(() => {
+  return middleware(rq2, {}, next).then(() => {
     t.pass();
   }).catch(() => {
     t.fail();
