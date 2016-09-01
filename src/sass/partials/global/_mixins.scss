@@ -52,7 +52,7 @@
 }
 
 @mixin checkbox {
-  transform: translateX(.5em);
+  opacity: 0;
 
   + label {
     position: relative;
@@ -63,7 +63,7 @@
       content: '';
       display: inline-block;
       height: 1.25em;
-      transform: translateX(setting-get('rhythm') / -1.25);
+      transform: translateX(setting-get('rhythm') / -1.25) translateY(setting-get('rhythm') / -8);
       vertical-align: middle;
       width: 1.25em;
     }
@@ -138,7 +138,7 @@
 }
 
 @mixin radio {
-  transform: translateX(.5em);
+  opacity: 0;
 
   + label {
     position: relative;
