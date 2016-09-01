@@ -5,14 +5,18 @@
  */
 const express = require('express');
 const config = require('config');
+const _ = require('lodash');
 
 const init = require('./lib/init');
 const routes = require('./lib/routes');
 
 const application = express();
+const test = _.cloneDeep(config);
+test.content.home.title = 'I win!';
 
 // Initialize the Database
 const initApp = () => {
+  config.util.extendDeep(config, test);
   return init(application).then(app => {
     return routes(app);
   }).catch(e => {
