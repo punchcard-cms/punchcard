@@ -93,6 +93,16 @@ test('Check content id-not blank', t => {
   });
 });
 
+test('Check content id-not empty string', t => {
+  const rq = cloneDeep(req);
+  rq.params.id = '';
+
+  return utils.id(rq).catch(err => {
+    t.is(typeof err, 'string', 'Non-uuid id fails');
+    t.is(err, 'Content ID must be in UUID format', 'Should fail with a message');
+  });
+});
+
 test('Check content id-not object', t => {
   const rq = cloneDeep(req);
   rq.params.id = {};
