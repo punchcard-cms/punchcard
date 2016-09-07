@@ -3,6 +3,7 @@ import uuid from 'uuid';
 import cloneDeep from 'lodash/cloneDeep';
 
 import types from './fixtures/content-types/objects/all-merged';
+import workflows from './fixtures/workflows/objects/all-flows';
 import middleware from '../lib/content/middleware';
 import utils from '../lib/content/middleware/utils';
 
@@ -20,6 +21,7 @@ const next = (value) => {
 const req = {
   content: {
     types,
+    workflows,
   },
   params: {
     type: 'services',
@@ -220,6 +222,17 @@ test('URL checks type exists in CMS', t => {
 
   return middleware(rq, {}, next).then(err => {
     t.is(err.message, 'Content Type \'foo\' not found', 'Should fail with error object');
+    t.is(err.safe, '/content', 'Should have a safe url');
+    t.is(err.status, 404, 'Should be a 404');
+  });
+});
+
+test('URL checks type has existing workflow in CMS', t => {
+  const rq = cloneDeep(req);
+  rq.content.types[0].workflow = 'foo';
+
+  return utils.url(rq, {}, next).then(err => {
+    t.is(err.message, 'Workflow \'foo\' for Content Type \'Services\' not found', 'Should fail with message');
     t.is(err.safe, '/content', 'Should have a safe url');
     t.is(err.status, 404, 'Should be a 404');
   });
