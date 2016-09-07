@@ -37,6 +37,7 @@
 
   &--fieldset {
     border: setting-get('input border width') solid setting-get('primary accent color');
+    margin-top: setting-get('rhythm') / .5;
     padding: 0 setting-get('rhythm') / .75 setting-get('rhythm') / .75 setting-get('rhythm') / .75;
     @include breakpoint(setting-get('responsive form')) {
       padding: 0 setting-get('rhythm') / .5 setting-get('rhythm') / .5 setting-get('rhythm') / .5;
