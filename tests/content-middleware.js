@@ -231,7 +231,7 @@ test('URL checks type has existing workflow in CMS', t => {
   const rq = cloneDeep(req);
   rq.content.types[0].workflow = 'foo';
 
-  return utils.url(rq, {}, next).then(err => {
+  return middleware(rq, {}, next).then(err => {
     t.is(err.message, 'Workflow \'foo\' for Content Type \'Services\' not found', 'Should fail with message');
     t.is(err.safe, '/content', 'Should have a safe url');
     t.is(err.status, 404, 'Should be a 404');
