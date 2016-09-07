@@ -24,6 +24,7 @@ test('Setup', t => {
     t.is(result.length, 1, 'One item added');
     t.deepEqual(attrs, revision.value);
   }).catch(e => {
+    console.error(e.message);
     t.fail(e.message);
   });
 });
@@ -46,7 +47,7 @@ test('Push', t => {
     t.is(result.length, 1, 'One item added');
     t.deepEqual(attrs, revision.value);
   }).catch(e => {
-    console.log(e);
+    console.error(e.message);
     t.fail(e.message);
   });
 });
@@ -79,6 +80,7 @@ test('Pull', t => {
   }).then(result => {
     t.is(result.length, 0, 'Item deleted');
   }).catch(e => {
+    console.error(e.message);
     t.fail(e.message);
   });
 });
@@ -102,7 +104,7 @@ test('Sunrise', t => {
     t.is(result.length, 1, 'One item added');
     t.deepEqual(attrs, revision.value);
   }).catch(e => {
-    console.log(e);
+    console.error(e.message);
     t.fail(e.message);
   });
 });
@@ -136,6 +138,7 @@ test('Sunset', t => {
   }).then(result => {
     t.is(result.length, 0, 'Item deleted');
   }).catch(e => {
+    console.error(e.message);
     t.fail(e.message);
   });
 });
