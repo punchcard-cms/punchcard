@@ -27,7 +27,8 @@
     "dev:start": "gulp",
     "dev": "npm run dev:database & npm run dev:start",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
-    "semantic-release": "semantic-release pre && npm publish && semantic-release post"
+    "semantic-release": "semantic-release pre && npm publish && semantic-release post",
+    "reparo": "reparo -b master"
   },
   "repository": {
     "type": "git",
@@ -95,6 +96,7 @@
     "punchcard-runner": "^2.1.2",
     "punchcard-semantic-release": "^2.0.1",
     "punchcard-shared-tests": "^1.0.2",
+    "reparo": "^1.1.1-0",
     "semantic-release": "^4.3.5",
     "supertest": "^1.2.0",
     "tap-diff": "^0.1.1",
