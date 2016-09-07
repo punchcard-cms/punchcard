@@ -10,6 +10,10 @@ const items = utils.generate();
 const length = items.content.length;
 const count = Math.floor(Math.random() * length);
 
+test.before(() => {
+  return db.init();
+});
+
 test('Setup', t => {
   const item = count;
   const revision = items.content[item];
