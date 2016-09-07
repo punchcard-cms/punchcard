@@ -20,8 +20,9 @@ test('Setup', t => {
       revision: revision.revision,
     });
   }).then(result => {
+    const attrs = typeof result[0].attributes === 'string' ? JSON.parse(result[0].attributes) : result[0].attributes;
     t.is(result.length, 1, 'One item added');
-    t.deepEqual(result[0].attributes, revision.value);
+    t.deepEqual(attrs, revision.value);
   }).catch(e => {
     t.fail(e.message);
   });
@@ -41,8 +42,9 @@ test('Push', t => {
       revision: revision.revision,
     });
   }).then(result => {
+    const attrs = typeof result[0].attributes === 'string' ? JSON.parse(result[0].attributes) : result[0].attributes;
     t.is(result.length, 1, 'One item added');
-    t.deepEqual(result[0].attributes, revision.value);
+    t.deepEqual(attrs, revision.value);
   }).catch(e => {
     console.log(e);
     t.fail(e.message);
@@ -96,8 +98,9 @@ test('Sunrise', t => {
       id: revision.id,
     });
   }).then(result => {
+    const attrs = typeof result[0].attributes === 'string' ? JSON.parse(result[0].attributes) : result[0].attributes;
     t.is(result.length, 1, 'One item added');
-    t.deepEqual(result[0].attributes, revision.value);
+    t.deepEqual(attrs, revision.value);
   }).catch(e => {
     console.log(e);
     t.fail(e.message);
