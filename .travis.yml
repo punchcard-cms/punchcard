@@ -2,7 +2,7 @@ language: node_js
 node_js:
   - '5.11'
 addons:
-  postgresql: '9.5'
+  postgresql: '9.4'
 
 #########################
 ## Setup
