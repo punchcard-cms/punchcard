@@ -1,7 +1,8 @@
 import test from 'ava';
 import moment from 'moment';
 import path from 'path';
-import content from 'punchcard-content-types';
+import types from 'punchcard-content-types';
+import config from 'config';
 
 import workflows from '../lib/workflows';
 import allFlows from './fixtures/workflows/objects/all-flows';
@@ -41,8 +42,8 @@ test('Workflow functions', t => {
 });
 
 test('Workflows compiled into content type', t => {
-  return content.raw().then(types => {
-    t.true(types[0].hasOwnProperty('workflow'), 'Should have a workflow attribute');
+  return types.raw(config).then(raw => {
+    t.true(raw[0].hasOwnProperty('workflow'), 'Should have a workflow attribute');
   });
 });
 
@@ -307,51 +308,6 @@ test('Audit on content with one approval', t => {
   t.is(typeof audits.audit.entries[0].author, 'object', 'Author should be an object');
   t.is(audits.audit.entries[0].author.id, 123, 'Should be an author id');
   t.is(typeof audits.audit.entries[0].created, 'object', 'Should have created object');
-});
-
-
-test('workflows in type', t => {
-  const type = {
-    workflow: 'editor-approve',
-  };
-
-  const globalConfig = {
-    content: {
-      base: '/',
-    },
-    workflows: {
-      default: 'self-publish',
-      messages: {
-        missing: 'Workflow \'%workf\' for Content Type \'%type\' not found',
-      },
-    },
-  };
-
-  const req = {
-    params: {
-      type: 'services',
-    },
-    session: {},
-    workflow: 'editor-approve',
-  };
-  const wf = workflows.workflow(type, allFlows, globalConfig, req);
-
-  // workflows.workflow should get the first flow in out fixture, `editor-approve`
-  t.is(wf, allFlows[0], 'Grabs an existing workflow');
-
-  // bad workflow in type
-  const badtype = (JSON.parse(JSON.stringify(type)));
-  badtype.workflow = 'nope';
-  const badflow = workflows.workflow(badtype, allFlows, globalConfig, req);
-  t.is(badflow, false, 'Returns false on workflow missing from global flows');
-
-  // no flow in type
-  const noflow = (JSON.parse(JSON.stringify(type)));
-  noflow.workflow = '';
-  const nopeflow = workflows.workflow(noflow, allFlows, globalConfig, req);
-
-  // workflows.workflow should get the second flow in out fixture, `self-approve`, also the default workflow
-  t.is(nopeflow, allFlows[1], 'Returns false on workflow missing from global flows');
 });
 
 test('workflows in type - bad workflow', t => {
