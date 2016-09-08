@@ -21,6 +21,9 @@ after_success:
   - npm run semantic-release
   - npm run reparo
 
+addons:
+  postgresql: '9.5'
+
 branches:
   except:
     - /^v\d+\.\d+\.\d+$/
