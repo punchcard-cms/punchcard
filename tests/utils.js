@@ -70,18 +70,10 @@ test('Input Time', t => {
     zone: 'America/New_York',
   };
 
-  const expectedUTC = {
-    date: '2016-05-28',
-    time: '01:56',
-    zone: 'UTC',
-  };
-
   const result = utils.time.input(time, 'America/New_York');
-  const resultUTC = utils.time.input(time);
   const badResult = utils.time.input('');
 
   t.deepEqual(result, expected, 'ISO Date Time converted to date, time, and zone');
-  t.deepEqual(resultUTC, expectedUTC, 'ISO Date Time converted to UTC date, time, and zone');
   t.is(badResult, null, 'Returns `null` if empty string passed in');
 });
 
