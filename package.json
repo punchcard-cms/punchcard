@@ -60,6 +60,7 @@
     "input-plugin-password": "0.1.0",
     "input-plugin-quote": "0.0.1",
     "input-plugin-radio": "0.0.1",
+    "input-plugin-reference": "^1.0.0",
     "input-plugin-select": "^0.3.0",
     "input-plugin-textarea": "0.0.1",
     "js-yaml": "^3.6.1",
