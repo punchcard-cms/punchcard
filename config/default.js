@@ -22,9 +22,6 @@ module.exports = {
       save: 'save',
       new: 'Save Revision',
     },
-    plugins: {
-      directory: [path.join(__dirname, '../input-plugins')],
-    },
     directory: path.join(__dirname, '../content-types'),
     messages: {
       content: {
