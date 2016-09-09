@@ -1,4 +1,5 @@
 {% extends "_donut.html" %}
+{% from "components/alert.html" import alert %}
 
 {% block pageHead %}
   {{ super() }}
@@ -14,6 +15,51 @@
 {% if revision %}
   <h2 class="base--h2">{{config.actions.approve|capitalize}} :: {{revision.identifier}}</h2>
 
+  {# Warnings #}
+  {# Cancel Sunset #}
+  {% if time.sunset.live.unix and not time.sunset.unix %}
+  {{ alert('approve', 'warning', 'Approving this revision will remove the current sunset')}}
+  {% endif %}
+
+  {# Change Sunset #}
+  {% if time.sunset.unix != time.sunset.live.unix and time.sunset.live.unix != 0 and time.sunset.unix != 0 %}
+  {{ alert('approve', 'warning', 'Approving this revision will change the current sunset from ' + time.sunset.live.human.date + ' ' + time.sunset.live.human.time + ' - ' + time.sunset.live.human.zone + ' to ' + time.sunset.human.date + ' ' + time.sunset.human.time + ' - ' + time.sunset.human.zone)}}
+  {% endif %}
+
+  {#  Immediate Sunset #}
+  {% if time.sunset.unix <= time.now and time.sunset.unix != 0 %}
+  {{ alert('approve', 'warning', 'Approving this revision will immediately sunset this content')}}
+  {% endif %}
+
+  {# Sunrise That Which Will Be Sunset #}
+  {% if (time.sunset.live.unix and time.sunrise.unix > time.sunset.live.unix) or (time.sunset.unix and time.sunrise.unix > time.sunset.unix) %}
+  {{ alert('approve', 'warning', 'Approving this revision will sunrise this content after it is scheduled to sunset')}}
+  {% endif %}
+
+  {# Immediate Sunset #}
+  {% if time.sunrise.unix <= time %}
+  {{ alert('approve', 'warning', 'Approving this revision will immediately sunrise it')}}
+  {% endif %}
+
+  {# Sunrise Override #}
+  {% if scheduled.length > 0 %}
+  {% set rvs = '' %}
+  {% if scheduled.length == 1 %}
+    {% set rvs = 'revision ' %}
+  {% else %}
+    {% set rvs = 'revisions ' %}
+  {% endif %}
+  {% for item in scheduled %}
+    {% if not loop.first %}
+      {% set rvs = rvs + ', ' %}
+    {% endif %}
+    {% set rvs = rvs + item.revision %}
+  {% endfor %}
+
+  {{ alert('approve', 'warning', 'Approving this revision will override scheduled ' + rvs)}}
+  {% endif %}
+
+  {# Attribtues #}
   {% if data %}
     <div class="listing">
     {% for attr, inputs in data %}
@@ -44,6 +90,24 @@
         {% endfor %}
       {% endif %}
     {% endfor %}
+
+    {# Sunrise/Sunset #}
+    <hr class="base--hr">
+
+    <h3 class="listing--h3">Sunrise/Sunset</h3>
+    {% if time.sunrise.human %}
+      <dl class="listing--dl">
+        <dt class="listing--dt">Sunrise</dt>
+        <dd class="listing--dd">{{time.sunrise.human.date}} {{time.sunrise.human.time}} - {{time.sunrise.human.zone}}</dd>
+      </dl>
+    {% endif %}
+    {% if time.sunset.human %}
+      <dl class="listing--dl">
+        <dt class="listing--dt">Sunset</dt>
+        <dd class="listing--dd">{{time.sunset.human.date}} {{time.sunset.human.time}} - {{time.sunset.human.zone}}</dd>
+      </dl>
+    {% endif %}
+
     </div>
   {% endif %}
 
