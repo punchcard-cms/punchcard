@@ -1,0 +1,3 @@
+{% macro alert(for, type, value) %}
+<p class="alert--{{type | upper}}" role="alert" for="{{for}}">{{value}}</p>
+{% endmacro %}
