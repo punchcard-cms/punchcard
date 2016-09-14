@@ -37,6 +37,7 @@ attributes:
     id: service-checkbox
     name: Service Checkbox
     required: save
+    repeatable: true
     inputs:
       checkbox:
         options:
@@ -49,4 +50,4 @@ attributes:
   - type: quote
     id: service-quote
     name: Service Quote
-          
+
