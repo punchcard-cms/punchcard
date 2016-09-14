@@ -57,7 +57,7 @@
     "ibm-design-colors": "^1.6.0",
     "input-plugin-checkbox": "^0.3.1",
     "input-plugin-email": "^0.2.0",
-    "input-plugin-password": "0.1.0",
+    "input-plugin-password": "0.1.2",
     "input-plugin-quote": "0.0.1",
     "input-plugin-radio": "0.0.1",
     "input-plugin-select": "^0.3.0",
