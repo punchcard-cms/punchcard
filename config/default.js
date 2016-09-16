@@ -9,6 +9,13 @@ env.host = env.url.replace(`:${env.port}`, '');
 
 
 module.exports = {
+  applications: {
+    base: 'applications',
+    actions: {
+      new: 'new',
+      save: 'save',
+    },
+  },
   content: {
     base: 'content',
     home: {
