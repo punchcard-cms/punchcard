@@ -43,6 +43,7 @@ mindless:
     - technical debt
     - experience debt
     - tests
+    - greenkeeper
 feedback:
   description: Issues that require further conversation to figure out how to proceed or what action steps are needed.
   color: '#db2780'
