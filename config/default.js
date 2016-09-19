@@ -12,7 +12,7 @@ module.exports = {
   applications: {
     base: 'applications',
     actions: {
-      new: 'new',
+      add: 'add',
       save: 'save',
     },
   },

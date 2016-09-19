@@ -92,7 +92,17 @@ const generate = total => {
   };
 };
 
+/*
+ * Basic validation function
+ *
+ * @returns true
+ */
+const validation = function validation () {
+  return true;
+};
+
 
 module.exports = {
   generate,
+  validation,
 };
