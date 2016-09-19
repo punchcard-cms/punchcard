@@ -1,2 +1,55 @@
-All webhooks
-{{webhooks}}
+{% extends "_donut.html" %}
+
+{% block pageHead %}
+  {{ super() }}
+{% endblock %}
+
+{% block header %}
+  {{ super() }}
+{% endblock %}
+
+{% block main %}
+
+      'live-endpoint': req.body['live-endpoint--text'],
+      'updated-endpoint': req.body['updated-endpoint--text'],
+      'sunset-endpoint': req.body['sunset-endpoint--text'],
+      'client-id': req.body['client-id--text'],
+      'client-secret': req.body['client-secret--text'],
+  <div class="introduction">
+    <h1 class="introduction--h1">{{structure.name}}</h1>
+    <p class="introduction--p">{{structure.description}}</p>
+  </div>
+  {{applications | dump}}
+
+  {% if applications %}
+  <table class="base--table">
+    <thead class="base--thead">
+      <tr class="base--tr">
+        <th class="base--th">Application</th>
+        <th class="base--th">Created</th>
+        <th class="base--th">Live</th>
+        <th class="base--th">Updated</th>
+        <th class="base--th">Sunset</th>
+        <th class="base--th" colspan="3">Edit</th>
+      </tr>
+    </thead>
+    <tbody class="base--tbody">
+    {% for c in applications %}
+      <tr class="base--tr">
+        <td data-th="Application" class="base--td">{{c.name}}</td>
+        <td data-th="Created" class="base--td">{{c.created}}</td>
+        <td data-th="Live" class="base--td">{{c['live-endpoint']}}</td>
+        <td data-th="Updated" class="base--td">{{c['updated-endpoint']}}</td>
+        <td data-th="Sunset" class="base--td">{{c['sunset-endpoint']}}</td>
+        <td data-th="Edit" class="base--td"><a href="/{{config.base}}/{{c.id}}" class="base--link">{{config.actions.edit|capitalize}}</a></td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  {% endif %}
+
+{% endblock %}
+
+{% block footer %}
+  {{ super() }}
+{% endblock %}

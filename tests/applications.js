@@ -74,19 +74,19 @@ test('Workflow model from config', t => {
 //////////////////////////////
 // Routes - Applications landing
 //////////////////////////////
-test.cb.skip('All applications route', t => {
+test.cb('All applications route', t => {
   const request = httpMocks.createRequest(reqObj);
 
   const response = httpMocks.createResponse({ eventEmitter: EventEmitter });
   applications.routes.all(request, response);
+  response.render();
 
-  // response.on('end', () => {
-  //   const data = response._getRenderData();
+  response.on('end', () => {
+    const data = response._getRenderData();
 
-  //   t.is(response.statusCode, 200, 'Should be a 200 response');
-  //   t.end();
-  // });
-  // response.render();
+    t.is(response.statusCode, 200, 'Should be a 200 response');
+    t.end();
+  });
 });
 
 //////////////////////////////
