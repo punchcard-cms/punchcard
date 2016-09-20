@@ -38,6 +38,7 @@ test('Applications structure object', t => {
 //////////////////////////////
 test('Applications model', t => {
   return applications.model().then(model => {
+    console.log(JSON.stringify(model, null, 2));
     t.true(model[0].hasOwnProperty('name'), 'Should have a workflow attribute');
     t.is(model[0].name, 'Applications', 'Structure has name');
   });
