@@ -4,7 +4,7 @@ import httpMocks from 'node-mocks-http';
 import _ from 'lodash';
 
 import applications from '../lib/applications';
-import merged from './fixtures/applications/model-merged.js';
+import merged from './fixtures/applications/objects/model-merged.js';
 
 const EventEmitter = events.EventEmitter;
 
@@ -29,13 +29,13 @@ const reqObj = {
 
 
 test('Applications functions', t => {
+  t.is(typeof applications.model, 'function', '`model` exists and is a function');
+  t.is(typeof applications.model.structure, 'object', '`structure` exists and is an object');
   t.is(typeof applications.routes, 'object', '`routes` exists and is an object');
   t.is(typeof applications.routes.all, 'function', '`all` exists and is a function');
   t.is(typeof applications.routes.add, 'function', '`new` exists and is a function');
   t.is(typeof applications.routes.one, 'function', '`one` exists and is a function');
   t.is(typeof applications.routes.save, 'function', '`save` exists and is a function');
-  t.is(typeof applications.model, 'function', '`model` exists and is a function');
-  t.is(typeof applications.model.structure, 'object', '`structure` exists and is an object');
 });
 
 //////////////////////////////
@@ -49,6 +49,7 @@ test('Applications structure object', t => {
   t.is(structure.description, 'Contains webhook applications', 'Structure has description');
   t.is(structure.id, 'applications', 'Structure has id');
   t.true(Array.isArray(structure.attributes), 'attributes is an array');
+  t.is(reqObj.applications.merged, merged, 'merged model is part of request object fixture');
 });
 
 //////////////////////////////
