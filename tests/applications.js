@@ -4,7 +4,6 @@ import _ from 'lodash';
 import applications from '../lib/applications';
 import merged from './fixtures/applications/objects/model-merged.js';
 
-
 const reqObj = {
   method: 'GET',
   url: '/application',
