@@ -10,9 +10,9 @@ const EventEmitter = events.EventEmitter;
 
 const body = {
   'name--text': 'Foo',
-  'live-endpoint--text': 'http://foo.com/live',
-  'updated-endpoint--text': 'http://foo.com/updated',
-  'sunset-endpoint--text': 'http://foo.com/sunset',
+  'live-endpoint--url': 'http://foo.com/live',
+  'updated-endpoint--url': 'http://foo.com/updated',
+  'sunset-endpoint--url': 'http://foo.com/sunset',
   'submit': 'save',
 };
 
@@ -105,7 +105,7 @@ test.cb('New application route', t => {
     const data = response._getRenderData();
 
     t.is(response.statusCode, 200, 'Should be a 200 response');
-    t.true(_.includes(data.form.html, 'name="sunset-endpoint--text"'), 'includes form with inputs');
+    t.true(_.includes(data.form.html, 'name="sunset-endpoint--url"'), 'includes form with inputs');
     t.end();
   });
 });
@@ -127,7 +127,7 @@ test.cb.skip('Single application route', t => {
     const data = response._getRenderData();
 
     t.is(response.statusCode, 200, 'Should be a 200 response');
-    t.true(_.includes(data.form.html, 'name="sunset-endpoint--text"'), 'includes form with inputs');
+    t.true(_.includes(data.form.html, 'name="sunset-endpoint--url"'), 'includes form with inputs');
     t.end();
   });
 });
