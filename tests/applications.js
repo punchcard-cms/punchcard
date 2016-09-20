@@ -13,8 +13,6 @@ const body = {
   'live-endpoint--text': 'http://foo.com/live',
   'updated-endpoint--text': 'http://foo.com/updated',
   'sunset-endpoint--text': 'http://foo.com/sunset',
-  'client-id--text': 'bar-client',
-  'client-secret--text': 'bar-secret',
   'submit': 'save',
 };
 
