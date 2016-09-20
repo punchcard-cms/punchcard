@@ -1,7 +1,9 @@
 import test from 'ava';
+import config from 'config';
 import _ from 'lodash';
 
 import applications from '../lib/applications';
+import database from '../lib/database';
 import merged from './fixtures/applications/objects/model-merged.js';
 
 const reqObj = {
@@ -13,6 +15,21 @@ const reqObj = {
   session: {},
 };
 
+test.cb.before(t => {
+  const data = {
+    id: 1,
+    name: 'Foo Application',
+  };
+  database.init().then(() => {
+    database(`${config.applications.base}`).del().then(() => {
+      database(`${config.applications.base}`).insert(data).then(() => {
+        t.end();
+      });
+    });
+  }).catch(e => {
+    t.fail(e.message);
+  });
+});
 
 test('Applications functions', t => {
   t.is(typeof applications.model, 'function', '`model` exists and is a function');

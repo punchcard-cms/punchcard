@@ -2,10 +2,10 @@ import test from 'ava';
 import config from 'config';
 import _ from 'lodash';
 
-import db from '../lib/database';
+import database from '../lib/database';
 
 test('Database Initialization', t => {
-  return db.init().then(() => {
+  return database.init().then(() => {
     t.pass();
   }).catch(e => {
     if (_.includes(e.message, `database "${config.knex.connection.database}" does not exist`)) {
