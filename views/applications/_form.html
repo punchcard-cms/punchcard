@@ -4,7 +4,10 @@
   </div>
 
   <div class="form--actions">
-    <input type="submit" name="submit" value="{{config.actions.save}}" class="form--submit">
+    <input type="submit" name="submit" value="{{button}}" class="form--submit">
+    {% if delete %}
+      <input type="submit" name="submit" value="{{config.actions.delete}}" class="form--submit">
+    {% endif %}
     <a href="../" class="form--cancel">Cancel</a>
   </div>
 </form>

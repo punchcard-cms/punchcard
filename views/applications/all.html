@@ -19,7 +19,6 @@
     <h1 class="introduction--h1">{{structure.name}}</h1>
     <p class="introduction--p">{{structure.description}}</p>
   </div>
-  {{applications | dump}}
 
   {% if applications %}
   <table class="base--table">
@@ -30,7 +29,7 @@
         <th class="base--th">Live</th>
         <th class="base--th">Updated</th>
         <th class="base--th">Sunset</th>
-        <th class="base--th" colspan="3">Edit</th>
+        <th class="base--th">Edit</th>
       </tr>
     </thead>
     <tbody class="base--tbody">

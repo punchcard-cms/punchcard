@@ -13,8 +13,15 @@ module.exports = {
     base: 'applications',
     actions: {
       add: 'add',
+      delete: 'delete',
       edit: 'edit',
       save: 'save',
+      update: 'update',
+    },
+    messages: {
+      missing: {
+        id: 'An application with the id \'%id\' was not found',
+      },
     },
   },
   content: {
