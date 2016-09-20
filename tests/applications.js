@@ -30,6 +30,7 @@ test('Applications structure object', t => {
   t.is(structure.description, 'Contains webhook applications', 'Structure has description');
   t.is(structure.id, 'applications', 'Structure has id');
   t.true(Array.isArray(structure.attributes), 'attributes is an array');
+  t.is(reqObj.applications.merged, merged, 'merged model is part of request object fixture');
 });
 
 //////////////////////////////

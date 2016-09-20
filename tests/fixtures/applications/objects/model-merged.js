@@ -1,5 +1,3 @@
-'use strict';
-
 const validation = require('../../_utils').validation;
 
 /**
@@ -164,7 +162,7 @@ module.exports = {
           },
           id: '55fc6ff0-b9d3-43a4-ad87-8c86647974fc',
           name: 'client-secret--text',
-        }
+        },
       },
       html: '<label for="{{text.id}}">{{text.label}}</label><input type="{{text.type}}" id="{{text.id}}" name="{{text.name}}" value="{{text.value}}" placeholder="{{text.placeholder}}" />',
       id: 'client-secret',

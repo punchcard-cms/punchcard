@@ -97,7 +97,7 @@ const generate = total => {
  *
  * @returns true
  */
-const validation = function validation () {
+const validation = function validation() {
   return true;
 };
 
