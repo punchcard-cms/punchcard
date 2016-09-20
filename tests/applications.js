@@ -122,15 +122,15 @@ test.cb.skip('Single application route', t => {
 
   const response = httpMocks.createResponse({ eventEmitter: EventEmitter });
   applications.routes.one(request, response);
+  response.render();
 
-  // response.on('end', () => {
-  //   const data = response._getRenderData();
+  response.on('end', () => {
+    const data = response._getRenderData();
 
-  //   t.is(response.statusCode, 200, 'Should be a 200 response');
-  //   t.is(data.webhooks, 'view Webhook');
-  //   t.end();
-  // });
-  // response.render();
+    t.is(response.statusCode, 200, 'Should be a 200 response');
+    t.true(_.includes(data.form.html, 'name="sunset-endpoint--text"'), 'includes form with inputs');
+    t.end();
+  });
 });
 
 //////////////////////////////
