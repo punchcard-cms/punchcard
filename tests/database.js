@@ -12,7 +12,7 @@ test('Database Initialization', t => {
       // warning added for safety
       console.log('--------------------------------------------------------------------------'); // eslint-disable-line no-console
       console.log(`WARNING: you MUST create the ${config.knex.connection.database} database. See Punchcard README for details.`); // eslint-disable-line no-console
-      console.log(`OMG THE WORLD IS BURNING!!!`);
+      console.log(`OMG THE WORLD IS BURNING!!!`); // eslint-disable-line no-console
       console.log('--------------------------------------------------------------------------'); // eslint-disable-line no-console
     }
     t.fail(e.message);
