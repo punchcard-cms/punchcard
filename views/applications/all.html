@@ -12,7 +12,7 @@
   <div class="introduction">
     <h1 class="introduction--h1">{{structure.name}}</h1>
     <p class="introduction--p">{{structure.description}}</p>
-    <a href="/${config.base}/${config.actions.add}" class="introduction--button">{{config.actions.add|capitalize}} {{config.base}}</a>
+    <a href="/{{config.base}}/{{config.actions.add}}" class="introduction--button">{{config.actions.add|capitalize}} {{config.base}}</a>
   </div>
 
   {% if applications %}
@@ -20,7 +20,6 @@
     <thead class="base--thead">
       <tr class="base--tr">
         <th class="base--th">Application</th>
-        <th class="base--th">Created</th>
         <th class="base--th">Live</th>
         <th class="base--th">Updated</th>
         <th class="base--th">Sunset</th>
@@ -31,7 +30,6 @@
     {% for a in applications %}
       <tr class="base--tr">
         <td data-th="Application" class="base--td">{{a.name}}</td>
-        <td data-th="Created" class="base--td">{{a.created}}</td>
         <td data-th="Live" class="base--td">{{a['live-endpoint']}}</td>
         <td data-th="Updated" class="base--td">{{a['updated-endpoint']}}</td>
         <td data-th="Sunset" class="base--td">{{a['sunset-endpoint']}}</td>
