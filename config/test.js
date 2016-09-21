@@ -15,6 +15,17 @@ if (process.env.CI === 'true') {
     debug: false,
   };
 }
+else {
+  knex = {
+    dialect: 'pg',
+    connection: {
+      host: 'localhost',
+      user: 'punchcard',
+      database: 'punchcard_test',
+    },
+    debug: false,
+  };
+}
 
 module.exports = {
   content: {
