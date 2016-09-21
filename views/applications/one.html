@@ -13,14 +13,9 @@
     <h1 class="introduction--h1">{{config.actions.edit|capitalize}}</h1>
     <p class="introduction--p">{{structure.description}}</p>
   </div>
-  {% include "applications/_form.html" %}
+  {% include "_form.html" %}
 {% endblock %}
 
 {% block footer %}
   {{ super() }}
-
-  <script>
-    {{form.validation | safe}}
-    {{form.scripts | safe}}
-  </script>
 {% endblock %}
