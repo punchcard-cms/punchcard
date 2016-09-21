@@ -31,7 +31,8 @@ module.exports = {
       options: [],
       settings: {
         empty: false,
-        view: 'select',    
+        view: 'select',
+        placeholder: '-- Choose One --',
       },
     },
   },
