@@ -28,14 +28,14 @@
       </tr>
     </thead>
     <tbody class="base--tbody">
-    {% for c in applications %}
+    {% for a in applications %}
       <tr class="base--tr">
-        <td data-th="Application" class="base--td">{{c.name}}</td>
-        <td data-th="Created" class="base--td">{{c.created}}</td>
-        <td data-th="Live" class="base--td">{{c['live-endpoint']}}</td>
-        <td data-th="Updated" class="base--td">{{c['updated-endpoint']}}</td>
-        <td data-th="Sunset" class="base--td">{{c['sunset-endpoint']}}</td>
-        <td data-th="Edit" class="base--td"><a href="/{{config.base}}/{{c.id}}" class="base--link">{{config.actions.edit|capitalize}}</a></td>
+        <td data-th="Application" class="base--td">{{a.name}}</td>
+        <td data-th="Created" class="base--td">{{a.created}}</td>
+        <td data-th="Live" class="base--td">{{a['live-endpoint']}}</td>
+        <td data-th="Updated" class="base--td">{{a['updated-endpoint']}}</td>
+        <td data-th="Sunset" class="base--td">{{a['sunset-endpoint']}}</td>
+        <td data-th="Edit" class="base--td"><a href="/{{config.base}}/{{a.id}}" class="base--link">{{config.actions.edit|capitalize}}</a></td>
       </tr>
     {% endfor %}
     </tbody>
