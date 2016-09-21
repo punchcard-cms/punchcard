@@ -22,7 +22,15 @@ const reqObj = {
   applications: {
     merged,
   },
-  session: {},
+  params: {},
+  session: {
+    form: {
+      applications: {
+        save: {},
+        edit: {},
+      },
+    },
+  },
 };
 
 
@@ -113,9 +121,10 @@ test.cb('New application route', t => {
 //////////////////////////////
 // Routes - Single application
 //////////////////////////////
-test.cb.skip('Single application route', t => {
+test.cb('Single application route', t => {
   const req = _.cloneDeep(reqObj);
-  req.url = '/applications/1234';
+  req.url = '/applications/1';
+  req.params.id = 1;
 
   const request = httpMocks.createRequest(req);
 
@@ -135,7 +144,7 @@ test.cb.skip('Single application route', t => {
 //////////////////////////////
 // Routes - Save application
 //////////////////////////////
-test.cb('Save app: name required', t => {
+test.cb('Save new app: name required', t => {
   const req = _.cloneDeep(reqObj);
   req.method = 'POST';
   req.session.referrer = '/applications/add';
@@ -156,11 +165,55 @@ test.cb('Save app: name required', t => {
   response.render();
 });
 
-test.cb('Save application route', t => {
+test.cb('Save existing app: name required', t => {
   const req = _.cloneDeep(reqObj);
   req.method = 'POST';
+  req.session.referrer = '/applications/123';
+  req.url = '/applications/save';
+  req.body = _.cloneDeep(body);
+  req.body['name--text'] = '';
+
+  const request = httpMocks.createRequest(req);
+
+  const response = httpMocks.createResponse({ eventEmitter: EventEmitter });
+  applications.routes.save(request, response);
+
+  response.on('end', () => {
+    t.is(response.statusCode, 302, 'Should be a 302 response');
+    t.is(response._getRedirectUrl(), '/applications/123');
+    t.end();
+  });
+  response.render();
+});
+
+test.cb('Save new application', t => {
+  const req = _.cloneDeep(reqObj);
+  req.method = 'POST';
+  req.session.referrer = '/applications/add';
   req.url = '/applications/save';
   req.body = body;
+
+  const request = httpMocks.createRequest(req);
+
+  const response = httpMocks.createResponse({ eventEmitter: EventEmitter });
+  applications.routes.save(request, response);
+  response.render();
+
+  response.on('end', () => {
+    t.is(response.statusCode, 302, 'Should be a 302 response');
+    t.is(response._getRedirectUrl(), '/applications');
+    t.end();
+  });
+});
+
+test.cb('Update existing application', t => {
+  const req = _.cloneDeep(reqObj);
+  req.method = 'POST';
+  req.session.referrer = '/applications/1';
+  req.session.form.applications.edit.id = 1;
+  req.url = '/applications/save';
+  req.body = _.cloneDeep(body);
+  req.body.submit = 'update';
 
   const request = httpMocks.createRequest(req);
 
