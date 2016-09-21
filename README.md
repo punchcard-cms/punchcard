@@ -34,36 +34,22 @@ $ npm run dev
 
 ## Setting up PostgreSQL locally
 
-1. Make sure you have homebrew installed
-
-  `/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"`
+1. Make sure you have homebrew installed: `/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"`
 
 2. `brew update`
 3. `brew install postgres`
-4. start the postgres server
-
-  `postgres -D /usr/local/var/postgres`
+4. start the postgres server: `postgres -D /usr/local/var/postgres`
 
 5. open new terminal tab
-6. create a postgres user (it'll prompt for a password) use `W@ts0n`
+6. create a postgres user (it'll prompt for a password use `W@ts0n`): `createuser punchcard -P`
 
-  `createuser punchcard -P`
+7. Create local CMS database: `createdb -O punchcard punchcard`
 
-7. Create local CMS database
+8. Create local test database: `createdb -O punchcard punchcard_test`
 
-  `createdb -O punchcard punchcard`
+9. reconnect to psql as new user: `psql -d punchcard -U punchcard`
 
-8. Create local test database
-
-  `createdb -O punchcard punchcard_test`
-
-9. reconnect to psql as new user
-
-  `psql -d punchcard -U punchcard`
-
-10. connect to db
-
-  `\connect punchcard`
+10. connect to db: `\connect punchcard`
 
 Once you are connected you should be able to use psql cli syntax to check tables.
 * `\d+` checks table relations
