@@ -14,6 +14,87 @@
     <p class="introduction--p">{{structure.description}}</p>
   </div>
   {% include "_basic-form.html" %}
+
+  {% if app['client-id'] %}
+    <dl class="base--dl">
+      <dt class="base--dt">Client ID</dt>
+      <dd class="base--dd">app['client-id']</dd>
+      <dd class="base--dd"><a href="#TBD">Create new Client ID</a></dd>
+    </dl>
+  {% endif %}
+
+  {% if app['client-secret'] %}
+    <dl class="base--dl">
+      <dt class="base--dt">Client Secret</dt>
+      <dd class="base--dd">app['client-secret']</dd>
+      <dd class="base--dd"><a href="#TBD">Create new Client Secret</a></dd>
+    </dl>
+  {% endif %}
+
+  {% if app.endpoints %}
+    <h2>Endpoints</h2>
+
+    {% if app.endpoints.live %}
+      <h3 id="live">Live</h3>
+      <table class="base--table">
+        <thead class="base--thead">
+          <tr class="base--tr">
+            <th class="base--th">Success</th>
+            <th class="base--th">Timestamp</th>
+          </tr>
+        </thead>
+        <tbody class="base--tbody">
+        {% for entry in app.endpoints.live %}
+          <tr class="base--tr">
+            <td data-th="Success" class="base--td">{{entry.response}}</td>
+            <td data-th="Timestamp" class="base--td">{{entry.timestamp}}</td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    {% endif %}
+
+    {% if app.endpoints.updated %}
+      <h3 id="updated">Updated</h3>
+      <table class="base--table">
+        <thead class="base--thead">
+          <tr class="base--tr">
+            <th class="base--th">Success</th>
+            <th class="base--th">Timestamp</th>
+          </tr>
+        </thead>
+        <tbody class="base--tbody">
+        {% for entry in app.endpoints.updated %}
+          <tr class="base--tr">
+            <td data-th="Success" class="base--td">{{entry.response}}</td>
+            <td data-th="Timestamp" class="base--td">{{entry.timestamp}}</td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    {% endif %}
+
+    {% if app.endpoints.sunset %}
+      <h3 id="sunset">Sunset</h3>
+      <table class="base--table">
+        <thead class="base--thead">
+          <tr class="base--tr">
+            <th class="base--th">Success</th>
+            <th class="base--th">Timestamp</th>
+          </tr>
+        </thead>
+        <tbody class="base--tbody">
+        {% for entry in app.endpoints.sunset %}
+          <tr class="base--tr">
+            <td data-th="Success" class="base--td">{{entry.response}}</td>
+            <td data-th="Timestamp" class="base--td">{{entry.timestamp}}</td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    {% endif %}
+  {% endif %}
+
 {% endblock %}
 
 {% block footer %}
