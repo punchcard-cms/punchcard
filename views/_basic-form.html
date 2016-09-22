@@ -1,0 +1,18 @@
+<form action="{{action}}" method="post" enctype="multipart/form-data" class="form" novalidate>
+  <div class="form--field-container">
+    {{form.html | safe}}
+  </div>
+
+  <div class="form--actions">
+    <input type="submit" name="submit" value="{{button}}" class="form--submit">
+    {% if delete %}
+      <input type="submit" name="submit" value="{{config.actions.delete}}" class="form--submit">
+    {% endif %}
+    <a href="../" class="form--cancel">Cancel</a>
+  </div>
+</form>
+
+<script>
+  {{form.validation | safe}}
+  {{form.scripts | safe}}
+</script>
