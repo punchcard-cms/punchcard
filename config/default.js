@@ -16,6 +16,7 @@ module.exports = {
       delete: 'delete',
       edit: 'edit',
       save: 'save',
+      secret: 'secret',
       update: 'update',
     },
     messages: {

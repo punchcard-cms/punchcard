@@ -3,6 +3,7 @@ import events from 'events';
 import httpMocks from 'node-mocks-http';
 import config from 'config';
 import _ from 'lodash';
+import uuid from 'uuid';
 
 import applications from '../lib/applications';
 import database from '../lib/database';
@@ -26,6 +27,8 @@ const body = {
   'live-endpoint--url': 'http://bar.com/live',
   'updated-endpoint--url': 'http://bar.com/updated',
   'sunset-endpoint--url': 'http://bar.com/sunset',
+  'client-id': uuid.v4(),
+  'client-secret': uuid.v4(),
   'submit': 'save',
 };
 
@@ -53,6 +56,8 @@ const inserts = [
     'live-endpoint': 'http:/foo.com/live',
     'updated-endpoint': 'http:/foo.com/updated',
     'sunset-endpoint': 'http:/foo.com/sunset',
+    'client-id': uuid.v4(),
+    'client-secret': uuid.v4(),
   },
   {
     'id': 2,
@@ -60,6 +65,8 @@ const inserts = [
     'live-endpoint': 'http:/baz.com/live',
     'updated-endpoint': 'http:/baz.com/updated',
     'sunset-endpoint': 'http:/baz.com/sunset',
+    'client-id': uuid.v4(),
+    'client-secret': uuid.v4(),
   },
   {
     'id': 3,
@@ -67,6 +74,8 @@ const inserts = [
     'live-endpoint': 'http:/bar.com/live',
     'updated-endpoint': 'http:/bar.com/updated',
     'sunset-endpoint': 'http:/bar.com/sunset',
+    'client-id': uuid.v4(),
+    'client-secret': uuid.v4(),
   },
 ];
 
@@ -89,6 +98,7 @@ test('Applications functions', t => {
   t.is(typeof applications.routes.all, 'function', '`all` exists and is a function');
   t.is(typeof applications.routes.add, 'function', '`new` exists and is a function');
   t.is(typeof applications.routes.one, 'function', '`one` exists and is a function');
+  t.is(typeof applications.routes.secret, 'function', '`secret` exists and is a function');
   t.is(typeof applications.routes.save, 'function', '`save` exists and is a function');
 });
 
@@ -260,6 +270,76 @@ test.cb('Single application route - error on save', t => {
     t.true(_.includes(data.form.html, 'class="required--save">Field is required to be saved!'), 'includes form with name value');
 
     t.end();
+  });
+});
+
+//////////////////////////////
+// Routes - Secret
+//////////////////////////////
+test.cb('Create new secret', t => {
+  const req = _.cloneDeep(reqObj);
+  req.method = 'POST';
+  req.session.referrer = '/applications/1';
+  req.session.form.applications.edit.id = 1;
+
+  const request = httpMocks.createRequest(req);
+
+  const response = httpMocks.createResponse({ eventEmitter: EventEmitter });
+  const resp = applications.routes.secret(request, response, next);
+  response.render();
+
+  response.on('end', () => {
+    t.is(response.statusCode, 302, 'Should be a 302 response');
+    t.is(response._getRedirectUrl(), '/applications/1');
+
+    return resp.then(res => {
+      t.not(res, inserts[0]['client-secret'], 'should be a new client secret');
+      t.end();
+    });
+  });
+});
+
+test.cb('Create new secret - bad id kills db', t => {
+  const req = _.cloneDeep(reqObj);
+  req.method = 'POST';
+  req.session.referrer = '/applications/break';
+  req.session.form.applications.edit.id = 'break';
+
+  const request = httpMocks.createRequest(req);
+
+  const response = httpMocks.createResponse({ eventEmitter: EventEmitter });
+  const resp = applications.routes.secret(request, response, next);
+
+  response.on('end', () => {
+    t.is(response.statusCode, 200, 'Should be a 200 response');
+
+    return resp.then(res => {
+      t.true(_.includes(res.message, 'update "applications" set "client-secret"'), 'postgres error');
+      t.end();
+    });
+  });
+  response.render();
+});
+
+test.cb('Create new secret - bad referrer', t => {
+  const req = _.cloneDeep(reqObj);
+  req.method = 'POST';
+  req.session.referrer = '/applications/add';
+  req.session.form.applications.edit.id = 1;
+
+  const request = httpMocks.createRequest(req);
+
+  const response = httpMocks.createResponse({ eventEmitter: EventEmitter });
+  const resp = applications.routes.secret(request, response, next);
+  response.render();
+
+  response.on('end', () => {
+    t.is(response.statusCode, 302, 'Should be a 302 response');
+
+    return resp.then(res => {
+      t.is(res.message, 'Secret can only be changed from the application edit screen', 'should error when bad referrer');
+      t.end();
+    });
   });
 });
 
