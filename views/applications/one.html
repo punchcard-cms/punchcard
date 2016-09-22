@@ -15,19 +15,17 @@
   </div>
   {% include "_basic-form.html" %}
 
-  {% if app['client-id'] %}
+  {% if app.client.id %}
     <dl class="base--dl">
       <dt class="base--dt">Client ID</dt>
-      <dd class="base--dd">app['client-id']</dd>
-      <dd class="base--dd"><a href="#TBD">Create new Client ID</a></dd>
+      <dd class="base--dd">{{app.client.id}}</dd>
     </dl>
   {% endif %}
 
-  {% if app['client-secret'] %}
+  {% if app.client.secret %}
     <dl class="base--dl">
       <dt class="base--dt">Client Secret</dt>
-      <dd class="base--dd">app['client-secret']</dd>
-      <dd class="base--dd"><a href="#TBD">Create new Client Secret</a></dd>
+      <dd class="base--dd">{{app.client.secret}} (<a href="#TBD">Create new Client Secret</a>)</dd>
     </dl>
   {% endif %}
 
