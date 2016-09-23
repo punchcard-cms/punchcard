@@ -16,7 +16,13 @@ module.exports = {
       delete: 'delete',
       edit: 'edit',
       save: 'save',
+      secret: 'secret',
       update: 'update',
+    },
+    messages: {
+      missing: {
+        id: 'An application with the id \'%id\' was not found',
+      },
     },
   },
   content: {
