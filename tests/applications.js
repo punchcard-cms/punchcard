@@ -4,6 +4,7 @@ import httpMocks from 'node-mocks-http';
 import config from 'config';
 import _ from 'lodash';
 import uuid from 'uuid';
+import moment from 'moment';
 
 import applications from '../lib/applications';
 import database from '../lib/database';
@@ -22,6 +23,8 @@ const next = (value) => {
   return value;
 };
 
+const date = moment().format('YYYY-MM-DD hh:mm');
+
 const body = {
   'name--text': 'Bar',
   'live-endpoint--url': 'http://bar.com/live',
@@ -32,12 +35,46 @@ const body = {
   'submit': 'save',
 };
 
+const responses = {
+  endpoints: [
+    {
+      live: {
+        response: 200,
+        timestamp: date,
+      },
+      updated: {
+        response: 200,
+        timestamp: date,
+      },
+      sunset: {
+        response: 200,
+        timestamp: date,
+      },
+    },
+    {
+      live: {
+        response: 500,
+        timestamp: date,
+      },
+      updated: {
+        response: 500,
+        timestamp: date,
+      },
+      sunset: {
+        response: 500,
+        timestamp: date,
+      },
+    },
+  ],
+};
+
 const reqObj = {
   method: 'GET',
   url: '/application',
   applications: {
     merged,
   },
+  headers: {},
   params: {},
   session: {
     form: {
@@ -58,6 +95,7 @@ const inserts = [
     'sunset-endpoint': 'http:/foo.com/sunset',
     'client-id': uuid.v4(),
     'client-secret': uuid.v4(),
+    responses,
   },
   {
     'id': 2,
@@ -67,6 +105,7 @@ const inserts = [
     'sunset-endpoint': 'http:/baz.com/sunset',
     'client-id': uuid.v4(),
     'client-secret': uuid.v4(),
+    responses,
   },
   {
     'id': 3,
@@ -137,6 +176,31 @@ test('Workflow model from config', t => {
 });
 
 //////////////////////////////
+// Utils - endpoints
+//////////////////////////////
+test('Endpoints utility', t => {
+  const row = applications.utils.endpoints(inserts[0]);
+
+  t.is(typeof row.endpoints, 'object', 'endpoints should be an object');
+
+  t.true(Array.isArray(row.endpoints.live), 'live should be an array');
+  t.is(row.endpoints.live[0].response, 200, 'includes live response');
+  t.true(_.isDate(new Date(row.endpoints.live[0].timestamp)), 'includes live timestamp which is a date');
+
+  t.true(Array.isArray(row.endpoints.updated), 'updated should be an array');
+  t.is(row.endpoints.updated[0].response, 200, 'includes updated response');
+  t.true(_.isDate(new Date(row.endpoints.updated[0].timestamp)), 'includes updated timestamp which is a date');
+
+  t.true(Array.isArray(row.endpoints.sunset), 'sunset should be an array');
+  t.is(row.endpoints.sunset[0].response, 200, 'includes sunset response');
+  t.true(_.isDate(new Date(row.endpoints.sunset[0].timestamp)), 'includes sunset timestamp which is a date');
+
+  t.is(typeof row.client, 'object', 'Client is added and an object');
+  t.is(row.client.id, inserts[0]['client-id'], 'should add client id to row object');
+  t.is(row.client.secret, inserts[0]['client-secret'], 'should add client secret to row object');
+});
+
+//////////////////////////////
 // Routes - Applications landing
 //////////////////////////////
 test.cb('All applications route', t => {
@@ -151,7 +215,13 @@ test.cb('All applications route', t => {
 
     t.is(response.statusCode, 200, 'Should be a 200 response');
     t.is(data.applications[0].name, 'Foo First Application', 'includes form with inputs');
-    t.is(data.applications[1].name, 'Baz Second Application', 'includes form with inputs');
+
+    t.is(data.applications[0].endpoints.live[0].response, 200, 'includes live response');
+    t.true(_.isDate(new Date(data.applications[0].endpoints.live[0].timestamp)), 'includes live timestamp which is a date');
+    t.is(data.applications[0].endpoints.updated[0].response, 200, 'includes updated response');
+    t.true(_.isDate(new Date(data.applications[0].endpoints.updated[0].timestamp)), 'includes updated timestamp which is a date');
+    t.is(data.applications[0].endpoints.sunset[0].response, 200, 'includes sunset response');
+    t.true(_.isDate(new Date(data.applications[0].endpoints.sunset[0].timestamp)), 'includes sunset timestamp which is a date');
 
     return resp.then(res => {
       t.is(res, true, 'should return true');
@@ -209,7 +279,7 @@ test.cb('Single application route', t => {
 
     t.true(_.includes(data.action, '/applications/save'), 'includes `save` for form action');
     t.is(data.config.toString(), config.applications.toString(), 'includes config for applications');
-    t.is(data.data.name.text.value, 'Foo First Application', 'includes data from database');
+    t.is(data.app.name, 'Foo First Application', 'includes data from database');
     t.is(data.button, 'update', 'includes `update` as text for button');
 
     return resp.then(res => {
@@ -279,7 +349,7 @@ test.cb('Single application route - error on save', t => {
 test.cb('Create new secret', t => {
   const req = _.cloneDeep(reqObj);
   req.method = 'POST';
-  req.session.referrer = '/applications/1';
+  req.headers.referrer = '/applications/1';
   req.session.form.applications.edit.id = 1;
 
   const request = httpMocks.createRequest(req);
@@ -301,8 +371,8 @@ test.cb('Create new secret', t => {
 
 test.cb('Create new secret - bad id kills db', t => {
   const req = _.cloneDeep(reqObj);
-  req.method = 'POST';
-  req.session.referrer = '/applications/break';
+  req.method = 'GET';
+  req.headers.referrer = '/applications/break';
   req.session.form.applications.edit.id = 'break';
 
   const request = httpMocks.createRequest(req);
@@ -324,7 +394,7 @@ test.cb('Create new secret - bad id kills db', t => {
 test.cb('Create new secret - bad referrer', t => {
   const req = _.cloneDeep(reqObj);
   req.method = 'POST';
-  req.session.referrer = '/applications/add';
+  req.headers.referrer = '/applications/add';
   req.session.form.applications.edit.id = 1;
 
   const request = httpMocks.createRequest(req);

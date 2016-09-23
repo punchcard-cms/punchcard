@@ -13,14 +13,91 @@
     <h1 class="introduction--h1">{{config.actions.edit|capitalize}}</h1>
     <p class="introduction--p">{{structure.description}}</p>
   </div>
-  {% include "applications/_form.html" %}
+
+  {% include "_basic-form.html" %}
+
+  {% if app.client.id %}
+    <dl class="base--dl">
+      <dt class="base--dt">Client ID</dt>
+      <dd class="base--dd">{{app.client.id}}</dd>
+    </dl>
+  {% endif %}
+
+  {% if app.client.secret %}
+    <dl class="base--dl">
+      <dt class="base--dt">Client Secret</dt>
+      <dd class="base--dd">{{app.client.secret}} (<a href="/applications/secret">Create new Client Secret</a>)</dd>
+    </dl>
+  {% endif %}
+
+  {% if app.endpoints %}
+    <h2>Endpoints</h2>
+
+    {% if app.endpoints.live | length %}
+      <h3>Live</h3>
+      <a name="live"></a>
+      <table class="base--table">
+        <thead class="base--thead">
+          <tr class="base--tr">
+            <th class="base--th">Success</th>
+            <th class="base--th">Timestamp</th>
+          </tr>
+        </thead>
+        <tbody class="base--tbody">
+        {% for entry in app.endpoints.live %}
+          <tr class="base--tr">
+            <td data-th="Success" class="base--td">{{entry.response}}</td>
+            <td data-th="Timestamp" class="base--td">{{entry.timestamp}}</td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    {% endif %}
+
+    {% if app.endpoints.updated | length %}
+      <h3>Updated</h3>
+      <a name="updated"></a>
+      <table class="base--table">
+        <thead class="base--thead">
+          <tr class="base--tr">
+            <th class="base--th">Success</th>
+            <th class="base--th">Timestamp</th>
+          </tr>
+        </thead>
+        <tbody class="base--tbody">
+        {% for entry in app.endpoints.updated %}
+          <tr class="base--tr">
+            <td data-th="Success" class="base--td">{{entry.response}}</td>
+            <td data-th="Timestamp" class="base--td">{{entry.timestamp}}</td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    {% endif %}
+
+    {% if app.endpoints.sunset | length %}
+      <h3>Sunset</h3>
+      <a name="sunset"></a>
+      <table class="base--table">
+        <thead class="base--thead">
+          <tr class="base--tr">
+            <th class="base--th">Success</th>
+            <th class="base--th">Timestamp</th>
+          </tr>
+        </thead>
+        <tbody class="base--tbody">
+        {% for entry in app.endpoints.sunset %}
+          <tr class="base--tr">
+            <td data-th="Success" class="base--td">{{entry.response}}</td>
+            <td data-th="Timestamp" class="base--td">{{entry.timestamp}}</td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    {% endif %}
+  {% endif %}
 {% endblock %}
 
 {% block footer %}
   {{ super() }}
-
-  <script>
-    {{form.validation | safe}}
-    {{form.scripts | safe}}
-  </script>
 {% endblock %}
