@@ -473,7 +473,6 @@ test.cb('Save new application', t => {
 
   response.on('end', () => {
     t.is(response.statusCode, 302, 'Should be a 302 response');
-    t.is(response._getRedirectUrl(), '/applications');
     t.end();
   });
 });
