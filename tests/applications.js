@@ -9,6 +9,7 @@ import moment from 'moment';
 import applications from '../lib/applications';
 import database from '../lib/database';
 import merged from './fixtures/applications/objects/model-merged.js';
+import dbmocks from './fixtures/applications/objects/database-mocks.js';
 
 const EventEmitter = events.EventEmitter;
 
@@ -23,8 +24,10 @@ const next = (value) => {
   return value;
 };
 
-const date = moment().format('YYYY-MM-DD hh:mm');
-
+/**
+ * Form body response
+ * @type {Object}
+ */
 const body = {
   'name--text': 'Bar',
   'live-endpoint--url': 'http://bar.com/live',
@@ -35,39 +38,10 @@ const body = {
   'submit': 'save',
 };
 
-const responses = {
-  endpoints: [
-    {
-      live: {
-        response: 200,
-        timestamp: date,
-      },
-      updated: {
-        response: 200,
-        timestamp: date,
-      },
-      sunset: {
-        response: 200,
-        timestamp: date,
-      },
-    },
-    {
-      live: {
-        response: 500,
-        timestamp: date,
-      },
-      updated: {
-        response: 500,
-        timestamp: date,
-      },
-      sunset: {
-        response: 500,
-        timestamp: date,
-      },
-    },
-  ],
-};
-
+/**
+ * Express Request Object
+ * @type {Object}
+ */
 const reqObj = {
   method: 'GET',
   url: '/application',
@@ -86,49 +60,10 @@ const reqObj = {
   },
 };
 
-const inserts = [
-  {
-    'id': 1,
-    'name': 'Foo First Application',
-    'live-endpoint': 'http:/foo.com/live',
-    'updated-endpoint': 'http:/foo.com/updated',
-    'sunset-endpoint': 'http:/foo.com/sunset',
-    'client-id': uuid.v4(),
-    'client-secret': uuid.v4(),
-    responses,
-  },
-  {
-    'id': 2,
-    'name': 'Baz Second Application',
-    'live-endpoint': 'http:/baz.com/live',
-    'updated-endpoint': 'http:/baz.com/updated',
-    'sunset-endpoint': 'http:/baz.com/sunset',
-    'client-id': uuid.v4(),
-    'client-secret': uuid.v4(),
-    responses,
-  },
-  {
-    'id': 3,
-    'name': 'Bar Third Application',
-    'live-endpoint': 'http:/bar.com/live',
-    'updated-endpoint': 'http:/bar.com/updated',
-    'sunset-endpoint': 'http:/bar.com/sunset',
-    'client-id': uuid.v4(),
-    'client-secret': uuid.v4(),
-  },
-  {
-    'id': 4,
-    'name': 'I will be deleted',
-    'live-endpoint': 'http:/sad.com/live',
-    'updated-endpoint': 'http:/disposable.com/updated',
-    'sunset-endpoint': 'http:/this-is-the-end-for-ole-number-four.com/sunset',
-  },
-];
-
 test.cb.before(t => {
   database.init().then(() => {
     database(`${config.applications.base}`).del().then(() => {
-      database(`${config.applications.base}`).insert(inserts).then(() => {
+      database(`${config.applications.base}`).insert(dbmocks.rows).then(() => {
         t.end();
       });
     });
@@ -140,7 +75,6 @@ test.cb.before(t => {
 test('Applications functions', t => {
   t.is(typeof applications.model, 'function', '`model` exists and is a function');
   t.is(typeof applications.model.structure, 'object', '`structure` exists and is an object');
-  t.is(typeof applications.utils.endpoints, 'function', '`endpoints` exists and is a function');
   t.is(typeof applications.routes, 'object', '`routes` exists and is an object');
   t.is(typeof applications.routes.all, 'function', '`all` exists and is a function');
   t.is(typeof applications.routes.add, 'function', '`new` exists and is a function');
@@ -173,7 +107,7 @@ test('Applications model', t => {
   });
 });
 
-test('Applications model from config', t => {
+test('Workflow model from config', t => {
   const structure = _.cloneDeep(applications.model.structure);
   structure.name = 'Other';
 
@@ -181,31 +115,6 @@ test('Applications model from config', t => {
     t.true(model[0].hasOwnProperty('name'), 'Should have a workflow attribute');
     t.is(model[0].name, 'Other', 'Structure has name');
   });
-});
-
-//////////////////////////////
-// Utils - endpoints
-//////////////////////////////
-test('Endpoints utility', t => {
-  const row = applications.utils.endpoints(inserts[0]);
-
-  t.is(typeof row.endpoints, 'object', 'endpoints should be an object');
-
-  t.true(Array.isArray(row.endpoints.live), 'live should be an array');
-  t.is(row.endpoints.live[0].response, 200, 'includes live response');
-  t.true(_.isDate(new Date(row.endpoints.live[0].timestamp)), 'includes live timestamp which is a date');
-
-  t.true(Array.isArray(row.endpoints.updated), 'updated should be an array');
-  t.is(row.endpoints.updated[0].response, 200, 'includes updated response');
-  t.true(_.isDate(new Date(row.endpoints.updated[0].timestamp)), 'includes updated timestamp which is a date');
-
-  t.true(Array.isArray(row.endpoints.sunset), 'sunset should be an array');
-  t.is(row.endpoints.sunset[0].response, 200, 'includes sunset response');
-  t.true(_.isDate(new Date(row.endpoints.sunset[0].timestamp)), 'includes sunset timestamp which is a date');
-
-  t.is(typeof row.client, 'object', 'Client is added and an object');
-  t.is(row.client.id, inserts[0]['client-id'], 'should add client id to row object');
-  t.is(row.client.secret, inserts[0]['client-secret'], 'should add client secret to row object');
 });
 
 //////////////////////////////
@@ -227,12 +136,12 @@ test.cb.skip('All applications route', t => {
     t.is(response.statusCode, 200, 'Should be a 200 response');
     t.is(app.name, 'Foo First Application', 'includes form with inputs');
 
-    t.is(_.get(app, 'endpoints.live[0].response', null), 200, 'includes live response');
-    t.true(_.isDate(new Date(_.get(app, 'endpoints.live[0].timestamp', null))), 'includes live timestamp which is a date');
-    t.is(_.get(app, 'endpoints.updated[0].response', null), 200, 'includes updated response');
-    t.true(_.isDate(new Date(_.get(app, 'endpoints.updated[0].timestamp', null))), 'includes updated timestamp which is a date');
-    t.is(_.get(app, 'endpoints.sunset[0].response', null), 200, 'includes sunset response');
-    t.true(_.isDate(new Date(_.get(app, 'endpoints.sunset[0].timestamp', null))), 'includes sunset timestamp which is a date');
+    t.is(_.get(app, 'responses.live[0].response', null), 200, 'includes live response');
+    t.true(_.isDate(new Date(_.get(app, 'responses.live[0].timestamp', null))), 'includes live timestamp which is a date');
+    t.is(_.get(app, 'responses.updated[0].response', null), 200, 'includes updated response');
+    t.true(_.isDate(new Date(_.get(app, 'responses.updated[0].timestamp', null))), 'includes updated timestamp which is a date');
+    t.is(_.get(app, 'responses.sunset[0].response', null), 200, 'includes sunset response');
+    t.true(_.isDate(new Date(_.get(app, 'responses.sunset[0].timestamp', null))), 'includes sunset timestamp which is a date');
 
     return resp.then(res => {
       t.is(res, true, 'should return true');
@@ -374,7 +283,7 @@ test.cb.skip('Create new secret', t => {
     t.is(response._getRedirectUrl(), '/applications/1');
 
     return resp.then(res => {
-      t.not(res, inserts[0]['client-secret'], 'should be a new client secret');
+      t.not(res, dbmocks.rows[0]['client-secret'], 'should be a new client secret');
       t.end();
     });
   });
