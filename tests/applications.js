@@ -116,6 +116,13 @@ const inserts = [
     'client-id': uuid.v4(),
     'client-secret': uuid.v4(),
   },
+  {
+    'id': 4,
+    'name': 'I will be deleted',
+    'live-endpoint': 'http:/sad.com/live',
+    'updated-endpoint': 'http:/disposable.com/updated',
+    'sunset-endpoint': 'http:/this-is-the-end-for-ole-number-four.com/sunset',
+  },
 ];
 
 test.cb.before(t => {
@@ -212,16 +219,19 @@ test.cb('All applications route', t => {
 
   response.on('end', () => {
     const data = response._getRenderData();
+    const app = data.applications.find((ap) => {
+      return ap.name === 'Foo First Application';
+    });
 
     t.is(response.statusCode, 200, 'Should be a 200 response');
-    t.is(data.applications[0].name, 'Foo First Application', 'includes form with inputs');
+    t.is(app.name, 'Foo First Application', 'includes form with inputs');
 
-    t.is(data.applications[0].endpoints.live[0].response, 200, 'includes live response');
-    t.true(_.isDate(new Date(data.applications[0].endpoints.live[0].timestamp)), 'includes live timestamp which is a date');
-    t.is(data.applications[0].endpoints.updated[0].response, 200, 'includes updated response');
-    t.true(_.isDate(new Date(data.applications[0].endpoints.updated[0].timestamp)), 'includes updated timestamp which is a date');
-    t.is(data.applications[0].endpoints.sunset[0].response, 200, 'includes sunset response');
-    t.true(_.isDate(new Date(data.applications[0].endpoints.sunset[0].timestamp)), 'includes sunset timestamp which is a date');
+    t.is(_.get(app, 'endpoints.live[0].response', null), 200, 'includes live response');
+    t.true(_.isDate(new Date(_.get(app, 'endpoints.live[0].timestamp', null))), 'includes live timestamp which is a date');
+    t.is(_.get(app, 'endpoints.updated[0].response', null), 200, 'includes updated response');
+    t.true(_.isDate(new Date(_.get(app, 'endpoints.updated[0].timestamp', null))), 'includes updated timestamp which is a date');
+    t.is(_.get(app, 'endpoints.sunset[0].response', null), 200, 'includes sunset response');
+    t.true(_.isDate(new Date(_.get(app, 'endpoints.sunset[0].timestamp', null))), 'includes sunset timestamp which is a date');
 
     return resp.then(res => {
       t.is(res, true, 'should return true');
@@ -485,6 +495,28 @@ test.cb('Update existing application', t => {
   req.url = '/applications/save';
   req.body = _.cloneDeep(body);
   req.body.submit = 'update';
+
+  const request = httpMocks.createRequest(req);
+
+  const response = httpMocks.createResponse({ eventEmitter: EventEmitter });
+  applications.routes.save(request, response);
+  response.render();
+
+  response.on('end', () => {
+    t.is(response.statusCode, 302, 'Should be a 302 response');
+    t.is(response._getRedirectUrl(), '/applications');
+    t.end();
+  });
+});
+
+test.cb('Delete existing application', t => {
+  const req = _.cloneDeep(reqObj);
+  req.method = 'POST';
+  req.session.referrer = '/applications/4';
+  req.session.form.applications.edit.id = 4;
+  req.url = '/applications/save';
+  req.body = _.cloneDeep(body);
+  req.body.submit = 'delete';
 
   const request = httpMocks.createRequest(req);
 
