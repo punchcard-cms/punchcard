@@ -3,8 +3,6 @@ import events from 'events';
 import httpMocks from 'node-mocks-http';
 import config from 'config';
 import _ from 'lodash';
-import uuid from 'uuid';
-import moment from 'moment';
 import isInt from 'validator/lib/isInt';
 
 import applications from '../lib/applications';
@@ -34,8 +32,6 @@ const body = {
   'live-endpoint--url': 'http://bar.com/live',
   'updated-endpoint--url': 'http://bar.com/updated',
   'sunset-endpoint--url': 'http://bar.com/sunset',
-  'client-id': uuid.v4(),
-  'client-secret': uuid.v4(),
   'submit': 'save',
 };
 
@@ -136,7 +132,7 @@ test.cb('All applications route', t => {
 
     t.is(response.statusCode, 200, 'Should be a 200 response');
     t.is(app.name, 'Foo First Application', 'includes form with inputs');
-console.log(app);
+
     t.is(_.get(app, 'responses.live[0].response', null), 200, 'includes live response');
     t.true(_.isDate(new Date(_.get(app, 'responses.live[0].timestamp', null))), 'includes live timestamp which is a date');
     t.is(_.get(app, 'responses.updated[0].response', null), 200, 'includes updated response');

@@ -85,4 +85,4 @@ const rows = [
 module.exports = {
   responses,
   rows,
-}
+};
