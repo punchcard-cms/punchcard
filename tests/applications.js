@@ -59,8 +59,8 @@ const reqObj = {
 
 test.cb.before(t => {
   database.init().then(() => {
-    database(`${config.applications.base}`).del().then(() => {
-      database(`${config.applications.base}`).insert(dbmocks.rows).then(() => {
+    database('applications').del().then(() => {
+      database('applications').insert(dbmocks.rows).then(() => {
         t.end();
       });
     });
@@ -152,7 +152,7 @@ test.cb('All applications route', t => {
 //////////////////////////////
 test.cb('New application route', t => {
   const req = _.cloneDeep(reqObj);
-  req.url = '/applications/new';
+  req.url = '/applications/add';
 
   const request = httpMocks.createRequest(req);
 
@@ -320,14 +320,15 @@ test.cb('Create new secret - bad referrer', t => {
   const resp = applications.routes.secret(request, response, next);
   response.render();
 
-  response.on('end', () => {
-    t.is(response.statusCode, 302, 'Should be a 302 response');
-
-    return resp.then(res => {
-      t.is(res.message, 'Secret can only be changed from the application edit screen', 'should error when bad referrer');
-      t.end();
-    });
-  });
+  if (resp.message) {
+    t.is(resp.message, 'Secret can only be changed from the application edit screen', 'should error with message when bad referrer');
+    t.is(resp.safe, '/applications', 'should error with safe url when bad referrer');
+    t.is(resp.status, 500, 'should error with status message when bad referrer');
+    t.end();
+  }
+  else {
+    t.fail('should get secret warning message');
+  }
 });
 
 //////////////////////////////
