@@ -387,7 +387,6 @@ test.cb('Save new application', t => {
     const redir = response._getRedirectUrl();
     const parts = redir.split('/');
 
-    t.is(response.statusCode, 302, 'Should be a 302 response');
     t.is(parts[1], 'applications', 'Should have applications base');
     t.true(isInt(parts[2]), 'Should have last application id');
 
@@ -414,7 +413,6 @@ test.cb('Update existing application', t => {
   response.render();
 
   response.on('end', () => {
-    t.is(response.statusCode, 302, 'Should be a 302 response');
     t.is(response._getRedirectUrl(), '/applications');
 
     return resp.then(res => {
@@ -440,7 +438,6 @@ test.cb('Delete existing application', t => {
   response.render();
 
   response.on('end', () => {
-    t.is(response.statusCode, 302, 'Should be a 302 response');
     t.is(response._getRedirectUrl(), '/applications');
 
     return resp.then(res => {
