@@ -275,9 +275,9 @@ test.cb.serial('Create new secret', t => {
   const resp = applications.routes.secret(request, response, next);
   response.render();
 
-  response.on('end', () => {
+  return response.on('end', () => {
     t.is(response.statusCode, 302, 'Should be a 302 response');
-    t.is(response._getRedirectUrl(), '/applications/1');
+    t.is(response._getRedirectUrl(), '/applications/1', 'should redirect to edit url');
 
     return resp.then(res => {
       t.not(res, dbmocks.rows[0]['client-secret'], 'should be a new client secret');
@@ -288,7 +288,7 @@ test.cb.serial('Create new secret', t => {
 
 test.cb.serial('Create new secret - bad id kills db', t => {
   const req = _.cloneDeep(reqObj);
-  req.method = 'GET';
+  req.method = 'POST';
   req.headers.referrer = '/applications/break';
   req.session.form.applications.edit.id = 'break';
 
@@ -297,15 +297,10 @@ test.cb.serial('Create new secret - bad id kills db', t => {
   const response = httpMocks.createResponse({ eventEmitter: EventEmitter });
   const resp = applications.routes.secret(request, response, next);
 
-  response.on('end', () => {
-    t.is(response.statusCode, 200, 'Should be a 200 response');
-
-    return resp.then(res => {
-      t.true(_.includes(res.message, 'update "applications" set "client-secret"'), 'postgres error');
-      t.end();
-    });
+  resp.then(res => {
+    t.true(_.includes(res.message, 'update "applications" set "client-secret"'), 'postgres error');
+    t.end();
   });
-  response.render();
 });
 
 test.cb.serial('Create new secret - bad referrer', t => {
@@ -318,7 +313,6 @@ test.cb.serial('Create new secret - bad referrer', t => {
 
   const response = httpMocks.createResponse({ eventEmitter: EventEmitter });
   const resp = applications.routes.secret(request, response, next);
-  response.render();
 
   if (resp.message) {
     t.is(resp.message, 'Secret can only be changed from the application edit screen', 'should error with message when bad referrer');
@@ -345,7 +339,7 @@ test.cb.serial('Save new app: name required', t => {
   const request = httpMocks.createRequest(req);
 
   const response = httpMocks.createResponse({ eventEmitter: EventEmitter });
-  applications.routes.save(request, response);
+  const resp = applications.routes.save(request, response);
 
   response.on('end', () => {
     t.is(response.statusCode, 302, 'Should be a 302 response');
