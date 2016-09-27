@@ -69,7 +69,7 @@ test.cb.before(t => {
   });
 });
 
-test.serial('Applications functions', t => {
+test('Applications functions', t => {
   t.is(typeof applications.model, 'function', '`model` exists and is a function');
   t.is(typeof applications.model.structure, 'object', '`structure` exists and is an object');
   t.is(typeof applications.routes, 'object', '`routes` exists and is an object');
@@ -83,7 +83,7 @@ test.serial('Applications functions', t => {
 //////////////////////////////
 // Applications object structure
 //////////////////////////////
-test.serial('Applications structure object', t => {
+test('Applications structure object', t => {
   const structure = applications.model.structure;
 
   t.is(typeof structure, 'object', 'Structure is an object');
@@ -97,14 +97,14 @@ test.serial('Applications structure object', t => {
 //////////////////////////////
 // Applications - model
 //////////////////////////////
-test.serial('Applications model', t => {
+test('Applications model', t => {
   return applications.model().then(model => {
     t.true(model[0].hasOwnProperty('name'), 'Should have a workflow attribute');
     t.is(model[0].name, 'Applications', 'Structure has name');
   });
 });
 
-test.serial('Workflow model from config', t => {
+test('Workflow model from config', t => {
   const structure = _.cloneDeep(applications.model.structure);
   structure.name = 'Other';
 
@@ -117,7 +117,7 @@ test.serial('Workflow model from config', t => {
 //////////////////////////////
 // Routes - Applications landing
 //////////////////////////////
-test.cb.serial('All applications route', t => {
+test.cb('All applications route', t => {
   const request = httpMocks.createRequest(reqObj);
 
   const response = httpMocks.createResponse({ eventEmitter: EventEmitter });
@@ -150,7 +150,7 @@ test.cb.serial('All applications route', t => {
 //////////////////////////////
 // Routes - New Application
 //////////////////////////////
-test.cb.serial('New application route', t => {
+test.cb('New application route', t => {
   const req = _.cloneDeep(reqObj);
   req.url = '/applications/add';
 
@@ -172,7 +172,7 @@ test.cb.serial('New application route', t => {
 //////////////////////////////
 // Routes - Single application
 //////////////////////////////
-test.cb.serial('Single application route', t => {
+test.cb('Single application route', t => {
   const req = _.cloneDeep(reqObj);
   req.url = '/applications/1';
   req.params.id = 1;
@@ -206,7 +206,7 @@ test.cb.serial('Single application route', t => {
   });
 });
 
-test.cb.serial('Single application route - bad id', t => {
+test.cb('Single application route - bad id', t => {
   const req = _.cloneDeep(reqObj);
   req.url = '/applications/1000';
   req.params.id = 1000;
@@ -227,7 +227,7 @@ test.cb.serial('Single application route - bad id', t => {
   response.render();
 });
 
-test.cb.serial('Single application route - error on save', t => {
+test.cb('Single application route - error on save', t => {
   const req = _.cloneDeep(reqObj);
   req.url = '/applications/3';
   req.params.id = 3;
@@ -263,7 +263,7 @@ test.cb.serial('Single application route - error on save', t => {
 //////////////////////////////
 // Routes - Secret
 //////////////////////////////
-test.cb.serial('Create new secret', t => {
+test.cb('Create new secret', t => {
   const req = _.cloneDeep(reqObj);
   req.method = 'POST';
   req.headers.referrer = '/applications/1';
@@ -286,7 +286,7 @@ test.cb.serial('Create new secret', t => {
   });
 });
 
-test.cb.serial('Create new secret - bad id kills db', t => {
+test.cb('Create new secret - bad id kills db', t => {
   const req = _.cloneDeep(reqObj);
   req.method = 'POST';
   req.headers.referrer = '/applications/break';
@@ -303,7 +303,7 @@ test.cb.serial('Create new secret - bad id kills db', t => {
   });
 });
 
-test.cb.serial('Create new secret - bad referrer', t => {
+test.cb('Create new secret - bad referrer', t => {
   const req = _.cloneDeep(reqObj);
   req.method = 'POST';
   req.headers.referrer = '/applications/add';
@@ -328,7 +328,7 @@ test.cb.serial('Create new secret - bad referrer', t => {
 //////////////////////////////
 // Routes - Save application
 //////////////////////////////
-test.cb.serial('Save new app: name required', t => {
+test.cb('Save new app: name required', t => {
   const req = _.cloneDeep(reqObj);
   req.method = 'POST';
   req.session.referrer = '/applications/add';
@@ -349,7 +349,7 @@ test.cb.serial('Save new app: name required', t => {
   response.render();
 });
 
-test.cb.serial('Save existing app: name required', t => {
+test.cb('Save existing app: name required', t => {
   const req = _.cloneDeep(reqObj);
   req.method = 'POST';
   req.session.referrer = '/applications/123';
@@ -370,7 +370,7 @@ test.cb.serial('Save existing app: name required', t => {
   response.render();
 });
 
-test.cb.serial('Save new application', t => {
+test.cb('Save new application', t => {
   const req = _.cloneDeep(reqObj);
   req.method = 'POST';
   req.session.referrer = '/applications/add';
@@ -380,7 +380,7 @@ test.cb.serial('Save new application', t => {
   const request = httpMocks.createRequest(req);
 
   const response = httpMocks.createResponse({ eventEmitter: EventEmitter });
-  applications.routes.save(request, response);
+  const resp = applications.routes.save(request, response);
   response.render();
 
   response.on('end', () => {
@@ -391,11 +391,14 @@ test.cb.serial('Save new application', t => {
     t.is(parts[1], 'applications', 'Should have applications base');
     t.true(isInt(parts[2]), 'Should have last application id');
 
-    t.end();
+    return resp.then(res => {
+      t.is(res, true, 'should return true');
+      t.end();
+    });
   });
 });
 
-test.cb.serial('Update existing application', t => {
+test.cb('Update existing application', t => {
   const req = _.cloneDeep(reqObj);
   req.method = 'POST';
   req.session.referrer = '/applications/2';
@@ -407,17 +410,21 @@ test.cb.serial('Update existing application', t => {
   const request = httpMocks.createRequest(req);
 
   const response = httpMocks.createResponse({ eventEmitter: EventEmitter });
-  applications.routes.save(request, response);
+  const resp = applications.routes.save(request, response);
   response.render();
 
   response.on('end', () => {
     t.is(response.statusCode, 302, 'Should be a 302 response');
     t.is(response._getRedirectUrl(), '/applications');
-    t.end();
+
+    return resp.then(res => {
+      t.is(res, true, 'should return true');
+      t.end();
+    });
   });
 });
 
-test.cb.serial('Delete existing application', t => {
+test.cb('Delete existing application', t => {
   const req = _.cloneDeep(reqObj);
   req.method = 'POST';
   req.session.referrer = '/applications/4';
@@ -429,12 +436,16 @@ test.cb.serial('Delete existing application', t => {
   const request = httpMocks.createRequest(req);
 
   const response = httpMocks.createResponse({ eventEmitter: EventEmitter });
-  applications.routes.save(request, response);
+  const resp = applications.routes.save(request, response);
   response.render();
 
   response.on('end', () => {
     t.is(response.statusCode, 302, 'Should be a 302 response');
     t.is(response._getRedirectUrl(), '/applications');
-    t.end();
+
+    return resp.then(res => {
+      t.is(res, true, 'should return true');
+      t.end();
+    });
   });
 });
