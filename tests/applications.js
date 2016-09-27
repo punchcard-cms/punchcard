@@ -339,7 +339,7 @@ test.cb.serial('Save new app: name required', t => {
   const request = httpMocks.createRequest(req);
 
   const response = httpMocks.createResponse({ eventEmitter: EventEmitter });
-  const resp = applications.routes.save(request, response);
+  applications.routes.save(request, response);
 
   response.on('end', () => {
     t.is(response.statusCode, 302, 'Should be a 302 response');
