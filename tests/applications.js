@@ -381,7 +381,6 @@ test.cb.serial('Save new application', t => {
 
   const response = httpMocks.createResponse({ eventEmitter: EventEmitter });
   const resp = applications.routes.save(request, response);
-  response.render();
 
   response.on('end', () => {
     const redir = response._getRedirectUrl();
@@ -410,7 +409,6 @@ test.cb.serial('Update existing application', t => {
 
   const response = httpMocks.createResponse({ eventEmitter: EventEmitter });
   const resp = applications.routes.save(request, response);
-  response.render();
 
   response.on('end', () => {
     t.is(response._getRedirectUrl(), '/applications');
@@ -435,7 +433,6 @@ test.cb.serial('Delete existing application', t => {
 
   const response = httpMocks.createResponse({ eventEmitter: EventEmitter });
   const resp = applications.routes.save(request, response);
-  response.render();
 
   response.on('end', () => {
     t.is(response._getRedirectUrl(), '/applications');
