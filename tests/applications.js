@@ -370,12 +370,14 @@ test.cb.serial('Save existing app: name required', t => {
   response.render();
 });
 
-test.cb.skip('Save new application', t => {
+test.cb.serial('Delete existing application', t => {
   const req = _.cloneDeep(reqObj);
   req.method = 'POST';
-  req.session.referrer = '/applications/add';
+  req.session.referrer = '/applications/4';
+  req.session.form.applications.edit.id = 4;
   req.url = '/applications/save';
   req.body = _.cloneDeep(body);
+  req.body.submit = 'delete';
 
   const request = httpMocks.createRequest(req);
 
@@ -383,12 +385,7 @@ test.cb.skip('Save new application', t => {
   applications.routes.save(request, response);
 
   response.on('end', () => {
-    const redir = response._getRedirectUrl();
-    const parts = redir.split('/');
-
-    t.is(parts[1], 'applications', 'Should have applications base');
-    t.true(isInt(parts[2]), 'Should have last application id');
-
+    t.is(response._getRedirectUrl(), '/applications');
     t.end();
   });
 });
@@ -413,14 +410,12 @@ test.cb.serial('Update existing application', t => {
   });
 });
 
-test.cb.serial('Delete existing application', t => {
+test.cb.serial('Save new application', t => {
   const req = _.cloneDeep(reqObj);
   req.method = 'POST';
-  req.session.referrer = '/applications/4';
-  req.session.form.applications.edit.id = 4;
+  req.session.referrer = '/applications/add';
   req.url = '/applications/save';
   req.body = _.cloneDeep(body);
-  req.body.submit = 'delete';
 
   const request = httpMocks.createRequest(req);
 
@@ -428,7 +423,12 @@ test.cb.serial('Delete existing application', t => {
   applications.routes.save(request, response);
 
   response.on('end', () => {
-    t.is(response._getRedirectUrl(), '/applications');
+    const redir = response._getRedirectUrl();
+    const parts = redir.split('/');
+
+    t.is(parts[1], 'applications', 'Should have applications base');
+    t.true(isInt(parts[2]), 'Should have last application id');
+
     t.end();
   });
 });
