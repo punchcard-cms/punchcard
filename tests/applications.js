@@ -380,7 +380,7 @@ test.cb.serial('Save new application', t => {
   const request = httpMocks.createRequest(req);
 
   const response = httpMocks.createResponse({ eventEmitter: EventEmitter });
-  const resp = applications.routes.save(request, response);
+  applications.routes.save(request, response);
 
   response.on('end', () => {
     const redir = response._getRedirectUrl();
@@ -389,10 +389,7 @@ test.cb.serial('Save new application', t => {
     t.is(parts[1], 'applications', 'Should have applications base');
     t.true(isInt(parts[2]), 'Should have last application id');
 
-    return resp.then(res => {
-      t.is(res, true, 'should return true');
-      t.end();
-    });
+    t.end();
   });
 });
 
@@ -408,15 +405,11 @@ test.cb.serial('Update existing application', t => {
   const request = httpMocks.createRequest(req);
 
   const response = httpMocks.createResponse({ eventEmitter: EventEmitter });
-  const resp = applications.routes.save(request, response);
+  applications.routes.save(request, response);
 
   response.on('end', () => {
     t.is(response._getRedirectUrl(), '/applications');
-
-    return resp.then(res => {
-      t.is(res, true, 'should return true');
-      t.end();
-    });
+    t.end();
   });
 });
 
@@ -432,14 +425,10 @@ test.cb.serial('Delete existing application', t => {
   const request = httpMocks.createRequest(req);
 
   const response = httpMocks.createResponse({ eventEmitter: EventEmitter });
-  const resp = applications.routes.save(request, response);
+  applications.routes.save(request, response);
 
   response.on('end', () => {
     t.is(response._getRedirectUrl(), '/applications');
-
-    return resp.then(res => {
-      t.is(res, true, 'should return true');
-      t.end();
-    });
+    t.end();
   });
 });
