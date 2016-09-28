@@ -59,8 +59,8 @@ const reqObj = {
 
 test.cb.before(t => {
   database.init().then(() => {
-    database(`${config.applications.base}`).del().then(() => {
-      database(`${config.applications.base}`).insert(dbmocks.rows).then(() => {
+    database('applications').del().then(() => {
+      database('applications').insert(dbmocks.rows).then(() => {
         t.end();
       });
     });
@@ -152,7 +152,7 @@ test.cb('All applications route', t => {
 //////////////////////////////
 test.cb('New application route', t => {
   const req = _.cloneDeep(reqObj);
-  req.url = '/applications/new';
+  req.url = '/applications/add';
 
   const request = httpMocks.createRequest(req);
 
@@ -275,9 +275,9 @@ test.cb('Create new secret', t => {
   const resp = applications.routes.secret(request, response, next);
   response.render();
 
-  response.on('end', () => {
+  return response.on('end', () => {
     t.is(response.statusCode, 302, 'Should be a 302 response');
-    t.is(response._getRedirectUrl(), '/applications/1');
+    t.is(response._getRedirectUrl(), '/applications/1', 'should redirect to edit url');
 
     return resp.then(res => {
       t.not(res, dbmocks.rows[0]['client-secret'], 'should be a new client secret');
@@ -288,7 +288,7 @@ test.cb('Create new secret', t => {
 
 test.cb('Create new secret - bad id kills db', t => {
   const req = _.cloneDeep(reqObj);
-  req.method = 'GET';
+  req.method = 'POST';
   req.headers.referrer = '/applications/break';
   req.session.form.applications.edit.id = 'break';
 
@@ -297,15 +297,10 @@ test.cb('Create new secret - bad id kills db', t => {
   const response = httpMocks.createResponse({ eventEmitter: EventEmitter });
   const resp = applications.routes.secret(request, response, next);
 
-  response.on('end', () => {
-    t.is(response.statusCode, 200, 'Should be a 200 response');
-
-    return resp.then(res => {
-      t.true(_.includes(res.message, 'update "applications" set "client-secret"'), 'postgres error');
-      t.end();
-    });
+  resp.then(res => {
+    t.true(_.includes(res.message, 'update "applications" set "client-secret"'), 'postgres error');
+    t.end();
   });
-  response.render();
 });
 
 test.cb('Create new secret - bad referrer', t => {
@@ -318,16 +313,16 @@ test.cb('Create new secret - bad referrer', t => {
 
   const response = httpMocks.createResponse({ eventEmitter: EventEmitter });
   const resp = applications.routes.secret(request, response, next);
-  response.render();
 
-  response.on('end', () => {
-    t.is(response.statusCode, 302, 'Should be a 302 response');
-
-    return resp.then(res => {
-      t.is(res.message, 'Secret can only be changed from the application edit screen', 'should error when bad referrer');
-      t.end();
-    });
-  });
+  if (resp.message) {
+    t.is(resp.message, 'Secret can only be changed from the application edit screen', 'should error with message when bad referrer');
+    t.is(resp.safe, '/applications', 'should error with safe url when bad referrer');
+    t.is(resp.status, 500, 'should error with status message when bad referrer');
+    t.end();
+  }
+  else {
+    t.fail('should get secret warning message');
+  }
 });
 
 //////////////////////////////
@@ -375,27 +370,22 @@ test.cb('Save existing app: name required', t => {
   response.render();
 });
 
-test.cb('Save new application', t => {
+test.cb('Delete existing application', t => {
   const req = _.cloneDeep(reqObj);
   req.method = 'POST';
-  req.session.referrer = '/applications/add';
+  req.session.referrer = '/applications/4';
+  req.session.form.applications.edit.id = 4;
   req.url = '/applications/save';
   req.body = _.cloneDeep(body);
+  req.body.submit = 'delete';
 
   const request = httpMocks.createRequest(req);
 
   const response = httpMocks.createResponse({ eventEmitter: EventEmitter });
   applications.routes.save(request, response);
-  response.render();
 
   response.on('end', () => {
-    const redir = response._getRedirectUrl();
-    const parts = redir.split('/');
-
-    t.is(response.statusCode, 302, 'Should be a 302 response');
-    t.is(parts[1], 'applications', 'Should have applications base');
-    t.true(isInt(parts[2]), 'Should have last application id');
-
+    t.is(response._getRedirectUrl(), '/applications');
     t.end();
   });
 });
@@ -413,33 +403,35 @@ test.cb('Update existing application', t => {
 
   const response = httpMocks.createResponse({ eventEmitter: EventEmitter });
   applications.routes.save(request, response);
-  response.render();
 
   response.on('end', () => {
-    t.is(response.statusCode, 302, 'Should be a 302 response');
     t.is(response._getRedirectUrl(), '/applications');
     t.end();
   });
 });
 
-test.cb('Delete existing application', t => {
+test.cb.skip('Save new application', t => {
   const req = _.cloneDeep(reqObj);
   req.method = 'POST';
-  req.session.referrer = '/applications/4';
-  req.session.form.applications.edit.id = 4;
+  req.session.referrer = '/applications/add';
   req.url = '/applications/save';
   req.body = _.cloneDeep(body);
-  req.body.submit = 'delete';
 
   const request = httpMocks.createRequest(req);
 
   const response = httpMocks.createResponse({ eventEmitter: EventEmitter });
-  applications.routes.save(request, response);
-  response.render();
+  const resp = applications.routes.save(request, response);
 
   response.on('end', () => {
-    t.is(response.statusCode, 302, 'Should be a 302 response');
-    t.is(response._getRedirectUrl(), '/applications');
-    t.end();
+    const redir = response._getRedirectUrl();
+    const parts = redir.split('/');
+
+    t.is(parts[1], 'applications', 'Should have applications base');
+    t.true(isInt(parts[2]), 'Should have last application id');
+
+    resp.then(() => {
+      t.pass();
+      t.end();
+    });
   });
 });

@@ -33,7 +33,7 @@ test('Setup', t => {
   });
 });
 
-test('Push', t => {
+test.skip('Push', t => {
   const item = count + 1 > length - 1 ? 1 : count + 1;
   const revision = items.content[item];
 
@@ -57,7 +57,7 @@ test('Push', t => {
 });
 
 
-test('Pull', t => {
+test.skip('Pull', t => {
   const item = count + 2 > length - 1 ? 2 : count + 2;
   const revision = items.content[item];
 

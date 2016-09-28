@@ -34,8 +34,7 @@
     <h2>Endpoints</h2>
 
     {% if app.endpoints.live | length %}
-      <h3>Live</h3>
-      <a name="live"></a>
+      <h3 id="live">Live</h3>
       <table class="base--table">
         <thead class="base--thead">
           <tr class="base--tr">
@@ -55,8 +54,7 @@
     {% endif %}
 
     {% if app.endpoints.updated | length %}
-      <h3>Updated</h3>
-      <a name="updated"></a>
+      <h3 id="updated">Updated</h3>
       <table class="base--table">
         <thead class="base--thead">
           <tr class="base--tr">
@@ -76,8 +74,7 @@
     {% endif %}
 
     {% if app.endpoints.sunset | length %}
-      <h3>Sunset</h3>
-      <a name="sunset"></a>
+      <h3 id="sunset">Sunset</h3>
       <table class="base--table">
         <thead class="base--thead">
           <tr class="base--tr">
