@@ -1,0 +1,63 @@
+{% extends "_donut.html" %}
+
+{% block pageHead %}
+  {{ super() }}
+{% endblock %}
+
+{% block header %}
+  {{ super() }}
+{% endblock %}
+
+{% block main %}
+  <div class="introduction">
+    <h1 class="introduction--h1">{{structure.name}}</h1>
+    <p class="introduction--p">{{structure.description}}</p>
+    <a href="/{{config.base}}/{{config.actions.add}}" class="introduction--button">{{config.actions.add|capitalize}} Application</a>
+  </div>
+
+  {% if applications %}
+  <table class="base--table">
+    <thead class="base--thead">
+      <tr class="base--tr">
+        <th class="base--th">Application</th>
+        <th class="base--th">Live</th>
+        <th class="base--th">Updated</th>
+        <th class="base--th">Sunset</th>
+        <th class="base--th">Edit</th>
+      </tr>
+    </thead>
+    <tbody class="base--tbody">
+    {% for app in applications %}
+
+      <tr class="base--tr">
+        <td data-th="Application" class="base--td">{{app.name}}</td>
+        <td data-th="Live" class="base--td">
+          {% if app.endpoints.live | length %}
+            <a href="/{{config.base}}/{{app.id}}#live" class="base--link">
+              <span class="endpoint-{{app.endpoints.live[0].response}}">{{app.endpoints.live[0].response}} ({{app.endpoints.live[0].timestamp}})</span>
+            </a>
+          {% endif %}</td>
+        <td data-th="Updated" class="base--td">
+          {% if app.endpoints.updated | length %}
+            <a href="/{{config.base}}/{{app.id}}#updated" class="base--link">
+              <span class="endpoint-{{app.endpoints.updated[0].response}}">{{app.endpoints.updated[0].response}} ({{app.endpoints.updated[0].timestamp}})</span>
+            </a>
+          {% endif %}</td>
+        <td data-th="Sunset" class="base--td">
+          {% if app.endpoints.sunset | length %}
+            <a href="/{{config.base}}/{{app.id}}#sunset" class="base--link">
+              <span class="endpoint-{{app.endpoints.sunset[0].response}}">{{app.endpoints.sunset[0].response}} ({{app.endpoints.sunset[0].timestamp}})</span>
+            </a>
+          {% endif %}</td>
+        <td data-th="Edit" class="base--td"><a href="/{{config.base}}/{{app.id}}" class="base--link">{{config.actions.edit|capitalize}}</a></td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  {% endif %}
+
+{% endblock %}
+
+{% block footer %}
+  {{ super() }}
+{% endblock %}
