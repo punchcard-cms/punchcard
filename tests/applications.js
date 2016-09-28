@@ -117,7 +117,7 @@ test('Workflow model from config', t => {
 //////////////////////////////
 // Routes - Applications landing
 //////////////////////////////
-test.cb.serial('All applications route', t => {
+test.cb('All applications route', t => {
   const request = httpMocks.createRequest(reqObj);
 
   const response = httpMocks.createResponse({ eventEmitter: EventEmitter });
@@ -150,7 +150,7 @@ test.cb.serial('All applications route', t => {
 //////////////////////////////
 // Routes - New Application
 //////////////////////////////
-test.cb.serial('New application route', t => {
+test.cb('New application route', t => {
   const req = _.cloneDeep(reqObj);
   req.url = '/applications/add';
 
@@ -172,7 +172,7 @@ test.cb.serial('New application route', t => {
 //////////////////////////////
 // Routes - Single application
 //////////////////////////////
-test.cb.serial('Single application route', t => {
+test.cb('Single application route', t => {
   const req = _.cloneDeep(reqObj);
   req.url = '/applications/1';
   req.params.id = 1;
@@ -206,7 +206,7 @@ test.cb.serial('Single application route', t => {
   });
 });
 
-test.cb.serial('Single application route - bad id', t => {
+test.cb('Single application route - bad id', t => {
   const req = _.cloneDeep(reqObj);
   req.url = '/applications/1000';
   req.params.id = 1000;
@@ -227,7 +227,7 @@ test.cb.serial('Single application route - bad id', t => {
   response.render();
 });
 
-test.cb.serial('Single application route - error on save', t => {
+test.cb('Single application route - error on save', t => {
   const req = _.cloneDeep(reqObj);
   req.url = '/applications/3';
   req.params.id = 3;
@@ -263,7 +263,7 @@ test.cb.serial('Single application route - error on save', t => {
 //////////////////////////////
 // Routes - Secret
 //////////////////////////////
-test.cb.serial('Create new secret', t => {
+test.cb('Create new secret', t => {
   const req = _.cloneDeep(reqObj);
   req.method = 'POST';
   req.headers.referrer = '/applications/1';
@@ -286,7 +286,7 @@ test.cb.serial('Create new secret', t => {
   });
 });
 
-test.cb.serial('Create new secret - bad id kills db', t => {
+test.cb('Create new secret - bad id kills db', t => {
   const req = _.cloneDeep(reqObj);
   req.method = 'POST';
   req.headers.referrer = '/applications/break';
@@ -303,7 +303,7 @@ test.cb.serial('Create new secret - bad id kills db', t => {
   });
 });
 
-test.cb.serial('Create new secret - bad referrer', t => {
+test.cb('Create new secret - bad referrer', t => {
   const req = _.cloneDeep(reqObj);
   req.method = 'POST';
   req.headers.referrer = '/applications/add';
@@ -328,7 +328,7 @@ test.cb.serial('Create new secret - bad referrer', t => {
 //////////////////////////////
 // Routes - Save application
 //////////////////////////////
-test.cb.serial('Save new app: name required', t => {
+test.cb('Save new app: name required', t => {
   const req = _.cloneDeep(reqObj);
   req.method = 'POST';
   req.session.referrer = '/applications/add';
@@ -349,7 +349,7 @@ test.cb.serial('Save new app: name required', t => {
   response.render();
 });
 
-test.cb.serial('Save existing app: name required', t => {
+test.cb('Save existing app: name required', t => {
   const req = _.cloneDeep(reqObj);
   req.method = 'POST';
   req.session.referrer = '/applications/123';
@@ -370,7 +370,7 @@ test.cb.serial('Save existing app: name required', t => {
   response.render();
 });
 
-test.cb.serial('Delete existing application', t => {
+test.cb('Delete existing application', t => {
   const req = _.cloneDeep(reqObj);
   req.method = 'POST';
   req.session.referrer = '/applications/4';
@@ -390,7 +390,7 @@ test.cb.serial('Delete existing application', t => {
   });
 });
 
-test.cb.serial('Update existing application', t => {
+test.cb('Update existing application', t => {
   const req = _.cloneDeep(reqObj);
   req.method = 'POST';
   req.session.referrer = '/applications/2';
