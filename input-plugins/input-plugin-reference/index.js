@@ -30,8 +30,8 @@ module.exports = {
       label: 'Select from the following',
       options: [],
       settings: {
-        empty: false,
-        view: 'select',    
+        view: 'select',
+        placeholder: '-- Choose One --',
       },
     },
   },

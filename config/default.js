@@ -9,6 +9,22 @@ env.host = env.url.replace(`:${env.port}`, '');
 
 
 module.exports = {
+  applications: {
+    base: 'applications',
+    actions: {
+      add: 'add',
+      delete: 'delete',
+      edit: 'edit',
+      save: 'save',
+      secret: 'secret',
+      update: 'update',
+    },
+    messages: {
+      missing: {
+        id: 'An application with the id \'%id\' was not found',
+      },
+    },
+  },
   content: {
     base: 'content',
     home: {
