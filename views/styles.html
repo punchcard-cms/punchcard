@@ -182,8 +182,8 @@ p q r s t u v w x y z { | } ~ </pre>
       <div class="form--field-container">
         <fieldset class="form--fieldset">
           <legend class="form--legend">Input fields</legend>
-          <div class="form--field">
-            <label for="input__text">Text Input</label>
+          <div class="form--field required--save">
+            <label for="input__text">Text Input <mark class="mark-save">required to save</mark></label>
             <input id="input__text" type="text" placeholder="Text Input">
             <p class="form--description">This is a description of the input above</p>
           </div>
@@ -192,22 +192,22 @@ p q r s t u v w x y z { | } ~ </pre>
             <input id="input__text" type="text" placeholder="Text Input" disabled>
             <p class="form--description">This is a description of the input above</p>
           </div>
-          <div class="form--field">
-            <label for="input__password">Password</label>
+          <div class="form--field required--save">
+            <label for="input__password">Password <mark class="mark-save">required to publish</mark></label>
             <input id="input__password" type="password" placeholder="Type your Password" >
             <p class="form--description">This is a description of the input above</p>
           </div>
-          <div class="form--field">
-            <label for="input__webaddress">Web Address</label>
+          <div class="form--field required--publish">
+            <label for="input__webaddress">Web Address <mark class="mark-publish">required to publish</mark></label>
             <input id="input__webaddress" type="url" placeholder="http://yoursite.com">
             <p class="form--description">This is a description of the input above</p>
           </div>
-          <div class="form--field">
-            <label for="input__emailaddress">Email Address</label>
+          <div class="form--field required--publish">
+            <label for="input__emailaddress">Email Address <mark class="mark-publish">required to publish</mark></label>
             <input id="input__emailaddress" type="email" placeholder="name@email.com">
           </div>
-          <div class="form--field">
-            <label for="input__phone">Phone Number</label>
+          <div class="form--field required--publish">
+            <label for="input__phone">Phone Number <mark class="mark-publish">required to publish</mark></label>
             <input id="input__phone" type="tel" placeholder="(999) 999-9999">
           </div>
           <div class="form--field">
@@ -223,8 +223,8 @@ p q r s t u v w x y z { | } ~ </pre>
       <div class="form--field-container">
         <fieldset class="form--fieldset">
           <legend class="form--legend">Select dropdown</legend>
-          <div class="form--field">
-            <label for="select">Select</label>
+          <div class="form--field required--publish">
+            <label for="select">Select <mark class="mark-publish">required to publish</mark></label>
             <select id="select">
               <optgroup label="Option Group" class="base--optgroup">
                 <option>Option One</option>
