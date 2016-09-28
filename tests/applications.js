@@ -410,7 +410,7 @@ test.cb.serial('Update existing application', t => {
   });
 });
 
-test.cb.serial('Save new application', t => {
+test.cb.skip('Save new application', t => {
   const req = _.cloneDeep(reqObj);
   req.method = 'POST';
   req.session.referrer = '/applications/add';
