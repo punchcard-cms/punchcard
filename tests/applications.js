@@ -410,6 +410,10 @@ test.cb('Update existing application', t => {
   });
 });
 
+/**
+ * save new application test
+ * todo: test fails after database call. research idea: https://github.com/howardabrams/node-mocks-http/pull/11/files
+ */
 test.cb.skip('Save new application', t => {
   const req = _.cloneDeep(reqObj);
   req.method = 'POST';
