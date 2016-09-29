@@ -28,16 +28,18 @@ test('Setup', t => {
     t.is(result.length, 1, 'One item added');
     t.deepEqual(attrs, revision.value);
   }).catch(e => {
-    console.error(e.message);
+    console.error(e.message); // eslint-disable-line no-console
     t.fail(e.message);
   });
 });
 
-test.skip('Push', t => {
+test('Push', t => {
   const item = count + 1 > length - 1 ? 1 : count + 1;
   const revision = items.content[item];
+  const sunrise = moment(revision.sunrise).subtract(2, 'days');
 
   revision.sunset = null;
+  revision.sunrise = putils.time.iso(sunrise.format('YYYY-MM-DD'), sunrise.format('hh:mm'), 'America/New_York');
 
   return sutils.setup(revision).then(() => {
     return sutils.push(revision);
@@ -51,17 +53,17 @@ test.skip('Push', t => {
     t.is(result.length, 1, 'One item added');
     t.deepEqual(attrs, revision.value);
   }).catch(e => {
-    console.error(e.message);
+    console.error(e.message); // eslint-disable-line no-console
     t.fail(e.message);
   });
 });
 
 
-test.skip('Pull', t => {
+test('Pull', t => {
   const item = count + 2 > length - 1 ? 2 : count + 2;
   const revision = items.content[item];
 
-  revision.sunset = putils.time.iso(moment().format('YYYY-MM-DD'), moment().subtract(1, 'minute').format('hh:mm'), 'America/New_York');
+  revision.sunset = putils.time.iso(moment().subtract(1, 'days').format('YYYY-MM-DD'), moment().format('hh:mm'), 'America/New_York');
 
   return db('live').insert({
     'id': revision.id,
@@ -84,7 +86,7 @@ test.skip('Pull', t => {
   }).then(result => {
     t.is(result.length, 0, 'Item deleted');
   }).catch(e => {
-    console.error(e.message);
+    console.error(e.message); // eslint-disable-line no-console
     t.fail(e.message);
   });
 });
@@ -92,8 +94,10 @@ test.skip('Pull', t => {
 test('Sunrise', t => {
   const item = count + 3 > length - 1 ? 3 : count + 3;
   const revision = items.content[item];
+  const sunrise = moment(revision.sunrise).subtract(5, 'minutes');
 
   revision.sunset = null;
+  revision.sunrise = putils.time.iso(sunrise.format('YYYY-MM-DD'), sunrise.format('hh:mm'), 'America/New_York');
 
   return sutils.setup(revision).then(() => {
     return sutils.sunrise(revision);
@@ -108,7 +112,7 @@ test('Sunrise', t => {
     t.is(result.length, 1, 'One item added');
     t.deepEqual(attrs, revision.value);
   }).catch(e => {
-    console.error(e.message);
+    console.error(e.message); // eslint-disable-line no-console
     t.fail(e.message);
   });
 });
@@ -117,7 +121,7 @@ test('Sunset', t => {
   const item = count + 4 > length - 1 ? 4 : count + 4;
   const revision = items.content[item];
 
-  revision.sunset = putils.time.iso(moment().format('YYYY-MM-DD'), moment().format('hh:mm'), 'America/New_York');
+  revision.sunset = putils.time.iso(moment().subtract(1, 'days').format('YYYY-MM-DD'), moment().format('hh:mm'), 'America/New_York');
 
   return db('live').insert({
     'id': revision.id,
@@ -142,7 +146,7 @@ test('Sunset', t => {
   }).then(result => {
     t.is(result.length, 0, 'Item deleted');
   }).catch(e => {
-    console.error(e.message);
+    console.error(e.message); // eslint-disable-line no-console
     t.fail(e.message);
   });
 });
