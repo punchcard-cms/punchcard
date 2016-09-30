@@ -5,10 +5,10 @@
 
   <div class="form--actions">
     <input type="submit" name="submit" value="{{button}}" class="form--submit">
-    {% if delete %}
+    {% if config.actions.delete %}
       <input type="submit" name="submit" value="{{config.actions.delete}}" class="form--submit">
     {% endif %}
-    <a href="../" class="form--cancel">Cancel</a>
+    <a href="/{{config.base}}" class="form--cancel">Cancel</a>
   </div>
 </form>
 

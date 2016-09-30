@@ -12,7 +12,7 @@
   <div class="introduction">
     <h1 class="introduction--h1">{{structure.name}}</h1>
     <p class="introduction--p">{{structure.description}}</p>
-    <a href="/{{config.base}}/{{config.actions.add}}" class="introduction--button">{{config.actions.add|capitalize}} {{config.base}}</a>
+    <a href="/{{config.base}}/{{config.actions.add}}" class="introduction--button">{{config.actions.add|capitalize}} Application</a>
   </div>
 
   {% if applications %}
@@ -28,11 +28,27 @@
     </thead>
     <tbody class="base--tbody">
     {% for app in applications %}
+
       <tr class="base--tr">
         <td data-th="Application" class="base--td">{{app.name}}</td>
-        <td data-th="Live" class="base--td">{% if app.endpoints.live %}<a href="/{{config.base}}/{{a.id}}#live" class="base--link"><span class="endpoint-{{app.endpoints.live.response|first}}">{{app.endpoints.live.response|first}}</span></a>{% endif %}</td>
-        <td data-th="Updated" class="base--td">{% if app.endpoints.updated %}<a href="/{{config.base}}/{{a.id}}#updated" class="base--link"><span class="endpoint-{{app.endpoints.updated.response|first}}">{{app.endpoints.updated.response|first}}</span></a>{% endif %}</td>
-        <td data-th="Sunset" class="base--td">{% if app.endpoints.sunset %}<a href="/{{config.base}}/{{a.id}}#sunset" class="base--link"><span class="endpoint-{{app.endpoints.sunset.response|first}}">{{app.endpoints.sunset.response|first}}</span></a>{% endif %}</td>
+        <td data-th="Live" class="base--td">
+          {% if app.endpoints.live | length %}
+            <a href="/{{config.base}}/{{app.id}}#live" class="base--link">
+              <span class="endpoint-{{app.endpoints.live[0].response}}">{{app.endpoints.live[0].response}} ({{app.endpoints.live[0].timestamp}})</span>
+            </a>
+          {% endif %}</td>
+        <td data-th="Updated" class="base--td">
+          {% if app.endpoints.updated | length %}
+            <a href="/{{config.base}}/{{app.id}}#updated" class="base--link">
+              <span class="endpoint-{{app.endpoints.updated[0].response}}">{{app.endpoints.updated[0].response}} ({{app.endpoints.updated[0].timestamp}})</span>
+            </a>
+          {% endif %}</td>
+        <td data-th="Sunset" class="base--td">
+          {% if app.endpoints.sunset | length %}
+            <a href="/{{config.base}}/{{app.id}}#sunset" class="base--link">
+              <span class="endpoint-{{app.endpoints.sunset[0].response}}">{{app.endpoints.sunset[0].response}} ({{app.endpoints.sunset[0].timestamp}})</span>
+            </a>
+          {% endif %}</td>
         <td data-th="Edit" class="base--td"><a href="/{{config.base}}/{{app.id}}" class="base--link">{{config.actions.edit|capitalize}}</a></td>
       </tr>
     {% endfor %}

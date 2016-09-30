@@ -20,8 +20,8 @@
     "posttest": "gulp build",
     "start": "nodemon -e html,js ./index.js",
     "lint": "gulp lint",
-    "ava:watch": "NODE_ENV=test NODE_CONFIG_DIR=../config ava --watch | tap-diff",
-    "ava": "NODE_ENV=test NODE_CONFIG_DIR=../config ava | tap-diff",
+    "ava:watch": "NODE_ENV=test NODE_CONFIG_DIR=../config ava --watch | tap-difflet",
+    "ava": "NODE_ENV=test NODE_CONFIG_DIR=../config ava | tap-difflet",
     "nyc": "nyc --all npm run ava",
     "dev:database": "postgres -D /usr/local/var/postgres",
     "dev:start": "gulp",
@@ -101,7 +101,7 @@
     "reparo": "^1.1.1-0",
     "semantic-release": "^4.3.5",
     "supertest": "^1.2.0",
-    "tap-diff": "^0.1.1",
+    "tap-difflet": "^0.6.0",
     "uuid": "^2.0.2"
   },
   "engines": {
