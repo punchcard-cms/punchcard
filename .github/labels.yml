@@ -28,6 +28,7 @@ experience:
     - microcopy
     - user experience
     - developer experience
+    - performance
 environment:
   description: 'Environment that the issue is present in, either Punchcard core or its use as a module'
   color: '#e9e0e0'
