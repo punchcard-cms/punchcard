@@ -59,7 +59,7 @@ test('Push', t => {
 });
 
 
-test('Pull', t => {
+test.skip('Pull', t => {
   const item = count + 2 > length - 1 ? 2 : count + 2;
   const revision = items.content[item];
 
