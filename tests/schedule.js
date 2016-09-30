@@ -33,7 +33,7 @@ test('Setup', t => {
   });
 });
 
-test('Push', t => {
+test.skip('Push', t => {
   const item = count + 1 > length - 1 ? 1 : count + 1;
   const revision = items.content[item];
   const sunrise = moment(revision.sunrise).subtract(2, 'days');
