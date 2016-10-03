@@ -432,7 +432,7 @@ test.cb('Save new application', t => {
   const request = httpMocks.createRequest(req);
 
   const response = httpMocks.createResponse({ eventEmitter: EventEmitter });
-  const resp = applications.routes.save(request, response);
+  applications.routes.save(request, response);
 
   response.on('end', () => {
     const redir = response._getRedirectUrl();
@@ -441,9 +441,6 @@ test.cb('Save new application', t => {
     t.is(parts[1], 'applications', 'Should have applications base');
     t.true(isInt(parts[2]), 'Should have last application id');
 
-    resp.then(() => {
-      t.pass();
-      t.end();
-    });
+    t.end();
   });
 });
