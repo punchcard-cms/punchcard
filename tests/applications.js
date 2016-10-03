@@ -1,6 +1,7 @@
 import test from 'ava';
 import events from 'events';
 import httpMocks from 'node-mocks-http';
+import nock from 'nock';
 import config from 'config';
 import _ from 'lodash';
 import isInt from 'validator/lib/isInt';
@@ -43,6 +44,7 @@ const reqObj = {
   method: 'GET',
   url: '/application',
   applications: {
+    apps: dbmocks.rows,
     merged,
   },
   headers: {},
@@ -56,6 +58,18 @@ const reqObj = {
     },
   },
 };
+
+// set up nock locations from data
+dbmocks.rows.forEach(app => {
+  const endpoints = ['live', 'updated', 'sunset'];
+  endpoints.forEach(endpoint => {
+    if (app[`${endpoint}-endpoint`]) {
+      nock(app[`${endpoint}-endpoint`])
+       .post('')
+       .reply(200);
+    }
+  });
+});
 
 test.cb.before(t => {
   database.init().then(() => {
@@ -121,7 +135,7 @@ test.cb('All applications route', t => {
   const request = httpMocks.createRequest(reqObj);
 
   const response = httpMocks.createResponse({ eventEmitter: EventEmitter });
-  const resp = applications.routes.all(request, response);
+  applications.routes.all(request, response);
   response.render();
 
   response.on('end', () => {
@@ -140,11 +154,9 @@ test.cb('All applications route', t => {
     t.is(_.get(app, 'responses.sunset[0].response', null), 200, 'includes sunset response');
     t.true(_.isDate(new Date(_.get(app, 'responses.sunset[0].timestamp', null))), 'includes sunset timestamp which is a date');
 
-    return resp.then(res => {
-      t.is(res, true, 'should return true');
-      t.end();
-    });
+    t.end();
   });
+  response.end();
 });
 
 //////////////////////////////
@@ -190,9 +202,9 @@ test.cb('Single application route', t => {
 
     // form is populated
     t.true(_.includes(data.form.html, 'value=\"Foo First Application\"'), 'includes form with name value');
-    t.true(_.includes(data.form.html, 'value=\"http:/foo.com/live\"'), 'includes form with live-endpoint value');
-    t.true(_.includes(data.form.html, 'value=\"http:/foo.com/updated\"'), 'includes form with updated-endpoint value');
-    t.true(_.includes(data.form.html, 'value=\"http:/foo.com/sunset\"'), 'includes form with sunset-endpoint value');
+    t.true(_.includes(data.form.html, 'value=\"http://foo.com/live\"'), 'includes form with live-endpoint value');
+    t.true(_.includes(data.form.html, 'value=\"http://foo.com/updated\"'), 'includes form with updated-endpoint value');
+    t.true(_.includes(data.form.html, 'value=\"http://foo.com/sunset\"'), 'includes form with sunset-endpoint value');
 
     t.true(_.includes(data.action, '/applications/save'), 'includes `save` for form action');
     t.is(data.config.toString(), config.applications.toString(), 'includes config for applications');
@@ -237,9 +249,9 @@ test.cb('Single application route - error on save', t => {
   };
   req.session.form.applications.save.content = {
     'name': { text: { value: '' } },
-    'live-endpoint': { url: { value: 'http:/bar.com/live' } },
-    'updated-endpoint': { url: { value: 'http:/bar.com/updated' } },
-    'sunset-endpoint': { url: { value: 'http:/bar.com/sunset' } },
+    'live-endpoint': { url: { value: 'http://bar.com/live' } },
+    'updated-endpoint': { url: { value: 'http://bar.com/updated' } },
+    'sunset-endpoint': { url: { value: 'http://bar.com/sunset' } },
   };
 
   const request = httpMocks.createRequest(req);
@@ -410,7 +422,7 @@ test.cb('Update existing application', t => {
   });
 });
 
-test.cb.skip('Save new application', t => {
+test.cb('Save new application', t => {
   const req = _.cloneDeep(reqObj);
   req.method = 'POST';
   req.session.referrer = '/applications/add';
