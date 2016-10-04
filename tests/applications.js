@@ -7,6 +7,7 @@ import _ from 'lodash';
 import isInt from 'validator/lib/isInt';
 
 import applications from '../lib/applications';
+import init from '../lib/applications/init';
 import database from '../lib/database';
 import merged from './fixtures/applications/objects/model-merged.js';
 import dbmocks from './fixtures/applications/objects/database-mocks.js';
@@ -24,6 +25,7 @@ const next = (value) => {
   return value;
 };
 
+
 /**
  * Form body response
  * @type {Object}
@@ -37,15 +39,42 @@ const body = {
 };
 
 /**
+ * appget
+ *
+ * @param {string} find - value to search for
+ *
+ * @returns {varies} whatever the search gives back
+ */
+const appget = (find) => {
+  // here to mimic application functions until this pr is complete: https://github.com/howardabrams/node-mocks-http/pull/107
+  return reqObj.app[find]; // eslint-disable-line no-use-before-define
+};
+
+/**
+ * appset
+ *
+ * @param {string} find - value to search for
+ * @param {varies} changed - new value to replace with
+ */
+const appset = (find, changed) => {
+  // here to mimic application functions until this pr is complete: https://github.com/howardabrams/node-mocks-http/pull/107
+  reqObj.app[find] = changed; // eslint-disable-line no-use-before-define
+};
+
+/**
  * Express Request Object
  * @type {Object}
+ *
+ * eslint note: quote-props required because app.settings cannot call sub-objects
  */
 const reqObj = {
   method: 'GET',
   url: '/application',
-  applications: {
-    apps: dbmocks.rows,
-    merged,
+  app: { // eslint-disable-line quote-props
+    get: appget,
+    set: appset,
+    'applications-apps': dbmocks.rows,
+    'applications-merged': merged,
   },
   headers: {},
   params: {},
@@ -108,7 +137,7 @@ test('Applications structure object', t => {
   t.is(structure.description, 'Contains webhook applications', 'Structure has description');
   t.is(structure.id, 'applications', 'Structure has id');
   t.true(Array.isArray(structure.attributes), 'attributes is an array');
-  t.is(reqObj.applications.merged, merged, 'merged model is part of request object fixture');
+  t.is(reqObj.app['applications-merged'], merged, 'merged model is part of request object fixture');
 });
 
 //////////////////////////////
@@ -130,6 +159,19 @@ test('Workflow model from config', t => {
     t.is(model[0].name, 'Other', 'Structure has name');
   });
 });
+
+//////////////////////////////
+// Applications init
+//////////////////////////////
+test('Grab applications model-merged and all apps', t => {
+  return init().then(result => {
+    t.is(typeof result, 'object', 'Returns an object');
+    t.is(typeof result.merged, 'object', 'Returns merged object');
+    t.true(Array.isArray(result.apps), 'Returns applications in an array');
+    t.is(result.apps.length, 5, 'has five applications');
+  });
+});
+
 
 //////////////////////////////
 // Routes - Applications landing
