@@ -1,11 +1,13 @@
 import test from 'ava';
 import events from 'events';
 import httpMocks from 'node-mocks-http';
+import nock from 'nock';
 import config from 'config';
 import _ from 'lodash';
 import isInt from 'validator/lib/isInt';
 
 import applications from '../lib/applications';
+import init from '../lib/applications/init';
 import database from '../lib/database';
 import merged from './fixtures/applications/objects/model-merged.js';
 import dbmocks from './fixtures/applications/objects/database-mocks.js';
@@ -23,6 +25,7 @@ const next = (value) => {
   return value;
 };
 
+
 /**
  * Form body response
  * @type {Object}
@@ -36,14 +39,42 @@ const body = {
 };
 
 /**
+ * appget
+ *
+ * @param {string} find - value to search for
+ *
+ * @returns {varies} whatever the search gives back
+ */
+const appget = (find) => {
+  // here to mimic application functions until this pr is complete: https://github.com/howardabrams/node-mocks-http/pull/107
+  return reqObj.app[find]; // eslint-disable-line no-use-before-define
+};
+
+/**
+ * appset
+ *
+ * @param {string} find - value to search for
+ * @param {varies} changed - new value to replace with
+ */
+const appset = (find, changed) => {
+  // here to mimic application functions until this pr is complete: https://github.com/howardabrams/node-mocks-http/pull/107
+  reqObj.app[find] = changed; // eslint-disable-line no-use-before-define
+};
+
+/**
  * Express Request Object
  * @type {Object}
+ *
+ * eslint note: quote-props required because app.settings cannot call sub-objects
  */
 const reqObj = {
   method: 'GET',
   url: '/application',
-  applications: {
-    merged,
+  app: { // eslint-disable-line quote-props
+    get: appget,
+    set: appset,
+    'applications-apps': dbmocks.rows,
+    'applications-merged': merged,
   },
   headers: {},
   params: {},
@@ -57,11 +88,26 @@ const reqObj = {
   },
 };
 
+// set up nock locations from data
+dbmocks.rows.forEach(app => {
+  const endpoints = ['live', 'updated', 'sunset'];
+  endpoints.forEach(endpoint => {
+    if (app[`${endpoint}-endpoint`]) {
+      nock(app[`${endpoint}-endpoint`])
+       .post('')
+       .reply(200);
+    }
+  });
+});
+
 test.cb.before(t => {
   database.init().then(() => {
     database('applications').del().then(() => {
       database('applications').insert(dbmocks.rows).then(() => {
-        t.end();
+        // auto-increment set past added entries
+        database.schema.raw('select setval(\'applications_id_seq\', 20, true)').then(() => {
+          t.end();
+        });
       });
     });
   }).catch(e => {
@@ -91,7 +137,7 @@ test('Applications structure object', t => {
   t.is(structure.description, 'Contains webhook applications', 'Structure has description');
   t.is(structure.id, 'applications', 'Structure has id');
   t.true(Array.isArray(structure.attributes), 'attributes is an array');
-  t.is(reqObj.applications.merged, merged, 'merged model is part of request object fixture');
+  t.is(reqObj.app['applications-merged'], merged, 'merged model is part of request object fixture');
 });
 
 //////////////////////////////
@@ -115,13 +161,26 @@ test('Workflow model from config', t => {
 });
 
 //////////////////////////////
+// Applications init
+//////////////////////////////
+test('Grab applications model-merged and all apps', t => {
+  return init().then(result => {
+    t.is(typeof result, 'object', 'Returns an object');
+    t.is(typeof result.merged, 'object', 'Returns merged object');
+    t.true(Array.isArray(result.apps), 'Returns applications in an array');
+    t.is(result.apps.length, 5, 'has five applications');
+  });
+});
+
+
+//////////////////////////////
 // Routes - Applications landing
 //////////////////////////////
 test.cb('All applications route', t => {
   const request = httpMocks.createRequest(reqObj);
 
   const response = httpMocks.createResponse({ eventEmitter: EventEmitter });
-  const resp = applications.routes.all(request, response);
+  applications.routes.all(request, response);
   response.render();
 
   response.on('end', () => {
@@ -140,11 +199,9 @@ test.cb('All applications route', t => {
     t.is(_.get(app, 'responses.sunset[0].response', null), 200, 'includes sunset response');
     t.true(_.isDate(new Date(_.get(app, 'responses.sunset[0].timestamp', null))), 'includes sunset timestamp which is a date');
 
-    return resp.then(res => {
-      t.is(res, true, 'should return true');
-      t.end();
-    });
+    t.end();
   });
+  response.end();
 });
 
 //////////////////////////////
@@ -190,9 +247,9 @@ test.cb('Single application route', t => {
 
     // form is populated
     t.true(_.includes(data.form.html, 'value=\"Foo First Application\"'), 'includes form with name value');
-    t.true(_.includes(data.form.html, 'value=\"http:/foo.com/live\"'), 'includes form with live-endpoint value');
-    t.true(_.includes(data.form.html, 'value=\"http:/foo.com/updated\"'), 'includes form with updated-endpoint value');
-    t.true(_.includes(data.form.html, 'value=\"http:/foo.com/sunset\"'), 'includes form with sunset-endpoint value');
+    t.true(_.includes(data.form.html, 'value=\"http://foo.com/live\"'), 'includes form with live-endpoint value');
+    t.true(_.includes(data.form.html, 'value=\"http://foo.com/updated\"'), 'includes form with updated-endpoint value');
+    t.true(_.includes(data.form.html, 'value=\"http://foo.com/sunset\"'), 'includes form with sunset-endpoint value');
 
     t.true(_.includes(data.action, '/applications/save'), 'includes `save` for form action');
     t.is(data.config.toString(), config.applications.toString(), 'includes config for applications');
@@ -237,9 +294,9 @@ test.cb('Single application route - error on save', t => {
   };
   req.session.form.applications.save.content = {
     'name': { text: { value: '' } },
-    'live-endpoint': { url: { value: 'http:/bar.com/live' } },
-    'updated-endpoint': { url: { value: 'http:/bar.com/updated' } },
-    'sunset-endpoint': { url: { value: 'http:/bar.com/sunset' } },
+    'live-endpoint': { url: { value: 'http://bar.com/live' } },
+    'updated-endpoint': { url: { value: 'http://bar.com/updated' } },
+    'sunset-endpoint': { url: { value: 'http://bar.com/sunset' } },
   };
 
   const request = httpMocks.createRequest(req);
@@ -410,7 +467,7 @@ test.cb('Update existing application', t => {
   });
 });
 
-test.cb.skip('Save new application', t => {
+test.cb('Save new application', t => {
   const req = _.cloneDeep(reqObj);
   req.method = 'POST';
   req.session.referrer = '/applications/add';
@@ -420,7 +477,7 @@ test.cb.skip('Save new application', t => {
   const request = httpMocks.createRequest(req);
 
   const response = httpMocks.createResponse({ eventEmitter: EventEmitter });
-  const resp = applications.routes.save(request, response);
+  applications.routes.save(request, response);
 
   response.on('end', () => {
     const redir = response._getRedirectUrl();
@@ -429,9 +486,6 @@ test.cb.skip('Save new application', t => {
     t.is(parts[1], 'applications', 'Should have applications base');
     t.true(isInt(parts[2]), 'Should have last application id');
 
-    resp.then(() => {
-      t.pass();
-      t.end();
-    });
+    t.end();
   });
 });
