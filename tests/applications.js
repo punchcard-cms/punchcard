@@ -308,11 +308,10 @@ test('Save responses to DB when zero responses', t => {
   };
 
   return applications.send.save(options).then(res => {
-    console.log(res);
     const app = res.find(ap => {
       return ap[0].id === 5;
     });
-    console.log(JSON.stringify(app, null, 2));
+
     t.true(Array.isArray(res), 'Should return an array');
     t.true(Array.isArray(app[0].responses.live), 'includes live responses, which is an array');
     t.is(app[0].responses.live[0].response, 200, 'includes endpoint response');
