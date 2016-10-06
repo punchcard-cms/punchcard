@@ -1,6 +1,7 @@
 import test from 'ava';
 import events from 'events';
 import httpMocks from 'node-mocks-http';
+import moment from 'moment';
 import nock from 'nock';
 import config from 'config';
 import _ from 'lodash';
@@ -88,6 +89,19 @@ const reqObj = {
   },
 };
 
+/**
+ * Request options
+ * @type {Object}
+ */
+const reqOptions = {
+  url: 'https://punchcard.io',
+  method: 'POST',
+  json: {
+    id: 1234,
+    secret: 5678,
+  },
+};
+
 // set up nock locations from data
 dbmocks.rows.forEach(app => {
   const endpoints = ['live', 'updated', 'sunset'];
@@ -124,6 +138,7 @@ test('Applications functions', t => {
   t.is(typeof applications.routes.one, 'function', '`one` exists and is a function');
   t.is(typeof applications.routes.secret, 'function', '`secret` exists and is a function');
   t.is(typeof applications.routes.save, 'function', '`save` exists and is a function');
+  t.is(typeof applications.send.endpoints, 'function', '`send` exists and is a function');
 });
 
 //////////////////////////////
@@ -172,6 +187,155 @@ test('Grab applications model-merged and all apps', t => {
   });
 });
 
+//////////////////////////////
+// Send: endpoints
+//////////////////////////////
+test('Endpoint Request options', t => {
+  const options = {
+    trigger: 'live',
+    apps: dbmocks.rows,
+  };
+
+  return applications.send.endpoints(options).then(res => {
+    t.true(Array.isArray(res.endpoints), 'Should return an array');
+    t.is(res.endpoints.length, 4, 'Should return four objects because id:2 has no `live` endpoint');
+
+    const point = dbmocks.rows.find((end) => {
+      return end.id === 1;
+    });
+    const app = res.endpoints.find((ap) => {
+      return ap.id === 1;
+    });
+
+    t.is(app.id, 1, 'Should be first app');
+    t.is(_.get(app, 'options.url', null), 'http://foo.com/live', 'includes live endpoint');
+    t.is(_.get(app, 'options.method', null), 'POST', 'includes method');
+    t.is(_.get(app, 'options.json.id', null), point['client-id'], 'includes client id');
+    t.is(_.get(app, 'options.json.secret', null), point['client-secret'], 'includes client secret');
+  });
+});
+
+test('Endpoint Request options', t => {
+  const options = {
+    trigger: 'live',
+    apps: null,
+  };
+
+  return applications.send.endpoints(options).catch(err => {
+    t.is(err, 'Apps must be an array', 'Should require apps to be an array');
+  });
+});
+
+//////////////////////////////
+// Send: request
+//////////////////////////////
+test('Request wrapper - good', t => {
+  nock('https://punchcard.io')
+   .post('/')
+   .reply(200);
+
+  return applications.send.request(reqOptions).then(res => {
+    t.is(typeof res, 'object', 'Should return an object');
+    t.is(res.response, 200, 'Should return 200 status');
+    t.true(_.isDate(new Date(res.timestamp)), 'includes a timestamp which is a date');
+  });
+});
+
+test('Request wrapper - bad', t => {
+  const badOptions = _.cloneDeep(reqOptions);
+  badOptions.url = 'https://punchcard.io/bad';
+
+  nock('https://punchcard.io')
+   .post('/bad')
+   .reply(500);
+
+  return applications.send.request(badOptions).catch(res => {
+    t.is(typeof res, 'object', 'Should return an object');
+    t.is(res.response, 500, 'Should return 500 status');
+    t.true(_.isDate(new Date(res.timestamp)), 'includes a timestamp which is a date');
+  });
+});
+
+//////////////////////////////
+// Send: save
+//////////////////////////////
+test('Save responses to DB', t => {
+  const response = {
+    response: 200,
+    timestamp: moment().unix(),
+  };
+  const options = {
+    trigger: 'live',
+    apps: dbmocks.rows,
+    endpoints: [
+      {
+        id: 1,
+        options: reqOptions,
+        response,
+      },
+      {
+        id: 2,
+        options: reqOptions,
+        response,
+      },
+    ],
+  };
+
+  return applications.send.save(options).then(res => {
+    const app = res[0][0];
+
+    t.true(Array.isArray(res), 'Should return an array');
+    t.true(Array.isArray(app.responses.live), 'includes live responses, which is an array');
+    t.is(app.responses.live[0].response, 200, 'includes endpoint response');
+  });
+});
+
+test('Save responses to DB when zero responses', t => {
+  const response = {
+    response: 200,
+    timestamp: moment().unix(),
+  };
+  const options = {
+    trigger: 'live',
+    apps: dbmocks.rows,
+    endpoints: [
+      {
+        id: 5,
+        options: reqOptions,
+        response,
+      },
+    ],
+  };
+
+  return applications.send.save(options).then(res => {
+    const app = res.find(ap => {
+      return ap[0].id === 5;
+    });
+
+    t.true(Array.isArray(res), 'Should return an array');
+    t.true(Array.isArray(app[0].responses.live), 'includes live responses, which is an array');
+    t.is(app[0].responses.live[0].response, 200, 'includes endpoint response');
+  });
+});
+
+//////////////////////////////
+// Send: SEND
+//////////////////////////////
+test('Send', t => {
+  const options = {
+    trigger: 'live',
+    apps: dbmocks.rows,
+  };
+
+  return applications.send(options).then(res => {
+    const app = res[0][0];
+
+    t.true(Array.isArray(res), 'Should return an array');
+
+    t.true(Array.isArray(app.responses.live), 'includes live responses, which is an array');
+    t.is(app.responses.live[0].response, 200, 'includes endpoint response');
+  });
+});
 
 //////////////////////////////
 // Routes - Applications landing
