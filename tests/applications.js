@@ -249,7 +249,7 @@ test('Request wrapper - bad', t => {
    .post('/bad')
    .reply(500);
 
-  return applications.send.request(badOptions).catch(res => {
+  return applications.send.request(badOptions).then(res => {
     t.is(typeof res, 'object', 'Should return an object');
     t.is(res.response, 500, 'Should return 500 status');
     t.true(_.isDate(new Date(res.timestamp)), 'includes a timestamp which is a date');
@@ -325,6 +325,43 @@ test('Send', t => {
   const options = {
     trigger: 'live',
     apps: dbmocks.rows,
+  };
+
+  return applications.send(options).then(res => {
+    const app = res[0][0];
+
+    t.true(Array.isArray(res), 'Should return an array');
+
+    t.true(Array.isArray(app.responses.live), 'includes live responses, which is an array');
+    t.is(app.responses.live[0].response, 200, 'includes endpoint response');
+  });
+});
+
+test('Send - sunset', t => {
+  const options = {
+    trigger: 'sunset',
+    apps: dbmocks.rows,
+  };
+
+  return applications.send(options).then(res => {
+    const app = res[0][0];
+
+    t.true(Array.isArray(res), 'Should return an array');
+
+    t.true(Array.isArray(app.responses.live), 'includes live responses, which is an array');
+    t.is(app.responses.live[0].response, 200, 'includes endpoint response');
+  });
+});
+
+test('Send - bad urls', t => {
+  const rows = dbmocks.rows;
+  const bad = rows.map(row => {
+    row['sunset-endpoint'] = 'http://a bad url.com';
+    return row;
+  });
+  const options = {
+    trigger: 'sunset',
+    apps: bad,
   };
 
   return applications.send(options).then(res => {
