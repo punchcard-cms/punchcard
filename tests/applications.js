@@ -300,7 +300,7 @@ test('Save responses to DB when zero responses', t => {
     apps: dbmocks.rows,
     endpoints: [
       {
-        id: 5,
+        id: 3,
         options: reqOptions,
         response,
       },
@@ -309,12 +309,12 @@ test('Save responses to DB when zero responses', t => {
 
   return applications.send.save(options).then(res => {
     const app = res.find(ap => {
-      return ap[0].id === 5;
+      return ap[0].name === 'Bar Third Application';
     });
 
     t.true(Array.isArray(res), 'Should return an array');
     t.true(Array.isArray(app[0].responses.live), 'includes live responses, which is an array');
-    t.is(app[0].responses.live[0].response, 200, 'includes endpoint response');
+    t.is(app[0].responses.live[app[0].responses.live.length - 1].response, 200, 'includes endpoint response');
   });
 });
 
@@ -333,7 +333,7 @@ test('Send', t => {
     t.true(Array.isArray(res), 'Should return an array');
 
     t.true(Array.isArray(app.responses.live), 'includes live responses, which is an array');
-    t.is(app.responses.live[0].response, 200, 'includes endpoint response');
+    t.is(app.responses.live[app.responses.live.length - 1].response, 200, 'includes endpoint response');
   });
 });
 
@@ -344,19 +344,24 @@ test('Send - sunset', t => {
   };
 
   return applications.send(options).then(res => {
-    const app = res[0][0];
+    const app = res.map(ap => {
+      return ap[0];
+    }).find((ap) => {
+      return ap.name === 'Foo First Application';
+    });
 
     t.true(Array.isArray(res), 'Should return an array');
-
-    t.true(Array.isArray(app.responses.live), 'includes live responses, which is an array');
-    t.is(app.responses.live[0].response, 200, 'includes endpoint response');
+    t.true(Array.isArray(app.responses.sunset), 'includes live responses, which is an array');
+    t.is(app.responses.sunset[0].response, 200, 'includes endpoint response');
   });
 });
 
 test('Send - bad urls', t => {
   const rows = dbmocks.rows;
-  const bad = rows.map(row => {
+  const bad = rows.map(rw => {
+    const row = rw;
     row['sunset-endpoint'] = 'http://a bad url.com';
+
     return row;
   });
   const options = {
@@ -365,12 +370,16 @@ test('Send - bad urls', t => {
   };
 
   return applications.send(options).then(res => {
-    const app = res[0][0];
+    const app = res.map(ap => {
+      return ap[0];
+    }).find((ap) => {
+      return ap.name === 'Bar Third Application';
+    });
 
     t.true(Array.isArray(res), 'Should return an array');
 
     t.true(Array.isArray(app.responses.live), 'includes live responses, which is an array');
-    t.is(app.responses.live[0].response, 200, 'includes endpoint response');
+    t.is(app.responses.live[0].response, 404, 'includes endpoint response');
   });
 });
 
