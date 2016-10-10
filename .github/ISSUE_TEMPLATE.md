@@ -1,18 +1,18 @@
-{{long description}}
+LONG_DESCRIPTION
 
 ```gherkin
-Feature: {{feature}}
-  As a {{persona}}
-  I want {{need}}
-  So that {{rationale}}
+Feature: FEATURE
+  As a PERSONA
+  I want NEED
+  So that RATIONALE
 
-  Scenario: {{scenario}}
-    Given {{thing}}
-     When {{action}}
-     Then {{result}}
+  Scenario: SCENARIO
+    Given CONTEXT
+     When ACTION
+     Then RESULT
 ```
 
 ---
 
-**{{feature}}**
-- [ ] {{scenario}}
+**FEATURE**
+- [ ] SCENARIO
