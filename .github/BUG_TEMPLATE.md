@@ -1,35 +1,35 @@
-{{long description}}
+LONG_DESCRIPTION
 
 ## Steps for Reproducing
 
-- {{Step 1}}
-- {{Step 2}}
-- {{Step 3}}
+- STEP_1
+- STEP_2
+- STEP_3
 
 ## Screenshots
 
-### {{Step 1}}
+### STEP_1
 
 ![Screenshot of Step 1](url/to/screenshot)
 
-### {{Step 2}}
+### STEP_2
 
 ![Screenshot of Step 2](url/to/screenshot)
 
-### {{Step 3}}
+### STEP_3
 
 ![Screenshot of Step 3](url/to/screenshot)
 
 ## Affected Browsers
 
-- [ ] {{Chrome 47 on Mac 10.11}} / {{Production, Development}}
-- [ ] {{Chrome 47 on Windows 10}} / {{Production, Development}}
-- [ ] {{Firefox 38.4 on Mac 10.11}} / {{Development}}
+- [ ] CHROME_53_MAC_SIERRA / CORE
+- [ ] CHROME_53_WINDOWS_10 / MODULE
+- [ ] FIREFOX_42_MAC_SIERRA / MODULE
 
 ## Runtime Version
 
-{{runtime version}}
+RUNTIME_VERSION
 
 ## Code Version
 
-{{code version}}
+CODE_VERSION
