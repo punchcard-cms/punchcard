@@ -373,13 +373,14 @@ test('Send - bad urls', t => {
     const app = res.map(ap => {
       return ap[0];
     }).find((ap) => {
-      return ap.name === 'Bar Third Application';
+      return ap.name === 'Foo First Application';
     });
 
     t.true(Array.isArray(res), 'Should return an array');
+    t.true(Array.isArray(app.responses.sunset), 'includes live responses, which is an array');
 
-    t.true(Array.isArray(app.responses.live), 'includes live responses, which is an array');
-    t.is(app.responses.live[0].response, 404, 'includes endpoint response');
+    const sorted = _.sortBy(app.responses.sunset, 'timestamp');
+    t.is(sorted[sorted.length - 1].response, 500, 'includes endpoint response');
   });
 });
 
