@@ -373,7 +373,7 @@ test('Send - bad urls', t => {
     const app = res.map(ap => {
       return ap[0];
     }).find((ap) => {
-      return ap.name === 'Bar Third Application';
+      return ap.name === 'Foo First Application';
     });
 
     t.true(Array.isArray(res), 'Should return an array');
