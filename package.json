@@ -20,8 +20,8 @@
     "posttest": "gulp build",
     "start": "nodemon -e html,js ./index.js",
     "lint": "gulp lint",
-    "ava:watch": "NODE_ENV=test NODE_CONFIG_DIR=../config ava --watch | tap-diff",
-    "ava": "NODE_ENV=test NODE_CONFIG_DIR=../config ava | tap-diff",
+    "ava:watch": "NODE_ENV=test NODE_CONFIG_DIR=../config ava --watch | tap-difflet",
+    "ava": "NODE_ENV=test NODE_CONFIG_DIR=../config ava | tap-difflet",
     "nyc": "nyc --all npm run ava",
     "dev:database": "postgres -D /usr/local/var/postgres",
     "dev:start": "gulp",
@@ -62,7 +62,7 @@
     "input-plugin-radio": "0.2.2",
     "input-plugin-select": "^0.3.0",
     "input-plugin-textarea": "0.1.2",
-    "input-plugin-url": "^0.2.2",
+    "input-plugin-url": "^0.3.0",
     "js-yaml": "^3.6.1",
     "knex": "^0.12.1",
     "lodash": "^4.13.1",
@@ -79,11 +79,12 @@
     "passport-local": "^1.0.0",
     "pg": "^6.0.1",
     "punchcard-content-types": "^6.0.1",
+    "request": "^2.75.0",
     "sass-toolkit": "^2.10.0",
     "serve-favicon": "^2.3.0",
     "underscore.string": "^3.3.4",
     "uuid": "^2.0.2",
-    "validator": "^5.7.0"
+    "validator": "^6.0.0"
   },
   "devDependencies": {
     "ava": "^0.16.0",
@@ -92,6 +93,7 @@
     "input-plugin-text": "0.1.2",
     "lorem-ipsum": "^1.0.3",
     "mock-express-response": "^0.1.2",
+    "nock": "^8.0.0",
     "node-mocks-http": "^1.5.3",
     "nyc": "^6.6.0",
     "punchcard-commit-msg": "^1.0.0",
@@ -101,7 +103,7 @@
     "reparo": "^1.1.1-0",
     "semantic-release": "^4.3.5",
     "supertest": "^1.2.0",
-    "tap-diff": "^0.1.1",
+    "tap-difflet": "^0.7.0",
     "uuid": "^2.0.2"
   },
   "engines": {

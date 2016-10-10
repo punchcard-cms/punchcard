@@ -178,3 +178,15 @@
   }
 }
 
+.required {
+
+  &--save {
+    background-color: setting-get('primary support color');
+    font-weight: setting-get('normal font weight');
+  }
+
+  &--publish {
+    background-color: setting-get('secondary support color');
+    font-weight: setting-get('normal font weight');
+  }
+}
