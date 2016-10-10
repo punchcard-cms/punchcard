@@ -377,9 +377,10 @@ test('Send - bad urls', t => {
     });
 
     t.true(Array.isArray(res), 'Should return an array');
-
     t.true(Array.isArray(app.responses.sunset), 'includes live responses, which is an array');
-    t.is(app.responses.sunset[0].response, 404, 'includes endpoint response');
+
+    const sorted = _.sortBy(app.responses.sunset, 'timestamp');
+    t.is(sorted[sorted.length - 1].response, 500, 'includes endpoint response');
   });
 });
 
