@@ -103,7 +103,7 @@
     "reparo": "^1.1.1-0",
     "semantic-release": "^4.3.5",
     "supertest": "^1.2.0",
-    "tap-difflet": "^0.6.0",
+    "tap-difflet": "^0.7.0",
     "uuid": "^2.0.2"
   },
   "engines": {
