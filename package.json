@@ -107,7 +107,7 @@
     "uuid": "^2.0.2"
   },
   "engines": {
-    "node": "5.7"
+    "node": "^6"
   },
   "nyc": {
     "exclude": [
