@@ -5,11 +5,12 @@ import Promise from 'bluebird';
 import slugify from 'underscore.string/slugify';
 import isEqual from 'lodash/isEqual';
 import cloneDeep from 'lodash/cloneDeep';
+import isUUID from 'validator/lib/isUUID';
+
 import apiUtils from '../lib/api/utils';
 import api from '../lib/api';
 import utils from '../lib/utils';
 import database from '../lib/database';
-
 import merged from './fixtures/live/objects/types-models-merged';
 import dbmocks from './fixtures/live/objects/database-mocks.js';
 
@@ -19,12 +20,15 @@ const eachOfType = dbmocks.eachOfType;
 const allTypes = merged.allTypes;
 
 
+
 test.cb.before(t => {
   database.init().then(() => {
     database('live').del().then(() => {
       database('live').insert(content).then(() => {
         t.end();
       });
+    }).catch(e => { // because we can't return in a before, this catch doesn't bubble out
+      t.fail(e);
     });
   }).catch(e => {
     t.fail(e.message);
@@ -32,7 +36,28 @@ test.cb.before(t => {
 });
 
 //////////////////////////////
-// Utils
+// Utils - attributes
+//////////////////////////////
+test('Utils: attributes', t => {
+  const item = Math.round(Math.random() * content.length);
+  const expected = cloneDeep(content[item]);
+  const model = allTypes.find(typ => {
+    return typ.id === expected['type-slug'];
+  });
+  const attributes = apiUtils.attributes(expected.attributes, model.attributes);
+
+  t.is(typeof attributes, 'object', 'Should return an object.');
+  const keys = Object.keys(attributes).map(key => {
+    const attr = key.split('-');
+    if (attr[attr.length - 1] === 'referencer') {
+      console.log(attributes[key]);
+      t.true(isUUID(attributes[key]), 'includes a uuid');
+    }
+  })
+});
+
+//////////////////////////////
+// Utils - format
 //////////////////////////////
 test('Utils: Format Results - List', t => {
   const formatted = apiUtils.format(content.slice(0, 9));
@@ -50,9 +75,13 @@ test('Utils: Format Results - List', t => {
 });
 
 test('Utils: Format Results - Attributes', t => {
+  const item = Math.round(Math.random() * content.length);
+  const expected = cloneDeep(content[item]);
+  const model = allTypes.find(typ => {
+    return typ.id === expected['type-slug'];
+  });
 
-  const model = cloneDeep(allTypes[0].attributes);
-  const formatted = apiUtils.format(content.slice(0, 9), model);
+  const formatted = apiUtils.format([expected], model.attributes);
 
   formatted.forEach(item => {
     t.true(item.hasOwnProperty('id'), 'Contains ID');
@@ -65,6 +94,9 @@ test('Utils: Format Results - Attributes', t => {
   });
 });
 
+//////////////////////////////
+// Utils - organize
+//////////////////////////////
 test('Utils: Organize - Default', t => {
   const actual = apiUtils.organize();
   const expected = {
@@ -187,6 +219,9 @@ test('Utils: Organize - Wrong Pages', t => {
   t.deepEqual(actual, expected, 'Returns defaults');
 });
 
+//////////////////////////////
+// Utils - page
+//////////////////////////////
 test('Utils: Page - First', t => {
   const organized = apiUtils.organize();
   const actual = apiUtils.page('api', organized, 100);
