@@ -1,5 +1,3 @@
-'use strict';
-
 /*
  * @fileoverview Content type-related objects and arrays
  *
@@ -84,7 +82,7 @@ for (let i = 0; i < 5; i++) {
 }
 
 module.exports = {
- allTypes,
- eachOfType,
- types
+  allTypes,
+  eachOfType,
+  types,
 };

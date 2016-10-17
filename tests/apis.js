@@ -1,7 +1,4 @@
 import test from 'ava';
-import uuid from 'uuid';
-import ipsum from 'lorem-ipsum';
-import Promise from 'bluebird';
 import slugify from 'underscore.string/slugify';
 import isEqual from 'lodash/isEqual';
 import cloneDeep from 'lodash/cloneDeep';
@@ -9,7 +6,6 @@ import isUUID from 'validator/lib/isUUID';
 
 import apiUtils from '../lib/api/utils';
 import api from '../lib/api';
-import utils from '../lib/utils';
 import database from '../lib/database';
 import merged from './fixtures/live/objects/types-models-merged';
 import dbmocks from './fixtures/live/objects/database-mocks.js';
@@ -19,14 +15,10 @@ const types = merged.types;
 const eachOfType = dbmocks.eachOfType;
 const allTypes = merged.allTypes;
 
-
-
 test.cb.before(t => {
   database.init().then(() => {
-    database('live').del().then(() => {
-      database('live').insert(content).then(() => {
-        t.end();
-      });
+    database('live').insert(content).then(() => {
+      t.end();
     }).catch(e => { // because we can't return in a before, this catch doesn't bubble out
       t.fail(e);
     });
@@ -47,13 +39,12 @@ test('Utils: attributes', t => {
   const attributes = apiUtils.attributes(expected.attributes, model.attributes);
 
   t.is(typeof attributes, 'object', 'Should return an object.');
-  const keys = Object.keys(attributes).map(key => {
+  Object.keys(attributes).map(key => {
     const attr = key.split('-');
     if (attr[attr.length - 1] === 'referencer') {
-      console.log(attributes[key]);
       t.true(isUUID(attributes[key]), 'includes a uuid');
     }
-  })
+  });
 });
 
 //////////////////////////////
@@ -83,14 +74,14 @@ test('Utils: Format Results - Attributes', t => {
 
   const formatted = apiUtils.format([expected], model.attributes);
 
-  formatted.forEach(item => {
-    t.true(item.hasOwnProperty('id'), 'Contains ID');
-    t.true(item.hasOwnProperty('type'), 'Contains Type');
-    t.true(item.hasOwnProperty('type_slug'), 'Contains Type Slug');
-    t.true(item.hasOwnProperty('key'), 'Contains Key');
-    t.true(item.hasOwnProperty('key_slug'), 'Contains Key Slug');
-    t.false(item.hasOwnProperty('meta'), 'Does not contain Meta');
-    t.true(item.hasOwnProperty('attributes'), 'Contains attributes');
+  formatted.forEach(itm => {
+    t.true(itm.hasOwnProperty('id'), 'Contains ID');
+    t.true(itm.hasOwnProperty('type'), 'Contains Type');
+    t.true(itm.hasOwnProperty('type_slug'), 'Contains Type Slug');
+    t.true(itm.hasOwnProperty('key'), 'Contains Key');
+    t.true(itm.hasOwnProperty('key_slug'), 'Contains Key Slug');
+    t.false(itm.hasOwnProperty('meta'), 'Does not contain Meta');
+    t.true(itm.hasOwnProperty('attributes'), 'Contains attributes');
   });
 });
 
@@ -323,18 +314,6 @@ test('APIs: Types', t => {
     'id',
   ];
 
-  const expectedAll = cloneDeep(allTypes).map(ct => {
-    const finalCT = ct;
-    delete finalCT.attributes;
-
-    finalCT.meta = {
-      url: `/api/types/${ct.id}`,
-      count: eachOfType[ct.name],
-    };
-
-    return finalCT;
-  });
-
   const apiTypes = api.types(app);
 
   t.true(apiTypes.hasOwnProperty('keys'), 'Has keys');
@@ -366,7 +345,6 @@ test('API: Content', t => {
     t.true(formatted.hasOwnProperty('pages'), 'Has Pagination');
     t.is(formatted.items.length, allTypes.length, 'All content types exist');
   });
-
 });
 
 test('API: Content - Descending', t => {
@@ -381,9 +359,8 @@ test('API: Content - Descending', t => {
   const apiTypes = api.types(app);
 
   return api.content({
-      sort_dir: 'desc', // eslint-disable-line camelcase
-    }, apiTypes).then(formatted => {
-
+    sort_dir: 'desc', // eslint-disable-line camelcase
+  }, apiTypes).then(formatted => {
     t.true(formatted.hasOwnProperty('items'), 'Has Items');
     t.true(formatted.hasOwnProperty('pages'), 'Has Pagination');
     t.is(formatted.items.length, allTypes.length, 'All content types exist');

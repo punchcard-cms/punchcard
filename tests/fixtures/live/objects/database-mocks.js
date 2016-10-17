@@ -1,5 +1,3 @@
-'use strict';
-
 /*
  * @fileoverview Dummy content for the live API db
  *
@@ -58,7 +56,7 @@ for (let i = 0; i < 50; i++) {
 
   id = uuid.v4();
 
-  const item = {
+  const item = { // eslint-disable-line quote-props
     id,
     language: 'en-us',
     sunrise: utils.time.iso(sunrise, '00:00'),
