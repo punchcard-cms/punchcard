@@ -89,6 +89,7 @@
   "devDependencies": {
     "ava": "^0.16.0",
     "coveralls": "^2.11.9",
+    "eslint-config-punchcard": "^1.1.1",
     "ghooks": "^1.2.4",
     "input-plugin-text": "0.1.2",
     "lorem-ipsum": "^1.0.3",
@@ -107,7 +108,7 @@
     "uuid": "^2.0.2"
   },
   "engines": {
-    "node": "5.7"
+    "node": "^6"
   },
   "nyc": {
     "exclude": [

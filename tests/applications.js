@@ -71,9 +71,9 @@ const appset = (find, changed) => {
 const reqObj = {
   method: 'GET',
   url: '/application',
-  app: { // eslint-disable-line quote-props
-    get: appget,
-    set: appset,
+  app: {
+    'get': appget,
+    'set': appset,
     'applications-apps': dbmocks.rows,
     'applications-merged': merged,
   },
