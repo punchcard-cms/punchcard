@@ -401,3 +401,15 @@ test('API: One - Not There', t => {
   });
 });
 
+test.cb.after(t => {
+  const promises = types.map(type => {
+    return database('live').where('type', type).del();
+  });
+
+  Promise.all(promises).then(() => {
+    t.end();
+  }).catch(e => {
+    console.error(e); // esling-disable-line no-console
+    t.end();
+  });
+});
