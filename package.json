@@ -59,7 +59,7 @@
     "input-plugin-email": "^0.2.0",
     "input-plugin-password": "0.1.3",
     "input-plugin-quote": "0.2.1",
-    "input-plugin-radio": "0.2.2",
+    "input-plugin-radio": "0.2.3",
     "input-plugin-select": "^0.3.0",
     "input-plugin-textarea": "0.1.2",
     "input-plugin-url": "^0.3.0",
