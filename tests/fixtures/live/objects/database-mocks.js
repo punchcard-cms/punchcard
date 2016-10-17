@@ -56,17 +56,18 @@ for (let i = 0; i < 50; i++) {
 
   id = uuid.v4();
 
-  const item = { // eslint-disable-line quote-props
+  const item = {
     id,
     language: 'en-us',
     sunrise: utils.time.iso(sunrise, '00:00'),
     sunset: utils.time.iso(sunset, '00:00'),
     key: name,
-    'key-slug': slugify(name),
     type: type.name,
-    'type-slug': slugify(type.name),
     attributes,
   };
+
+  item['key-slug'] = slugify(name);
+  item['type-slug'] = slugify(type.name);
 
   rows[i] = item;
 }
