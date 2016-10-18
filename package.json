@@ -20,8 +20,8 @@
     "posttest": "gulp build",
     "start": "nodemon -e html,js ./index.js",
     "lint": "gulp lint",
-    "ava:watch": "NODE_ENV=test NODE_CONFIG_DIR=../config ava --watch | tap-difflet",
-    "ava": "NODE_ENV=test NODE_CONFIG_DIR=../config ava | tap-difflet",
+    "ava:watch": "NODE_ENV=test NODE_CONFIG_DIR=../config ava --watch",
+    "ava": "NODE_ENV=test NODE_CONFIG_DIR=../config ava",
     "nyc": "nyc --all npm run ava",
     "dev:database": "postgres -D /usr/local/var/postgres",
     "dev:start": "gulp",
@@ -112,9 +112,6 @@
   },
   "nyc": {
     "exclude": [
-      "lib/api.js",
-      "lib/routes/api.js",
-      "lib/api/**/*",
       "tests/**/*",
       "config/**/*",
       "public/**/*",
@@ -125,11 +122,10 @@
   },
   "ava": {
     "files": [
-      "tests/*.js",
-      "!tests/apis.js"
+      "tests/*.js"
     ],
-    "failFast": true,
-    "tap": true
+    "failFast": false,
+    "tap": false
   },
   "config": {
     "ghooks": {
