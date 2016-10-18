@@ -17,7 +17,6 @@ const fixtures = utils.generate(generated, lang);
 const content = fixtures.content;
 const live = fixtures.live;
 const types = fixtures.types.names;
-const eachOfType = fixtures.types.each;
 const allTypes = fixtures.types.full;
 
 test.cb.before(t => {
@@ -42,17 +41,24 @@ test.cb.before(t => {
 //////////////////////////////
 test('Utils: attributes', t => {
   const item = Math.round(Math.random() * content.length - 1);
-  const expected = cloneDeep(content[item]);
+  let expected = content[item];
+  if (expected === undefined) {
+    expected = cloneDeep(content[content.length - 1]);
+  }
+
   const model = allTypes.find(typ => {
     return typ.id === expected['type-slug'];
   });
+
   const attributes = apiUtils.attributes(expected.value, model.attributes);
 
   t.is(typeof attributes, 'object', 'Should return an object.');
   Object.keys(attributes).map(key => {
     const attr = key.split('-');
     if (attr[attr.length - 1] === 'referencer') {
-      t.true(isUUID(attributes[key]), 'includes a uuid');
+      if (attributes[key] !== '') {
+        t.true(isUUID(attributes[key]), 'includes a uuid');
+      }
     }
   });
 });
@@ -77,7 +83,12 @@ test('Utils: Format Results - List', t => {
 
 test('Utils: Format Results - Attributes', t => {
   const item = Math.round(Math.random() * content.length - 1);
-  const expected = cloneDeep(content[item]);
+  let expected = cloneDeep(content[item]);
+
+  if (expected === undefined) {
+    expected = cloneDeep(content[content.length - 1]);
+  }
+
   const model = allTypes.find(typ => {
     return typ.id === expected['type-slug'];
   });
@@ -389,7 +400,12 @@ test('API: ofType', t => {
 
 test('API: One', t => {
   const item = Math.round(Math.random() * content.length - 1);
-  const expected = content[item];
+  let expected = cloneDeep(content[item]);
+
+  if (expected === undefined) {
+    expected = cloneDeep(content[content.length - 1]);
+  }
+
   const model = allTypes.find(typ => {
     return typ.id === expected['type-slug'];
   });
