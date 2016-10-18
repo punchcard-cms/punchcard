@@ -7,23 +7,33 @@ import isUUID from 'validator/lib/isUUID';
 import apiUtils from '../lib/api/utils';
 import api from '../lib/api';
 import database from '../lib/database';
-import merged from './fixtures/live/objects/types-models-merged';
-import dbmocks from './fixtures/live/objects/database-mocks.js';
+import utils from './fixtures/_utils';
 
-const content = dbmocks.rows;
-const types = merged.types;
-const eachOfType = dbmocks.eachOfType;
-const allTypes = merged.allTypes;
+const generated = 17;
+const lang = 'api-test';
+
+const fixtures = utils.generate(generated, lang);
+
+const content = fixtures.content;
+const live = fixtures.live;
+const types = fixtures.types.names;
+const eachOfType = fixtures.types.each;
+const allTypes = fixtures.types.full;
 
 test.cb.before(t => {
   database.init().then(() => {
-    database('live').insert(content).then(() => {
-      t.end();
-    }).catch(e => { // because we can't return in a before, this catch doesn't bubble out
-      t.fail(e);
+    database('live').where('language', lang).del().then(() => {
+      database('live').insert(live).then(() => {
+        t.end();
+      }).catch(e => { // because we can't return in a before, this catch doesn't bubble out
+        console.error(e.stack); // eslint-disable-line no-console
+        t.fail(e.stack);
+      });
     });
-  }).catch(e => {
-    t.fail(e.message);
+  })
+  .catch(e => {
+    console.error(e.stack); // eslint-disable-line no-console
+    t.fail(e.stack);
   });
 });
 
@@ -32,11 +42,11 @@ test.cb.before(t => {
 //////////////////////////////
 test('Utils: attributes', t => {
   const item = Math.round(Math.random() * content.length);
-  const expected = cloneDeep(content[item]);
+  const expected = cloneDeep(content[item - 1]);
   const model = allTypes.find(typ => {
     return typ.id === expected['type-slug'];
   });
-  const attributes = apiUtils.attributes(expected.attributes, model.attributes);
+  const attributes = apiUtils.attributes(expected.value, model.attributes);
 
   t.is(typeof attributes, 'object', 'Should return an object.');
   Object.keys(attributes).map(key => {
@@ -67,7 +77,7 @@ test('Utils: Format Results - List', t => {
 
 test('Utils: Format Results - Attributes', t => {
   const item = Math.round(Math.random() * content.length);
-  const expected = cloneDeep(content[item]);
+  const expected = cloneDeep(content[item - 1]);
   const model = allTypes.find(typ => {
     return typ.id === expected['type-slug'];
   });
@@ -325,7 +335,7 @@ test('API: All', t => {
   return api.all({}).then(results => {
     t.true(results.hasOwnProperty('items'), 'Has Items');
     t.true(results.hasOwnProperty('pages'), 'Has Pagination');
-    t.is(results.items.length, 30, 'Has all 30 items in it');
+    t.true(results.items.length >= generated, 'Has at least all items in it');
   });
 });
 
@@ -369,28 +379,32 @@ test('API: Content - Descending', t => {
 
 test('API: ofType', t => {
   const item = Math.round(Math.random() * types.length);
+  const type = types[item - 1];
 
-  return api.ofType({}, slugify(types[item])).then(formatted => {
+  return api.ofType({}, slugify(type)).then(formatted => {
     t.true(formatted.hasOwnProperty('items'), 'Has Items');
     t.true(formatted.hasOwnProperty('pages'), 'Has Pagination');
 
-    if (eachOfType[types[item]] > 30) {
+    if (eachOfType[types[item]] > generated) {
       t.is(formatted.items.length, 30, 'Has all available items');
     }
     else {
-      t.is(formatted.items.length, eachOfType[types[item]], 'Has all available items');
+      t.is(formatted.items.length, eachOfType[type], 'Has all available items');
     }
   });
 });
 
 test('API: One', t => {
   const item = Math.round(Math.random() * content.length);
-  const expected = content[item];
+  const expected = content[item - 1];
+  const model = allTypes.find(typ => {
+    return typ.id === expected['type-slug'];
+  });
 
-  return api.one({}, expected.id, allTypes[0].attributes).then(result => {
+  return api.one({}, expected.id, model.attributes).then(result => {
     t.is(result.id, expected.id, 'IDs the same');
     t.true(result.hasOwnProperty('attributes'));
-    t.is(result.key, expected.key, 'Key available');
+    t.is(result.key_slug, expected.slug, 'Key available');
     t.true(result.hasOwnProperty('type'), 'Has type info');
   });
 });
@@ -401,15 +415,16 @@ test('API: One - Not There', t => {
   });
 });
 
-test.cb.after(t => {
-  const promises = types.map(type => {
-    return database('live').where('type', type).del();
-  });
 
-  Promise.all(promises).then(() => {
+//////////////////////////////
+// AFTER ALL TESTS RUN
+//////////////////////////////
+test.cb.after(t => {
+  database('live').where('language', lang).del().then(() => {
     t.end();
-  }).catch(e => {
-    console.error(e); // esling-disable-line no-console
+  })
+  .catch(e => {
+    console.error(e.stack); // eslint-disable-line no-console
     t.end();
   });
 });
