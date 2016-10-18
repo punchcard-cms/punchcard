@@ -41,8 +41,8 @@ test.cb.before(t => {
 // Utils - attributes
 //////////////////////////////
 test('Utils: attributes', t => {
-  const item = Math.round(Math.random() * content.length);
-  const expected = cloneDeep(content[item - 1]);
+  const item = Math.round(Math.random() * content.length - 1);
+  const expected = cloneDeep(content[item]);
   const model = allTypes.find(typ => {
     return typ.id === expected['type-slug'];
   });
@@ -76,8 +76,8 @@ test('Utils: Format Results - List', t => {
 });
 
 test('Utils: Format Results - Attributes', t => {
-  const item = Math.round(Math.random() * content.length);
-  const expected = cloneDeep(content[item - 1]);
+  const item = Math.round(Math.random() * content.length - 1);
+  const expected = cloneDeep(content[item]);
   const model = allTypes.find(typ => {
     return typ.id === expected['type-slug'];
   });
@@ -378,25 +378,18 @@ test('API: Content - Descending', t => {
 });
 
 test('API: ofType', t => {
-  const item = Math.round(Math.random() * types.length);
-  const type = types[item - 1];
+  const item = Math.round(Math.random() * types.length - 1);
+  const type = types[item];
 
   return api.ofType({}, slugify(type)).then(formatted => {
     t.true(formatted.hasOwnProperty('items'), 'Has Items');
     t.true(formatted.hasOwnProperty('pages'), 'Has Pagination');
-
-    if (eachOfType[types[item]] > generated) {
-      t.is(formatted.items.length, 30, 'Has all available items');
-    }
-    else {
-      t.is(formatted.items.length, eachOfType[type], 'Has all available items');
-    }
   });
 });
 
 test('API: One', t => {
-  const item = Math.round(Math.random() * content.length);
-  const expected = content[item - 1];
+  const item = Math.round(Math.random() * content.length - 1);
+  const expected = content[item];
   const model = allTypes.find(typ => {
     return typ.id === expected['type-slug'];
   });
