@@ -20,8 +20,8 @@
     "posttest": "gulp build",
     "start": "nodemon -e html,js ./index.js",
     "lint": "gulp lint",
-    "ava:watch": "NODE_ENV=test NODE_CONFIG_DIR=../config ava --watch | tap-difflet",
-    "ava": "NODE_ENV=test NODE_CONFIG_DIR=../config ava | tap-difflet",
+    "ava:watch": "NODE_ENV=test NODE_CONFIG_DIR=../config ava --watch",
+    "ava": "NODE_ENV=test NODE_CONFIG_DIR=../config ava",
     "nyc": "nyc --all npm run ava",
     "dev:database": "postgres -D /usr/local/var/postgres",
     "dev:start": "gulp",
@@ -57,9 +57,9 @@
     "ibm-design-colors": "^1.6.0",
     "input-plugin-checkbox": "^0.3.1",
     "input-plugin-email": "^0.2.0",
-    "input-plugin-password": "0.1.3",
+    "input-plugin-password": "^0.1.4",
     "input-plugin-quote": "0.2.1",
-    "input-plugin-radio": "0.2.2",
+    "input-plugin-radio": "^0.2.3",
     "input-plugin-select": "^0.3.0",
     "input-plugin-textarea": "^0.1.3",
     "input-plugin-url": "^0.3.0",
@@ -91,7 +91,7 @@
     "coveralls": "^2.11.9",
     "eslint-config-punchcard": "^1.1.1",
     "ghooks": "^1.2.4",
-    "input-plugin-text": "0.1.2",
+    "input-plugin-text": "^0.1.3",
     "lorem-ipsum": "^1.0.3",
     "mock-express-response": "^0.1.2",
     "nock": "^8.0.0",
@@ -112,9 +112,6 @@
   },
   "nyc": {
     "exclude": [
-      "lib/api.js",
-      "lib/routes/api.js",
-      "lib/api/**/*",
       "tests/**/*",
       "config/**/*",
       "public/**/*",
@@ -125,11 +122,10 @@
   },
   "ava": {
     "files": [
-      "tests/*.js",
-      "!tests/apis.js"
+      "tests/*.js"
     ],
-    "failFast": true,
-    "tap": true
+    "failFast": false,
+    "tap": false
   },
   "config": {
     "ghooks": {
