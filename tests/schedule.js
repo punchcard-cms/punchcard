@@ -5,7 +5,7 @@ import Promise from 'bluebird';
 import sutils from '../lib/schedule/utils';
 import putils from '../lib/utils';
 import utils from './fixtures/_utils';
-import db from '../lib/database';
+import database from '../lib/database';
 import apps from './fixtures/applications/objects/database-mocks.js';
 
 const items = utils.generate();
@@ -13,7 +13,7 @@ const length = items.content.length;
 const count = Math.floor(Math.random() * length);
 
 test.before(() => {
-  return db.init();
+  return database.init();
 });
 
 test('Setup', t => {
@@ -21,7 +21,7 @@ test('Setup', t => {
   const revision = items.content[item];
 
   return sutils.setup(revision).then(() => {
-    return db('schedule').select('*').where({
+    return database('schedule').select('*').where({
       id: revision.id,
       revision: revision.revision,
     });
@@ -46,7 +46,7 @@ test('Push', t => {
   return sutils.setup(revision).then(() => {
     return sutils.push(revision, apps.rows);
   }).then(() => {
-    return db('live').select('*').where({
+    return database('live').select('*').where({
       id: revision.id,
       revision: revision.revision,
     });
@@ -67,7 +67,7 @@ test('Pull', t => {
 
   revision.sunset = putils.time.iso(moment().subtract(1, 'days').format('YYYY-MM-DD'), moment().format('hh:mm'), 'America/New_York');
 
-  return db('live').insert({
+  return database('live').insert({
     'id': revision.id,
     'revision': revision.revision,
     'language': revision.language,
@@ -81,7 +81,7 @@ test('Pull', t => {
   }).then(() => {
     return sutils.pull(revision, apps.rows);
   }).then(() => {
-    return db('live').select('*').where({
+    return database('live').select('*').where({
       id: revision.id,
       revision: revision.revision,
     });
@@ -106,7 +106,7 @@ test.skip('Sunrise', t => {
   }).then(() => {
     return Promise.delay(200);
   }).then(() => {
-    return db('live').select('*').where({
+    return database('live').select('*').where({
       id: revision.id,
     });
   }).then(result => {
@@ -125,7 +125,7 @@ test.skip('Sunset', t => {
 
   revision.sunset = putils.time.iso(moment().subtract(1, 'days').format('YYYY-MM-DD'), moment().format('hh:mm'), 'America/New_York');
 
-  return db('live').insert({
+  return database('live').insert({
     'id': revision.id,
     'revision': revision.revision,
     'language': revision.language,
@@ -141,7 +141,7 @@ test.skip('Sunset', t => {
   }).then(() => {
     return Promise.delay(200);
   }).then(() => {
-    return db('live').select('*').where({
+    return database('live').select('*').where({
       id: revision.id,
       revision: revision.revision,
     });
