@@ -7,7 +7,7 @@ addons:
 #########################
 ## Setup
 #########################
-sudo: false
+sudo: true
 cache:
   directories:
     - node_modules
