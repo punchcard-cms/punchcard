@@ -35,6 +35,8 @@ before_script:
   - psql -c 'create database travis_ci_test;' -U postgres
   - npm prune
 
+script: yarn test
+
 after_success:
   - npm run coverage
   - npm run semantic-release
