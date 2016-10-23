@@ -1,88 +1,70 @@
 import test from 'ava';
-import uuid from 'uuid';
-import ipsum from 'lorem-ipsum';
-import Promise from 'bluebird';
 import slugify from 'underscore.string/slugify';
 import isEqual from 'lodash/isEqual';
 import cloneDeep from 'lodash/cloneDeep';
+import isUUID from 'validator/lib/isUUID';
+
 import apiUtils from '../lib/api/utils';
 import api from '../lib/api';
-import utils from '../lib/utils';
 import database from '../lib/database';
+import utils from './fixtures/_utils';
 
-const content = [];
-const types = [];
-const eachOfType = {};
-const allTypes = [];
+const generated = 17;
+const lang = 'api-test';
 
-for (let i = 0; i < 5; i++) {
-  types.push(`Test Type ${ipsum({
-    count: 1,
-    units: 'words',
-  })}`);
-  eachOfType[types[i]] = 0;
-  allTypes.push({
-    name: types[i],
-    id: slugify(types[i]),
-    description: ipsum({
-      count: Math.round(Math.random() * 6 + 1),
-      units: 'words',
-    }),
-    attributes: [],
-  });
-}
+const fixtures = utils.generate(generated, lang);
 
-for (let i = 0; i < 50; i++) {
-  const name = ipsum({
-    count: 3,
-    units: 'words',
-    format: 'plain',
-  });
-
-  const sunrise = `${Math.round(Math.random() * 3 + 2016)}-${Math.round(Math.random() * 11 + 1)}-${Math.round(Math.random() * 25 + 1)}`;
-  const sunset = `${Math.round(Math.random() * 3 + 2016)}-${Math.round(Math.random() * 11 + 1)}-${Math.round(Math.random() * 25 + 1)}`;
-
-  const type = types[Math.round(Math.random() * 4)];
-
-  eachOfType[type] += 1;
-
-  const item = {
-    'id': uuid.v4(),
-    'language': 'en-us',
-    'sunrise': utils.time.iso(sunrise, '00:00'),
-    'sunrise-timezone': 'America/New_York',
-    'sunset': utils.time.iso(sunset, '00:00'),
-    'sunset-timezone': 'America/New_York',
-    'key': name,
-    'key-slug': slugify(name),
-    type,
-    'type-slug': slugify(type),
-    'attributes': {
-      name,
-      text: ipsum({
-        count: 3,
-        units: 'paragraphs',
-        format: 'html',
-      }),
-    },
-  };
-
-  content[i] = item;
-}
+const content = fixtures.content;
+const live = fixtures.live;
+const types = fixtures.types.names;
+const allTypes = fixtures.types.full;
 
 test.cb.before(t => {
-  Promise.map(content, item => {
-    return database('live').insert(item);
-  }).then(() => {
-    t.end();
-  }).catch(e => {
-    console.error(e);
-    t.end();
+  database.init().then(() => {
+    database('live').where('language', lang).del().then(() => {
+      database('live').insert(live).then(() => {
+        t.end();
+      }).catch(e => { // because we can't return in a before, this catch doesn't bubble out
+        console.error(e.stack); // eslint-disable-line no-console
+        t.fail(e.stack);
+      });
+    });
+  })
+  .catch(e => {
+    console.error(e.stack); // eslint-disable-line no-console
+    t.fail(e.stack);
   });
 });
 
 //////////////////////////////
-// Utils
+// Utils - attributes
+//////////////////////////////
+test('Utils: attributes', t => {
+  const item = Math.round(Math.random() * content.length - 1);
+  let expected = content[item];
+  if (expected === undefined) {
+    expected = cloneDeep(content[content.length - 1]);
+  }
+
+  const model = allTypes.find(typ => {
+    return typ.id === expected['type-slug'];
+  });
+
+  const attributes = apiUtils.attributes(expected.value, model.attributes);
+
+  t.is(typeof attributes, 'object', 'Should return an object.');
+  Object.keys(attributes).map(key => {
+    const attr = key.split('-');
+    if (attr[attr.length - 1] === 'referencer') {
+      if (attributes[key] !== '') {
+        t.true(isUUID(attributes[key]), 'includes a uuid');
+      }
+    }
+  });
+});
+
+//////////////////////////////
+// Utils - format
 //////////////////////////////
 test('Utils: Format Results - List', t => {
   const formatted = apiUtils.format(content.slice(0, 9));
@@ -100,19 +82,33 @@ test('Utils: Format Results - List', t => {
 });
 
 test('Utils: Format Results - Attributes', t => {
-  const formatted = apiUtils.format(content.slice(0, 9), true);
+  const item = Math.round(Math.random() * content.length - 1);
+  let expected = cloneDeep(content[item]);
 
-  formatted.forEach(item => {
-    t.true(item.hasOwnProperty('id'), 'Contains ID');
-    t.true(item.hasOwnProperty('type'), 'Contains Type');
-    t.true(item.hasOwnProperty('type_slug'), 'Contains Type Slug');
-    t.true(item.hasOwnProperty('key'), 'Contains Key');
-    t.true(item.hasOwnProperty('key_slug'), 'Contains Key Slug');
-    t.false(item.hasOwnProperty('meta'), 'Does not contain Meta');
-    t.true(item.hasOwnProperty('attributes'), 'Contains attributes');
+  if (expected === undefined) {
+    expected = cloneDeep(content[content.length - 1]);
+  }
+
+  const model = allTypes.find(typ => {
+    return typ.id === expected['type-slug'];
+  });
+
+  const formatted = apiUtils.format([expected], model.attributes);
+
+  formatted.forEach(itm => {
+    t.true(itm.hasOwnProperty('id'), 'Contains ID');
+    t.true(itm.hasOwnProperty('type'), 'Contains Type');
+    t.true(itm.hasOwnProperty('type_slug'), 'Contains Type Slug');
+    t.true(itm.hasOwnProperty('key'), 'Contains Key');
+    t.true(itm.hasOwnProperty('key_slug'), 'Contains Key Slug');
+    t.false(itm.hasOwnProperty('meta'), 'Does not contain Meta');
+    t.true(itm.hasOwnProperty('attributes'), 'Contains attributes');
   });
 });
 
+//////////////////////////////
+// Utils - organize
+//////////////////////////////
 test('Utils: Organize - Default', t => {
   const actual = apiUtils.organize();
   const expected = {
@@ -235,6 +231,9 @@ test('Utils: Organize - Wrong Pages', t => {
   t.deepEqual(actual, expected, 'Returns defaults');
 });
 
+//////////////////////////////
+// Utils - page
+//////////////////////////////
 test('Utils: Page - First', t => {
   const organized = apiUtils.organize();
   const actual = apiUtils.page('api', organized, 100);
@@ -336,37 +335,18 @@ test('APIs: Types', t => {
     'id',
   ];
 
-  const expectedAll = cloneDeep(allTypes).map(ct => {
-    const finalCT = ct;
-    delete finalCT.attributes;
+  const apiTypes = api.types(app);
 
-    finalCT.meta = {
-      url: `/api/types/${ct.id}`,
-      count: eachOfType[ct.name],
-    };
-
-    return finalCT;
-  });
-
-  return api.types(app).then(apiTypes => {
-    console.log(apiTypes.all);  // eslint-disable-line no-console
-    console.log('-----');  // eslint-disable-line no-console
-    console.log(expectedAll);  // eslint-disable-line no-console
-    t.true(apiTypes.hasOwnProperty('keys'), 'Has keys');
-    t.true(apiTypes.hasOwnProperty('all'), 'Has All Content Types');
-    t.true(isEqual(apiTypes.keys, keys), 'Keys are as expected');
-
-    // t.true(isEqual(apiTypes.keys, expectedAll), 'All types are as expected');
-    // t.deepEqual(apiTypes.keys, keys, 'Keys are as expected');
-    // t.deepEqual(apiTypes.all, expectedAll, 'All types are as expected');
-  });
+  t.true(apiTypes.hasOwnProperty('keys'), 'Has keys');
+  t.true(apiTypes.hasOwnProperty('all'), 'Has All Content Types');
+  t.true(isEqual(apiTypes.keys, keys), 'Keys are as expected');
 });
 
 test('API: All', t => {
   return api.all({}).then(results => {
     t.true(results.hasOwnProperty('items'), 'Has Items');
     t.true(results.hasOwnProperty('pages'), 'Has Pagination');
-    t.is(results.items.length, 30, 'Has all 30 items in it');
+    t.true(results.items.length >= generated, 'Has at least all items in it');
   });
 });
 
@@ -379,9 +359,9 @@ test('API: Content', t => {
     },
   };
 
-  return api.types(app).then(apiTypes => {
-    const formatted = api.content({}, apiTypes);
+  const apiTypes = api.types(app);
 
+  return api.content({}, apiTypes).then(formatted => {
     t.true(formatted.hasOwnProperty('items'), 'Has Items');
     t.true(formatted.hasOwnProperty('pages'), 'Has Pagination');
     t.is(formatted.items.length, allTypes.length, 'All content types exist');
@@ -397,41 +377,43 @@ test('API: Content - Descending', t => {
     },
   };
 
-  return api.types(app).then(apiTypes => {
-    const formatted = api.content({
-      sort_dir: 'desc', // eslint-disable-line camelcase
-    }, apiTypes);
+  const apiTypes = api.types(app);
 
+  return api.content({
+    sort_dir: 'desc', // eslint-disable-line camelcase
+  }, apiTypes).then(formatted => {
     t.true(formatted.hasOwnProperty('items'), 'Has Items');
     t.true(formatted.hasOwnProperty('pages'), 'Has Pagination');
     t.is(formatted.items.length, allTypes.length, 'All content types exist');
   });
 });
 
-test.skip('API: ofType', t => {
-  const item = Math.round(Math.random() * types.length);
+test('API: ofType', t => {
+  const item = Math.round(Math.random() * types.length - 1);
+  const type = types[item];
 
-  return api.ofType({}, slugify(types[item])).then(formatted => {
+  return api.ofType({}, slugify(type)).then(formatted => {
     t.true(formatted.hasOwnProperty('items'), 'Has Items');
     t.true(formatted.hasOwnProperty('pages'), 'Has Pagination');
-
-    if (eachOfType[types[item]] > 30) {
-      t.is(formatted.items.length, 30, 'Has all available items');
-    }
-    else {
-      t.is(formatted.items.length, eachOfType[types[item]], 'Has all available items');
-    }
   });
 });
 
 test('API: One', t => {
-  const item = Math.round(Math.random() * content.length);
-  const expected = content[item];
+  const item = Math.round(Math.random() * content.length - 1);
+  let expected = cloneDeep(content[item]);
 
-  return api.one({}, expected.id).then(result => {
+  if (expected === undefined) {
+    expected = cloneDeep(content[content.length - 1]);
+  }
+
+  const model = allTypes.find(typ => {
+    return typ.id === expected['type-slug'];
+  });
+
+  return api.one({}, expected.id, model.attributes).then(result => {
     t.is(result.id, expected.id, 'IDs the same');
     t.true(result.hasOwnProperty('attributes'));
-    t.is(result.key, expected.key, 'Key available');
+    t.is(result.key_slug, expected.slug, 'Key available');
     t.true(result.hasOwnProperty('type'), 'Has type info');
   });
 });
@@ -442,13 +424,16 @@ test('API: One - Not There', t => {
   });
 });
 
+
+//////////////////////////////
+// AFTER ALL TESTS RUN
+//////////////////////////////
 test.cb.after(t => {
-  Promise.map(types, type => {
-    return database('live').where('type', type).del();
-  }).then(() => {
+  database('live').where('language', lang).del().then(() => {
     t.end();
-  }).catch(e => {
-    console.error(e);
+  })
+  .catch(e => {
+    console.error(e.stack); // eslint-disable-line no-console
     t.end();
   });
 });
