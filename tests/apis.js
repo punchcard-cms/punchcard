@@ -387,7 +387,10 @@ test('API: All with Follow', t => {
     t.true(results.hasOwnProperty('items'), 'Has Items');
     t.true(results.hasOwnProperty('pages'), 'Has Pagination');
     t.true(results.items.length >= generated, 'Has at least all items in it');
-    t.true(one, 'At least one item returned in items');
+
+    if (results.items.length > 0) {
+      t.true(one, 'At least one item returned in items');
+    }
   });
 });
 
@@ -468,7 +471,10 @@ test('API: ofType with Follow', t => {
     });
     t.true(results.hasOwnProperty('items'), 'Has Items');
     t.true(results.hasOwnProperty('pages'), 'Has Pagination');
-    t.true(one, 'At least one item returned in items');
+
+    if (results.items.length > 0) {
+      t.true(one, 'At least one item returned in items');
+    }
   });
 });
 
