@@ -368,9 +368,12 @@ test('API: All with Follow', t => {
   return api.all({
     follow: 'true',
   }, allTypes).then(results => {
+    let one = false;
+
     results.items.forEach(item => {
       // Ignore empty object
       if (Object.keys(item).length !== 0) {
+        one = true;
         t.true(item.hasOwnProperty('id'), 'Each item has an ID');
         t.true(item.hasOwnProperty('type'), 'Each item has a type');
         t.true(item.type.hasOwnProperty('name'), 'Each item type has an name');
@@ -384,6 +387,7 @@ test('API: All with Follow', t => {
     t.true(results.hasOwnProperty('items'), 'Has Items');
     t.true(results.hasOwnProperty('pages'), 'Has Pagination');
     t.true(results.items.length >= generated, 'Has at least all items in it');
+    t.true(one, 'At least one item returned in items');
   });
 });
 
@@ -446,9 +450,12 @@ test('API: ofType with Follow', t => {
   return api.ofType({
     follow: 'true',
   }, model).then(results => {
+    let one = false;
+
     results.items.forEach(itm => {
       // Ignore empty object
       if (Object.keys(itm).length !== 0) {
+        one = true;
         t.true(itm.hasOwnProperty('id'), 'Each item has an ID');
         t.true(itm.hasOwnProperty('type'), 'Each item has a type');
         t.true(itm.type.hasOwnProperty('name'), 'Each item type has an name');
@@ -461,6 +468,7 @@ test('API: ofType with Follow', t => {
     });
     t.true(results.hasOwnProperty('items'), 'Has Items');
     t.true(results.hasOwnProperty('pages'), 'Has Pagination');
+    t.true(one, 'At least one item returned in items');
   });
 });
 
