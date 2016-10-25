@@ -36,6 +36,22 @@ test.cb.before(t => {
   });
 });
 
+test.cb.after.always(t => {
+  const items = types.map(type => {
+    return database('live').where('type', type).del().then(() => {
+      return database('schedule').where('type', type).del();
+    });
+  });
+
+  Promise.all(items)
+    .then(() => {
+      t.end();
+    })
+    .catch(e => {
+      t.fail(e);
+    });
+});
+
 //////////////////////////////
 // Utils - attributes
 //////////////////////////////
