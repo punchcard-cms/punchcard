@@ -8,6 +8,7 @@ const ipsum = require('lorem-ipsum');
 const uuid = require('uuid');
 const slugify = require('underscore.string/slugify');
 const moment = require('moment');
+const _ = require('lodash');
 
 const utils = require('../../lib/utils');
 
@@ -34,11 +35,15 @@ const utils = require('../../lib/utils');
  * Randomly generate content
  */
 const generate = (total, lang) => {
-  const content = [];
+  let content = [];
   const lives = [];
   const types = [];
+  const refs = {
+    types: {},
+    content: {},
+  };
   const eachOfType = {};
-  const allTypes = [];
+  let allTypes = [];
   const t = total || 50;
   const language = lang || 'en-us';
   let i;
@@ -54,6 +59,8 @@ const generate = (total, lang) => {
     })}`);
 
     eachOfType[types[i]] = 0;
+    refs.content[slugify(types[i])] = [];
+
     allTypes.push({
       name: types[i],
       id: slugify(types[i]),
@@ -96,20 +103,130 @@ const generate = (total, lang) => {
               type: 'reference',
               id: uuid.v4(),
               name: 'referencer--reference',
+              settings: {
+                contentType: 'will-be-changed',
+              },
+              reference: true,
             },
           },
           id: `${slugify(types[i])}-referencer`,
           type: 'reference',
+        },
+        {
+          name: 'Referencer Dual',
+          inputs: {
+            referencerdual1: {
+              label: 'Referencer 1',
+              type: 'reference',
+              id: uuid.v4(),
+              name: 'referencer1--reference',
+              settings: {
+                contentType: 'will-be-changed',
+              },
+              reference: true,
+            },
+            referencerdual2: {
+              label: 'Referencer 2',
+              type: 'reference',
+              id: uuid.v4(),
+              name: 'referencer2--reference',
+              settings: {
+                contentType: 'will-be-changed',
+              },
+              reference: true,
+            },
+          },
+          id: `${slugify(types[i])}-referencer-dual`,
+          type: 'reference',
+        },
+        {
+          name: 'Referencer Repeating',
+          inputs: {
+            referencerrepeat: {
+              label: 'Ref Repeat',
+              type: 'reference',
+              id: uuid.v4(),
+              name: 'referencer-repeating--reference',
+              settings: {
+                contentType: 'will-be-changed',
+              },
+              reference: true,
+            },
+          },
+          id: `${slugify(types[i])}-referencer-repeating`,
+          type: 'reference',
+          repeatable: true,
+        },
+        {
+          name: 'Referencer Dual Repeating',
+          inputs: {
+            referencerdualrepeat1: {
+              label: 'Referencer 1',
+              type: 'reference',
+              id: uuid.v4(),
+              name: 'referencer1--reference-repeating',
+              settings: {
+                contentType: 'will-be-changed',
+              },
+              reference: true,
+            },
+            referencerdualrepeat2: {
+              label: 'Referencer 2',
+              type: 'reference',
+              id: uuid.v4(),
+              name: 'referencer2--reference-repeating',
+              settings: {
+                contentType: 'will-be-changed',
+              },
+              reference: true,
+            },
+          },
+          id: `${slugify(types[i])}-referencer-dual-repeating`,
+          type: 'reference',
+          repeatable: true,
         },
       ],
     });
   }
 
   /**
+   * Cycle through All Types and give a content-type ID to all references
+   */
+  allTypes = allTypes.map(tp => {
+    const type = tp;
+    const others = _.cloneDeep(types).filter(typ => {
+      return typ !== type;
+    });
+    const random = Math.round(Math.random() * Math.round(others.length - 1));
+
+    // go through each attribute and assign a content type for references
+    type.attributes = type.attributes.map(atr => {
+      const attr = atr;
+      Object.keys(attr.inputs).forEach(inp => {
+        const input = attr.inputs[inp];
+        if (input.hasOwnProperty('reference') && input.hasOwnProperty('settings')) {
+          input.settings.contentType = slugify(others[random]);
+        }
+
+        attr.inputs[inp] = input;
+      });
+
+      return attr;
+    });
+
+    // store contentType used by all this type's attributes
+    refs.types[type.id] = slugify(others[random]);
+
+    return type;
+  });
+
+  // get the number of content types
+  let typesnum = types.length - 1;
+
+  /**
    * Add {type} fixtures to the content array
    */
   for (i = 0; i < t; i++) {
-    let referenced = '';
     const name = ipsum({
       count: 3,
       units: 'words',
@@ -122,14 +239,19 @@ const generate = (total, lang) => {
     const sunrise = moment().format('hh:mm');
     const sunset = moment().format('hh:mm');
 
-    const type = types[Math.round(Math.random() * 4)];
-
-    eachOfType[type] += 1;
-
-    if (content.length > 0) {
-      // make the last entry the referencee
-      referenced = content[content.length - 1].id;
+    if (typesnum < 0) {
+      typesnum = types.length - 1;
     }
+
+    // goes through each type (instead of random) to make sure no types are empty
+    const type = types[typesnum];
+    typesnum--;
+
+    // store id under this content type
+    refs.content[slugify(type)].push(id);
+
+    // track number of pieces of content for each type
+    eachOfType[type] += 1;
 
     const values = {};
     values[`${slugify(type)}-name`] = {
@@ -154,9 +276,30 @@ const generate = (total, lang) => {
     };
     values[`${slugify(type)}-referencer`] = {
       referencer: {
-        value: referenced,
+        value: 'make-me-an-id',
       },
     };
+    values[`${slugify(type)}-referencer-dual`] = {
+      referencerdual1: {
+        value: 'make-me-an-id',
+      },
+      referencerdual2: {
+        value: 'make-me-an-id',
+      },
+    };
+    values[`${slugify(type)}-referencer-repeating`] = [{
+      referencerrepeat: {
+        value: 'make-me-an-id',
+      },
+    }];
+    values[`${slugify(type)}-referencer-dual-repeating`] = [{
+      referencerdualrepeat1: {
+        value: 'make-me-an-id',
+      },
+      referencerdualrepeat2: {
+        value: 'make-me-an-id',
+      },
+    }];
 
     const item = {
       id,
@@ -191,9 +334,39 @@ const generate = (total, lang) => {
     lives[i] = live;
   }
 
+  // add referenced UUIDs to content/live
+  content = content.map(ct => {
+    let cont = ct;
+    const live = lives.findIndex(elm => {
+      return elm.id === cont.id;
+    });
+
+    // get the source of referenced content
+    const source = {
+      type: refs.types[slugify(ct.type)],
+      ids: refs.content[refs.types[slugify(ct.type)]],
+    };
+
+    // need a random number to get id
+    const random = Math.round(Math.random() * Math.round(source.ids.length - 1));
+
+    // replace every id placeholder wiht a random id from the correct content-type
+    const replaced = JSON.stringify(cont, null, 2).replace(/make-me-an-id/g, source.ids[random]);
+    cont = JSON.parse(replaced);
+
+    // replace live data too
+    lives[live].attributes = cont.value;
+
+    return cont;
+  });
+
+// console.log(JSON.stringify(content, null, 2));
+// console.log(JSON.stringify(lives, null, 2));
+
   return {
     content,
     live: lives,
+    references: utils.references(allTypes).references,
     types: {
       names: types,
       each: eachOfType,

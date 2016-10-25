@@ -16,8 +16,13 @@ const fixtures = utils.generate(generated, lang);
 
 const content = fixtures.content;
 const live = fixtures.live;
+const references = fixtures.references;
 const types = fixtures.types.names;
 const allTypes = fixtures.types.full;
+
+const ids = types.map(type => {
+  return slugify(type);
+});
 
 test.cb.before(t => {
   database.init().then(() => {
@@ -40,8 +45,8 @@ test.cb.before(t => {
 // Utils - attributes
 //////////////////////////////
 test('Utils: attributes', t => {
-  const item = Math.round(Math.random() * content.length - 1);
-  let expected = content[item];
+  const random = Math.round(Math.random() * content.length - 1);
+  let expected = content[random];
   if (expected === undefined) {
     expected = cloneDeep(content[content.length - 1]);
   }
@@ -50,14 +55,61 @@ test('Utils: attributes', t => {
     return typ.id === expected['type-slug'];
   });
 
-  const attributes = apiUtils.attributes(expected.value, model.attributes);
+  const attributes = apiUtils.attributes(expected.value, model.attributes, {}, references);
 
   t.is(typeof attributes, 'object', 'Should return an object.');
-  Object.keys(attributes).map(key => {
-    const attr = key.split('-');
-    if (attr[attr.length - 1] === 'referencer') {
+
+  Object.keys(attributes).forEach(key => {
+    const parts = key.split('-');
+    const attr = model.attributes.find(atr => {
+      return atr.id === key;
+    });
+
+    // only finds attributes which are references
+    if (parts.indexOf('referencer') > -1) {
       if (attributes[key] !== '') {
-        t.true(isUUID(attributes[key]), 'includes a uuid');
+        if (Array.isArray(attributes[key])) {
+          attributes[key].forEach(item => {
+            // check single, repeated attribute
+            if (Object.keys(attr.inputs).length === 1) {
+              t.is(typeof item, 'object', 'references should be an object');
+              t.true(item.hasOwnProperty('id'), 'contains a referenced id');
+              t.true(isUUID(item.id), 'referenced id is a uuid');
+              t.true(item.hasOwnProperty('type'), 'contains the content-type id for the referenced content');
+              t.true(ids.indexOf(item.type) > -1, 'content-type is in this cms instance');
+            }
+            else {
+              // check multi, repeat attr
+              Object.keys(attr.inputs).forEach(input => {
+                t.is(typeof item[input], 'object', 'references should be an object');
+                t.true(item[input].hasOwnProperty('id'), 'contains a referenced id');
+                t.true(isUUID(item[input].id), 'referenced id is a uuid');
+                t.true(item[input].hasOwnProperty('type'), 'contains the content-type id for the referenced content');
+                t.true(ids.indexOf(item[input].type) > -1, 'content-type is in this cms instance');
+              });
+            }
+          });
+        }
+        else {
+          // check single, non-repeated attribute
+          if (Object.keys(attr.inputs).length === 1) {
+            t.is(typeof attributes[key], 'object', 'references should be an object');
+            t.true(attributes[key].hasOwnProperty('id'), 'contains a referenced id');
+            t.true(isUUID(attributes[key].id), 'referenced id is a uuid');
+            t.true(attributes[key].hasOwnProperty('type'), 'contains the content-type id for the referenced content');
+            t.true(ids.indexOf(attributes[key].type) > -1, 'content-type is in this cms instance');
+          }
+          else {
+            // check multi, non-repeat attr
+            Object.keys(attr.inputs).forEach(input => {
+              t.is(typeof attributes[key][input], 'object', 'references should be an object');
+              t.true(attributes[key][input].hasOwnProperty('id'), 'contains a referenced id');
+              t.true(isUUID(attributes[key][input].id), 'referenced id is a uuid');
+              t.true(attributes[key][input].hasOwnProperty('type'), 'contains the content-type id for the referenced content');
+              t.true(ids.indexOf(attributes[key][input].type) > -1, 'content-type is in this cms instance');
+            });
+          }
+        }
       }
     }
   });
@@ -93,7 +145,7 @@ test('Utils: Format Results - Attributes', t => {
     return typ.id === expected['type-slug'];
   });
 
-  const formatted = apiUtils.format([expected], model.attributes);
+  const formatted = apiUtils.format([expected], model.attributes, {}, references);
 
   formatted.forEach(itm => {
     t.true(itm.hasOwnProperty('id'), 'Contains ID');
@@ -410,7 +462,7 @@ test('API: One', t => {
     return typ.id === expected['type-slug'];
   });
 
-  return api.one({}, expected.id, model.attributes).then(result => {
+  return api.one({}, expected.id, model.attributes, {}, references).then(result => {
     t.is(result.id, expected.id, 'IDs the same');
     t.true(result.hasOwnProperty('attributes'));
     t.is(result.key_slug, expected.slug, 'Key available');
