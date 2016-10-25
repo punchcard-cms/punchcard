@@ -338,9 +338,7 @@ test('Utils: Page - None', t => {
 //////////////////////////////
 test('APIs: Types', t => {
   const app = {
-    get: word => {
-      // console.log(word); // eslint-disable-line no-console
-
+    get: () => {
       return allTypes;
     },
   };
@@ -366,11 +364,32 @@ test('API: All', t => {
   });
 });
 
+test('API: All with Follow', t => {
+  return api.all({
+    follow: 'true',
+  }, allTypes).then(results => {
+    results.items.forEach(item => {
+      // Ignore empty object
+      if (Object.keys(item).length !== 0) {
+        t.true(item.hasOwnProperty('id'), 'Each item has an ID');
+        t.true(item.hasOwnProperty('type'), 'Each item has a type');
+        t.true(item.type.hasOwnProperty('name'), 'Each item type has an name');
+        t.true(item.type.hasOwnProperty('slug'), 'Each item type has an slug');
+        t.true(item.type.hasOwnProperty('url'), 'Each item type has an url');
+        t.true(item.hasOwnProperty('key'), 'Each item has a key');
+        t.true(item.hasOwnProperty('key_slug'), 'Each item has a key_slug');
+        t.true(item.hasOwnProperty('attributes'), 'Each item has attributes');
+      }
+    });
+    t.true(results.hasOwnProperty('items'), 'Has Items');
+    t.true(results.hasOwnProperty('pages'), 'Has Pagination');
+    t.true(results.items.length >= generated, 'Has at least all items in it');
+  });
+});
+
 test('API: Content', t => {
   const app = {
-    get: word => {
-      // console.log(word); // eslint-disable-line no-console
-
+    get: () => {
       return allTypes;
     },
   };
@@ -386,9 +405,7 @@ test('API: Content', t => {
 
 test('API: Content - Descending', t => {
   const app = {
-    get: word => {
-      // console.log(word); // eslint-disable-line no-console
-
+    get: () => {
       return allTypes;
     },
   };
@@ -407,7 +424,6 @@ test('API: Content - Descending', t => {
 test('API: ofType', t => {
   const item = Math.round(Math.random() * (types.length - 1));
   const type = types[item];
-  console.log(item);
 
   const model = allTypes.find(typ => {
     return typ.id === slugify(type);
@@ -416,6 +432,35 @@ test('API: ofType', t => {
   return api.ofType({}, model).then(formatted => {
     t.true(formatted.hasOwnProperty('items'), 'Has Items');
     t.true(formatted.hasOwnProperty('pages'), 'Has Pagination');
+  });
+});
+
+test('API: ofType with Follow', t => {
+  const item = Math.round(Math.random() * (types.length - 1));
+  const type = types[item];
+
+  const model = allTypes.find(typ => {
+    return typ.id === slugify(type);
+  });
+
+  return api.ofType({
+    follow: 'true',
+  }, model).then(results => {
+    results.items.forEach(itm => {
+      // Ignore empty object
+      if (Object.keys(itm).length !== 0) {
+        t.true(itm.hasOwnProperty('id'), 'Each item has an ID');
+        t.true(itm.hasOwnProperty('type'), 'Each item has a type');
+        t.true(itm.type.hasOwnProperty('name'), 'Each item type has an name');
+        t.true(itm.type.hasOwnProperty('slug'), 'Each item type has an slug');
+        t.true(itm.type.hasOwnProperty('url'), 'Each item type has an url');
+        t.true(itm.hasOwnProperty('key'), 'Each item has a key');
+        t.true(itm.hasOwnProperty('key_slug'), 'Each item has a key_slug');
+        t.true(itm.hasOwnProperty('attributes'), 'Each item has attributes');
+      }
+    });
+    t.true(results.hasOwnProperty('items'), 'Has Items');
+    t.true(results.hasOwnProperty('pages'), 'Has Pagination');
   });
 });
 
