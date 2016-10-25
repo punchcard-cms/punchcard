@@ -16,7 +16,6 @@ const fixtures = utils.generate(generated, lang);
 
 const content = fixtures.content;
 const live = fixtures.live;
-const references = fixtures.references;
 const types = fixtures.types.names;
 const allTypes = fixtures.types.full;
 
@@ -55,7 +54,7 @@ test('Utils: attributes', t => {
     return typ.id === expected['type-slug'];
   });
 
-  const attributes = apiUtils.attributes(expected.value, model.attributes, {}, references);
+  const attributes = apiUtils.attributes(expected.value, model.attributes, {});
 
   t.is(typeof attributes, 'object', 'Should return an object.');
 
@@ -145,7 +144,7 @@ test('Utils: Format Results - Attributes', t => {
     return typ.id === expected['type-slug'];
   });
 
-  const formatted = apiUtils.format([expected], model.attributes, {}, references);
+  const formatted = apiUtils.format([expected], model.attributes, {});
 
   formatted.forEach(itm => {
     t.true(itm.hasOwnProperty('id'), 'Contains ID');
@@ -462,7 +461,7 @@ test('API: One', t => {
     return typ.id === expected['type-slug'];
   });
 
-  return api.one({}, expected.id, model.attributes, {}, references).then(result => {
+  return api.one({}, expected.id, model.attributes, {}).then(result => {
     t.is(result.id, expected.id, 'IDs the same');
     t.true(result.hasOwnProperty('attributes'));
     t.is(result.key_slug, expected.slug, 'Key available');
