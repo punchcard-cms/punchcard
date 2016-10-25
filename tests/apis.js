@@ -40,10 +40,10 @@ test.cb.before(t => {
 // Utils - attributes
 //////////////////////////////
 test('Utils: attributes', t => {
-  const item = Math.round(Math.random() * content.length - 1);
+  const item = Math.round(Math.random() * (content.length - 1));
   let expected = content[item];
   if (expected === undefined) {
-    expected = cloneDeep(content[content.length - 1]);
+    expected = cloneDeep(content[(content.length - 1)]);
   }
 
   const model = allTypes.find(typ => {
@@ -82,11 +82,11 @@ test('Utils: Format Results - List', t => {
 });
 
 test('Utils: Format Results - Attributes', t => {
-  const item = Math.round(Math.random() * content.length - 1);
+  const item = Math.round(Math.random() * (content.length - 1));
   let expected = cloneDeep(content[item]);
 
   if (expected === undefined) {
-    expected = cloneDeep(content[content.length - 1]);
+    expected = cloneDeep(content[(content.length - 1)]);
   }
 
   const model = allTypes.find(typ => {
@@ -323,7 +323,7 @@ test('Utils: Page - None', t => {
 test('APIs: Types', t => {
   const app = {
     get: word => {
-      console.log(word); // eslint-disable-line no-console
+      // console.log(word); // eslint-disable-line no-console
 
       return allTypes;
     },
@@ -353,7 +353,7 @@ test('API: All', t => {
 test('API: Content', t => {
   const app = {
     get: word => {
-      console.log(word); // eslint-disable-line no-console
+      // console.log(word); // eslint-disable-line no-console
 
       return allTypes;
     },
@@ -371,7 +371,7 @@ test('API: Content', t => {
 test('API: Content - Descending', t => {
   const app = {
     get: word => {
-      console.log(word); // eslint-disable-line no-console
+      // console.log(word); // eslint-disable-line no-console
 
       return allTypes;
     },
@@ -389,21 +389,26 @@ test('API: Content - Descending', t => {
 });
 
 test('API: ofType', t => {
-  const item = Math.round(Math.random() * types.length - 1);
+  const item = Math.round(Math.random() * (types.length - 1));
   const type = types[item];
+  console.log(item);
 
-  return api.ofType({}, slugify(type)).then(formatted => {
+  const model = allTypes.find(typ => {
+    return typ.id === slugify(type);
+  });
+
+  return api.ofType({}, model).then(formatted => {
     t.true(formatted.hasOwnProperty('items'), 'Has Items');
     t.true(formatted.hasOwnProperty('pages'), 'Has Pagination');
   });
 });
 
 test('API: One', t => {
-  const item = Math.round(Math.random() * content.length - 1);
+  const item = Math.round(Math.random() * (content.length - 1));
   let expected = cloneDeep(content[item]);
 
   if (expected === undefined) {
-    expected = cloneDeep(content[content.length - 1]);
+    expected = cloneDeep(content[(content.length - 1)]);
   }
 
   const model = allTypes.find(typ => {
