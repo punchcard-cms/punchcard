@@ -129,6 +129,14 @@ test.cb.before(t => {
   });
 });
 
+test.cb.after.always(t => {
+  database('applications').select('*').del().then(() => {
+    t.end();
+  }).catch(e => {
+    t.fail(e.message);
+  });
+});
+
 test('Applications functions', t => {
   t.is(typeof applications.model, 'function', '`model` exists and is a function');
   t.is(typeof applications.model.structure, 'object', '`structure` exists and is an object');
@@ -380,7 +388,7 @@ test('Send - bad urls', t => {
     t.true(Array.isArray(app.responses.sunset), 'includes live responses, which is an array');
 
     const sorted = _.sortBy(app.responses.sunset, 'timestamp');
-    t.is(sorted[sorted.length - 1].response, 500, 'includes endpoint response');
+    t.is(sorted[sorted.length - 1].response, 400, 'includes endpoint response');
   });
 });
 
