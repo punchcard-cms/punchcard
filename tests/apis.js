@@ -3,6 +3,7 @@ import slugify from 'underscore.string/slugify';
 import isEqual from 'lodash/isEqual';
 import cloneDeep from 'lodash/cloneDeep';
 import isUUID from 'validator/lib/isUUID';
+import util from 'util';
 
 import apiUtils from '../lib/api/utils';
 import api from '../lib/api';
@@ -26,7 +27,7 @@ const ids = types.map(type => {
 test.cb.before(t => {
   database.init().then(() => {
     database('live').where('language', lang).del().then(() => {
-      database('live').insert(live).then(() => {
+      database('live').insert(live).then((all) => {
         t.end();
       }).catch(e => { // because we can't return in a before, this catch doesn't bubble out
         console.error(e.stack); // eslint-disable-line no-console
@@ -40,7 +41,7 @@ test.cb.before(t => {
   });
 });
 
-test.cb.after.always(t => {
+test.cb.after(t => {
   const items = types.map(type => {
     return database('live').where('type', type).del().then(() => {
       return database('schedule').where('type', type).del();
@@ -70,65 +71,84 @@ test('Utils: attributes', t => {
     return typ.id === expected['type-slug'];
   });
 
-  const attributes = apiUtils.attributes(expected.value, model.attributes, {});
+  const attributes = apiUtils.attributes(expected.value, model.attributes, allTypes, {});
 
-  t.is(typeof attributes, 'object', 'Should return an object.');
-  t.is(typeof attributes.result, 'object', 'Should contain result, an object.');
-  t.true(Array.isArray(attributes.references), 'Should contain references, an array');
-  console.log(JSON.stringify(attributes, null, 2));
-  Object.keys(attributes.result).forEach(key => {
-    const parts = key.split('-');
-    const attr = model.attributes.find(atr => {
-      return atr.id === key;
-    });
+    console.log('~~~~~~~~~~~~~~~~~~~~attributes');
+    console.log(attributes);
+  return attributes.then(result => {
+    console.log('~~~~~~~~~~~~~~~~~~~~');
+    console.log(result);
+    t.pass();
+    //     console.log('result FINAL FINAL END FINAL');
+    //     console.log(result);
+    // t.is(typeof result, 'object', 'Should contain result, an object.');
 
-    // only finds attributes which are references
-    if (parts.indexOf('referencer') > -1) {
-      if (attributes[key] !== '') {
-        if (Array.isArray(attributes[key])) {
-          attributes[key].forEach(item => {
-            // check single, repeated attribute
-            if (Object.keys(attr.inputs).length === 1) {
-              t.is(typeof item, 'object', 'references should be an object');
-              t.true(item.hasOwnProperty('id'), 'contains a referenced id');
-              t.true(isUUID(item.id), 'referenced id is a uuid');
-              t.true(item.hasOwnProperty('type'), 'contains the content-type id for the referenced content');
-              t.true(ids.indexOf(item.type) > -1, 'content-type is in this cms instance');
-            }
-            else {
-              // check multi, repeat attr
-              Object.keys(attr.inputs).forEach(input => {
-                t.is(typeof item[input], 'object', 'references should be an object');
-                t.true(item[input].hasOwnProperty('id'), 'contains a referenced id');
-                t.true(isUUID(item[input].id), 'referenced id is a uuid');
-                t.true(item[input].hasOwnProperty('type'), 'contains the content-type id for the referenced content');
-                t.true(ids.indexOf(item[input].type) > -1, 'content-type is in this cms instance');
-              });
-            }
-          });
-        }
-        else {
-          // check single, non-repeated attribute
-          if (Object.keys(attr.inputs).length === 1) {
-            t.is(typeof attributes[key], 'object', 'references should be an object');
-            t.true(attributes[key].hasOwnProperty('id'), 'contains a referenced id');
-            t.true(isUUID(attributes[key].id), 'referenced id is a uuid');
-            t.true(attributes[key].hasOwnProperty('type'), 'contains the content-type id for the referenced content');
-            t.true(ids.indexOf(attributes[key].type) > -1, 'content-type is in this cms instance');
-          }
-          else {
-            // check multi, non-repeat attr
-            Object.keys(attr.inputs).forEach(input => {
-              t.is(typeof attributes[key][input], 'object', 'references should be an object');
-              t.true(attributes[key][input].hasOwnProperty('id'), 'contains a referenced id');
-              t.true(isUUID(attributes[key][input].id), 'referenced id is a uuid');
-              t.true(attributes[key][input].hasOwnProperty('type'), 'contains the content-type id for the referenced content');
-              t.true(ids.indexOf(attributes[key][input].type) > -1, 'content-type is in this cms instance');
-            });
-          }
-        }
-      }
-    }
+    // Object.keys(result).forEach(key => {
+    //   const parts = key.split('-');
+    //   const attr = model.attributes.find(atr => {
+    //     return atr.id === key;
+    //   });
+
+    //   // only finds attributes which are references
+    //   if (parts.indexOf('referencer') > -1) {
+    //     if (result[key] !== '') {
+    //       if (Array.isArray(result[key])) {
+    //         result[key].forEach(item => {
+    //           // check single, repeated attribute
+    //           if (Object.keys(attr.inputs).length === 1) {
+    //             const res = item[Object.keys(result[key][0])[0]];
+
+    //             t.true(res.hasOwnProperty('value'), 'contains a value');
+    //             t.true(Array.isArray(res.value), 'value should be an object');
+    //             t.true(res.value[0].hasOwnProperty('id'), 'contains a referenced id');
+    //             t.true(isUUID(res.value[0].id), 'referenced id is a uuid');
+    //             t.true(res.value[0].hasOwnProperty('attributes'), 'contains the attributes for the referenced content');
+    //           }
+    //           else {
+    //             // check multi, repeat attr
+    //             Object.keys(attr.inputs).forEach(input => {
+    //               const res = item[input];
+    //               t.true(res.hasOwnProperty('value'), 'contains a value');
+    //               t.true(Array.isArray(res.value), 'value should be an object');
+    //               t.true(res.value[0].hasOwnProperty('id'), 'contains a referenced id');
+    //               t.true(isUUID(res.value[0].id), 'referenced id is a uuid');
+    //               t.true(res.value[0].hasOwnProperty('attributes'), 'contains the attributes for the referenced content');
+    //             });
+    //           }
+    //         });
+    //       }
+    //       else {
+    //         // check single, non-repeated attribute
+    //         if (Object.keys(attr.inputs).length === 1) {
+    //           console.log(result);
+    //           console.log(key);
+    //             t.is(typeof result[key], 'object', ' should be an object');
+    //             const item = result[key][Object.keys(result[key])[0]];
+    //             t.true(item.hasOwnProperty('value'), 'contains a value');
+    //             t.true(Array.isArray(item.value), 'value should be an object');
+    //             t.true(item.value[0].hasOwnProperty('id'), 'contains a referenced id');
+    //             t.true(isUUID(item.value[0].id), 'referenced id is a uuid');
+    //             t.true(item.value[0].hasOwnProperty('attributes'), 'contains the attributes for the referenced content');
+    //         }
+    //         else {
+    //           // check multi, non-repeat attr
+    //           Object.keys(attr.inputs).forEach(input => {
+    //             t.is(typeof result[key][input], 'object', ' should be an object');
+    //             t.true(result[key][input].hasOwnProperty('value'), 'contains a value');
+    //             t.true(Array.isArray(result[key][input].value), 'value should be an object');
+    //             t.true(result[key][input].value[0].hasOwnProperty('id'), 'contains a referenced id');
+    //             t.true(isUUID(result[key][input].value[0].id), 'referenced id is a uuid');
+    //             t.true(result[key][input].value[0].hasOwnProperty('attributes'), 'contains the attributes for the referenced content');
+    //           });
+    //         }
+    //       }
+    //     }
+    //   }
+    // });
+  })
+  .catch(e => {
+    console.log('ERRRRRR')
+    console.log(e)
   });
 });
 
