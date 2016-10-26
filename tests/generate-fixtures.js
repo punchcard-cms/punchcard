@@ -3,7 +3,7 @@ import _ from 'lodash';
 import slugify from 'underscore.string/slugify';
 import isUUID from 'validator/lib/isUUID';
 
-import utils from './fixtures/_utils';
+import utils from './fixtures';
 
 const generated = 17;
 

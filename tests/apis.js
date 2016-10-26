@@ -8,7 +8,7 @@ import util from 'util';
 import apiUtils from '../lib/api/utils';
 import api from '../lib/api';
 import database from '../lib/database';
-import utils from './fixtures/_utils';
+import utils from './fixtures';
 
 const generated = 17;
 const lang = 'api-test';
