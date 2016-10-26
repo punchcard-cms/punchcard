@@ -1,6 +1,7 @@
 'use strict';
 
 const uuid = require('uuid');
+const ipsum = require('lorem-ipsum');
 const slugify = require('underscore.string/slugify');
 
 const type = name => {

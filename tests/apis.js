@@ -73,8 +73,6 @@ test('Utils: attributes', t => {
 
   const attributes = apiUtils.attributes(expected.value, model.attributes, allTypes, {});
 
-    console.log('~~~~~~~~~~~~~~~~~~~~attributes');
-    console.log(attributes);
   return attributes.then(result => {
     console.log('~~~~~~~~~~~~~~~~~~~~');
     console.log(result);

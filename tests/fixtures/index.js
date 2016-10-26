@@ -10,7 +10,7 @@ const slugify = require('underscore.string/slugify');
 const moment = require('moment');
 const _ = require('lodash');
 
-const futils = require('./utils');
+const futils = require('./_utils');
 
 const utils = require('../../lib/utils');
 
