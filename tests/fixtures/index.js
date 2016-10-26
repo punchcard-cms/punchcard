@@ -65,126 +65,126 @@ const generate = (total, lang) => {
       name: types[i],
       id: slugify(types[i]),
       description: ipsum({
-        count: Math.round(Math.random() * 6 + 1),
-        units: 'words',
+	count: Math.round(Math.random() * 6 + 1),
+	units: 'words',
       }),
       attributes: [
-        {
-          name: 'Name',
-          inputs: {
-            text: {
-              label: 'Name',
-              type: 'text',
-              id: uuid.v4(),
-              name: 'name--text',
-            },
-          },
-          id: `${slugify(types[i])}-name`,
-          type: 'text',
-        },
-        {
-          name: 'Textblock',
-          inputs: {
-            textblock: {
-              label: 'Text',
-              type: 'textarea',
-              id: uuid.v4(),
-              name: 'textblock--textarea',
-            },
-          },
-          id: `${slugify(types[i])}-textblock`,
-          type: 'textarea',
-        },
-        {
-          name: 'Referencer',
-          inputs: {
-            referencer: {
-              label: 'Text',
-              type: 'reference',
-              id: uuid.v4(),
-              name: 'referencer--reference',
-              settings: {
-                contentType: 'will-be-changed',
-              },
-              reference: true,
-            },
-          },
-          id: `${slugify(types[i])}-referencer`,
-          type: 'reference',
-        },
-        {
-          name: 'Referencer Dual',
-          inputs: {
-            referencerdual1: {
-              label: 'Referencer 1',
-              type: 'reference',
-              id: uuid.v4(),
-              name: 'referencer1--reference',
-              settings: {
-                contentType: 'will-be-changed',
-              },
-              reference: true,
-            },
-            referencerdual2: {
-              label: 'Referencer 2',
-              type: 'reference',
-              id: uuid.v4(),
-              name: 'referencer2--reference',
-              settings: {
-                contentType: 'will-be-changed',
-              },
-              reference: true,
-            },
-          },
-          id: `${slugify(types[i])}-referencer-dual`,
-          type: 'reference',
-        },
-        {
-          name: 'Referencer Repeating',
-          inputs: {
-            referencerrepeat: {
-              label: 'Ref Repeat',
-              type: 'reference',
-              id: uuid.v4(),
-              name: 'referencer-repeating--reference',
-              settings: {
-                contentType: 'will-be-changed',
-              },
-              reference: true,
-            },
-          },
-          id: `${slugify(types[i])}-referencer-repeating`,
-          type: 'reference',
-          repeatable: true,
-        },
-        {
-          name: 'Referencer Dual Repeating',
-          inputs: {
-            referencerdualrepeat1: {
-              label: 'Referencer 1',
-              type: 'reference',
-              id: uuid.v4(),
-              name: 'referencer1--reference-repeating',
-              settings: {
-                contentType: 'will-be-changed',
-              },
-              reference: true,
-            },
-            referencerdualrepeat2: {
-              label: 'Referencer 2',
-              type: 'reference',
-              id: uuid.v4(),
-              name: 'referencer2--reference-repeating',
-              settings: {
-                contentType: 'will-be-changed',
-              },
-              reference: true,
-            },
-          },
-          id: `${slugify(types[i])}-referencer-dual-repeating`,
-          type: 'reference',
-          repeatable: true,
-        },
+	{
+	  name: 'Name',
+	  inputs: {
+	    text: {
+	      label: 'Name',
+	      type: 'text',
+	      id: uuid.v4(),
+	      name: 'name--text',
+	    },
+	  },
+	  id: `${slugify(types[i])}-name`,
+	  type: 'text',
+	},
+	{
+	  name: 'Textblock',
+	  inputs: {
+	    textblock: {
+	      label: 'Text',
+	      type: 'textarea',
+	      id: uuid.v4(),
+	      name: 'textblock--textarea',
+	    },
+	  },
+	  id: `${slugify(types[i])}-textblock`,
+	  type: 'textarea',
+	},
+	{
+	  name: 'Referencer',
+	  inputs: {
+	    referencer: {
+	      label: 'Text',
+	      type: 'reference',
+	      id: uuid.v4(),
+	      name: 'referencer--reference',
+	      settings: {
+		contentType: 'will-be-changed',
+	      },
+	      reference: true,
+	    },
+	  },
+	  id: `${slugify(types[i])}-referencer`,
+	  type: 'reference',
+	},
+	{
+	  name: 'Referencer Dual',
+	  inputs: {
+	    referencerdual1: {
+	      label: 'Referencer 1',
+	      type: 'reference',
+	      id: uuid.v4(),
+	      name: 'referencer1--reference',
+	      settings: {
+		contentType: 'will-be-changed',
+	      },
+	      reference: true,
+	    },
+	    referencerdual2: {
+	      label: 'Referencer 2',
+	      type: 'reference',
+	      id: uuid.v4(),
+	      name: 'referencer2--reference',
+	      settings: {
+		contentType: 'will-be-changed',
+	      },
+	      reference: true,
+	    },
+	  },
+	  id: `${slugify(types[i])}-referencer-dual`,
+	  type: 'reference',
+	},
+	{
+	  name: 'Referencer Repeating',
+	  inputs: {
+	    referencerrepeat: {
+	      label: 'Ref Repeat',
+	      type: 'reference',
+	      id: uuid.v4(),
+	      name: 'referencer-repeating--reference',
+	      settings: {
+		contentType: 'will-be-changed',
+	      },
+	      reference: true,
+	    },
+	  },
+	  id: `${slugify(types[i])}-referencer-repeating`,
+	  type: 'reference',
+	  repeatable: true,
+	},
+	{
+	  name: 'Referencer Dual Repeating',
+	  inputs: {
+	    referencerdualrepeat1: {
+	      label: 'Referencer 1',
+	      type: 'reference',
+	      id: uuid.v4(),
+	      name: 'referencer1--reference-repeating',
+	      settings: {
+		contentType: 'will-be-changed',
+	      },
+	      reference: true,
+	    },
+	    referencerdualrepeat2: {
+	      label: 'Referencer 2',
+	      type: 'reference',
+	      id: uuid.v4(),
+	      name: 'referencer2--reference-repeating',
+	      settings: {
+		contentType: 'will-be-changed',
+	      },
+	      reference: true,
+	    },
+	  },
+	  id: `${slugify(types[i])}-referencer-dual-repeating`,
+	  type: 'reference',
+	  repeatable: true,
+	},
       ],
     });
   }
@@ -203,12 +203,12 @@ const generate = (total, lang) => {
     type.attributes = type.attributes.map(atr => {
       const attr = atr;
       Object.keys(attr.inputs).forEach(inp => {
-        const input = attr.inputs[inp];
-        if (input.hasOwnProperty('reference') && input.hasOwnProperty('settings')) {
-          input.settings.contentType = slugify(others[random]);
-        }
+	const input = attr.inputs[inp];
+	if (input.hasOwnProperty('reference') && input.hasOwnProperty('settings')) {
+	  input.settings.contentType = slugify(others[random]);
+	}
 
-        attr.inputs[inp] = input;
+	attr.inputs[inp] = input;
       });
 
       return attr;
@@ -256,48 +256,48 @@ const generate = (total, lang) => {
     const values = {};
     values[`${slugify(type)}-name`] = {
       text: {
-        value: ipsum({
-          count: 1,
-          units: 'words',
-          format: 'plain',
-        }),
+	value: ipsum({
+	  count: 1,
+	  units: 'words',
+	  format: 'plain',
+	}),
       },
     };
     values[`${slugify(type)}-textblock`] = {
       textblock: {
-        value: ipsum({
-          count: 2,
-          units: 'paragraphs',
-          format: 'plain',
-          sentenceUpperBound: 5,
-          paragraphUpperBound: 3,
-        }),
+	value: ipsum({
+	  count: 2,
+	  units: 'paragraphs',
+	  format: 'plain',
+	  sentenceUpperBound: 5,
+	  paragraphUpperBound: 3,
+	}),
       },
     };
     values[`${slugify(type)}-referencer`] = {
       referencer: {
-        value: 'make-me-an-id',
+	value: 'make-me-an-id',
       },
     };
     values[`${slugify(type)}-referencer-dual`] = {
       referencerdual1: {
-        value: 'make-me-an-id',
+	value: 'make-me-an-id',
       },
       referencerdual2: {
-        value: 'make-me-an-id',
+	value: 'make-me-an-id',
       },
     };
     values[`${slugify(type)}-referencer-repeating`] = [{
       referencerrepeat: {
-        value: 'make-me-an-id',
+	value: 'make-me-an-id',
       },
     }];
     values[`${slugify(type)}-referencer-dual-repeating`] = [{
       referencerdualrepeat1: {
-        value: 'make-me-an-id',
+	value: 'make-me-an-id',
       },
       referencerdualrepeat2: {
-        value: 'make-me-an-id',
+	value: 'make-me-an-id',
       },
     }];
 
