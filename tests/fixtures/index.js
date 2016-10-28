@@ -80,12 +80,12 @@ const generate = (total, lang) => {
     type.attributes = type.attributes.map(atr => {
       const attr = atr;
       Object.keys(attr.inputs).forEach(inp => {
-	const input = attr.inputs[inp];
-	if (input.hasOwnProperty('reference') && input.hasOwnProperty('settings')) {
-	  input.settings.contentType = slugify(others[random]);
-	}
+        const input = attr.inputs[inp];
+        if (input.hasOwnProperty('reference') && input.hasOwnProperty('settings')) {
+          input.settings.contentType = slugify(others[random]);
+        }
 
-	attr.inputs[inp] = input;
+        attr.inputs[inp] = input;
       });
 
       return attr;
