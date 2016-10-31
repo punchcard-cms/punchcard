@@ -8,17 +8,38 @@ import utils from './fixtures/_utils';
 import database from '../lib/database';
 import apps from './fixtures/applications/objects/database-mocks.js';
 
-const items = utils.generate();
-const length = items.content.length;
+const fixtures = utils.generate();
+const length = fixtures.content.length;
 const count = Math.floor(Math.random() * length);
+const types = fixtures.types.names;
 
-test.before(() => {
-  return database.init();
+test.cb.before(t => {
+  database.init().then(() => {
+    t.end();
+  }).catch(e => {
+    t.fail(e);
+  });
+});
+
+test.cb.after.always(t => {
+  const items = types.map(type => {
+    return database('live').where('type', type).del().then(() => {
+      return database('schedule').where('type', type).del();
+    });
+  });
+
+  Promise.all(items)
+    .then(() => {
+      t.end();
+    })
+    .catch(e => {
+      t.fail(e);
+    });
 });
 
 test('Setup', t => {
   const item = count;
-  const revision = items.content[item];
+  const revision = fixtures.content[item];
 
   return sutils.setup(revision).then(() => {
     return database('schedule').select('*').where({
@@ -37,7 +58,7 @@ test('Setup', t => {
 
 test('Push', t => {
   const item = count + 1 > length - 1 ? 1 : count + 1;
-  const revision = items.content[item];
+  const revision = fixtures.content[item];
   const sunrise = moment(revision.sunrise).subtract(2, 'days');
 
   revision.sunset = null;
@@ -63,7 +84,7 @@ test('Push', t => {
 
 test('Pull', t => {
   const item = count + 2 > length - 1 ? 2 : count + 2;
-  const revision = items.content[item];
+  const revision = fixtures.content[item];
 
   revision.sunset = putils.time.iso(moment().subtract(1, 'days').format('YYYY-MM-DD'), moment().format('hh:mm'), 'America/New_York');
 
@@ -95,7 +116,7 @@ test('Pull', t => {
 
 test.skip('Sunrise', t => {
   const item = count + 3 > length - 1 ? 3 : count + 3;
-  const revision = items.content[item];
+  const revision = fixtures.content[item];
   const sunrise = moment(revision.sunrise).subtract(5, 'minutes');
 
   revision.sunset = null;
@@ -121,7 +142,7 @@ test.skip('Sunrise', t => {
 
 test.skip('Sunset', t => {
   const item = count + 4 > length - 1 ? 4 : count + 4;
-  const revision = items.content[item];
+  const revision = fixtures.content[item];
 
   revision.sunset = putils.time.iso(moment().subtract(1, 'days').format('YYYY-MM-DD'), moment().format('hh:mm'), 'America/New_York');
 
