@@ -4,7 +4,7 @@ import Promise from 'bluebird';
 
 import sutils from '../lib/schedule/utils';
 import putils from '../lib/utils';
-import utils from './fixtures/_utils';
+import utils from './fixtures';
 import database from '../lib/database';
 import apps from './fixtures/applications/objects/database-mocks.js';
 

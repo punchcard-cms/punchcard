@@ -1,6 +1,6 @@
 'use strict';
 
-const validation = require('../../_utils').validation;
+const validation = require('../../').validation;
 
 /**
  * Mock of `applications` merged-content-type object
