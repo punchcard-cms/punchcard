@@ -55,8 +55,6 @@ test.cb.after(t => {
  * Tests attributes with references
  * @param  {object} t - ava testing
  * @param  {object|array} attrs object containing attributes to test
- *
- * @return {null} returns nothing
  */
 const referencerTests = (t, attrs) => {
   if (typeof attrs !== 'object' || attrs === undefined) {
