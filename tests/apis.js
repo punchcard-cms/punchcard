@@ -131,11 +131,65 @@ const referencerTests = (t, attrs) => {
 //////////////////////////////
 // Utils - attributes
 //////////////////////////////
-test('Utils: attributes - depth 1', t => {
-  const random = Math.round(Math.random() * content.length - 1);
-  let expected = content[random];
+test('Utils: attributes - empty query', t => {
+  const random = Math.round(Math.random() * live.length - 1);
+  let expected = live[random];
   if (expected === undefined) {
-    expected = cloneDeep(content[(content.length - 1)]);
+    expected = cloneDeep(live[(live.length - 1)]);
+  }
+
+  const model = allTypes.find(typ => {
+    return typ.id === expected['type-slug'];
+  });
+
+  const query = {};
+
+  const attributes = apiUtils.attributes(expected.attributes, model.attributes, allTypes, query);
+
+  return attributes.then(result => {
+    t.is(typeof result, 'object', 'Should contain result, an object.');
+    t.is(Object.keys(result).length, 6, 'Should contain six main objects.');
+
+    referencerTests(t, result);
+  })
+  .catch(e => {
+    console.log(e); // eslint-disable-line no-console
+  });
+});
+
+test('Utils: attributes - depth 0', t => {
+  const random = Math.round(Math.random() * live.length - 1);
+  let expected = live[random];
+  if (expected === undefined) {
+    expected = cloneDeep(live[(live.length - 1)]);
+  }
+
+  const model = allTypes.find(typ => {
+    return typ.id === expected['type-slug'];
+  });
+
+  // because depth is checked during attributes, depth 1 and 0 are the same for the attributes function
+  const query = {
+    depth: 0,
+  };
+
+  const attributes = apiUtils.attributes(expected.attributes, model.attributes, allTypes, query);
+
+  return attributes.then(result => {
+    t.is(typeof result, 'object', 'Should contain result, an object.');
+
+    referencerTests(t, result);
+  })
+  .catch(e => {
+    console.log(e); // eslint-disable-line no-console
+  });
+});
+
+test('Utils: attributes - depth 1', t => {
+  const random = Math.round(Math.random() * live.length - 1);
+  let expected = live[random];
+  if (expected === undefined) {
+    expected = cloneDeep(live[(live.length - 1)]);
   }
 
   const model = allTypes.find(typ => {
@@ -147,7 +201,7 @@ test('Utils: attributes - depth 1', t => {
     depth: 1,
   };
 
-  const attributes = apiUtils.attributes(expected.value, model.attributes, allTypes, query);
+  const attributes = apiUtils.attributes(expected.attributes, model.attributes, allTypes, query);
 
   return attributes.then(result => {
     t.is(typeof result, 'object', 'Should contain result, an object.');
@@ -160,10 +214,10 @@ test('Utils: attributes - depth 1', t => {
 });
 
 test('Utils: attributes - depth 2', t => {
-  const random = Math.round(Math.random() * content.length - 1);
-  let expected = content[random];
+  const random = Math.round(Math.random() * live.length - 1);
+  let expected = live[random];
   if (expected === undefined) {
-    expected = cloneDeep(content[(content.length - 1)]);
+    expected = cloneDeep(live[(live.length - 1)]);
   }
 
   const model = allTypes.find(typ => {
@@ -174,7 +228,7 @@ test('Utils: attributes - depth 2', t => {
     depth: 2,
   };
 
-  const attributes = apiUtils.attributes(expected.value, model.attributes, allTypes, query);
+  const attributes = apiUtils.attributes(expected.attributes, model.attributes, allTypes, query);
 
   return attributes.then(result => {
     t.is(typeof result, 'object', 'Should contain result, an object.');
@@ -188,11 +242,55 @@ test('Utils: attributes - depth 2', t => {
   });
 });
 
+test('Utils: attributes - no references', t => {
+  const random = Math.round(Math.random() * live.length - 1);
+  let expected = live[random];
+  if (expected === undefined) {
+    expected = cloneDeep(live[(live.length - 1)]);
+  }
+
+  Object.keys(expected.attributes).forEach(attr => {
+    if (attr.split('-').indexOf('referencer') > -1) {
+      delete expected.attributes[attr];
+    }
+  });
+
+  const model = allTypes.find(typ => {
+    return typ.id === expected['type-slug'];
+  });
+
+  let modelattrs = cloneDeep(model.attributes);
+  modelattrs = modelattrs.map(attr => {
+    if (attr.id.split('-').indexOf('referencer') < 0) {
+      return attr;
+    }
+
+    return false;
+  }).filter(attr => {
+    return attr !== false;
+  });
+
+  // because depth is checked during attributes, depth 1 and 0 are the same for the attributes function
+  const query = {
+    depth: 0,
+  };
+
+  const attributes = apiUtils.attributes(expected.attributes, modelattrs, allTypes, query);
+
+  return attributes.then(result => {
+    t.is(typeof result, 'object', 'Should contain result, an object.');
+    t.is(Object.keys(result).length, 2, 'Should contain two main objects.');
+  })
+  .catch(e => {
+    console.log(e); // eslint-disable-line no-console
+  });
+});
+
 //////////////////////////////
 // Utils - format
 //////////////////////////////
 test('Utils: Format Results - List', t => {
-  const formatted = apiUtils.format(content.slice(0, 9));
+  const formatted = apiUtils.format(live.slice(0, 9));
 
   return formatted.then(result => {
     result.forEach(item => {
@@ -212,11 +310,11 @@ test('Utils: Format Results - Attributes', t => {
   const query = {
     depth: 2,
   };
-  const item = Math.round(Math.random() * (content.length - 1));
-  let expected = cloneDeep(content[item]);
+  const item = Math.round(Math.random() * (live.length - 1));
+  let expected = cloneDeep(live[item]);
 
   if (expected === undefined) {
-    expected = cloneDeep(content[(content.length - 1)]);
+    expected = cloneDeep(live[(live.length - 1)]);
   }
 
   const model = allTypes.find(typ => {
@@ -600,11 +698,11 @@ test('API: One', t => {
   const query = {
     depth: 1,
   };
-  const item = Math.round(Math.random() * (content.length - 1));
-  let expected = cloneDeep(content[item]);
+  const item = Math.round(Math.random() * (live.length - 1));
+  let expected = cloneDeep(live[item]);
 
   if (expected === undefined) {
-    expected = cloneDeep(content[(content.length - 1)]);
+    expected = cloneDeep(live[(live.length - 1)]);
   }
 
   const model = allTypes.find(typ => {
@@ -614,7 +712,7 @@ test('API: One', t => {
   return api.one(query, expected.id, model.attributes, allTypes, database).then(result => {
     t.is(result.id, expected.id, 'IDs the same');
     t.true(result.hasOwnProperty('attributes'));
-    t.is(result.key_slug, expected.slug, 'Key available');
+    t.is(result.key_slug, expected['key-slug'], 'Key available');
     t.true(result.hasOwnProperty('type'), 'Has type info');
   });
 });
