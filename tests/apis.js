@@ -2,12 +2,11 @@ import test from 'ava';
 import slugify from 'underscore.string/slugify';
 import isEqual from 'lodash/isEqual';
 import cloneDeep from 'lodash/cloneDeep';
-import isUUID from 'validator/lib/isUUID';
 
 import apiUtils from '../lib/api/utils';
 import api from '../lib/api';
 import database from '../lib/database';
-import utils from './fixtures/_utils';
+import utils from './fixtures';
 
 const generated = 17;
 const lang = 'api-test';
@@ -36,7 +35,7 @@ test.cb.before(t => {
   });
 });
 
-test.cb.after.always(t => {
+test.cb.after(t => {
   const items = types.map(type => {
     return database('live').where('type', type).del().then(() => {
       return database('schedule').where('type', type).del();
@@ -52,80 +51,302 @@ test.cb.after.always(t => {
     });
 });
 
+/**
+ * Tests attributes with references
+ * @param  {object} t - ava testing
+ * @param  {object|array} attrs object containing attributes to test
+ *
+ * @return {null} returns nothing
+ */
+const referencerTests = (t, attrs) => {
+  if (typeof attrs !== 'object' || attrs === undefined) {
+    return;
+  }
+
+  if (attrs.hasOwnProperty('attributes')) {
+    referencerTests(t, attrs.attributes);
+
+    return;
+  }
+
+  if (Array.isArray(attrs)) {
+    attrs.forEach(attr => {
+      Object.keys(attr).forEach(atr => {
+        if (attr[atr].hasOwnProperty('attributes')) {
+          referencerTests(t, attr[atr].attributes);
+
+          return;
+        }
+        else if (attr[atr].hasOwnProperty('id')) {
+          t.true(attr[atr].hasOwnProperty('meta'), 'attribute in array contains meta');
+
+          return;
+        }
+      });
+    });
+  }
+
+  // check if this object is an attribute object
+  if (Object.keys(attrs).indexOf('id') !== -1) {
+    t.true(attrs.poo.hasOwnProperty('meta'), 'attribute in array contains meta');
+
+    return;
+  }
+
+  Object.keys(attrs).forEach(attr => {
+    if (attr.split('-').indexOf('referencer') > -1) {
+      const item = attrs[attr];
+
+      // if item has attributes
+      if (item.hasOwnProperty('attributes')) {
+        referencerTests(t, item.attributes);
+
+        return;
+      }
+
+      // if it's an array, recurseit!
+      if (Array.isArray(item)) {
+        referencerTests(t, item);
+
+        return;
+      }
+
+      if (typeof item === 'object' && typeof item[Object.keys(item)[0]] === 'object' && item[Object.keys(item)[0]].hasOwnProperty('attributes')) {
+        referencerTests(t, item.attributes);
+
+        return;
+      }
+
+      if (Object.keys(item).indexOf('id') === -1 && Object.keys(item).length >= 1) {
+        Object.keys(item).forEach(itm => {
+          t.true(item[itm].hasOwnProperty('meta'), 'attribute in array contains meta');
+
+          return;
+        });
+      }
+
+      // non-repeatable; single input
+      else {
+        t.true(item.hasOwnProperty('meta'), 'attribute in array contains meta');
+
+        return;
+      }
+    }
+  });
+};
+
 //////////////////////////////
 // Utils - attributes
 //////////////////////////////
-test('Utils: attributes', t => {
-  const item = Math.round(Math.random() * (content.length - 1));
-  let expected = content[item];
+test.serial.skip('Utils: attributes - empty query', t => {
+  const random = Math.round(Math.random() * live.length - 1);
+  let expected = live[random];
   if (expected === undefined) {
-    expected = cloneDeep(content[(content.length - 1)]);
+    expected = cloneDeep(live[(live.length - 1)]);
   }
 
   const model = allTypes.find(typ => {
     return typ.id === expected['type-slug'];
   });
 
-  const attributes = apiUtils.attributes(expected.value, model.attributes);
+  const query = {};
 
-  t.is(typeof attributes, 'object', 'Should return an object.');
-  Object.keys(attributes).map(key => {
-    const attr = key.split('-');
-    if (attr[attr.length - 1] === 'referencer') {
-      if (attributes[key] !== '') {
-        t.true(isUUID(attributes[key]), 'includes a uuid');
-      }
+  const attributes = apiUtils.attributes(expected.attributes, model.attributes, allTypes, query);
+
+  return attributes.then(result => {
+    t.is(typeof result, 'object', 'Should contain result, an object.');
+    t.is(Object.keys(result).length, 6, 'Should contain six main objects.');
+
+    referencerTests(t, result);
+  })
+  .catch(e => {
+    console.log(e); // eslint-disable-line no-console
+  });
+});
+
+test.serial.skip('Utils: attributes - depth 0', t => {
+  const random = Math.round(Math.random() * live.length - 1);
+  let expected = live[random];
+  if (expected === undefined) {
+    expected = cloneDeep(live[(live.length - 1)]);
+  }
+
+  const model = allTypes.find(typ => {
+    return typ.id === expected['type-slug'];
+  });
+
+  // because depth is checked during attributes, depth 1 and 0 are the same for the attributes function
+  const query = {
+    depth: 0,
+  };
+
+  const attributes = apiUtils.attributes(expected.attributes, model.attributes, allTypes, query);
+
+  return attributes.then(result => {
+    t.is(typeof result, 'object', 'Should contain result, an object.');
+
+    referencerTests(t, result);
+  })
+  .catch(e => {
+    console.log(e); // eslint-disable-line no-console
+  });
+});
+
+test.serial.skip('Utils: attributes - depth 1', t => {
+  const random = Math.round(Math.random() * live.length - 1);
+  let expected = live[random];
+  if (expected === undefined) {
+    expected = cloneDeep(live[(live.length - 1)]);
+  }
+
+  const model = allTypes.find(typ => {
+    return typ.id === expected['type-slug'];
+  });
+
+  // because depth is checked during attributes, depth 1 and 0 are the same for the attributes function
+  const query = {
+    depth: 1,
+  };
+
+  const attributes = apiUtils.attributes(expected.attributes, model.attributes, allTypes, query);
+
+  return attributes.then(result => {
+    t.is(typeof result, 'object', 'Should contain result, an object.');
+
+    referencerTests(t, result);
+  })
+  .catch(e => {
+    console.log(e); // eslint-disable-line no-console
+  });
+});
+
+test.serial.skip('Utils: attributes - depth 2', t => {
+  const random = Math.round(Math.random() * live.length - 1);
+  let expected = live[random];
+  if (expected === undefined) {
+    expected = cloneDeep(live[(live.length - 1)]);
+  }
+
+  const model = allTypes.find(typ => {
+    return typ.id === expected['type-slug'];
+  });
+
+  const query = {
+    depth: 2,
+  };
+
+  const attributes = apiUtils.attributes(expected.attributes, model.attributes, allTypes, query);
+
+  return attributes.then(result => {
+    t.is(typeof result, 'object', 'Should contain result, an object.');
+
+    Object.keys(result).forEach(key => {
+      referencerTests(t, result[key]);
+    });
+  })
+  .catch(e => {
+    console.log(e); // eslint-disable-line no-console
+  });
+});
+
+test.serial.skip('Utils: attributes - no references', t => {
+  const random = Math.round(Math.random() * live.length - 1);
+  let expected = live[random];
+  if (expected === undefined) {
+    expected = cloneDeep(live[(live.length - 1)]);
+  }
+
+  Object.keys(expected.attributes).forEach(attr => {
+    if (attr.split('-').indexOf('referencer') > -1) {
+      delete expected.attributes[attr];
     }
+  });
+
+  const model = allTypes.find(typ => {
+    return typ.id === expected['type-slug'];
+  });
+
+  let modelattrs = cloneDeep(model.attributes);
+  modelattrs = modelattrs.map(attr => {
+    if (attr.id.split('-').indexOf('referencer') < 0) {
+      return attr;
+    }
+
+    return false;
+  }).filter(attr => {
+    return attr !== false;
+  });
+
+  // because depth is checked during attributes, depth 1 and 0 are the same for the attributes function
+  const query = {
+    depth: 0,
+  };
+
+  const attributes = apiUtils.attributes(expected.attributes, modelattrs, allTypes, query);
+
+  return attributes.then(result => {
+    t.is(typeof result, 'object', 'Should contain result, an object.');
+    t.is(Object.keys(result).length, 2, 'Should contain two main objects.');
+  })
+  .catch(e => {
+    console.log(e); // eslint-disable-line no-console
   });
 });
 
 //////////////////////////////
 // Utils - format
 //////////////////////////////
-test('Utils: Format Results - List', t => {
-  const formatted = apiUtils.format(content.slice(0, 9));
+test.serial.skip('Utils: Format Results - List', t => {
+  const formatted = apiUtils.format(live.slice(0, 9));
 
-  formatted.forEach(item => {
-    t.true(item.hasOwnProperty('id'), 'Contains ID');
-    t.true(item.hasOwnProperty('type'), 'Contains Type');
-    t.true(item.hasOwnProperty('type_slug'), 'Contains Type Slug');
-    t.true(item.hasOwnProperty('key'), 'Contains Key');
-    t.true(item.hasOwnProperty('key_slug'), 'Contains Key Slug');
-    t.true(item.hasOwnProperty('meta'), 'Contains Meta');
-    t.false(item.hasOwnProperty('attributes'), 'Does not contain attributes');
-    t.is(item.meta.url, `/api/types/${item.type_slug}/${item.id}`, 'URL points to full content item');
+  return formatted.then(result => {
+    result.forEach(item => {
+      t.true(item.hasOwnProperty('id'), 'Contains ID');
+      t.true(item.hasOwnProperty('type'), 'Contains Type');
+      t.true(item.hasOwnProperty('type_slug'), 'Contains Type Slug');
+      t.true(item.hasOwnProperty('key'), 'Contains Key');
+      t.true(item.hasOwnProperty('key_slug'), 'Contains Key Slug');
+      t.true(item.hasOwnProperty('meta'), 'Contains Meta');
+      t.false(item.hasOwnProperty('attributes'), 'Does not contain attributes');
+      t.is(item.meta.url, `/api/types/${item.type_slug}/${item.id}`, 'URL points to full content item');
+    });
   });
 });
 
-test('Utils: Format Results - Attributes', t => {
-  const item = Math.round(Math.random() * (content.length - 1));
-  let expected = cloneDeep(content[item]);
+test.serial.skip('Utils: Format Results - Attributes', t => {
+  const query = {
+    depth: 2,
+  };
+  const item = Math.round(Math.random() * (live.length - 1));
+  let expected = cloneDeep(live[item]);
 
   if (expected === undefined) {
-    expected = cloneDeep(content[(content.length - 1)]);
+    expected = cloneDeep(live[(live.length - 1)]);
   }
 
   const model = allTypes.find(typ => {
     return typ.id === expected['type-slug'];
   });
 
-  const formatted = apiUtils.format([expected], model.attributes);
+  const formatted = apiUtils.format([expected], model.attributes, allTypes, query);
 
-  formatted.forEach(itm => {
-    t.true(itm.hasOwnProperty('id'), 'Contains ID');
-    t.true(itm.hasOwnProperty('type'), 'Contains Type');
-    t.true(itm.hasOwnProperty('type_slug'), 'Contains Type Slug');
-    t.true(itm.hasOwnProperty('key'), 'Contains Key');
-    t.true(itm.hasOwnProperty('key_slug'), 'Contains Key Slug');
-    t.false(itm.hasOwnProperty('meta'), 'Does not contain Meta');
-    t.true(itm.hasOwnProperty('attributes'), 'Contains attributes');
+  return formatted.then(result => {
+    result.forEach(itm => {
+      t.true(itm.hasOwnProperty('id'), 'Contains ID');
+      t.true(itm.hasOwnProperty('type'), 'Contains Type');
+      t.true(itm.hasOwnProperty('type_slug'), 'Contains Type Slug');
+      t.true(itm.hasOwnProperty('key'), 'Contains Key');
+      t.true(itm.hasOwnProperty('key_slug'), 'Contains Key Slug');
+      t.false(itm.hasOwnProperty('meta'), 'Does not contain Meta');
+      t.true(itm.hasOwnProperty('attributes'), 'Contains attributes');
+    });
   });
 });
 
 //////////////////////////////
 // Utils - organize
 //////////////////////////////
-test('Utils: Organize - Default', t => {
+test.serial('Utils: Organize - Default', t => {
   const actual = apiUtils.organize();
   const expected = {
     sort: {
@@ -142,7 +363,7 @@ test('Utils: Organize - Default', t => {
   t.deepEqual(actual, expected, 'Returns defaults');
 });
 
-test('Utils: Organize - Lookup', t => {
+test.serial('Utils: Organize - Lookup', t => {
   const actual = apiUtils.organize({}, [
     'foo',
     'bar',
@@ -163,7 +384,7 @@ test('Utils: Organize - Lookup', t => {
   t.deepEqual(actual, expected, 'Returns defaults');
 });
 
-test('Utils: Organize - Bad Lookup', t => {
+test.serial('Utils: Organize - Bad Lookup', t => {
   const actual = apiUtils.organize({}, {});
   const expected = {
     sort: {
@@ -180,7 +401,7 @@ test('Utils: Organize - Bad Lookup', t => {
   t.deepEqual(actual, expected, 'Returns defaults');
 });
 
-test('Utils: Organize - Custom', t => {
+test.serial('Utils: Organize - Custom', t => {
   const actual = apiUtils.organize({
     sort: 'type',
     sort_dir: 'desc', // eslint-disable-line camelcase
@@ -203,7 +424,7 @@ test('Utils: Organize - Custom', t => {
   t.deepEqual(actual, expected, 'Returns defaults');
 });
 
-test('Utils: Organize - Wrong', t => {
+test.serial('Utils: Organize - Wrong', t => {
   const actual = apiUtils.organize({
     sort: 'foo',
     sort_dir: 'banana', // eslint-disable-line camelcase
@@ -226,7 +447,7 @@ test('Utils: Organize - Wrong', t => {
   t.deepEqual(actual, expected, 'Returns defaults');
 });
 
-test('Utils: Organize - Wrong Pages', t => {
+test.serial('Utils: Organize - Wrong Pages', t => {
   const actual = apiUtils.organize({
     page: -1,
     per_page: -1, // eslint-disable-line camelcase
@@ -250,7 +471,7 @@ test('Utils: Organize - Wrong Pages', t => {
 //////////////////////////////
 // Utils - page
 //////////////////////////////
-test('Utils: Page - First', t => {
+test.serial('Utils: Page - First', t => {
   const organized = apiUtils.organize();
   const actual = apiUtils.page('api', organized, 100);
 
@@ -265,7 +486,7 @@ test('Utils: Page - First', t => {
   t.deepEqual(actual, expected);
 });
 
-test('Utils: Page - Middle', t => {
+test.serial('Utils: Page - Middle', t => {
   const organized = apiUtils.organize({
     page: 2,
   });
@@ -282,7 +503,7 @@ test('Utils: Page - Middle', t => {
   t.deepEqual(actual, expected);
 });
 
-test('Utils: Page - End', t => {
+test.serial('Utils: Page - End', t => {
   const organized = apiUtils.organize({
     page: 4,
   });
@@ -299,7 +520,7 @@ test('Utils: Page - End', t => {
   t.deepEqual(actual, expected);
 });
 
-test('Utils: Page - One', t => {
+test.serial('Utils: Page - One', t => {
   const organized = apiUtils.organize({
     page: 1,
   });
@@ -316,7 +537,7 @@ test('Utils: Page - One', t => {
   t.deepEqual(actual, expected);
 });
 
-test('Utils: Page - None', t => {
+test.serial('Utils: Page - None', t => {
   const organized = apiUtils.organize({
     page: 4,
   });
@@ -336,7 +557,7 @@ test('Utils: Page - None', t => {
 //////////////////////////////
 // APIs
 //////////////////////////////
-test('APIs: Types', t => {
+test.serial('APIs: Types', t => {
   const app = {
     get: () => {
       return allTypes;
@@ -356,17 +577,18 @@ test('APIs: Types', t => {
   t.true(isEqual(apiTypes.keys, keys), 'Keys are as expected');
 });
 
-test('API: All', t => {
-  return api.all({}).then(results => {
+test.serial('API: All', t => {
+  return api.all({}, allTypes).then(results => {
     t.true(results.hasOwnProperty('items'), 'Has Items');
     t.true(results.hasOwnProperty('pages'), 'Has Pagination');
     t.true(results.items.length >= generated, 'Has at least all items in it');
   });
 });
 
-test('API: All with Follow', t => {
+test.serial.skip('API: All with Follow', t => {
   return api.all({
     follow: 'true',
+    depth: 1,
   }, allTypes).then(results => {
     let one = false;
 
@@ -394,7 +616,7 @@ test('API: All with Follow', t => {
   });
 });
 
-test('API: Content', t => {
+test.serial('API: Content', t => {
   const app = {
     get: () => {
       return allTypes;
@@ -410,7 +632,7 @@ test('API: Content', t => {
   });
 });
 
-test('API: Content - Descending', t => {
+test.serial('API: Content - Descending', t => {
   const app = {
     get: () => {
       return allTypes;
@@ -428,7 +650,7 @@ test('API: Content - Descending', t => {
   });
 });
 
-test('API: ofType', t => {
+test.serial('API: ofType', t => {
   const item = Math.round(Math.random() * (types.length - 1));
   const type = types[item];
 
@@ -442,7 +664,7 @@ test('API: ofType', t => {
   });
 });
 
-test('API: ofType with Follow', t => {
+test.serial.skip('API: ofType with Follow', t => {
   const item = Math.round(Math.random() * (types.length - 1));
   const type = types[item];
 
@@ -452,7 +674,8 @@ test('API: ofType with Follow', t => {
 
   return api.ofType({
     follow: 'true',
-  }, model).then(results => {
+    depth: 1,
+  }, model, allTypes).then(results => {
     let one = false;
 
     results.items.forEach(itm => {
@@ -478,27 +701,30 @@ test('API: ofType with Follow', t => {
   });
 });
 
-test('API: One', t => {
-  const item = Math.round(Math.random() * (content.length - 1));
-  let expected = cloneDeep(content[item]);
+test.serial.skip('API: One', t => {
+  const query = {
+    depth: 1,
+  };
+  const item = Math.round(Math.random() * (live.length - 1));
+  let expected = cloneDeep(live[item]);
 
   if (expected === undefined) {
-    expected = cloneDeep(content[(content.length - 1)]);
+    expected = cloneDeep(live[(live.length - 1)]);
   }
 
   const model = allTypes.find(typ => {
     return typ.id === expected['type-slug'];
   });
 
-  return api.one({}, expected.id, model.attributes).then(result => {
+  return api.one(query, expected.id, model.attributes, allTypes, database).then(result => {
     t.is(result.id, expected.id, 'IDs the same');
     t.true(result.hasOwnProperty('attributes'));
-    t.is(result.key_slug, expected.slug, 'Key available');
+    t.is(result.key_slug, expected['key-slug'], 'Key available');
     t.true(result.hasOwnProperty('type'), 'Has type info');
   });
 });
 
-test('API: One - Not There', t => {
+test.serial('API: One - Not There', t => {
   return api.one({}, `Test ${Math.round(Math.random() * content.length)}`).then(result => {
     t.deepEqual(result, {}, 'Empty object returned');
   });
@@ -508,7 +734,7 @@ test('API: One - Not There', t => {
 //////////////////////////////
 // AFTER ALL TESTS RUN
 //////////////////////////////
-test.cb.after(t => {
+test.cb.after.always(t => {
   database('live').where('language', lang).del().then(() => {
     t.end();
   })
