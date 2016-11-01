@@ -131,7 +131,7 @@ const referencerTests = (t, attrs) => {
 //////////////////////////////
 // Utils - attributes
 //////////////////////////////
-test('Utils: attributes - empty query', t => {
+test.serial('Utils: attributes - empty query', t => {
   const random = Math.round(Math.random() * live.length - 1);
   let expected = live[random];
   if (expected === undefined) {
@@ -157,7 +157,7 @@ test('Utils: attributes - empty query', t => {
   });
 });
 
-test('Utils: attributes - depth 0', t => {
+test.serial('Utils: attributes - depth 0', t => {
   const random = Math.round(Math.random() * live.length - 1);
   let expected = live[random];
   if (expected === undefined) {
@@ -185,7 +185,7 @@ test('Utils: attributes - depth 0', t => {
   });
 });
 
-test('Utils: attributes - depth 1', t => {
+test.serial('Utils: attributes - depth 1', t => {
   const random = Math.round(Math.random() * live.length - 1);
   let expected = live[random];
   if (expected === undefined) {
@@ -213,7 +213,7 @@ test('Utils: attributes - depth 1', t => {
   });
 });
 
-test('Utils: attributes - depth 2', t => {
+test.serial('Utils: attributes - depth 2', t => {
   const random = Math.round(Math.random() * live.length - 1);
   let expected = live[random];
   if (expected === undefined) {
@@ -242,7 +242,7 @@ test('Utils: attributes - depth 2', t => {
   });
 });
 
-test('Utils: attributes - no references', t => {
+test.serial('Utils: attributes - no references', t => {
   const random = Math.round(Math.random() * live.length - 1);
   let expected = live[random];
   if (expected === undefined) {
@@ -289,7 +289,7 @@ test('Utils: attributes - no references', t => {
 //////////////////////////////
 // Utils - format
 //////////////////////////////
-test('Utils: Format Results - List', t => {
+test.serial('Utils: Format Results - List', t => {
   const formatted = apiUtils.format(live.slice(0, 9));
 
   return formatted.then(result => {
@@ -306,7 +306,7 @@ test('Utils: Format Results - List', t => {
   });
 });
 
-test('Utils: Format Results - Attributes', t => {
+test.serial('Utils: Format Results - Attributes', t => {
   const query = {
     depth: 2,
   };
@@ -339,7 +339,7 @@ test('Utils: Format Results - Attributes', t => {
 //////////////////////////////
 // Utils - organize
 //////////////////////////////
-test('Utils: Organize - Default', t => {
+test.serial('Utils: Organize - Default', t => {
   const actual = apiUtils.organize();
   const expected = {
     sort: {
@@ -356,7 +356,7 @@ test('Utils: Organize - Default', t => {
   t.deepEqual(actual, expected, 'Returns defaults');
 });
 
-test('Utils: Organize - Lookup', t => {
+test.serial('Utils: Organize - Lookup', t => {
   const actual = apiUtils.organize({}, [
     'foo',
     'bar',
@@ -377,7 +377,7 @@ test('Utils: Organize - Lookup', t => {
   t.deepEqual(actual, expected, 'Returns defaults');
 });
 
-test('Utils: Organize - Bad Lookup', t => {
+test.serial('Utils: Organize - Bad Lookup', t => {
   const actual = apiUtils.organize({}, {});
   const expected = {
     sort: {
@@ -394,7 +394,7 @@ test('Utils: Organize - Bad Lookup', t => {
   t.deepEqual(actual, expected, 'Returns defaults');
 });
 
-test('Utils: Organize - Custom', t => {
+test.serial('Utils: Organize - Custom', t => {
   const actual = apiUtils.organize({
     sort: 'type',
     sort_dir: 'desc', // eslint-disable-line camelcase
@@ -417,7 +417,7 @@ test('Utils: Organize - Custom', t => {
   t.deepEqual(actual, expected, 'Returns defaults');
 });
 
-test('Utils: Organize - Wrong', t => {
+test.serial('Utils: Organize - Wrong', t => {
   const actual = apiUtils.organize({
     sort: 'foo',
     sort_dir: 'banana', // eslint-disable-line camelcase
@@ -440,7 +440,7 @@ test('Utils: Organize - Wrong', t => {
   t.deepEqual(actual, expected, 'Returns defaults');
 });
 
-test('Utils: Organize - Wrong Pages', t => {
+test.serial('Utils: Organize - Wrong Pages', t => {
   const actual = apiUtils.organize({
     page: -1,
     per_page: -1, // eslint-disable-line camelcase
@@ -464,7 +464,7 @@ test('Utils: Organize - Wrong Pages', t => {
 //////////////////////////////
 // Utils - page
 //////////////////////////////
-test('Utils: Page - First', t => {
+test.serial('Utils: Page - First', t => {
   const organized = apiUtils.organize();
   const actual = apiUtils.page('api', organized, 100);
 
@@ -479,7 +479,7 @@ test('Utils: Page - First', t => {
   t.deepEqual(actual, expected);
 });
 
-test('Utils: Page - Middle', t => {
+test.serial('Utils: Page - Middle', t => {
   const organized = apiUtils.organize({
     page: 2,
   });
@@ -496,7 +496,7 @@ test('Utils: Page - Middle', t => {
   t.deepEqual(actual, expected);
 });
 
-test('Utils: Page - End', t => {
+test.serial('Utils: Page - End', t => {
   const organized = apiUtils.organize({
     page: 4,
   });
@@ -513,7 +513,7 @@ test('Utils: Page - End', t => {
   t.deepEqual(actual, expected);
 });
 
-test('Utils: Page - One', t => {
+test.serial('Utils: Page - One', t => {
   const organized = apiUtils.organize({
     page: 1,
   });
@@ -530,7 +530,7 @@ test('Utils: Page - One', t => {
   t.deepEqual(actual, expected);
 });
 
-test('Utils: Page - None', t => {
+test.serial('Utils: Page - None', t => {
   const organized = apiUtils.organize({
     page: 4,
   });
@@ -550,7 +550,7 @@ test('Utils: Page - None', t => {
 //////////////////////////////
 // APIs
 //////////////////////////////
-test('APIs: Types', t => {
+test.serial('APIs: Types', t => {
   const app = {
     get: () => {
       return allTypes;
@@ -570,7 +570,7 @@ test('APIs: Types', t => {
   t.true(isEqual(apiTypes.keys, keys), 'Keys are as expected');
 });
 
-test('API: All', t => {
+test.serial('API: All', t => {
   return api.all({}, allTypes).then(results => {
     t.true(results.hasOwnProperty('items'), 'Has Items');
     t.true(results.hasOwnProperty('pages'), 'Has Pagination');
@@ -578,7 +578,7 @@ test('API: All', t => {
   });
 });
 
-test('API: All with Follow', t => {
+test.serial('API: All with Follow', t => {
   return api.all({
     follow: 'true',
     depth: 1,
@@ -609,7 +609,7 @@ test('API: All with Follow', t => {
   });
 });
 
-test('API: Content', t => {
+test.serial('API: Content', t => {
   const app = {
     get: () => {
       return allTypes;
@@ -625,7 +625,7 @@ test('API: Content', t => {
   });
 });
 
-test('API: Content - Descending', t => {
+test.serial('API: Content - Descending', t => {
   const app = {
     get: () => {
       return allTypes;
@@ -643,7 +643,7 @@ test('API: Content - Descending', t => {
   });
 });
 
-test('API: ofType', t => {
+test.serial('API: ofType', t => {
   const item = Math.round(Math.random() * (types.length - 1));
   const type = types[item];
 
@@ -657,7 +657,7 @@ test('API: ofType', t => {
   });
 });
 
-test('API: ofType with Follow', t => {
+test.serial('API: ofType with Follow', t => {
   const item = Math.round(Math.random() * (types.length - 1));
   const type = types[item];
 
@@ -694,7 +694,7 @@ test('API: ofType with Follow', t => {
   });
 });
 
-test('API: One', t => {
+test.serial('API: One', t => {
   const query = {
     depth: 1,
   };
@@ -717,7 +717,7 @@ test('API: One', t => {
   });
 });
 
-test('API: One - Not There', t => {
+test.serial('API: One - Not There', t => {
   return api.one({}, `Test ${Math.round(Math.random() * content.length)}`).then(result => {
     t.deepEqual(result, {}, 'Empty object returned');
   });
