@@ -4073,6 +4073,10 @@ input-plugin-email@^0.2.0:
   dependencies:
     validator "^5.2.0"
 
+input-plugin-file:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/input-plugin-file/-/input-plugin-file-1.1.0.tgz#2aa932f36dde80906243defcdf4d803f4f04a1e0"
+
 input-plugin-password@^0.1.4:
   version "0.1.4"
   resolved "https://registry.yarnpkg.com/input-plugin-password/-/input-plugin-password-0.1.4.tgz#79c0e2af21a250db3aaa0cee941df9461d142f87"
