@@ -51,88 +51,6 @@ test.cb.after(t => {
     });
 });
 
-/**
- * Tests attributes with references
- * @param  {object} t - ava testing
- * @param  {object|array} attrs object containing attributes to test
- */
-const referencerTests = (t, attrs) => {
-  if (typeof attrs !== 'object' || attrs === undefined) {
-    return;
-  }
-
-  if (attrs.hasOwnProperty('attributes')) {
-    referencerTests(t, attrs.attributes);
-
-    return;
-  }
-
-  if (Array.isArray(attrs)) {
-    attrs.forEach(attr => {
-      Object.keys(attr).forEach(atr => {
-	if (attr[atr].hasOwnProperty('attributes')) {
-	  referencerTests(t, attr[atr].attributes);
-
-	  return;
-	}
-	else if (attr[atr].hasOwnProperty('id')) {
-	  t.true(attr[atr].hasOwnProperty('meta'), 'attribute in array contains meta');
-
-	  return;
-	}
-      });
-    });
-  }
-
-  // check if this object is an attribute object
-  if (Object.keys(attrs).indexOf('id') !== -1) {
-    t.true(attrs.poo.hasOwnProperty('meta'), 'attribute in array contains meta');
-
-    return;
-  }
-
-  Object.keys(attrs).forEach(attr => {
-    if (attr.split('-').indexOf('referencer') > -1) {
-      const item = attrs[attr];
-
-      // if item has attributes
-      if (item.hasOwnProperty('attributes')) {
-	referencerTests(t, item.attributes);
-
-	return;
-      }
-
-      // if it's an array, recurseit!
-      if (Array.isArray(item)) {
-	referencerTests(t, item);
-
-	return;
-      }
-
-      if (typeof item === 'object' && typeof item[Object.keys(item)[0]] === 'object' && item[Object.keys(item)[0]].hasOwnProperty('attributes')) {
-	referencerTests(t, item.attributes);
-
-	return;
-      }
-
-      if (Object.keys(item).indexOf('id') === -1 && Object.keys(item).length >= 1) {
-	Object.keys(item).forEach(itm => {
-	  t.true(item[itm].hasOwnProperty('meta'), 'attribute in array contains meta');
-
-	  return;
-	});
-      }
-
-      // non-repeatable; single input
-      else {
-	t.true(item.hasOwnProperty('meta'), 'attribute in array contains meta');
-
-	return;
-      }
-    }
-  });
-};
-
 //////////////////////////////
 // Utils - attributes
 //////////////////////////////
@@ -155,7 +73,7 @@ test.serial.skip('Utils: attributes - empty query', t => {
     t.is(typeof result, 'object', 'Should contain result, an object.');
     t.is(Object.keys(result).length, 6, 'Should contain six main objects.');
 
-    referencerTests(t, result);
+    utils.referencer(t, result);
   })
   .catch(e => {
     console.log(e); // eslint-disable-line no-console
@@ -183,7 +101,7 @@ test.serial.skip('Utils: attributes - depth 0', t => {
   return attributes.then(result => {
     t.is(typeof result, 'object', 'Should contain result, an object.');
 
-    referencerTests(t, result);
+    utils.referencer(t, result);
   })
   .catch(e => {
     console.log(e); // eslint-disable-line no-console
@@ -211,7 +129,7 @@ test.serial.skip('Utils: attributes - depth 1', t => {
   return attributes.then(result => {
     t.is(typeof result, 'object', 'Should contain result, an object.');
 
-    referencerTests(t, result);
+    utils.referencer(t, result);
   })
   .catch(e => {
     console.log(e); // eslint-disable-line no-console
@@ -239,7 +157,7 @@ test.serial.skip('Utils: attributes - depth 2', t => {
     t.is(typeof result, 'object', 'Should contain result, an object.');
 
     Object.keys(result).forEach(key => {
-      referencerTests(t, result[key]);
+      utils.referencer(t, result[key]);
     });
   })
   .catch(e => {

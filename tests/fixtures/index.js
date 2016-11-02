@@ -218,4 +218,5 @@ const validation = function validation() {
 module.exports = {
   generate,
   validation,
+  referencer: futils.referencer,
 };
