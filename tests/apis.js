@@ -35,27 +35,11 @@ test.cb.before(t => {
   });
 });
 
-test.cb.after(t => {
-  const items = types.map(type => {
-    return database('live').where('type', type).del().then(() => {
-      return database('schedule').where('type', type).del();
-    });
-  });
-
-  Promise.all(items)
-    .then(() => {
-      t.end();
-    })
-    .catch(e => {
-      t.fail(e);
-    });
-});
-
 //////////////////////////////
 // Utils - attributes
 //////////////////////////////
 test.serial.skip('Utils: attributes - empty query', t => {
-  const random = Math.round(Math.random() * live.length - 1);
+  const random = Math.round(Math.random() * (live.length - 1));
   let expected = live[random];
   if (expected === undefined) {
     expected = cloneDeep(live[(live.length - 1)]);
@@ -76,12 +60,13 @@ test.serial.skip('Utils: attributes - empty query', t => {
     utils.referencer(t, result);
   })
   .catch(e => {
-    console.log(e); // eslint-disable-line no-console
+    console.error(e); // eslint-disable-line no-console
+    t.fail(e.stack);
   });
 });
 
 test.serial.skip('Utils: attributes - depth 0', t => {
-  const random = Math.round(Math.random() * live.length - 1);
+  const random = Math.round(Math.random() * (live.length - 1));
   let expected = live[random];
   if (expected === undefined) {
     expected = cloneDeep(live[(live.length - 1)]);
@@ -104,12 +89,13 @@ test.serial.skip('Utils: attributes - depth 0', t => {
     utils.referencer(t, result);
   })
   .catch(e => {
-    console.log(e); // eslint-disable-line no-console
+    console.error(e); // eslint-disable-line no-console
+    t.fail(e.stack);
   });
 });
 
 test.serial.skip('Utils: attributes - depth 1', t => {
-  const random = Math.round(Math.random() * live.length - 1);
+  const random = Math.round(Math.random() * (live.length - 1));
   let expected = live[random];
   if (expected === undefined) {
     expected = cloneDeep(live[(live.length - 1)]);
@@ -132,12 +118,13 @@ test.serial.skip('Utils: attributes - depth 1', t => {
     utils.referencer(t, result);
   })
   .catch(e => {
-    console.log(e); // eslint-disable-line no-console
+    console.error(e); // eslint-disable-line no-console
+    t.fail(e.stack);
   });
 });
 
 test.serial.skip('Utils: attributes - depth 2', t => {
-  const random = Math.round(Math.random() * live.length - 1);
+  const random = Math.round(Math.random() * (live.length - 1));
   let expected = live[random];
   if (expected === undefined) {
     expected = cloneDeep(live[(live.length - 1)]);
@@ -161,12 +148,13 @@ test.serial.skip('Utils: attributes - depth 2', t => {
     });
   })
   .catch(e => {
-    console.log(e); // eslint-disable-line no-console
+    console.error(e); // eslint-disable-line no-console
+    t.fail(e.stack);
   });
 });
 
 test.serial.skip('Utils: attributes - no references', t => {
-  const random = Math.round(Math.random() * live.length - 1);
+  const random = Math.round(Math.random() * (live.length - 1));
   let expected = live[random];
   if (expected === undefined) {
     expected = cloneDeep(live[(live.length - 1)]);
@@ -205,7 +193,8 @@ test.serial.skip('Utils: attributes - no references', t => {
     t.is(Object.keys(result).length, 2, 'Should contain two main objects.');
   })
   .catch(e => {
-    console.log(e); // eslint-disable-line no-console
+    console.error(e); // eslint-disable-line no-console
+    t.fail(e.stack);
   });
 });
 
@@ -641,7 +630,7 @@ test.serial.skip('API: One', t => {
 });
 
 test.serial('API: One - Not There', t => {
-  return api.one({}, `Test ${Math.round(Math.random() * content.length)}`).then(result => {
+  return api.one({}, `Test ${Math.round(Math.random() * (live.length - 1))}`).then(result => {
     t.deepEqual(result, {}, 'Empty object returned');
   });
 });
@@ -656,6 +645,7 @@ test.cb.after.always(t => {
   })
   .catch(e => {
     console.error(e.stack); // eslint-disable-line no-console
+    t.fail(e);
     t.end();
   });
 });
