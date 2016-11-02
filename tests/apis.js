@@ -635,9 +635,9 @@ test.serial.skip('API: One', t => {
   };
 
   return api.one(query, testable.expected.id, testable.model.attributes, allTypes, database).then(result => {
-    t.is(result.id, expected.id, 'IDs the same');
+    t.is(result.id, testable.expected.id, 'IDs the same');
     t.true(result.hasOwnProperty('attributes'));
-    t.is(result.key_slug, expected['key-slug'], 'Key available');
+    t.is(result.key_slug, testable.expected['key-slug'], 'Key available');
     t.true(result.hasOwnProperty('type'), 'Has type info');
   });
 });
