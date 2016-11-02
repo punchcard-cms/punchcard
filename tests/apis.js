@@ -206,19 +206,95 @@ test.serial.skip('Utils: Format Results - List', t => {
 
   return formatted.then(result => {
     result.forEach(item => {
-      t.true(item.hasOwnProperty('id'), 'Contains ID');
-      t.true(item.hasOwnProperty('type'), 'Contains Type');
-      t.true(item.hasOwnProperty('type_slug'), 'Contains Type Slug');
-      t.true(item.hasOwnProperty('key'), 'Contains Key');
-      t.true(item.hasOwnProperty('key_slug'), 'Contains Key Slug');
-      t.true(item.hasOwnProperty('meta'), 'Contains Meta');
-      t.false(item.hasOwnProperty('attributes'), 'Does not contain attributes');
-      t.is(item.meta.url, `/api/types/${item.type_slug}/${item.id}`, 'URL points to full content item');
+      utils.attribute(t, item);
     });
   });
 });
 
-test.serial.skip('Utils: Format Results - Attributes', t => {
+test.serial.skip('Utils: Format Results - no query', t => {
+  const item = Math.round(Math.random() * (live.length - 1));
+  let expected = cloneDeep(live[item]);
+
+  if (expected === undefined) {
+    expected = cloneDeep(live[(live.length - 1)]);
+  }
+
+  const model = allTypes.find(typ => {
+    return typ.id === expected['type-slug'];
+  });
+
+  const formatted = apiUtils.format([expected], model.attributes, allTypes);
+
+  return formatted.then(result => {
+    result.forEach(itm => {
+      utils.attribute(t, itm);
+    });
+  });
+});
+
+test.serial.skip('Utils: Format Results - query depth zero', t => {
+  const query = {
+    depth: 0,
+  };
+  const item = Math.round(Math.random() * (live.length - 1));
+  let expected = cloneDeep(live[item]);
+
+  if (expected === undefined) {
+    expected = cloneDeep(live[(live.length - 1)]);
+  }
+
+  const model = allTypes.find(typ => {
+    return typ.id === expected['type-slug'];
+  });
+
+  const formatted = apiUtils.format([expected], model.attributes, allTypes, query);
+
+  return formatted.then(result => {
+    result.forEach(itm => {
+      utils.attribute(t, itm);
+    });
+  });
+});
+
+test.serial.skip('Utils: Format Results - query depth one', t => {
+  const query = {
+    depth: 1,
+  };
+  const item = Math.round(Math.random() * (live.length - 1));
+  let expected = cloneDeep(live[item]);
+
+  if (expected === undefined) {
+    expected = cloneDeep(live[(live.length - 1)]);
+  }
+
+  const model = allTypes.find(typ => {
+    return typ.id === expected['type-slug'];
+  });
+
+  const formatted = apiUtils.format([expected], model.attributes, allTypes, query);
+
+  return formatted.then(result => {
+    result.forEach(itm => {
+      utils.attribute(t, itm);
+      t.true(itm.hasOwnProperty('attributes'), 'Contains attributes');
+
+      Object.keys(itm.attributes).forEach(attr => {
+        if (attr.split('-').indexOf('referencer') > -1) {
+          if (itm.attributes[attr].hasOwnProperty('id')) {
+            utils.attribute(t, itm.attributes[attr]);
+          }
+          else if (!Array.isArray(itm.attributes[attr])) {
+            Object.keys(itm.attributes[attr]).forEach(atr => {
+              utils.attribute(t, itm.attributes[attr][atr]);
+            });
+          }
+        }
+      });
+    });
+  });
+});
+
+test.serial.skip('Utils: Format Results - query depth two', t => {
   const query = {
     depth: 2,
   };
@@ -237,13 +313,33 @@ test.serial.skip('Utils: Format Results - Attributes', t => {
 
   return formatted.then(result => {
     result.forEach(itm => {
-      t.true(itm.hasOwnProperty('id'), 'Contains ID');
-      t.true(itm.hasOwnProperty('type'), 'Contains Type');
-      t.true(itm.hasOwnProperty('type_slug'), 'Contains Type Slug');
-      t.true(itm.hasOwnProperty('key'), 'Contains Key');
-      t.true(itm.hasOwnProperty('key_slug'), 'Contains Key Slug');
-      t.false(itm.hasOwnProperty('meta'), 'Does not contain Meta');
+      utils.attribute(t, itm);
       t.true(itm.hasOwnProperty('attributes'), 'Contains attributes');
+
+      Object.keys(itm.attributes).forEach(attr => {
+        if (attr.split('-').indexOf('referencer') > -1) {
+          if (itm.attributes[attr].hasOwnProperty('id')) {
+            utils.attribute(t, itm.attributes[attr]);
+            Object.keys(itm.attributes[attr]).forEach(atr => {
+              if (atr.split('-').indexOf('referencer') > -1) {
+                if (itm.attributes[attr][atr].hasOwnProperty('id')) {
+                  utils.attribute(t, itm.attributes[attr][atr]);
+                }
+                else if (!Array.isArray(itm.attributes[attr][atr])) {
+                  Object.keys(itm.attributes[attr][atr]).forEach(ar => {
+                    utils.attribute(t, itm.attributes[attr][atr][ar]);
+                  });
+                }
+              }
+            });
+          }
+          else if (!Array.isArray(itm.attributes[attr])) {
+            Object.keys(itm.attributes[attr]).forEach(atr => {
+              utils.attribute(t, itm.attributes[attr][atr]);
+            });
+          }
+        }
+      });
     });
   });
 });
@@ -501,14 +597,7 @@ test.serial.skip('API: All with Follow', t => {
       // Ignore empty object
       if (Object.keys(item).length !== 0) {
         one = true;
-        t.true(item.hasOwnProperty('id'), 'Each item has an ID');
-        t.true(item.hasOwnProperty('type'), 'Each item has a type');
-        t.true(item.type.hasOwnProperty('name'), 'Each item type has an name');
-        t.true(item.type.hasOwnProperty('slug'), 'Each item type has an slug');
-        t.true(item.type.hasOwnProperty('url'), 'Each item type has an url');
-        t.true(item.hasOwnProperty('key'), 'Each item has a key');
-        t.true(item.hasOwnProperty('key_slug'), 'Each item has a key_slug');
-        t.true(item.hasOwnProperty('attributes'), 'Each item has attributes');
+        utils.attribute(t, item);
       }
     });
     t.true(results.hasOwnProperty('items'), 'Has Items');
@@ -587,14 +676,7 @@ test.serial.skip('API: ofType with Follow', t => {
       // Ignore empty object
       if (Object.keys(itm).length !== 0) {
         one = true;
-        t.true(itm.hasOwnProperty('id'), 'Each item has an ID');
-        t.true(itm.hasOwnProperty('type'), 'Each item has a type');
-        t.true(itm.type.hasOwnProperty('name'), 'Each item type has an name');
-        t.true(itm.type.hasOwnProperty('slug'), 'Each item type has an slug');
-        t.true(itm.type.hasOwnProperty('url'), 'Each item type has an url');
-        t.true(itm.hasOwnProperty('key'), 'Each item has a key');
-        t.true(itm.hasOwnProperty('key_slug'), 'Each item has a key_slug');
-        t.true(itm.hasOwnProperty('attributes'), 'Each item has attributes');
+        utils.attribute(t, itm);
       }
     });
     t.true(results.hasOwnProperty('items'), 'Has Items');
