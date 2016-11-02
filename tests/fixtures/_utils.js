@@ -236,6 +236,7 @@ const referencer = (t, attrs) => {
         // we've reached our depth, test `meta` exists
         else if (attr[atr].hasOwnProperty('id')) {
           t.true(attr[atr].hasOwnProperty('meta'), 'attribute in array contains meta');
+          t.true(attr[atr].meta.hasOwnProperty('url'), 'attribute in array contains meta url');
 
           return;
         }
@@ -273,6 +274,7 @@ const referencer = (t, attrs) => {
         // no attributes - it should have a meta then
         Object.keys(item).forEach(itm => {
           t.true(item[itm].hasOwnProperty('meta'), 'attribute in array contains meta');
+          t.true(item[itm].meta.hasOwnProperty('url'), 'attribute in array contains meta url');
 
           return;
         });
@@ -281,6 +283,7 @@ const referencer = (t, attrs) => {
       // non-repeatable; single input
       else {
         t.true(item.hasOwnProperty('meta'), 'attribute in array contains meta');
+        t.true(item.meta.hasOwnProperty('url'), 'attribute in array contains meta url');
 
         return;
       }
