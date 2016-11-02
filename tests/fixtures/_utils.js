@@ -208,7 +208,96 @@ const values = ctype => {
   return results;
 };
 
+/**
+ * Tests attributes with references
+ * @param  {object} t - ava testing
+ * @param  {object|array} attrs object containing attributes to test
+ */
+const referencer = (t, attrs) => {
+  if (typeof attrs !== 'object' || attrs === undefined) {
+    return;
+  }
+
+  // an individual piece of content, so we need to test just the attributes
+  if (attrs.hasOwnProperty('attributes')) {
+    referencer(t, attrs.attributes);
+
+    return;
+  }
+
+  // an array of attributes, this set of attributes is a repeatable
+  if (Array.isArray(attrs)) {
+    attrs.forEach(attr => {
+      Object.keys(attr).forEach(atr => {
+        // an individual piece of content, so we need to test just the attributes
+        // at this point, we've found a piece of content _inside_ a piece of content's attributes
+        if (attr[atr].hasOwnProperty('attributes')) {
+          referencer(t, attr[atr].attributes);
+
+          return;
+        }
+
+        // we've reached our depth, test `meta` exists
+        else if (attr[atr].hasOwnProperty('id')) {
+          t.true(attr[atr].hasOwnProperty('meta'), 'attribute in array contains meta');
+
+          return;
+        }
+      });
+    });
+  }
+
+  // now we go through each attribute
+  Object.keys(attrs).forEach(attr => {
+    // only testing referencer attributes
+    if (attr.split('-').indexOf('referencer') > -1) {
+      const item = attrs[attr];
+
+      // if attributes exists, we're still digging down in our depth, recurse!
+      if (item.hasOwnProperty('attributes')) {
+        referencer(t, item.attributes);
+
+        return;
+      }
+
+      // if it's an array, we're in a repeatable - recurseit!
+      if (Array.isArray(item)) {
+        referencer(t, item);
+
+        return;
+      }
+
+      // non-repeatable attribute with multiple inputs
+      if (typeof item === 'object' && typeof item[Object.keys(item)[0]] === 'object') {
+        // if it has attributes, we're not at depth so....uuuuuuhhhhhhhaaaAAAAHHHH recursit!
+        if (item[Object.keys(item)[0]].hasOwnProperty('attributes')) {
+          Object.keys(item).forEach(itm => {
+            referencer(t, item[itm].attributes);
+          });
+
+          return;
+        }
+
+        // no attributes - it should have a meta then
+        Object.keys(item).forEach(itm => {
+          t.true(item[itm].hasOwnProperty('meta'), 'attribute in array contains meta');
+
+          return;
+        });
+      }
+
+      // non-repeatable; single input
+      else {
+        t.true(item.hasOwnProperty('meta'), 'attribute in array contains meta');
+
+        return;
+      }
+    }
+  });
+};
+
 module.exports = {
   type,
   values,
+  referencer,
 };
