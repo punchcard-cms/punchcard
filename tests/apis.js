@@ -35,23 +35,38 @@ test.cb.before(t => {
   });
 });
 
-//////////////////////////////
-// Utils - attributes
-//////////////////////////////
-test.serial.skip('Utils: attributes - empty query', t => {
-  const random = Math.round(Math.random() * (live.length - 1));
-  let expected = live[random];
+/**
+ * Randomly selects a piece of content from source, and it's content-type model
+ *
+ * @param  {object} source object of content
+ * @return {object}  - selected content and its model
+ */
+const testables = source => {
+  const random = Math.round(Math.random() * (source.length - 1));
+  let expected = source[random];
   if (expected === undefined) {
-    expected = cloneDeep(live[(live.length - 1)]);
+    expected = cloneDeep(source[(source.length - 1)]);
   }
 
   const model = allTypes.find(typ => {
     return typ.id === expected['type-slug'];
   });
 
+  return {
+    expected,
+    model,
+  };
+};
+
+//////////////////////////////
+// Utils - attributes
+//////////////////////////////
+test.serial.skip('Utils: attributes - empty query', t => {
+  const testable = testables(live);
+
   const query = {};
 
-  const attributes = apiUtils.attributes(expected.attributes, model.attributes, allTypes, query);
+  const attributes = apiUtils.attributes(testable.expected.attributes, testable.model.attributes, allTypes, query);
 
   return attributes.then(result => {
     t.is(typeof result, 'object', 'Should contain result, an object.');
@@ -60,27 +75,18 @@ test.serial.skip('Utils: attributes - empty query', t => {
     utils.referencer(t, result);
   })
   .catch(e => {
-    console.error(e); // eslint-disable-line no-console
-    t.fail(e.stack);
+    console.log(e); // eslint-disable-line no-console
   });
 });
 
 test.serial.skip('Utils: attributes - depth 0', t => {
-  const random = Math.round(Math.random() * (live.length - 1));
-  let expected = live[random];
-  if (expected === undefined) {
-    expected = cloneDeep(live[(live.length - 1)]);
-  }
-
-  const model = allTypes.find(typ => {
-    return typ.id === expected['type-slug'];
-  });
+  const testable = testables(live);
 
   const query = {
     depth: 0,
   };
 
-  const attributes = apiUtils.attributes(expected.attributes, model.attributes, allTypes, query);
+  const attributes = apiUtils.attributes(testable.expected.attributes, testable.model.attributes, allTypes, query);
 
   return attributes.then(result => {
     t.is(typeof result, 'object', 'Should contain result, an object.');
@@ -88,27 +94,18 @@ test.serial.skip('Utils: attributes - depth 0', t => {
     utils.referencer(t, result);
   })
   .catch(e => {
-    console.error(e); // eslint-disable-line no-console
-    t.fail(e.stack);
+    console.log(e); // eslint-disable-line no-console
   });
 });
 
 test.serial.skip('Utils: attributes - depth 1', t => {
-  const random = Math.round(Math.random() * (live.length - 1));
-  let expected = live[random];
-  if (expected === undefined) {
-    expected = cloneDeep(live[(live.length - 1)]);
-  }
-
-  const model = allTypes.find(typ => {
-    return typ.id === expected['type-slug'];
-  });
+  const testable = testables(live);
 
   const query = {
     depth: 1,
   };
 
-  const attributes = apiUtils.attributes(expected.attributes, model.attributes, allTypes, query);
+  const attributes = apiUtils.attributes(testable.expected.attributes, testable.model.attributes, allTypes, query);
 
   return attributes.then(result => {
     t.is(typeof result, 'object', 'Should contain result, an object.');
@@ -116,27 +113,18 @@ test.serial.skip('Utils: attributes - depth 1', t => {
     utils.referencer(t, result);
   })
   .catch(e => {
-    console.error(e); // eslint-disable-line no-console
-    t.fail(e.stack);
+    console.log(e); // eslint-disable-line no-console
   });
 });
 
 test.serial.skip('Utils: attributes - depth 2', t => {
-  const random = Math.round(Math.random() * (live.length - 1));
-  let expected = live[random];
-  if (expected === undefined) {
-    expected = cloneDeep(live[(live.length - 1)]);
-  }
-
-  const model = allTypes.find(typ => {
-    return typ.id === expected['type-slug'];
-  });
+  const testable = testables(live);
 
   const query = {
     depth: 2,
   };
 
-  const attributes = apiUtils.attributes(expected.attributes, model.attributes, allTypes, query);
+  const attributes = apiUtils.attributes(testable.expected.attributes, testable.model.attributes, allTypes, query);
 
   return attributes.then(result => {
     t.is(typeof result, 'object', 'Should contain result, an object.');
@@ -146,29 +134,20 @@ test.serial.skip('Utils: attributes - depth 2', t => {
     });
   })
   .catch(e => {
-    console.error(e); // eslint-disable-line no-console
-    t.fail(e.stack);
+    console.log(e); // eslint-disable-line no-console
   });
 });
 
 test.serial.skip('Utils: attributes - no references', t => {
-  const random = Math.round(Math.random() * (live.length - 1));
-  let expected = live[random];
-  if (expected === undefined) {
-    expected = cloneDeep(live[(live.length - 1)]);
-  }
+  const testable = testables(live);
 
-  Object.keys(expected.attributes).forEach(attr => {
+  Object.keys(testable.expected.attributes).forEach(attr => {
     if (attr.split('-').indexOf('referencer') > -1) {
-      delete expected.attributes[attr];
+      delete testable.expected.attributes[attr];
     }
   });
 
-  const model = allTypes.find(typ => {
-    return typ.id === expected['type-slug'];
-  });
-
-  let modelattrs = cloneDeep(model.attributes);
+  let modelattrs = cloneDeep(testable.model.attributes);
   modelattrs = modelattrs.map(attr => {
     if (attr.id.split('-').indexOf('referencer') < 0) {
       return attr;
@@ -183,15 +162,14 @@ test.serial.skip('Utils: attributes - no references', t => {
     depth: 0,
   };
 
-  const attributes = apiUtils.attributes(expected.attributes, modelattrs, allTypes, query);
+  const attributes = apiUtils.attributes(testable.expected.attributes, modelattrs, allTypes, query);
 
   return attributes.then(result => {
     t.is(typeof result, 'object', 'Should contain result, an object.');
     t.is(Object.keys(result).length, 2, 'Should contain two main objects.');
   })
   .catch(e => {
-    console.error(e); // eslint-disable-line no-console
-    t.fail(e.stack);
+    console.log(e); // eslint-disable-line no-console
   });
 });
 
@@ -209,18 +187,9 @@ test.serial.skip('Utils: Format Results - List', t => {
 });
 
 test.serial.skip('Utils: Format Results - no query', t => {
-  const item = Math.round(Math.random() * (live.length - 1));
-  let expected = cloneDeep(live[item]);
+  const testable = testables(live);
 
-  if (expected === undefined) {
-    expected = cloneDeep(live[(live.length - 1)]);
-  }
-
-  const model = allTypes.find(typ => {
-    return typ.id === expected['type-slug'];
-  });
-
-  const formatted = apiUtils.format([expected], model.attributes, allTypes);
+  const formatted = apiUtils.format([testable.expected], testable.model.attributes, allTypes);
 
   return formatted.then(result => {
     result.forEach(itm => {
@@ -230,21 +199,12 @@ test.serial.skip('Utils: Format Results - no query', t => {
 });
 
 test.serial.skip('Utils: Format Results - query depth zero', t => {
+  const testable = testables(live);
   const query = {
     depth: 0,
   };
-  const item = Math.round(Math.random() * (live.length - 1));
-  let expected = cloneDeep(live[item]);
 
-  if (expected === undefined) {
-    expected = cloneDeep(live[(live.length - 1)]);
-  }
-
-  const model = allTypes.find(typ => {
-    return typ.id === expected['type-slug'];
-  });
-
-  const formatted = apiUtils.format([expected], model.attributes, allTypes, query);
+  const formatted = apiUtils.format([testable.expected], testable.model.attributes, allTypes, query);
 
   return formatted.then(result => {
     result.forEach(itm => {
@@ -254,21 +214,12 @@ test.serial.skip('Utils: Format Results - query depth zero', t => {
 });
 
 test.serial.skip('Utils: Format Results - query depth one', t => {
+  const testable = testables(live);
   const query = {
     depth: 1,
   };
-  const item = Math.round(Math.random() * (live.length - 1));
-  let expected = cloneDeep(live[item]);
 
-  if (expected === undefined) {
-    expected = cloneDeep(live[(live.length - 1)]);
-  }
-
-  const model = allTypes.find(typ => {
-    return typ.id === expected['type-slug'];
-  });
-
-  const formatted = apiUtils.format([expected], model.attributes, allTypes, query);
+  const formatted = apiUtils.format([testable.expected], testable.model.attributes, allTypes, query);
 
   return formatted.then(result => {
     result.forEach(itm => {
@@ -292,21 +243,12 @@ test.serial.skip('Utils: Format Results - query depth one', t => {
 });
 
 test.serial.skip('Utils: Format Results - query depth two', t => {
+  const testable = testables(live);
   const query = {
     depth: 2,
   };
-  const item = Math.round(Math.random() * (live.length - 1));
-  let expected = cloneDeep(live[item]);
 
-  if (expected === undefined) {
-    expected = cloneDeep(live[(live.length - 1)]);
-  }
-
-  const model = allTypes.find(typ => {
-    return typ.id === expected['type-slug'];
-  });
-
-  const formatted = apiUtils.format([expected], model.attributes, allTypes, query);
+  const formatted = apiUtils.format([testable.expected], testable.model.attributes, allTypes, query);
 
   return formatted.then(result => {
     result.forEach(itm => {
@@ -685,22 +627,14 @@ test.serial.skip('API: ofType with Follow', t => {
   });
 });
 
+
 test.serial.skip('API: One', t => {
+  const testable = testables(live);
   const query = {
     depth: 1,
   };
-  const item = Math.round(Math.random() * (live.length - 1));
-  let expected = cloneDeep(live[item]);
 
-  if (expected === undefined) {
-    expected = cloneDeep(live[(live.length - 1)]);
-  }
-
-  const model = allTypes.find(typ => {
-    return typ.id === expected['type-slug'];
-  });
-
-  return api.one(query, expected.id, model.attributes, allTypes, database).then(result => {
+  return api.one(query, testable.expected.id, testable.model.attributes, allTypes, database).then(result => {
     t.is(result.id, expected.id, 'IDs the same');
     t.true(result.hasOwnProperty('attributes'));
     t.is(result.key_slug, expected['key-slug'], 'Key available');
