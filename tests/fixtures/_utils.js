@@ -212,6 +212,8 @@ const values = ctype => {
  * Tests attributes with references
  * @param  {object} t - ava testing
  * @param  {object|array} attrs object containing attributes to test
+ *
+ * @returns {object|function|boolean} various returns
  */
 const referencer = (t, attrs) => {
   if (typeof attrs !== 'object' || attrs === undefined) {
@@ -220,7 +222,8 @@ const referencer = (t, attrs) => {
 
   // an individual piece of content, so we need to test just the attributes
   if (attrs.hasOwnProperty('attributes')) {
-    referencer(t, attrs.attributes);
+    // eslint will not allow a return here
+    return referencer(t, attrs.attributes); // eslint-disable-line consistent-return
   }
 
   // an array of attributes, this set of attributes is a repeatable
