@@ -220,7 +220,7 @@ const referencer = (t, attrs) => {
 
   // an individual piece of content, so we need to test just the attributes
   if (attrs.hasOwnProperty('attributes')) {
-    return referencer(t, attrs.attributes);
+    referencer(t, attrs.attributes);
   }
 
   // an array of attributes, this set of attributes is a repeatable
@@ -238,8 +238,10 @@ const referencer = (t, attrs) => {
           t.true(attr[atr].hasOwnProperty('meta'), 'attribute in array contains meta');
           t.true(attr[atr].meta.hasOwnProperty('url'), 'attribute in array contains meta url');
 
-          return;
+          return true;
         }
+
+        return true;
       });
     });
   }
@@ -250,7 +252,7 @@ const referencer = (t, attrs) => {
     if (attr.split('-').indexOf('referencer') > -1) {
       const item = attrs[attr];
 
-      // if attributes exists, we're still digging down in our depth, recurse!
+      // if attributes exists, we're still digging down in our depth, recurseit!
       if (item.hasOwnProperty('attributes')) {
         return referencer(t, item.attributes);
       }
@@ -265,10 +267,10 @@ const referencer = (t, attrs) => {
         // if it has attributes, we're not at depth so....uuuuuuhhhhhhhaaaAAAAHHHH recursit!
         if (item[Object.keys(item)[0]].hasOwnProperty('attributes')) {
           Object.keys(item).forEach(itm => {
-            referencer(t, item[itm].attributes);
+            return referencer(t, item[itm].attributes);
           });
 
-          return;
+          return true;
         }
 
         // no attributes - it should have a meta then
@@ -276,7 +278,7 @@ const referencer = (t, attrs) => {
           t.true(item[itm].hasOwnProperty('meta'), 'attribute in array contains meta');
           t.true(item[itm].meta.hasOwnProperty('url'), 'attribute in array contains meta url');
 
-          return;
+          return true;
         });
       }
 
@@ -284,10 +286,10 @@ const referencer = (t, attrs) => {
       else {
         t.true(item.hasOwnProperty('meta'), 'attribute in array contains meta');
         t.true(item.meta.hasOwnProperty('url'), 'attribute in array contains meta url');
-
-        return;
       }
     }
+
+    return true;
   });
 };
 
@@ -324,7 +326,7 @@ const formatted = (t, attr) => {
     t.false(attr.hasOwnProperty('attributes'), 'Does not contain attributes');
     t.is(attr.meta.url, `/api/types/${typeslug}/${attr.id}`, 'URL points to full content item');
   }
-}
+};
 
 module.exports = {
   type,

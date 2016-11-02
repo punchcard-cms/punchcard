@@ -13,7 +13,6 @@ const lang = 'api-test';
 
 const fixtures = utils.generate(generated, lang);
 
-const content = fixtures.content;
 const live = fixtures.live;
 const types = fixtures.types.names;
 const allTypes = fixtures.types.full;
@@ -39,7 +38,7 @@ test.cb.before(t => {
  * Randomly selects a piece of content from source, and it's content-type model
  *
  * @param  {object} source object of content
- * @return {object}  - selected content and its model
+ * @returns {object}  - selected content and its model
  */
 const testables = source => {
   const random = Math.round(Math.random() * (source.length - 1));
