@@ -35,39 +35,38 @@ test.cb.before(t => {
   });
 });
 
-test.cb.after(t => {
-  const items = types.map(type => {
-    return database('live').where('type', type).del().then(() => {
-      return database('schedule').where('type', type).del();
-    });
-  });
-
-  Promise.all(items)
-    .then(() => {
-      t.end();
-    })
-    .catch(e => {
-      t.fail(e);
-    });
-});
-
-//////////////////////////////
-// Utils - attributes
-//////////////////////////////
-test.serial('Utils: attributes - empty query', t => {
-  const random = Math.round(Math.random() * live.length - 1);
-  let expected = live[random];
+/**
+ * Randomly selects a piece of content from source, and it's content-type model
+ *
+ * @param  {object} source object of content
+ * @return {object}  - selected content and its model
+ */
+const testables = source => {
+  const random = Math.round(Math.random() * (source.length - 1));
+  let expected = source[random];
   if (expected === undefined) {
-    expected = cloneDeep(live[(live.length - 1)]);
+    expected = cloneDeep(source[(source.length - 1)]);
   }
 
   const model = allTypes.find(typ => {
     return typ.id === expected['type-slug'];
   });
 
+  return {
+    expected,
+    model,
+  };
+};
+
+//////////////////////////////
+// Utils - attributes
+//////////////////////////////
+test.serial('Utils: attributes - empty query', t => {
+  const testable = testables(live);
+
   const query = {};
 
-  const attributes = apiUtils.attributes(expected.attributes, model.attributes, allTypes, query);
+  const attributes = apiUtils.attributes(testable.expected.attributes, testable.model.attributes, allTypes, query);
 
   return attributes.then(result => {
     t.is(typeof result, 'object', 'Should contain result, an object.');
@@ -81,22 +80,13 @@ test.serial('Utils: attributes - empty query', t => {
 });
 
 test.serial('Utils: attributes - depth 0', t => {
-  const random = Math.round(Math.random() * live.length - 1);
-  let expected = live[random];
-  if (expected === undefined) {
-    expected = cloneDeep(live[(live.length - 1)]);
-  }
+  const testable = testables(live);
 
-  const model = allTypes.find(typ => {
-    return typ.id === expected['type-slug'];
-  });
-
-  // because depth is checked during attributes, depth 1 and 0 are the same for the attributes function
   const query = {
     depth: 0,
   };
 
-  const attributes = apiUtils.attributes(expected.attributes, model.attributes, allTypes, query);
+  const attributes = apiUtils.attributes(testable.expected.attributes, testable.model.attributes, allTypes, query);
 
   return attributes.then(result => {
     t.is(typeof result, 'object', 'Should contain result, an object.');
@@ -109,22 +99,13 @@ test.serial('Utils: attributes - depth 0', t => {
 });
 
 test.serial('Utils: attributes - depth 1', t => {
-  const random = Math.round(Math.random() * live.length - 1);
-  let expected = live[random];
-  if (expected === undefined) {
-    expected = cloneDeep(live[(live.length - 1)]);
-  }
+  const testable = testables(live);
 
-  const model = allTypes.find(typ => {
-    return typ.id === expected['type-slug'];
-  });
-
-  // because depth is checked during attributes, depth 1 and 0 are the same for the attributes function
   const query = {
     depth: 1,
   };
 
-  const attributes = apiUtils.attributes(expected.attributes, model.attributes, allTypes, query);
+  const attributes = apiUtils.attributes(testable.expected.attributes, testable.model.attributes, allTypes, query);
 
   return attributes.then(result => {
     t.is(typeof result, 'object', 'Should contain result, an object.');
@@ -137,21 +118,13 @@ test.serial('Utils: attributes - depth 1', t => {
 });
 
 test.serial('Utils: attributes - depth 2', t => {
-  const random = Math.round(Math.random() * live.length - 1);
-  let expected = live[random];
-  if (expected === undefined) {
-    expected = cloneDeep(live[(live.length - 1)]);
-  }
-
-  const model = allTypes.find(typ => {
-    return typ.id === expected['type-slug'];
-  });
+  const testable = testables(live);
 
   const query = {
     depth: 2,
   };
 
-  const attributes = apiUtils.attributes(expected.attributes, model.attributes, allTypes, query);
+  const attributes = apiUtils.attributes(testable.expected.attributes, testable.model.attributes, allTypes, query);
 
   return attributes.then(result => {
     t.is(typeof result, 'object', 'Should contain result, an object.');
@@ -166,23 +139,15 @@ test.serial('Utils: attributes - depth 2', t => {
 });
 
 test.serial('Utils: attributes - no references', t => {
-  const random = Math.round(Math.random() * live.length - 1);
-  let expected = live[random];
-  if (expected === undefined) {
-    expected = cloneDeep(live[(live.length - 1)]);
-  }
+  const testable = testables(live);
 
-  Object.keys(expected.attributes).forEach(attr => {
+  Object.keys(testable.expected.attributes).forEach(attr => {
     if (attr.split('-').indexOf('referencer') > -1) {
-      delete expected.attributes[attr];
+      delete testable.expected.attributes[attr];
     }
   });
 
-  const model = allTypes.find(typ => {
-    return typ.id === expected['type-slug'];
-  });
-
-  let modelattrs = cloneDeep(model.attributes);
+  let modelattrs = cloneDeep(testable.model.attributes);
   modelattrs = modelattrs.map(attr => {
     if (attr.id.split('-').indexOf('referencer') < 0) {
       return attr;
@@ -193,12 +158,11 @@ test.serial('Utils: attributes - no references', t => {
     return attr !== false;
   });
 
-  // because depth is checked during attributes, depth 1 and 0 are the same for the attributes function
   const query = {
     depth: 0,
   };
 
-  const attributes = apiUtils.attributes(expected.attributes, modelattrs, allTypes, query);
+  const attributes = apiUtils.attributes(testable.expected.attributes, modelattrs, allTypes, query);
 
   return attributes.then(result => {
     t.is(typeof result, 'object', 'Should contain result, an object.');
@@ -217,44 +181,104 @@ test.serial('Utils: Format Results - List', t => {
 
   return formatted.then(result => {
     result.forEach(item => {
-      t.true(item.hasOwnProperty('id'), 'Contains ID');
-      t.true(item.hasOwnProperty('type'), 'Contains Type');
-      t.true(item.hasOwnProperty('type_slug'), 'Contains Type Slug');
-      t.true(item.hasOwnProperty('key'), 'Contains Key');
-      t.true(item.hasOwnProperty('key_slug'), 'Contains Key Slug');
-      t.true(item.hasOwnProperty('meta'), 'Contains Meta');
-      t.false(item.hasOwnProperty('attributes'), 'Does not contain attributes');
-      t.is(item.meta.url, `/api/types/${item.type_slug}/${item.id}`, 'URL points to full content item');
+      utils.formatted(t, item);
     });
   });
 });
 
-test.serial('Utils: Format Results - Attributes', t => {
-  const query = {
-    depth: 2,
-  };
-  const item = Math.round(Math.random() * (live.length - 1));
-  let expected = cloneDeep(live[item]);
+test.serial('Utils: Format Results - no query', t => {
+  const testable = testables(live);
 
-  if (expected === undefined) {
-    expected = cloneDeep(live[(live.length - 1)]);
-  }
-
-  const model = allTypes.find(typ => {
-    return typ.id === expected['type-slug'];
-  });
-
-  const formatted = apiUtils.format([expected], model.attributes, allTypes, query);
+  const formatted = apiUtils.format([testable.expected], testable.model.attributes, allTypes);
 
   return formatted.then(result => {
     result.forEach(itm => {
-      t.true(itm.hasOwnProperty('id'), 'Contains ID');
-      t.true(itm.hasOwnProperty('type'), 'Contains Type');
-      t.true(itm.hasOwnProperty('type_slug'), 'Contains Type Slug');
-      t.true(itm.hasOwnProperty('key'), 'Contains Key');
-      t.true(itm.hasOwnProperty('key_slug'), 'Contains Key Slug');
-      t.false(itm.hasOwnProperty('meta'), 'Does not contain Meta');
+      utils.formatted(t, itm);
+    });
+  });
+});
+
+test.serial('Utils: Format Results - query depth zero', t => {
+  const testable = testables(live);
+  const query = {
+    depth: 0,
+  };
+
+  const formatted = apiUtils.format([testable.expected], testable.model.attributes, allTypes, query);
+
+  return formatted.then(result => {
+    result.forEach(itm => {
+      utils.formatted(t, itm);
+    });
+  });
+});
+
+test.serial('Utils: Format Results - query depth one', t => {
+  const testable = testables(live);
+  const query = {
+    depth: 1,
+  };
+
+  const formatted = apiUtils.format([testable.expected], testable.model.attributes, allTypes, query);
+
+  return formatted.then(result => {
+    result.forEach(itm => {
+      utils.formatted(t, itm);
       t.true(itm.hasOwnProperty('attributes'), 'Contains attributes');
+
+      Object.keys(itm.attributes).forEach(attr => {
+        if (attr.split('-').indexOf('referencer') > -1) {
+          if (itm.attributes[attr].hasOwnProperty('id')) {
+            utils.formatted(t, itm.attributes[attr]);
+          }
+          else if (!Array.isArray(itm.attributes[attr])) {
+            Object.keys(itm.attributes[attr]).forEach(atr => {
+              utils.formatted(t, itm.attributes[attr][atr]);
+            });
+          }
+        }
+      });
+    });
+  });
+});
+
+test.serial('Utils: Format Results - query depth two', t => {
+  const testable = testables(live);
+  const query = {
+    depth: 2,
+  };
+
+  const formatted = apiUtils.format([testable.expected], testable.model.attributes, allTypes, query);
+
+  return formatted.then(result => {
+    result.forEach(itm => {
+      utils.formatted(t, itm);
+      t.true(itm.hasOwnProperty('attributes'), 'Contains attributes');
+
+      Object.keys(itm.attributes).forEach(attr => {
+        if (attr.split('-').indexOf('referencer') > -1) {
+          if (itm.attributes[attr].hasOwnProperty('id')) {
+            utils.formatted(t, itm.attributes[attr]);
+            Object.keys(itm.attributes[attr]).forEach(atr => {
+              if (atr.split('-').indexOf('referencer') > -1) {
+                if (itm.attributes[attr][atr].hasOwnProperty('id')) {
+                  utils.formatted(t, itm.attributes[attr][atr]);
+                }
+                else if (!Array.isArray(itm.attributes[attr][atr])) {
+                  Object.keys(itm.attributes[attr][atr]).forEach(ar => {
+                    utils.formatted(t, itm.attributes[attr][atr][ar]);
+                  });
+                }
+              }
+            });
+          }
+          else if (!Array.isArray(itm.attributes[attr])) {
+            Object.keys(itm.attributes[attr]).forEach(atr => {
+              utils.formatted(t, itm.attributes[attr][atr]);
+            });
+          }
+        }
+      });
     });
   });
 });
@@ -512,14 +536,7 @@ test.serial('API: All with Follow', t => {
       // Ignore empty object
       if (Object.keys(item).length !== 0) {
         one = true;
-        t.true(item.hasOwnProperty('id'), 'Each item has an ID');
-        t.true(item.hasOwnProperty('type'), 'Each item has a type');
-        t.true(item.type.hasOwnProperty('name'), 'Each item type has an name');
-        t.true(item.type.hasOwnProperty('slug'), 'Each item type has an slug');
-        t.true(item.type.hasOwnProperty('url'), 'Each item type has an url');
-        t.true(item.hasOwnProperty('key'), 'Each item has a key');
-        t.true(item.hasOwnProperty('key_slug'), 'Each item has a key_slug');
-        t.true(item.hasOwnProperty('attributes'), 'Each item has attributes');
+        utils.formatted(t, item);
       }
     });
     t.true(results.hasOwnProperty('items'), 'Has Items');
@@ -598,14 +615,7 @@ test.serial('API: ofType with Follow', t => {
       // Ignore empty object
       if (Object.keys(itm).length !== 0) {
         one = true;
-        t.true(itm.hasOwnProperty('id'), 'Each item has an ID');
-        t.true(itm.hasOwnProperty('type'), 'Each item has a type');
-        t.true(itm.type.hasOwnProperty('name'), 'Each item type has an name');
-        t.true(itm.type.hasOwnProperty('slug'), 'Each item type has an slug');
-        t.true(itm.type.hasOwnProperty('url'), 'Each item type has an url');
-        t.true(itm.hasOwnProperty('key'), 'Each item has a key');
-        t.true(itm.hasOwnProperty('key_slug'), 'Each item has a key_slug');
-        t.true(itm.hasOwnProperty('attributes'), 'Each item has attributes');
+        utils.formatted(t, itm);
       }
     });
     t.true(results.hasOwnProperty('items'), 'Has Items');
@@ -617,31 +627,23 @@ test.serial('API: ofType with Follow', t => {
   });
 });
 
+
 test.serial('API: One', t => {
+  const testable = testables(live);
   const query = {
     depth: 1,
   };
-  const item = Math.round(Math.random() * (live.length - 1));
-  let expected = cloneDeep(live[item]);
 
-  if (expected === undefined) {
-    expected = cloneDeep(live[(live.length - 1)]);
-  }
-
-  const model = allTypes.find(typ => {
-    return typ.id === expected['type-slug'];
-  });
-
-  return api.one(query, expected.id, model.attributes, allTypes, database).then(result => {
-    t.is(result.id, expected.id, 'IDs the same');
+  return api.one(query, testable.expected.id, testable.model.attributes, allTypes, database).then(result => {
+    t.is(result.id, testable.expected.id, 'IDs the same');
     t.true(result.hasOwnProperty('attributes'));
-    t.is(result.key_slug, expected['key-slug'], 'Key available');
+    t.is(result.key_slug, testable.expected['key-slug'], 'Key available');
     t.true(result.hasOwnProperty('type'), 'Has type info');
   });
 });
 
 test.serial('API: One - Not There', t => {
-  return api.one({}, `Test ${Math.round(Math.random() * content.length)}`).then(result => {
+  return api.one({}, `Test ${Math.round(Math.random() * (live.length - 1))}`).then(result => {
     t.deepEqual(result, {}, 'Empty object returned');
   });
 });
@@ -650,12 +652,13 @@ test.serial('API: One - Not There', t => {
 //////////////////////////////
 // AFTER ALL TESTS RUN
 //////////////////////////////
-test.cb.after(t => {
+test.cb.after.always(t => {
   database('live').where('language', lang).del().then(() => {
     t.end();
   })
   .catch(e => {
     console.error(e.stack); // eslint-disable-line no-console
+    t.fail(e);
     t.end();
   });
 });
