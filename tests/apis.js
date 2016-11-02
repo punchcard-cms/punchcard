@@ -76,7 +76,6 @@ test.serial.skip('Utils: attributes - depth 0', t => {
     return typ.id === expected['type-slug'];
   });
 
-  // because depth is checked during attributes, depth 1 and 0 are the same for the attributes function
   const query = {
     depth: 0,
   };
@@ -105,7 +104,6 @@ test.serial.skip('Utils: attributes - depth 1', t => {
     return typ.id === expected['type-slug'];
   });
 
-  // because depth is checked during attributes, depth 1 and 0 are the same for the attributes function
   const query = {
     depth: 1,
   };
@@ -181,7 +179,6 @@ test.serial.skip('Utils: attributes - no references', t => {
     return attr !== false;
   });
 
-  // because depth is checked during attributes, depth 1 and 0 are the same for the attributes function
   const query = {
     depth: 0,
   };
