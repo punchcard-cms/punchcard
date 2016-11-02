@@ -129,7 +129,7 @@
   },
   "ava": {
     "files": [
-      "tests/apis.js"
+      "tests/*.js"
     ],
     "failFast": false,
     "tap": false
