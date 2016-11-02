@@ -296,8 +296,41 @@ const referencer = (t, attrs) => {
   });
 };
 
+const attribute = (t, attr) => {
+  let typeslug;
+
+  t.true(attr.hasOwnProperty('id'), 'Contains ID');
+  t.true(attr.hasOwnProperty('type'), 'Contains Type');
+
+  if (typeof attr.type === 'object') {
+    t.true(attr.type.hasOwnProperty('name'), 'Contains Type Name');
+    t.true(attr.type.hasOwnProperty('slug'), 'Contains Type Slug');
+    t.true(attr.type.hasOwnProperty('url'), 'Contains Type url');
+    typeslug = attr.type.slug;
+  }
+  else {
+    t.true(attr.hasOwnProperty('type_slug'), 'Contains Type Slug');
+    typeslug = attr.type_slug;
+  }
+
+  t.true(attr.hasOwnProperty('key'), 'Contains Key');
+  t.true(attr.hasOwnProperty('key_slug'), 'Contains Key Slug');
+
+  if (!attr.hasOwnProperty('meta')) {
+    t.true(attr.hasOwnProperty('attributes'), 'Contains attributes');
+  }
+  else {
+    t.true(attr.hasOwnProperty('meta'), 'Contains Meta');
+    t.false(attr.hasOwnProperty('attributes'), 'Does not contain attributes');
+    t.is(attr.meta.url, `/api/types/${typeslug}/${attr.id}`, 'URL points to full content item');
+  }
+
+
+}
+
 module.exports = {
   type,
   values,
   referencer,
+  attribute,
 };
