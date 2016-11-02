@@ -220,9 +220,7 @@ const referencer = (t, attrs) => {
 
   // an individual piece of content, so we need to test just the attributes
   if (attrs.hasOwnProperty('attributes')) {
-    referencer(t, attrs.attributes);
-
-    return;
+    return referencer(t, attrs.attributes);
   }
 
   // an array of attributes, this set of attributes is a repeatable
@@ -232,9 +230,7 @@ const referencer = (t, attrs) => {
 	// an individual piece of content, so we need to test just the attributes
 	// at this point, we've found a piece of content _inside_ a piece of content's attributes
 	if (attr[atr].hasOwnProperty('attributes')) {
-	  referencer(t, attr[atr].attributes);
-
-	  return;
+	  return referencer(t, attr[atr].attributes);
 	}
 
 	// we've reached our depth, test `meta` exists
@@ -255,16 +251,12 @@ const referencer = (t, attrs) => {
 
       // if attributes exists, we're still digging down in our depth, recurse!
       if (item.hasOwnProperty('attributes')) {
-	referencer(t, item.attributes);
-
-	return;
+	return referencer(t, item.attributes);
       }
 
       // if it's an array, we're in a repeatable - recurseit!
       if (Array.isArray(item)) {
-	referencer(t, item);
-
-	return;
+	return referencer(t, item);
       }
 
       // non-repeatable attribute with multiple inputs
@@ -296,6 +288,11 @@ const referencer = (t, attrs) => {
   });
 };
 
+/**
+ * Tests for a formatted attribute
+ * @param  {object} t - ava testing
+ * @param  {object} attr object containing attributes to test
+ */
 const formatted = (t, attr) => {
   let typeslug;
 
@@ -324,8 +321,6 @@ const formatted = (t, attr) => {
     t.false(attr.hasOwnProperty('attributes'), 'Does not contain attributes');
     t.is(attr.meta.url, `/api/types/${typeslug}/${attr.id}`, 'URL points to full content item');
   }
-
-
 }
 
 module.exports = {
