@@ -218,6 +218,6 @@ const validation = function validation() {
 module.exports = {
   generate,
   validation,
-  attribute: futils.attribute,
+  formatted: futils.formatted,
   referencer: futils.referencer,
 };

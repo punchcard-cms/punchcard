@@ -203,7 +203,7 @@ test.serial.skip('Utils: Format Results - List', t => {
 
   return formatted.then(result => {
     result.forEach(item => {
-      utils.attribute(t, item);
+      utils.formatted(t, item);
     });
   });
 });
@@ -224,7 +224,7 @@ test.serial.skip('Utils: Format Results - no query', t => {
 
   return formatted.then(result => {
     result.forEach(itm => {
-      utils.attribute(t, itm);
+      utils.formatted(t, itm);
     });
   });
 });
@@ -248,7 +248,7 @@ test.serial.skip('Utils: Format Results - query depth zero', t => {
 
   return formatted.then(result => {
     result.forEach(itm => {
-      utils.attribute(t, itm);
+      utils.formatted(t, itm);
     });
   });
 });
@@ -272,17 +272,17 @@ test.serial.skip('Utils: Format Results - query depth one', t => {
 
   return formatted.then(result => {
     result.forEach(itm => {
-      utils.attribute(t, itm);
+      utils.formatted(t, itm);
       t.true(itm.hasOwnProperty('attributes'), 'Contains attributes');
 
       Object.keys(itm.attributes).forEach(attr => {
         if (attr.split('-').indexOf('referencer') > -1) {
           if (itm.attributes[attr].hasOwnProperty('id')) {
-            utils.attribute(t, itm.attributes[attr]);
+            utils.formatted(t, itm.attributes[attr]);
           }
           else if (!Array.isArray(itm.attributes[attr])) {
             Object.keys(itm.attributes[attr]).forEach(atr => {
-              utils.attribute(t, itm.attributes[attr][atr]);
+              utils.formatted(t, itm.attributes[attr][atr]);
             });
           }
         }
@@ -310,21 +310,21 @@ test.serial.skip('Utils: Format Results - query depth two', t => {
 
   return formatted.then(result => {
     result.forEach(itm => {
-      utils.attribute(t, itm);
+      utils.formatted(t, itm);
       t.true(itm.hasOwnProperty('attributes'), 'Contains attributes');
 
       Object.keys(itm.attributes).forEach(attr => {
         if (attr.split('-').indexOf('referencer') > -1) {
           if (itm.attributes[attr].hasOwnProperty('id')) {
-            utils.attribute(t, itm.attributes[attr]);
+            utils.formatted(t, itm.attributes[attr]);
             Object.keys(itm.attributes[attr]).forEach(atr => {
               if (atr.split('-').indexOf('referencer') > -1) {
                 if (itm.attributes[attr][atr].hasOwnProperty('id')) {
-                  utils.attribute(t, itm.attributes[attr][atr]);
+                  utils.formatted(t, itm.attributes[attr][atr]);
                 }
                 else if (!Array.isArray(itm.attributes[attr][atr])) {
                   Object.keys(itm.attributes[attr][atr]).forEach(ar => {
-                    utils.attribute(t, itm.attributes[attr][atr][ar]);
+                    utils.formatted(t, itm.attributes[attr][atr][ar]);
                   });
                 }
               }
@@ -332,7 +332,7 @@ test.serial.skip('Utils: Format Results - query depth two', t => {
           }
           else if (!Array.isArray(itm.attributes[attr])) {
             Object.keys(itm.attributes[attr]).forEach(atr => {
-              utils.attribute(t, itm.attributes[attr][atr]);
+              utils.formatted(t, itm.attributes[attr][atr]);
             });
           }
         }
@@ -594,7 +594,7 @@ test.serial.skip('API: All with Follow', t => {
       // Ignore empty object
       if (Object.keys(item).length !== 0) {
         one = true;
-        utils.attribute(t, item);
+        utils.formatted(t, item);
       }
     });
     t.true(results.hasOwnProperty('items'), 'Has Items');
@@ -673,7 +673,7 @@ test.serial.skip('API: ofType with Follow', t => {
       // Ignore empty object
       if (Object.keys(itm).length !== 0) {
         one = true;
-        utils.attribute(t, itm);
+        utils.formatted(t, itm);
       }
     });
     t.true(results.hasOwnProperty('items'), 'Has Items');

@@ -296,7 +296,7 @@ const referencer = (t, attrs) => {
   });
 };
 
-const attribute = (t, attr) => {
+const formatted = (t, attr) => {
   let typeslug;
 
   t.true(attr.hasOwnProperty('id'), 'Contains ID');
@@ -332,5 +332,5 @@ module.exports = {
   type,
   values,
   referencer,
-  attribute,
+  formatted,
 };
