@@ -13,7 +13,6 @@ const lang = 'api-test';
 
 const fixtures = utils.generate(generated, lang);
 
-const content = fixtures.content;
 const live = fixtures.live;
 const types = fixtures.types.names;
 const allTypes = fixtures.types.full;
@@ -35,34 +34,11 @@ test.cb.before(t => {
   });
 });
 
-/**
- * Randomly selects a piece of content from source, and it's content-type model
- *
- * @param  {object} source object of content
- * @return {object}  - selected content and its model
- */
-const testables = source => {
-  const random = Math.round(Math.random() * (source.length - 1));
-  let expected = source[random];
-  if (expected === undefined) {
-    expected = cloneDeep(source[(source.length - 1)]);
-  }
-
-  const model = allTypes.find(typ => {
-    return typ.id === expected['type-slug'];
-  });
-
-  return {
-    expected,
-    model,
-  };
-};
-
 //////////////////////////////
 // Utils - attributes
 //////////////////////////////
-test.serial('Utils: attributes - empty query', t => {
-  const testable = testables(live);
+test.serial.skip('Utils: attributes - empty query', t => {
+  const testable = utils.testables(live, allTypes);
 
   const query = {};
 
@@ -75,12 +51,14 @@ test.serial('Utils: attributes - empty query', t => {
     utils.referencer(t, result);
   })
   .catch(e => {
-    console.log(e); // eslint-disable-line no-console
+    console.error(e.stack); // eslint-disable-line no-console
+    t.fail(e);
+    t.end();
   });
 });
 
-test.serial('Utils: attributes - depth 0', t => {
-  const testable = testables(live);
+test.serial.skip('Utils: attributes - depth 0', t => {
+  const testable = utils.testables(live, allTypes);
 
   const query = {
     depth: 0,
@@ -94,12 +72,14 @@ test.serial('Utils: attributes - depth 0', t => {
     utils.referencer(t, result);
   })
   .catch(e => {
-    console.log(e); // eslint-disable-line no-console
+    console.error(e.stack); // eslint-disable-line no-console
+    t.fail(e);
+    t.end();
   });
 });
 
-test.serial('Utils: attributes - depth 1', t => {
-  const testable = testables(live);
+test.serial.skip('Utils: attributes - depth 1', t => {
+  const testable = utils.testables(live, allTypes);
 
   const query = {
     depth: 1,
@@ -113,12 +93,14 @@ test.serial('Utils: attributes - depth 1', t => {
     utils.referencer(t, result);
   })
   .catch(e => {
-    console.log(e); // eslint-disable-line no-console
+    console.error(e.stack); // eslint-disable-line no-console
+    t.fail(e);
+    t.end();
   });
 });
 
-test.serial('Utils: attributes - depth 2', t => {
-  const testable = testables(live);
+test.serial.skip('Utils: attributes - depth 2', t => {
+  const testable = utils.testables(live, allTypes);
 
   const query = {
     depth: 2,
@@ -134,12 +116,14 @@ test.serial('Utils: attributes - depth 2', t => {
     });
   })
   .catch(e => {
-    console.log(e); // eslint-disable-line no-console
+    console.error(e.stack); // eslint-disable-line no-console
+    t.fail(e);
+    t.end();
   });
 });
 
-test.serial('Utils: attributes - no references', t => {
-  const testable = testables(live);
+test.serial.skip('Utils: attributes - no references', t => {
+  const testable = utils.testables(live, allTypes);
 
   Object.keys(testable.expected.attributes).forEach(attr => {
     if (attr.split('-').indexOf('referencer') > -1) {
@@ -169,14 +153,16 @@ test.serial('Utils: attributes - no references', t => {
     t.is(Object.keys(result).length, 2, 'Should contain two main objects.');
   })
   .catch(e => {
-    console.log(e); // eslint-disable-line no-console
+    console.error(e.stack); // eslint-disable-line no-console
+    t.fail(e);
+    t.end();
   });
 });
 
 //////////////////////////////
 // Utils - format
 //////////////////////////////
-test.serial('Utils: Format Results - List', t => {
+test.serial.skip('Utils: Format Results - List', t => {
   const formatted = apiUtils.format(live.slice(0, 9));
 
   return formatted.then(result => {
@@ -186,8 +172,8 @@ test.serial('Utils: Format Results - List', t => {
   });
 });
 
-test.serial('Utils: Format Results - no query', t => {
-  const testable = testables(live);
+test.serial.skip('Utils: Format Results - no query', t => {
+  const testable = utils.testables(live, allTypes);
 
   const formatted = apiUtils.format([testable.expected], testable.model.attributes, allTypes);
 
@@ -198,8 +184,8 @@ test.serial('Utils: Format Results - no query', t => {
   });
 });
 
-test.serial('Utils: Format Results - query depth zero', t => {
-  const testable = testables(live);
+test.serial.skip('Utils: Format Results - query depth zero', t => {
+  const testable = utils.testables(live, allTypes);
   const query = {
     depth: 0,
   };
@@ -213,8 +199,8 @@ test.serial('Utils: Format Results - query depth zero', t => {
   });
 });
 
-test.serial('Utils: Format Results - query depth one', t => {
-  const testable = testables(live);
+test.serial.skip('Utils: Format Results - query depth one', t => {
+  const testable = utils.testables(live, allTypes);
   const query = {
     depth: 1,
   };
@@ -226,24 +212,14 @@ test.serial('Utils: Format Results - query depth one', t => {
       utils.formatted(t, itm);
       t.true(itm.hasOwnProperty('attributes'), 'Contains attributes');
 
-      Object.keys(itm.attributes).forEach(attr => {
-        if (attr.split('-').indexOf('referencer') > -1) {
-          if (itm.attributes[attr].hasOwnProperty('id')) {
-            utils.formatted(t, itm.attributes[attr]);
-          }
-          else if (!Array.isArray(itm.attributes[attr])) {
-            Object.keys(itm.attributes[attr]).forEach(atr => {
-              utils.formatted(t, itm.attributes[attr][atr]);
-            });
-          }
-        }
-      });
+      utils.depths(t, itm.attributes, query.depth);
+
     });
   });
 });
 
-test.serial('Utils: Format Results - query depth two', t => {
-  const testable = testables(live);
+test.serial.skip('Utils: Format Results - query depth two', t => {
+  const testable = utils.testables(live, allTypes);
   const query = {
     depth: 2,
   };
@@ -255,30 +231,7 @@ test.serial('Utils: Format Results - query depth two', t => {
       utils.formatted(t, itm);
       t.true(itm.hasOwnProperty('attributes'), 'Contains attributes');
 
-      Object.keys(itm.attributes).forEach(attr => {
-        if (attr.split('-').indexOf('referencer') > -1) {
-          if (itm.attributes[attr].hasOwnProperty('id')) {
-            utils.formatted(t, itm.attributes[attr]);
-            Object.keys(itm.attributes[attr]).forEach(atr => {
-              if (atr.split('-').indexOf('referencer') > -1) {
-                if (itm.attributes[attr][atr].hasOwnProperty('id')) {
-                  utils.formatted(t, itm.attributes[attr][atr]);
-                }
-                else if (!Array.isArray(itm.attributes[attr][atr])) {
-                  Object.keys(itm.attributes[attr][atr]).forEach(ar => {
-                    utils.formatted(t, itm.attributes[attr][atr][ar]);
-                  });
-                }
-              }
-            });
-          }
-          else if (!Array.isArray(itm.attributes[attr])) {
-            Object.keys(itm.attributes[attr]).forEach(atr => {
-              utils.formatted(t, itm.attributes[attr][atr]);
-            });
-          }
-        }
-      });
+      utils.depths(t, itm.attributes, query.depth);
     });
   });
 });
@@ -286,7 +239,7 @@ test.serial('Utils: Format Results - query depth two', t => {
 //////////////////////////////
 // Utils - organize
 //////////////////////////////
-test.serial('Utils: Organize - Default', t => {
+test.serial.skip('Utils: Organize - Default', t => {
   const actual = apiUtils.organize();
   const expected = {
     sort: {
@@ -303,7 +256,7 @@ test.serial('Utils: Organize - Default', t => {
   t.deepEqual(actual, expected, 'Returns defaults');
 });
 
-test.serial('Utils: Organize - Lookup', t => {
+test.serial.skip('Utils: Organize - Lookup', t => {
   const actual = apiUtils.organize({}, [
     'foo',
     'bar',
@@ -324,7 +277,7 @@ test.serial('Utils: Organize - Lookup', t => {
   t.deepEqual(actual, expected, 'Returns defaults');
 });
 
-test.serial('Utils: Organize - Bad Lookup', t => {
+test.serial.skip('Utils: Organize - Bad Lookup', t => {
   const actual = apiUtils.organize({}, {});
   const expected = {
     sort: {
@@ -341,7 +294,7 @@ test.serial('Utils: Organize - Bad Lookup', t => {
   t.deepEqual(actual, expected, 'Returns defaults');
 });
 
-test.serial('Utils: Organize - Custom', t => {
+test.serial.skip('Utils: Organize - Custom', t => {
   const actual = apiUtils.organize({
     sort: 'type',
     sort_dir: 'desc', // eslint-disable-line camelcase
@@ -364,7 +317,7 @@ test.serial('Utils: Organize - Custom', t => {
   t.deepEqual(actual, expected, 'Returns defaults');
 });
 
-test.serial('Utils: Organize - Wrong', t => {
+test.serial.skip('Utils: Organize - Wrong', t => {
   const actual = apiUtils.organize({
     sort: 'foo',
     sort_dir: 'banana', // eslint-disable-line camelcase
@@ -387,7 +340,7 @@ test.serial('Utils: Organize - Wrong', t => {
   t.deepEqual(actual, expected, 'Returns defaults');
 });
 
-test.serial('Utils: Organize - Wrong Pages', t => {
+test.serial.skip('Utils: Organize - Wrong Pages', t => {
   const actual = apiUtils.organize({
     page: -1,
     per_page: -1, // eslint-disable-line camelcase
@@ -411,7 +364,7 @@ test.serial('Utils: Organize - Wrong Pages', t => {
 //////////////////////////////
 // Utils - page
 //////////////////////////////
-test.serial('Utils: Page - First', t => {
+test.serial.skip('Utils: Page - First', t => {
   const organized = apiUtils.organize();
   const actual = apiUtils.page('api', organized, 100);
 
@@ -426,7 +379,7 @@ test.serial('Utils: Page - First', t => {
   t.deepEqual(actual, expected);
 });
 
-test.serial('Utils: Page - Middle', t => {
+test.serial.skip('Utils: Page - Middle', t => {
   const organized = apiUtils.organize({
     page: 2,
   });
@@ -443,7 +396,7 @@ test.serial('Utils: Page - Middle', t => {
   t.deepEqual(actual, expected);
 });
 
-test.serial('Utils: Page - End', t => {
+test.serial.skip('Utils: Page - End', t => {
   const organized = apiUtils.organize({
     page: 4,
   });
@@ -460,7 +413,7 @@ test.serial('Utils: Page - End', t => {
   t.deepEqual(actual, expected);
 });
 
-test.serial('Utils: Page - One', t => {
+test.serial.skip('Utils: Page - One', t => {
   const organized = apiUtils.organize({
     page: 1,
   });
@@ -477,7 +430,7 @@ test.serial('Utils: Page - One', t => {
   t.deepEqual(actual, expected);
 });
 
-test.serial('Utils: Page - None', t => {
+test.serial.skip('Utils: Page - None', t => {
   const organized = apiUtils.organize({
     page: 4,
   });
@@ -497,7 +450,7 @@ test.serial('Utils: Page - None', t => {
 //////////////////////////////
 // APIs
 //////////////////////////////
-test.serial('APIs: Types', t => {
+test.serial.skip('APIs: Types', t => {
   const app = {
     get: () => {
       return allTypes;
@@ -517,20 +470,33 @@ test.serial('APIs: Types', t => {
   t.true(isEqual(apiTypes.keys, keys), 'Keys are as expected');
 });
 
-test.serial('API: All', t => {
+//////////////////////////////
+// APIs - all
+//////////////////////////////
+test.serial.skip('API: All', t => {
   return api.all({}, allTypes).then(results => {
     t.true(results.hasOwnProperty('items'), 'Has Items');
     t.true(results.hasOwnProperty('pages'), 'Has Pagination');
     t.true(results.items.length >= generated, 'Has at least all items in it');
+
+    results.items.forEach(item => {
+      // Ignore empty object
+      if (Object.keys(item).length !== 0) {
+        utils.formatted(t, item);
+      }
+    });
   });
 });
 
-test.serial('API: All with Follow', t => {
+test.serial.skip('API: All with depth 0', t => {
   return api.all({
-    follow: 'true',
-    depth: 1,
+    depth: 0,
   }, allTypes).then(results => {
     let one = false;
+
+    t.true(results.hasOwnProperty('items'), 'Has Items');
+    t.true(results.hasOwnProperty('pages'), 'Has Pagination');
+    t.true(results.items.length >= generated, 'Has at least all items in it');
 
     results.items.forEach(item => {
       // Ignore empty object
@@ -539,9 +505,6 @@ test.serial('API: All with Follow', t => {
         utils.formatted(t, item);
       }
     });
-    t.true(results.hasOwnProperty('items'), 'Has Items');
-    t.true(results.hasOwnProperty('pages'), 'Has Pagination');
-    t.true(results.items.length >= generated, 'Has at least all items in it');
 
     if (results.items.length > 0) {
       t.true(one, 'At least one item returned in items');
@@ -549,7 +512,79 @@ test.serial('API: All with Follow', t => {
   });
 });
 
-test.serial('API: Content', t => {
+test.serial.skip('API: All with depth 1', t => {
+  return api.all({
+    depth: 1,
+  }, allTypes).then(results => {
+    let one = false;
+
+    t.true(results.hasOwnProperty('items'), 'Has Items');
+    t.true(results.hasOwnProperty('pages'), 'Has Pagination');
+    t.true(results.items.length >= generated, 'Has at least all items in it');
+
+    results.items.forEach(item => {
+      // Ignore empty object
+      if (Object.keys(item).length !== 0) {
+        one = true;
+        utils.formatted(t, item);
+      }
+    });
+
+    if (results.items.length > 0) {
+      t.true(one, 'At least one item returned in items');
+    }
+  });
+});
+
+test.serial('API: All with depth 2', t => {
+  return api.all({
+    depth: 2,
+  }, allTypes).then(results => {
+    let one = false;
+
+    t.true(results.hasOwnProperty('items'), 'Has Items');
+    t.true(results.hasOwnProperty('pages'), 'Has Pagination');
+    t.true(results.items.length >= generated, 'Has at least all items in it');
+
+    results.items.forEach(item => {
+      // Ignore empty object
+      if (Object.keys(item).length !== 0) {
+        one = true;
+        utils.formatted(t, item);
+      }
+    });
+
+    if (results.items.length > 0) {
+      t.true(one, 'At least one item returned in items');
+    }
+  });
+});
+
+test.serial.skip('API: All with Follow', t => {
+  return api.all({
+    follow: 'true',
+  }, allTypes).then(results => {
+    let one = false;
+
+    t.true(results.hasOwnProperty('items'), 'Has Items');
+    t.true(results.hasOwnProperty('pages'), 'Has Pagination');
+    t.true(results.items.length >= generated, 'Has at least all items in it');
+
+    results.items.forEach(item => {
+      // Ignore empty object
+      if (Object.keys(item).length !== 0) {
+        one = true;
+        utils.formatted(t, item);
+      }
+    });
+
+    if (results.items.length > 0) {
+      t.true(one, 'At least one item returned in items');
+    }
+  });
+});
+
+test.serial.skip('API: Content', t => {
   const app = {
     get: () => {
       return allTypes;
@@ -565,7 +600,7 @@ test.serial('API: Content', t => {
   });
 });
 
-test.serial('API: Content - Descending', t => {
+test.serial.skip('API: Content - Descending', t => {
   const app = {
     get: () => {
       return allTypes;
@@ -583,32 +618,22 @@ test.serial('API: Content - Descending', t => {
   });
 });
 
-test.serial('API: ofType', t => {
-  const item = Math.round(Math.random() * (types.length - 1));
-  const type = types[item];
+test.serial.skip('API: ofType', t => {
+  const testable = utils.testables(live, allTypes);
 
-  const model = allTypes.find(typ => {
-    return typ.id === slugify(type);
-  });
-
-  return api.ofType({}, model).then(formatted => {
+  return api.ofType({}, testable.model).then(formatted => {
     t.true(formatted.hasOwnProperty('items'), 'Has Items');
     t.true(formatted.hasOwnProperty('pages'), 'Has Pagination');
   });
 });
 
-test.serial('API: ofType with Follow', t => {
-  const item = Math.round(Math.random() * (types.length - 1));
-  const type = types[item];
-
-  const model = allTypes.find(typ => {
-    return typ.id === slugify(type);
-  });
+test.serial.skip('API: ofType with Follow', t => {
+  const testable = utils.testables(live, allTypes);
 
   return api.ofType({
     follow: 'true',
     depth: 1,
-  }, model, allTypes).then(results => {
+  }, testable.model, allTypes).then(results => {
     let one = false;
 
     results.items.forEach(itm => {
@@ -628,8 +653,8 @@ test.serial('API: ofType with Follow', t => {
 });
 
 
-test.serial('API: One', t => {
-  const testable = testables(live);
+test.serial.skip('API: One', t => {
+  const testable = utils.testables(live, allTypes);
   const query = {
     depth: 1,
   };
@@ -642,7 +667,7 @@ test.serial('API: One', t => {
   });
 });
 
-test.serial('API: One - Not There', t => {
+test.serial.skip('API: One - Not There', t => {
   return api.one({}, `Test ${Math.round(Math.random() * (live.length - 1))}`).then(result => {
     t.deepEqual(result, {}, 'Empty object returned');
   });

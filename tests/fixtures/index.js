@@ -220,4 +220,6 @@ module.exports = {
   validation,
   formatted: futils.formatted,
   referencer: futils.referencer,
+  depths: futils.depths,
+  testables: futils.testables,
 };

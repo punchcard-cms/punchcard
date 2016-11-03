@@ -1,4 +1,5 @@
 const uuid = require('uuid');
+const cloneDeep = require('lodash/cloneDeep');
 const ipsum = require('lorem-ipsum');
 const slugify = require('underscore.string/slugify');
 
@@ -212,6 +213,8 @@ const values = ctype => {
  * Tests attributes with references
  * @param  {object} t - ava testing
  * @param  {object|array} attrs object containing attributes to test
+ *
+ * @returns {object|function|boolean} various returns
  */
 const referencer = (t, attrs) => {
   if (typeof attrs !== 'object' || attrs === undefined) {
@@ -220,7 +223,8 @@ const referencer = (t, attrs) => {
 
   // an individual piece of content, so we need to test just the attributes
   if (attrs.hasOwnProperty('attributes')) {
-    return referencer(t, attrs.attributes);
+    // eslint will not allow a return here
+    return referencer(t, attrs.attributes); // eslint-disable-line consistent-return
   }
 
   // an array of attributes, this set of attributes is a repeatable
@@ -236,9 +240,12 @@ const referencer = (t, attrs) => {
         // we've reached our depth, test `meta` exists
         else if (attr[atr].hasOwnProperty('id')) {
           t.true(attr[atr].hasOwnProperty('meta'), 'attribute in array contains meta');
+          t.true(attr[atr].meta.hasOwnProperty('url'), 'attribute in array contains meta url');
 
-          return;
+          return true;
         }
+
+        return true;
       });
     });
   }
@@ -249,7 +256,7 @@ const referencer = (t, attrs) => {
     if (attr.split('-').indexOf('referencer') > -1) {
       const item = attrs[attr];
 
-      // if attributes exists, we're still digging down in our depth, recurse!
+      // if attributes exists, we're still digging down in our depth, recurseit!
       if (item.hasOwnProperty('attributes')) {
         return referencer(t, item.attributes);
       }
@@ -264,27 +271,29 @@ const referencer = (t, attrs) => {
         // if it has attributes, we're not at depth so....uuuuuuhhhhhhhaaaAAAAHHHH recursit!
         if (item[Object.keys(item)[0]].hasOwnProperty('attributes')) {
           Object.keys(item).forEach(itm => {
-            referencer(t, item[itm].attributes);
+            return referencer(t, item[itm].attributes);
           });
 
-          return;
+          return true;
         }
 
         // no attributes - it should have a meta then
         Object.keys(item).forEach(itm => {
           t.true(item[itm].hasOwnProperty('meta'), 'attribute in array contains meta');
+          t.true(item[itm].meta.hasOwnProperty('url'), 'attribute in array contains meta url');
 
-          return;
+          return true;
         });
       }
 
       // non-repeatable; single input
       else {
         t.true(item.hasOwnProperty('meta'), 'attribute in array contains meta');
-
-        return;
+        t.true(item.meta.hasOwnProperty('url'), 'attribute in array contains meta url');
       }
     }
+
+    return true;
   });
 };
 
@@ -315,17 +324,72 @@ const formatted = (t, attr) => {
 
   if (!attr.hasOwnProperty('meta')) {
     t.true(attr.hasOwnProperty('attributes'), 'Contains attributes');
+    return referencer(t, attr.attributes);
   }
   else {
     t.true(attr.hasOwnProperty('meta'), 'Contains Meta');
     t.false(attr.hasOwnProperty('attributes'), 'Does not contain attributes');
     t.is(attr.meta.url, `/api/types/${typeslug}/${attr.id}`, 'URL points to full content item');
   }
+};
+
+/**
+ * Checks attributes are formatted depending on depth
+ * @param  {[type]} t     [description]
+ * @param  {[type]} attrs [description]
+ *
+ * @returns {[type]}       [description]
+ */
+const depths = (t, attrs, depth) => {
+  let dep = depth--;
+
+  Object.keys(attrs).forEach(attr => {
+    if (attr.split('-').indexOf('referencer') > -1) {
+      if (attrs[attr].hasOwnProperty('id')) {
+        formatted(t, attrs[attr]);
+        if (dep > 0) {
+          depths(t, attrs[attr], dep);
+        }
+      }
+      else if (!Array.isArray(attrs[attr])) {
+        Object.keys(attrs[attr]).forEach(atr => {
+          formatted(t, attrs[attr][atr]);
+        });
+      }
+    }
+  });
 }
+
+/**
+ * Randomly selects an item from source, and it's coresponding model
+ *
+ * @param {array} source - should contain multiple items to randomly select from
+ * @param {array} models - contains the model from which the source item is derived
+ *
+ * @returns {object}  - selected item and its model
+ */
+const testables = (source, models) => {
+  const random = Math.round(Math.random() * (source.length - 1));
+  let expected = source[random];
+  if (expected === undefined) {
+    expected = cloneDeep(source[(source.length - 1)]);
+  }
+
+  const model = models.find(typ => {
+    return typ.id === expected['type-slug'];
+  });
+
+  return {
+    expected,
+    model,
+  };
+};
 
 module.exports = {
   type,
   values,
   referencer,
   formatted,
+  depths,
+  testables,
 };
