@@ -74,7 +74,9 @@ test.serial.skip('Utils: attributes - empty query', t => {
     utils.referencer(t, result);
   })
   .catch(e => {
-    console.log(e); // eslint-disable-line no-console
+    console.error(e.stack); // eslint-disable-line no-console
+    t.fail(e);
+    t.end();
   });
 });
 
@@ -93,7 +95,9 @@ test.serial.skip('Utils: attributes - depth 0', t => {
     utils.referencer(t, result);
   })
   .catch(e => {
-    console.log(e); // eslint-disable-line no-console
+    console.error(e.stack); // eslint-disable-line no-console
+    t.fail(e);
+    t.end();
   });
 });
 
@@ -112,7 +116,9 @@ test.serial.skip('Utils: attributes - depth 1', t => {
     utils.referencer(t, result);
   })
   .catch(e => {
-    console.log(e); // eslint-disable-line no-console
+    console.error(e.stack); // eslint-disable-line no-console
+    t.fail(e);
+    t.end();
   });
 });
 
@@ -133,7 +139,9 @@ test.serial.skip('Utils: attributes - depth 2', t => {
     });
   })
   .catch(e => {
-    console.log(e); // eslint-disable-line no-console
+    console.error(e.stack); // eslint-disable-line no-console
+    t.fail(e);
+    t.end();
   });
 });
 
@@ -168,7 +176,9 @@ test.serial.skip('Utils: attributes - no references', t => {
     t.is(Object.keys(result).length, 2, 'Should contain two main objects.');
   })
   .catch(e => {
-    console.log(e); // eslint-disable-line no-console
+    console.error(e.stack); // eslint-disable-line no-console
+    t.fail(e);
+    t.end();
   });
 });
 
