@@ -31,3 +31,4 @@ attributes:
   - type: file
     id: file-upload
     name: Awesome Files
+    repeatable: true
