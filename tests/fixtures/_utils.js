@@ -1,4 +1,5 @@
 const uuid = require('uuid');
+const cloneDeep = require('lodash/cloneDeep');
 const ipsum = require('lorem-ipsum');
 const slugify = require('underscore.string/slugify');
 
@@ -323,6 +324,7 @@ const formatted = (t, attr) => {
 
   if (!attr.hasOwnProperty('meta')) {
     t.true(attr.hasOwnProperty('attributes'), 'Contains attributes');
+    return referencer(t, attr.attributes);
   }
   else {
     t.true(attr.hasOwnProperty('meta'), 'Contains Meta');
@@ -331,9 +333,63 @@ const formatted = (t, attr) => {
   }
 };
 
+/**
+ * Checks attributes are formatted depending on depth
+ * @param  {[type]} t     [description]
+ * @param  {[type]} attrs [description]
+ *
+ * @returns {[type]}       [description]
+ */
+const depths = (t, attrs, depth) => {
+  let dep = depth--;
+
+  Object.keys(attrs).forEach(attr => {
+    if (attr.split('-').indexOf('referencer') > -1) {
+      if (attrs[attr].hasOwnProperty('id')) {
+        formatted(t, attrs[attr]);
+        if (dep > 0) {
+          depths(t, attrs[attr], dep);
+        }
+      }
+      else if (!Array.isArray(attrs[attr])) {
+        Object.keys(attrs[attr]).forEach(atr => {
+          formatted(t, attrs[attr][atr]);
+        });
+      }
+    }
+  });
+};
+
+/**
+ * Randomly selects an item from source, and it's coresponding model
+ *
+ * @param {array} source - should contain multiple items to randomly select from
+ * @param {array} models - contains the model from which the source item is derived
+ *
+ * @returns {object}  - selected item and its model
+ */
+const testables = (source, models) => {
+  const random = Math.round(Math.random() * (source.length - 1));
+  let expected = source[random];
+  if (expected === undefined) {
+    expected = cloneDeep(source[(source.length - 1)]);
+  }
+
+  const model = models.find(typ => {
+    return typ.id === expected['type-slug'];
+  });
+
+  return {
+    expected,
+    model,
+  };
+};
+
 module.exports = {
   type,
   values,
   referencer,
   formatted,
+  depths,
+  testables,
 };
