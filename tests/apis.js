@@ -1,5 +1,4 @@
 import test from 'ava';
-import slugify from 'underscore.string/slugify';
 import isEqual from 'lodash/isEqual';
 import cloneDeep from 'lodash/cloneDeep';
 
@@ -14,7 +13,6 @@ const lang = 'api-test';
 const fixtures = utils.generate(generated, lang);
 
 const live = fixtures.live;
-const types = fixtures.types.names;
 const allTypes = fixtures.types.full;
 
 test.cb.before(t => {
@@ -213,7 +211,6 @@ test.serial.skip('Utils: Format Results - query depth one', t => {
       t.true(itm.hasOwnProperty('attributes'), 'Contains attributes');
 
       utils.depths(t, itm.attributes, query.depth);
-
     });
   });
 });

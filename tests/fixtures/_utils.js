@@ -301,6 +301,8 @@ const referencer = (t, attrs) => {
  * Tests for a formatted attribute
  * @param  {object} t - ava testing
  * @param  {object} attr object containing attributes to test
+ *
+ * @returns {boolean} returns true
  */
 const formatted = (t, attr) => {
   let typeslug;
@@ -324,24 +326,27 @@ const formatted = (t, attr) => {
 
   if (!attr.hasOwnProperty('meta')) {
     t.true(attr.hasOwnProperty('attributes'), 'Contains attributes');
+
     return referencer(t, attr.attributes);
   }
-  else {
-    t.true(attr.hasOwnProperty('meta'), 'Contains Meta');
-    t.false(attr.hasOwnProperty('attributes'), 'Does not contain attributes');
-    t.is(attr.meta.url, `/api/types/${typeslug}/${attr.id}`, 'URL points to full content item');
-  }
+
+  t.true(attr.hasOwnProperty('meta'), 'Contains Meta');
+  t.false(attr.hasOwnProperty('attributes'), 'Does not contain attributes');
+  t.is(attr.meta.url, `/api/types/${typeslug}/${attr.id}`, 'URL points to full content item');
+
+  return true;
 };
 
 /**
  * Checks attributes are formatted depending on depth
- * @param  {[type]} t     [description]
- * @param  {[type]} attrs [description]
+ * @param  {object} t - ava testing
+ * @param  {object} attrs object containing attributes to test
+ * @param  {number} depth - depth function should recurse
  *
- * @returns {[type]}       [description]
  */
 const depths = (t, attrs, depth) => {
-  let dep = depth--;
+  let dep = depth;
+  dep--;
 
   Object.keys(attrs).forEach(attr => {
     if (attr.split('-').indexOf('referencer') > -1) {
