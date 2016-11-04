@@ -66,6 +66,7 @@
     "js-yaml": "^3.6.1",
     "knex": "^0.12.6",
     "lodash": "^4.13.1",
+    "map-stream": "^0.0.6",
     "modularscale-sass": "^2.1.1",
     "moment": "^2.15.0",
     "moment-timezone": "^0.5.4",
@@ -82,9 +83,12 @@
     "request": "^2.75.0",
     "sass-toolkit": "^2.10.0",
     "serve-favicon": "^2.3.0",
+    "stream-from-array": "^1.0.0",
     "underscore.string": "^3.3.4",
     "uuid": "^2.0.2",
-    "validator": "^6.0.0"
+    "validator": "^6.0.0",
+    "vinyl": "^2.0.0",
+    "vinyl-fs": "^2.4.4"
   },
   "devDependencies": {
     "ava": "^0.16.0",
