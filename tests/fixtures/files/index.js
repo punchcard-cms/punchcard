@@ -1,9 +1,11 @@
 'use strict';
 
+const uuid = require('uuid');
+const _ = require('lodash');
 const path = require('path');
 const fs = require('fs');
 
-const files = [
+const all = [
   path.join(process.cwd(), '', 'storage.js'),
   path.join(process.cwd(), '..', 'index.js'),
   path.join(process.cwd(), '..', 'Gulpfile.js'),
@@ -12,7 +14,8 @@ const files = [
   path.join(process.cwd(), '../src/images', 'punchcard-404.svg'),
 ];
 
-const fixtures = () => {
+const raw = () => {
+  const files = _.cloneDeep(all);
   const items = [];
   let counter = files.length - 1;
   do {
@@ -40,5 +43,30 @@ const fixtures = () => {
   return items;
 };
 
+const saved =  () => {
+  const files = _.cloneDeep(all);
+  const items = [];
+  let counter = files.length - 1;
+  do {
+    counter = Math.round(Math.random() * (files.length - 1));
 
-module.exports = fixtures;
+    const type = path.extname(files[counter]) === '.js' ? 'document/javascript' : 'image/svg';
+
+    items.push({
+      name: path.basename(files[counter]),
+      path: `${uuid.v4()}${path.extname(files[counter])}`,
+      type,
+    });
+
+    files.splice(counter, 1);
+  } while (files.length > 0 && Math.random() > 0.5);
+
+
+  return items;
+};
+
+
+module.exports = {
+  raw,
+  saved,
+};
