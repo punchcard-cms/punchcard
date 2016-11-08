@@ -55,10 +55,7 @@ const generate = (total, lang) => {
    * Populate an array {allTypes} of content types {type}
    */
   for (i = 0; i < 5; i++) {
-    types.push(`Test Type ${ipsum({
-      count: 1,
-      units: 'words',
-    })}`);
+    types.push(`Test Type Foo${i}`);
 
     eachOfType[types[i]] = 0;
     refs.content[slugify(types[i])] = [];
