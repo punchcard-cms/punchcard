@@ -275,9 +275,11 @@ test.serial('Utils: Format Results - with follow', t => {
   return formatted.then(result => {
     result.forEach(itm => {
       utils.formatted(t, itm, query);
-      t.true(itm.hasOwnProperty('attributes'), 'Contains attributes');
+      if (itm) {
+        t.true(itm.hasOwnProperty('attributes'), 'Contains attributes');
 
-      utils.depths(t, itm.attributes, query);
+        utils.depths(t, itm.attributes, query);
+      }
     });
   });
 });
