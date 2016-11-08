@@ -17,14 +17,14 @@ attributes:
     name: Bar reference
     repeatable: true
     inputs:
-      reference: 
-        settings: 
+      reference:
+        settings:
           contentType: services
   - type: reference
     id: foo-reference
     name: Foo reference
     inputs:
-      reference: 
-        settings: 
+      reference:
+        settings:
           contentType: services
           view: radio

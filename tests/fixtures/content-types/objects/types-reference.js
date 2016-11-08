@@ -1,3 +1,5 @@
+'use strict';
+
 /**
  * Mock of content types array using reference plugin
  * @type {Array}
