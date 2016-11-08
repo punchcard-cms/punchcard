@@ -46,7 +46,8 @@ test.serial.skip('Utils: attributes - empty query', t => {
     t.is(typeof result, 'object', 'Should contain result, an object.');
     t.is(Object.keys(result).length, 6, 'Should contain six main objects.');
 
-    utils.referencer(t, result);
+    // depths checks each attribute
+    utils.depths(t, result, query);
   })
   .catch(e => {
     console.error(e.stack); // eslint-disable-line no-console
@@ -67,7 +68,8 @@ test.serial.skip('Utils: attributes - depth 0', t => {
   return attributes.then(result => {
     t.is(typeof result, 'object', 'Should contain result, an object.');
 
-    utils.referencer(t, result);
+    // depths checks each attribute
+    utils.depths(t, result, query);
   })
   .catch(e => {
     console.error(e.stack); // eslint-disable-line no-console
@@ -76,11 +78,42 @@ test.serial.skip('Utils: attributes - depth 0', t => {
   });
 });
 
-test.serial.skip('Utils: attributes - depth 1', t => {
+test.serial.skip('Utils: attributes - depth 1 v depth 0 (no follow)', t => {
+  const testable = utils.testables(live, allTypes);
+
+  const query0 = {
+    depth: 0,
+  };
+
+  const attributes0 = apiUtils.attributes(testable.expected.attributes, testable.model.attributes, allTypes, query0);
+
+  const query1 = {
+    depth: 1,
+  };
+
+  const attributes1 = apiUtils.attributes(testable.expected.attributes, testable.model.attributes, allTypes, query1);
+
+  return attributes0.then(result0 => {
+    t.is(typeof result0, 'object', 'Should contain result, an object.');
+
+    return attributes1.then(result1 => {
+      t.is(typeof result1, 'object', 'Should contain result, an object.');
+
+      t.deepEqual(result0, result1, 'Depth is no good without follow');
+    });
+  })
+  .catch(e => {
+    console.error(e.stack); // eslint-disable-line no-console
+    t.fail(e);
+    t.end();
+  });
+});
+
+test.serial.skip('Utils: attributes - follow', t => {
   const testable = utils.testables(live, allTypes);
 
   const query = {
-    depth: 1,
+    follow: 'true',
   };
 
   const attributes = apiUtils.attributes(testable.expected.attributes, testable.model.attributes, allTypes, query);
@@ -88,7 +121,8 @@ test.serial.skip('Utils: attributes - depth 1', t => {
   return attributes.then(result => {
     t.is(typeof result, 'object', 'Should contain result, an object.');
 
-    utils.referencer(t, result);
+    // depths checks each attribute, follow does nothing in attributes function without depth
+    utils.depths(t, result, query);
   })
   .catch(e => {
     console.error(e.stack); // eslint-disable-line no-console
@@ -97,10 +131,11 @@ test.serial.skip('Utils: attributes - depth 1', t => {
   });
 });
 
-test.serial.skip('Utils: attributes - depth 2', t => {
+test.serial.skip('Utils: attributes - follow + depth 1', t => {
   const testable = utils.testables(live, allTypes);
 
   const query = {
+    follow: 'true',
     depth: 2,
   };
 
@@ -109,9 +144,8 @@ test.serial.skip('Utils: attributes - depth 2', t => {
   return attributes.then(result => {
     t.is(typeof result, 'object', 'Should contain result, an object.');
 
-    Object.keys(result).forEach(key => {
-      utils.referencer(t, result[key]);
-    });
+    // calling attributes funciton directly requires a depth of 2 to show follow's attributes
+    utils.depths(t, result, query);
   })
   .catch(e => {
     console.error(e.stack); // eslint-disable-line no-console
@@ -160,6 +194,22 @@ test.serial.skip('Utils: attributes - no references', t => {
 //////////////////////////////
 // Utils - format
 //////////////////////////////
+test.serial.skip('Utils: Format Results - error check model attributes', t => {
+  const formatted = apiUtils.format(live.slice(0, 9), 'fail');
+
+  return formatted.catch(error => {
+    t.is(error, 'Content model attributes must be an array', 'should check model attributes is an array');
+  });
+});
+
+test.serial.skip('Utils: Format Results - error check models parameter', t => {
+  const formatted = apiUtils.format(live.slice(0, 9), [], 'fail');
+
+  return formatted.catch(error => {
+    t.is(error, 'Content models parameter must be an array', 'should check models parameter is an array');
+  });
+});
+
 test.serial.skip('Utils: Format Results - List', t => {
   const formatted = apiUtils.format(live.slice(0, 9));
 
@@ -192,7 +242,7 @@ test.serial.skip('Utils: Format Results - query depth zero', t => {
 
   return formatted.then(result => {
     result.forEach(itm => {
-      utils.formatted(t, itm);
+      utils.formatted(t, itm, query);
     });
   });
 });
@@ -207,28 +257,45 @@ test.serial.skip('Utils: Format Results - query depth one', t => {
 
   return formatted.then(result => {
     result.forEach(itm => {
-      utils.formatted(t, itm);
-      t.true(itm.hasOwnProperty('attributes'), 'Contains attributes');
+      utils.formatted(t, itm, query);
 
-      utils.depths(t, itm.attributes, query.depth);
+      t.false(itm.hasOwnProperty('attributes'), 'Contains attributes');
     });
   });
 });
 
-test.serial.skip('Utils: Format Results - query depth two', t => {
+test.serial.skip('Utils: Format Results - with follow', t => {
   const testable = utils.testables(live, allTypes);
   const query = {
-    depth: 2,
+    follow: 'true',
   };
 
   const formatted = apiUtils.format([testable.expected], testable.model.attributes, allTypes, query);
 
   return formatted.then(result => {
     result.forEach(itm => {
-      utils.formatted(t, itm);
+      utils.formatted(t, itm, query);
       t.true(itm.hasOwnProperty('attributes'), 'Contains attributes');
 
-      utils.depths(t, itm.attributes, query.depth);
+      utils.depths(t, itm.attributes, query);
+    });
+  });
+});
+
+test.serial.skip('Utils: Format Results - depth with follow', t => {
+  const testable = utils.testables(live, allTypes);
+  const query = {
+    follow: 'true',
+    depth: 2, // depth gets subtracted during attributes, to see depth the format function needs at least depth: two
+  };
+
+  const formatted = apiUtils.format([testable.expected], testable.model.attributes, allTypes, query);
+
+  return formatted.then(result => {
+    result.forEach(itm => {
+      utils.formatted(t, itm, query);
+      t.true(itm.hasOwnProperty('attributes'), 'Contains attributes');
+      utils.depths(t, itm.attributes, query);
     });
   });
 });
@@ -486,9 +553,11 @@ test.serial('API: All', t => {
 });
 
 test.serial('API: All with depth 0', t => {
-  return api.all({
+  const query = {
     depth: 0,
-  }, allTypes).then(results => {
+  };
+
+  return api.all(query, allTypes).then(results => {
     let one = false;
 
     t.true(results.hasOwnProperty('items'), 'Has Items');
@@ -509,10 +578,12 @@ test.serial('API: All with depth 0', t => {
   });
 });
 
-test.serial.skip('API: All with depth 1', t => {
-  return api.all({
+test.serial('API: All with depth 1', t => {
+  const query = {
     depth: 1,
-  }, allTypes).then(results => {
+  };
+
+  return api.all(query, allTypes).then(results => {
     let one = false;
 
     t.true(results.hasOwnProperty('items'), 'Has Items');
@@ -524,36 +595,9 @@ test.serial.skip('API: All with depth 1', t => {
       if (Object.keys(item).length !== 0) {
         one = true;
         utils.formatted(t, item);
-        t.true(item.hasOwnProperty('attributes'), 'Contains attributes');
 
-        utils.depths(t, item.attributes, 1);
-      }
-    });
-
-    if (results.items.length > 0) {
-      t.true(one, 'At least one item returned in items');
-    }
-  });
-});
-
-test.serial.skip('API: All with depth 2', t => {
-  return api.all({
-    depth: 2,
-  }, allTypes).then(results => {
-    let one = false;
-
-    t.true(results.hasOwnProperty('items'), 'Has Items');
-    t.true(results.hasOwnProperty('pages'), 'Has Pagination');
-    t.true(results.items.length >= generated, 'Has at least all items in it');
-
-    results.items.forEach(item => {
-      // Ignore empty object
-      if (Object.keys(item).length !== 0) {
-        one = true;
-        utils.formatted(t, item);
-        t.true(item.hasOwnProperty('attributes'), 'Contains attributes');
-
-        utils.depths(t, item.attributes, 2);
+        // no follow = no attributes, thus no depth check needed
+        t.false(item.hasOwnProperty('attributes'), 'Contains attributes');
       }
     });
 
@@ -564,9 +608,11 @@ test.serial.skip('API: All with depth 2', t => {
 });
 
 test.serial.skip('API: All with Follow', t => {
-  return api.all({
+  const query = {
     follow: 'true',
-  }, allTypes).then(results => {
+  };
+
+  return api.all(query, allTypes).then(results => {
     let one = false;
 
     t.true(results.hasOwnProperty('items'), 'Has Items');
@@ -577,7 +623,15 @@ test.serial.skip('API: All with Follow', t => {
       // Ignore empty object
       if (Object.keys(item).length !== 0) {
         one = true;
-        utils.formatted(t, item);
+
+        // check the format of each piece of content
+        utils.formatted(t, item, query);
+
+        // follow will have attributes
+        t.true(item.hasOwnProperty('attributes'), 'Contains attributes');
+
+        // follow will have attributes, so check echo of those to depth 0
+        utils.depths(t, item.attributes, query);
       }
     });
 
@@ -588,10 +642,12 @@ test.serial.skip('API: All with Follow', t => {
 });
 
 test.serial.skip('API: All with Follow with depth zero', t => {
-  return api.all({
+  const query = {
     follow: 'true',
     depth: 0,
-  }, allTypes).then(results => {
+  };
+
+  return api.all(query, allTypes).then(results => {
     let one = false;
 
     t.true(results.hasOwnProperty('items'), 'Has Items');
@@ -602,7 +658,15 @@ test.serial.skip('API: All with Follow with depth zero', t => {
       // Ignore empty object
       if (Object.keys(item).length !== 0) {
         one = true;
-        utils.formatted(t, item);
+
+        // check the format of each piece of content
+        utils.formatted(t, item, query);
+
+        // follow will have attributes
+        t.true(item.hasOwnProperty('attributes'), 'Contains attributes');
+
+        // follow will have attributes, so check echo of those to depth 0
+        utils.depths(t, item.attributes, query);
       }
     });
 
@@ -613,10 +677,12 @@ test.serial.skip('API: All with Follow with depth zero', t => {
 });
 
 test.serial.skip('API: All with Follow with depth one', t => {
-  return api.all({
+  const query = {
     follow: 'true',
     depth: 1,
-  }, allTypes).then(results => {
+  };
+
+  return api.all(query, allTypes).then(results => {
     let one = false;
 
     t.true(results.hasOwnProperty('items'), 'Has Items');
@@ -627,10 +693,15 @@ test.serial.skip('API: All with Follow with depth one', t => {
       // Ignore empty object
       if (Object.keys(item).length !== 0) {
         one = true;
-        utils.formatted(t, item);
+
+        // check the format of each piece of content
+        utils.formatted(t, item, query);
+
+        // follow will have attributes
         t.true(item.hasOwnProperty('attributes'), 'Contains attributes');
 
-        utils.depths(t, item.attributes, 1);
+        // follow will have attributes, so check echo of those to depth 1
+        utils.depths(t, item.attributes, query);
       }
     });
 
@@ -641,10 +712,12 @@ test.serial.skip('API: All with Follow with depth one', t => {
 });
 
 test.serial.skip('API: All with Follow with depth two', t => {
-  return api.all({
+  const query = {
     follow: 'true',
     depth: 2,
-  }, allTypes).then(results => {
+  };
+
+  return api.all(query, allTypes).then(results => {
     let one = false;
 
     t.true(results.hasOwnProperty('items'), 'Has Items');
@@ -655,10 +728,15 @@ test.serial.skip('API: All with Follow with depth two', t => {
       // Ignore empty object
       if (Object.keys(item).length !== 0) {
         one = true;
-        utils.formatted(t, item);
+
+        // check the format of each piece of content
+        utils.formatted(t, item, query);
+
+        // follow will have attributes
         t.true(item.hasOwnProperty('attributes'), 'Contains attributes');
 
-        utils.depths(t, item.attributes, 2);
+        // follow will have attributes, so check echo of those to depth 2
+        utils.depths(t, item.attributes, query);
       }
     });
 
@@ -705,27 +783,42 @@ test.serial('API: Content - Descending', t => {
 test.serial('API: ofType', t => {
   const testable = utils.testables(live, allTypes);
 
-  return api.ofType({}, testable.model, allTypes).then(formatted => {
-    t.true(formatted.hasOwnProperty('items'), 'Has Items');
-    t.true(formatted.hasOwnProperty('pages'), 'Has Pagination');
+  return api.ofType({}, testable.model, allTypes).then(results => {
+    t.true(results.hasOwnProperty('items'), 'Has Items');
+    t.true(results.hasOwnProperty('pages'), 'Has Pagination');
+
+    results.items.forEach(item => {
+      // Ignore empty object
+      if (Object.keys(item).length !== 0) {
+        utils.formatted(t, item);
+
+        // no follow = no attributes, thus no depth check needed
+        t.false(item.hasOwnProperty('attributes'), 'Contains attributes');
+      }
+    });
   });
 });
 
 test.serial('API: ofType depth zero', t => {
   const testable = utils.testables(live, allTypes);
-
-  return api.ofType({
+  const query = {
     depth: 0,
-  }, testable.model, allTypes).then(results => {
+  };
+
+  return api.ofType(query, testable.model, allTypes).then(results => {
     let one = false;
 
-    results.items.forEach(itm => {
+    results.items.forEach(item => {
       // Ignore empty object
-      if (Object.keys(itm).length !== 0) {
+      if (Object.keys(item).length !== 0) {
         one = true;
-        utils.formatted(t, itm);
+        utils.formatted(t, item, query);
+
+        // no follow = no attributes, thus no depth check needed
+        t.false(item.hasOwnProperty('attributes'), 'Contains attributes');
       }
     });
+
     t.true(results.hasOwnProperty('items'), 'Has Items');
     t.true(results.hasOwnProperty('pages'), 'Has Pagination');
 
@@ -735,24 +828,26 @@ test.serial('API: ofType depth zero', t => {
   });
 });
 
-test.serial.skip('API: ofType depth one', t => {
+test.serial('API: ofType depth one', t => {
   const testable = utils.testables(live, allTypes);
-
-  return api.ofType({
+  const query = {
     depth: 1,
-  }, testable.model, allTypes).then(results => {
+  };
+
+  return api.ofType(query, testable.model, allTypes).then(results => {
     let one = false;
 
     results.items.forEach(item => {
       // Ignore empty object
       if (Object.keys(item).length !== 0) {
         one = true;
-        utils.formatted(t, item);
-        t.true(item.hasOwnProperty('attributes'), 'Contains attributes');
+        utils.formatted(t, item, query);
 
-        utils.depths(t, item.attributes, 1);
+        // no follow = no attributes, thus no depth check needed
+        t.false(item.hasOwnProperty('attributes'), 'Contains attributes');
       }
     });
+
     t.true(results.hasOwnProperty('items'), 'Has Items');
     t.true(results.hasOwnProperty('pages'), 'Has Pagination');
 
@@ -762,24 +857,29 @@ test.serial.skip('API: ofType depth one', t => {
   });
 });
 
-test.serial.skip('API: ofType depth two', t => {
+test.serial.skip('API: ofType with follow', t => {
   const testable = utils.testables(live, allTypes);
+  const query = {
+    follow: 'true',
+  };
 
-  return api.ofType({
-    depth: 2,
-  }, testable.model, allTypes).then(results => {
+  return api.ofType(query, testable.model, allTypes).then(results => {
     let one = false;
 
     results.items.forEach(item => {
       // Ignore empty object
       if (Object.keys(item).length !== 0) {
         one = true;
-        utils.formatted(t, item);
+        utils.formatted(t, item, query);
+
+        // follow = attributes
         t.true(item.hasOwnProperty('attributes'), 'Contains attributes');
 
-        utils.depths(t, item.attributes, 2);
+        // follow will have attributes, so check echo of those to depth 0
+        utils.depths(t, item.attributes, query);
       }
     });
+
     t.true(results.hasOwnProperty('items'), 'Has Items');
     t.true(results.hasOwnProperty('pages'), 'Has Pagination');
 
@@ -789,74 +889,30 @@ test.serial.skip('API: ofType depth two', t => {
   });
 });
 
-test.serial.skip('API: ofType with Follow', t => {
+test.serial.skip('API: ofType with follow depth one', t => {
   const testable = utils.testables(live, allTypes);
-
-  return api.ofType({
-    follow: 'true',
-  }, testable.model, allTypes).then(results => {
-    let one = false;
-
-    results.items.forEach(itm => {
-      // Ignore empty object
-      if (Object.keys(itm).length !== 0) {
-        one = true;
-        utils.formatted(t, itm);
-      }
-    });
-    t.true(results.hasOwnProperty('items'), 'Has Items');
-    t.true(results.hasOwnProperty('pages'), 'Has Pagination');
-
-    if (results.items.length > 0) {
-      t.true(one, 'At least one item returned in items');
-    }
-  });
-});
-
-test.serial.skip('API: ofType with Follow with depth zero', t => {
-  const testable = utils.testables(live, allTypes);
-
-  return api.ofType({
-    follow: 'true',
-    depth: 0,
-  }, testable.model, allTypes).then(results => {
-    let one = false;
-
-    results.items.forEach(itm => {
-      // Ignore empty object
-      if (Object.keys(itm).length !== 0) {
-        one = true;
-        utils.formatted(t, itm);
-      }
-    });
-    t.true(results.hasOwnProperty('items'), 'Has Items');
-    t.true(results.hasOwnProperty('pages'), 'Has Pagination');
-
-    if (results.items.length > 0) {
-      t.true(one, 'At least one item returned in items');
-    }
-  });
-});
-
-test.serial.skip('API: ofType with Follow with depth one', t => {
-  const testable = utils.testables(live, allTypes);
-
-  return api.ofType({
+  const query = {
     follow: 'true',
     depth: 1,
-  }, testable.model, allTypes).then(results => {
+  };
+
+  return api.ofType(query, testable.model, allTypes).then(results => {
     let one = false;
 
     results.items.forEach(item => {
       // Ignore empty object
       if (Object.keys(item).length !== 0) {
         one = true;
-        utils.formatted(t, item);
+        utils.formatted(t, item, query);
+
+        // follow = attributes
         t.true(item.hasOwnProperty('attributes'), 'Contains attributes');
 
-        utils.depths(t, item.attributes, 1);
+        // follow will have attributes, so check echo of those to depth 0
+        utils.depths(t, item.attributes, query);
       }
     });
+
     t.true(results.hasOwnProperty('items'), 'Has Items');
     t.true(results.hasOwnProperty('pages'), 'Has Pagination');
 
@@ -866,31 +922,42 @@ test.serial.skip('API: ofType with Follow with depth one', t => {
   });
 });
 
-test.serial.skip('API: ofType with Follow with depth two', t => {
+test.serial.skip('API: ofType with follow depth two', t => {
   const testable = utils.testables(live, allTypes);
-
-  return api.ofType({
+  const query = {
     follow: 'true',
     depth: 2,
-  }, testable.model, allTypes).then(results => {
+  };
+
+  return api.ofType(query, testable.model, allTypes).then(results => {
     let one = false;
 
     results.items.forEach(item => {
       // Ignore empty object
       if (Object.keys(item).length !== 0) {
         one = true;
-        utils.formatted(t, item);
+        utils.formatted(t, item, query);
+
+        // follow = attributes
         t.true(item.hasOwnProperty('attributes'), 'Contains attributes');
 
-        utils.depths(t, item.attributes, 2);
+        // follow will have attributes, so check echo of those to depth 0
+        utils.depths(t, item.attributes, query);
       }
     });
+
     t.true(results.hasOwnProperty('items'), 'Has Items');
     t.true(results.hasOwnProperty('pages'), 'Has Pagination');
 
     if (results.items.length > 0) {
       t.true(one, 'At least one item returned in items');
     }
+  });
+});
+
+test.serial('API: One - Not There', t => {
+  return api.one({}, `Test ${Math.round(Math.random() * (live.length - 1))}`).then(result => {
+    t.deepEqual(result, {}, 'Empty object returned');
   });
 });
 
@@ -899,9 +966,17 @@ test.serial.skip('API: One', t => {
   const query = {};
 
   return api.one(query, testable.expected.id, testable.model.attributes, allTypes, database).then(result => {
+    // no meta on one
+    t.false(result.hasOwnProperty('meta'), 'Contains attributes');
+
+    // because `one` adds follow
+    query.follow = 'true';
+
     t.is(result.id, testable.expected.id, 'IDs the same');
-    utils.formatted(t, result);
-    t.false(result.hasOwnProperty('attributes'));
+    utils.formatted(t, result, query);
+
+    // one will have attributes, so check echo of those to depth 0
+    utils.depths(t, result.attributes, query);
   });
 });
 
@@ -912,9 +987,17 @@ test.serial.skip('API: One - depth zero', t => {
   };
 
   return api.one(query, testable.expected.id, testable.model.attributes, allTypes, database).then(result => {
+    // no meta on one
+    t.false(result.hasOwnProperty('meta'), 'Contains attributes');
+
+    // because `one` adds follow
+    query.follow = 'true';
+
     t.is(result.id, testable.expected.id, 'IDs the same');
-    utils.formatted(t, result);
-    t.false(result.hasOwnProperty('attributes'));
+    utils.formatted(t, result, query);
+
+    // one will have attributes, so check echo of those to depth 0
+    utils.depths(t, result.attributes, query);
   });
 });
 
@@ -925,10 +1008,17 @@ test.serial.skip('API: One - depth one', t => {
   };
 
   return api.one(query, testable.expected.id, testable.model.attributes, allTypes, database).then(result => {
+    // no meta on one
+    t.false(result.hasOwnProperty('meta'), 'Contains attributes');
+
+    // because `one` adds follow
+    query.follow = 'true';
+
     t.is(result.id, testable.expected.id, 'IDs the same');
-    utils.formatted(t, result);
-    t.true(result.hasOwnProperty('attributes'));
-    utils.depths(t, result.attributes, 1);
+    utils.formatted(t, result, query);
+
+    // one will have attributes, so check echo of those to depth 0
+    utils.depths(t, result.attributes, query);
   });
 });
 
@@ -939,10 +1029,17 @@ test.serial.skip('API: One - depth two', t => {
   };
 
   return api.one(query, testable.expected.id, testable.model.attributes, allTypes, database).then(result => {
+    // no meta on one
+    t.false(result.hasOwnProperty('meta'), 'Contains attributes');
+
+    // because `one` adds follow
+    query.follow = 'true';
+
     t.is(result.id, testable.expected.id, 'IDs the same');
-    utils.formatted(t, result);
-    t.true(result.hasOwnProperty('attributes'));
-    utils.depths(t, result.attributes, 2);
+    utils.formatted(t, result, query);
+
+    // one will have attributes, so check echo of those to depth 0
+    utils.depths(t, result.attributes, query);
   });
 });
 
