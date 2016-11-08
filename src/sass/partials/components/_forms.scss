@@ -157,12 +157,6 @@
     @include range--thumb('moz', 'range');
   }
 
-  [type='file'] {
-    appearance: none;
-    display: block;
-    line-height: 1;
-  }
-
   textarea {
     @include input;
   }
