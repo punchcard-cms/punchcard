@@ -1,217 +1,352 @@
-'use strict'; // eslint-disable-line strict
-
-/*
- * Utility Files for Tests
- */
-
-const ipsum = require('lorem-ipsum');
 const uuid = require('uuid');
+const cloneDeep = require('lodash/cloneDeep');
+const ipsum = require('lorem-ipsum');
 const slugify = require('underscore.string/slugify');
-const moment = require('moment');
 
-const utils = require('../../lib/utils');
-
-/**
- * Content type model after merged with input plugins via content-types module
- * @typedef {Object} type
- * @property {string} name - name of content type
- * @property {string} id - id of content type
- * @property {string} description - description of content type
- * @property {array} attributes - input attributes
- */
-
-/**
- * array of content types
- * @typedef {array} allTypes
- */
-
-/**
- * Object which tracks the number of pieces of content for each content type
- * @typedef {array} eachOfType
- */
-
-/*
- * Randomly generate content
- */
-const generate = (total, lang) => {
-  const content = [];
-  const lives = [];
-  const types = [];
-  const eachOfType = {};
-  const allTypes = [];
-  const t = total || 50;
-  const language = lang || 'en-us';
-  let i;
-
-
-  /**
-   * Populate an array {allTypes} of content types {type}
-   */
-  for (i = 0; i < 5; i++) {
-    types.push(`Test Type ${ipsum({
-      count: 1,
-      units: 'words',
-    })}`);
-
-    eachOfType[types[i]] = 0;
-    allTypes.push({
-      name: types[i],
-      id: slugify(types[i]),
-      description: ipsum({
-        count: Math.round(Math.random() * 6 + 1),
-        units: 'words',
-      }),
-      attributes: [
-        {
-          name: 'Name',
-          inputs: {
-            text: {
-              label: 'Name',
-              type: 'text',
-              id: uuid.v4(),
-              name: 'name--text',
-            },
-          },
-          id: `${slugify(types[i])}-name`,
-          type: 'text',
-        },
-        {
-          name: 'Textblock',
-          inputs: {
-            textblock: {
-              label: 'Text',
-              type: 'textarea',
-              id: uuid.v4(),
-              name: 'textblock--textarea',
-            },
-          },
-          id: `${slugify(types[i])}-textblock`,
-          type: 'textarea',
-        },
-        {
-          name: 'Referencer',
-          inputs: {
-            referencer: {
-              label: 'Text',
-              type: 'reference',
-              id: uuid.v4(),
-              name: 'referencer--reference',
-            },
-          },
-          id: `${slugify(types[i])}-referencer`,
-          type: 'reference',
-        },
-      ],
-    });
-  }
-
-  /**
-   * Add {type} fixtures to the content array
-   */
-  for (i = 0; i < t; i++) {
-    let referenced = '';
-    const name = ipsum({
-      count: 3,
-      units: 'words',
-      format: 'plain',
-    });
-
-    const id = uuid.v4();
-    const date = moment().format('YYYY-MM-DD');
-
-    const sunrise = moment().format('hh:mm');
-    const sunset = moment().format('hh:mm');
-
-    const type = types[Math.round(Math.random() * 4)];
-
-    eachOfType[type] += 1;
-
-    if (content.length > 0) {
-      // make the last entry the referencee
-      referenced = content[content.length - 1].id;
-    }
-
-    const values = {};
-    values[`${slugify(type)}-name`] = {
-      text: {
-        value: ipsum({
-          count: 1,
-          units: 'words',
-          format: 'plain',
-        }),
-      },
-    };
-    values[`${slugify(type)}-textblock`] = {
-      textblock: {
-        value: ipsum({
-          count: 2,
-          units: 'paragraphs',
-          format: 'plain',
-          sentenceUpperBound: 5,
-          paragraphUpperBound: 3,
-        }),
-      },
-    };
-    values[`${slugify(type)}-referencer`] = {
-      referencer: {
-        value: referenced,
-      },
-    };
-
-    const item = {
-      id,
-      language,
-      'revision': Math.round(Math.random() * 40),
-      'sunrise': utils.time.iso(date, sunrise, 'America/New_York'),
-      'sunrise-timezone': 'America/New_York',
-      'sunset': Date.now() % 6 === 0 ? utils.time.iso(date, sunset, 'America/New_York') : null,
-      'sunset-timezone': 'America/New_York',
-      'identifier': name,
-      'slug': slugify(name),
-      type,
-      'type-slug': slugify(type),
-      'value': values,
-    };
-
-    content[i] = item;
-
-    const live = {
-      id,
-      language,
-      'sunrise': utils.time.iso(date, sunrise, 'America/New_York'),
-      'sunset': Date.now() % 6 === 0 ? utils.time.iso(date, sunset, 'America/New_York') : null,
-      'attributes': values,
-      'key': name,
-      'key-slug': slugify(name),
-      type,
-      'type-slug': slugify(type),
-      'revision': Math.round(Math.random() * 40),
-    };
-
-    lives[i] = live;
-  }
-
+const type = name => {
   return {
-    content,
-    live: lives,
-    types: {
-      names: types,
-      each: eachOfType,
-      full: allTypes,
-    },
+    name,
+    id: slugify(name),
+    description: ipsum({
+      count: Math.round(Math.random() * 6 + 1),
+      units: 'words',
+    }),
+    attributes: [
+      {
+        name: 'Name',
+        inputs: {
+          text: {
+            label: 'Name',
+            type: 'text',
+            id: uuid.v4(),
+            name: 'name--text',
+          },
+        },
+        id: `${slugify(name)}-name`,
+        type: 'text',
+      },
+      {
+        name: 'Textblock',
+        inputs: {
+          textblock: {
+            label: 'Text',
+            type: 'textarea',
+            id: uuid.v4(),
+            name: 'textblock--textarea',
+          },
+        },
+        id: `${slugify(name)}-textblock`,
+        type: 'textarea',
+      },
+      {
+        name: 'Referencer',
+        inputs: {
+          referencer: {
+            label: 'Text',
+            type: 'reference',
+            id: uuid.v4(),
+            name: 'referencer--reference',
+            settings: {
+              contentType: 'will-be-changed',
+            },
+            reference: true,
+          },
+        },
+        id: `${slugify(name)}-referencer`,
+        type: 'reference',
+      },
+      {
+        name: 'Referencer Dual',
+        inputs: {
+          referencerdual1: {
+            label: 'Referencer 1',
+            type: 'reference',
+            id: uuid.v4(),
+            name: 'referencer1--reference',
+            settings: {
+              contentType: 'will-be-changed',
+            },
+            reference: true,
+          },
+          referencerdual2: {
+            label: 'Referencer 2',
+            type: 'reference',
+            id: uuid.v4(),
+            name: 'referencer2--reference',
+            settings: {
+              contentType: 'will-be-changed',
+            },
+            reference: true,
+          },
+        },
+        id: `${slugify(name)}-referencer-dual`,
+        type: 'reference',
+      },
+      {
+        name: 'Referencer Repeating',
+        inputs: {
+          referencerrepeat: {
+            label: 'Ref Repeat',
+            type: 'reference',
+            id: uuid.v4(),
+            name: 'referencer-repeating--reference',
+            settings: {
+              contentType: 'will-be-changed',
+            },
+            reference: true,
+          },
+        },
+        id: `${slugify(name)}-referencer-repeating`,
+        type: 'reference',
+        repeatable: true,
+      },
+      {
+        name: 'Referencer Dual Repeating',
+        inputs: {
+          referencerdualrepeat1: {
+            label: 'Referencer 1',
+            type: 'reference',
+            id: uuid.v4(),
+            name: 'referencer1--reference-repeating',
+            settings: {
+              contentType: 'will-be-changed',
+            },
+            reference: true,
+          },
+          referencerdualrepeat2: {
+            label: 'Referencer 2',
+            type: 'reference',
+            id: uuid.v4(),
+            name: 'referencer2--reference-repeating',
+            settings: {
+              contentType: 'will-be-changed',
+            },
+            reference: true,
+          },
+        },
+        id: `${slugify(name)}-referencer-dual-repeating`,
+        type: 'reference',
+        repeatable: true,
+      },
+    ],
   };
 };
 
-/*
- * Basic validation function
+const values = ctype => {
+  const results = {};
+  results[`${slugify(ctype)}-name`] = {
+    text: {
+      value: ipsum({
+        count: 1,
+        units: 'words',
+        format: 'plain',
+      }),
+    },
+  };
+  results[`${slugify(ctype)}-textblock`] = {
+    textblock: {
+      value: ipsum({
+        count: 2,
+        units: 'paragraphs',
+        format: 'plain',
+        sentenceUpperBound: 5,
+        paragraphUpperBound: 3,
+      }),
+    },
+  };
+  results[`${slugify(ctype)}-referencer`] = {
+    referencer: {
+      value: 'make-me-an-id',
+    },
+  };
+  results[`${slugify(ctype)}-referencer-dual`] = {
+    referencerdual1: {
+      value: 'make-me-an-id',
+    },
+    referencerdual2: {
+      value: 'make-me-an-id',
+    },
+  };
+  results[`${slugify(ctype)}-referencer-repeating`] = [
+    {
+      referencerrepeat: {
+        value: 'make-me-an-id',
+      },
+    },
+    {
+      referencerrepeat: {
+        value: 'make-me-an-id',
+      },
+    },
+  ];
+  results[`${slugify(ctype)}-referencer-dual-repeating`] = [
+    {
+      referencerdualrepeat1: {
+        value: 'make-me-an-id',
+      },
+      referencerdualrepeat2: {
+        value: 'make-me-an-id',
+      },
+    },
+    {
+      referencerdualrepeat1: {
+        value: 'make-me-an-id',
+      },
+      referencerdualrepeat2: {
+        value: 'make-me-an-id',
+      },
+    },
+    {
+      referencerdualrepeat1: {
+        value: 'make-me-an-id',
+      },
+      referencerdualrepeat2: {
+        value: 'make-me-an-id',
+      },
+    },
+  ];
+
+  return results;
+};
+
+/**
+ * Tests a piece of content formatted for the api
  *
- * @returns true
+ * @param  {object} t - ava testing
+ * @param  {object} content - the piece of content
+ * @param {object} query - request query
  */
-const validation = function validation() {
-  return true;
+const formatted = (t, content, query) => {
+  const qry = cloneDeep(query) || {};
+  let typeslug;
+
+  t.true(content.hasOwnProperty('id'), 'Contains ID');
+  t.true(content.hasOwnProperty('type'), 'Contains Type');
+
+  if (typeof content.type === 'object') {
+    t.true(content.type.hasOwnProperty('name'), 'Contains Type Name');
+    t.true(content.type.hasOwnProperty('slug'), 'Contains Type Slug');
+    t.true(content.type.hasOwnProperty('url'), 'Contains Type url');
+    typeslug = content.type.slug;
+  }
+  else {
+    t.true(content.hasOwnProperty('type_slug'), 'Contains Type Slug');
+    typeslug = content.type_slug;
+  }
+
+  t.true(content.hasOwnProperty('key'), 'Contains Key');
+  t.true(content.hasOwnProperty('key_slug'), 'Contains Key Slug');
+
+  // if follow, then should have attributes
+  if (qry.follow) {
+    t.true(content.hasOwnProperty('attributes'), 'Contains attributes');
+
+    // if we still have depth, keep digging down
+    if (qry.depth > 0) {
+      // circular eslint problem
+      depths(t, content.attributes, qry); // eslint-disable-line no-use-before-define
+    }
+  }
+  else {
+    t.true(content.hasOwnProperty('meta'), 'Contains Meta');
+    t.false(content.hasOwnProperty('attributes'), 'Does not contain attributes');
+    t.is(content.meta.url, `/api/types/${typeslug}/${content.id}`, 'URL points to full content item');
+  }
+
+  // return true;
+};
+
+/**
+ * Checks attributes with references are formatted correctly depending on depth
+ *
+ * @param  {object} t - ava testing
+ * @param  {object} attrs object containing attributes to test
+ * @param {object} query - request query
+ *
+ */
+const depths = (t, attrs, query) => {
+  const qry = cloneDeep(query);
+
+  if (qry.hasOwnProperty('depth')) {
+    qry.depth--;
+  }
+  else {
+    qry.depth = 0;
+  }
+
+  if (qry.depth <= 0) {
+    qry.follow = false;
+  }
+
+  Object.keys(attrs).forEach(attr => {
+    // we're only checking attributes with references
+    if (attr.split('-').indexOf('referencer') > -1) {
+      // array means it's a repeatable
+      if (Array.isArray(attrs[attr])) {
+        // gets each entry
+        attrs[attr].forEach(entry => {
+          // gets the id of each input
+          Object.keys(entry).forEach(id => {
+            // check formatting
+            formatted(t, entry[id], qry);
+
+            return;
+          });
+
+          return;
+        });
+      }
+      else {
+        // no id makes this a multi-input
+        if (!attrs[attr].hasOwnProperty('id')) {
+          // gets the id of each input
+          Object.keys(attrs[attr]).forEach(id => {
+            // check formatting
+            formatted(t, attrs[attr][id], qry);
+
+            return;
+          });
+        }
+        else {
+          // check formatting
+          formatted(t, attrs[attr], qry);
+        }
+      }
+    }
+
+    return;
+  });
+};
+
+/**
+ * Randomly selects an item from source, and it's coresponding model
+ *
+ * @param {array} source - should contain multiple items to randomly select from
+ * @param {array} models - contains the model from which the source item is derived
+ *
+ * @returns {object}  - selected item and its model
+ */
+const testables = (source, models) => {
+  const random = Math.round(Math.random() * (source.length - 1));
+  let expected = source[random];
+  if (expected === undefined) {
+    expected = cloneDeep(source[(source.length - 1)]);
+  }
+
+  const model = models.find(typ => {
+    return typ.id === expected['type-slug'];
+  });
+
+  return {
+    expected,
+    model,
+  };
 };
 
 module.exports = {
-  generate,
-  validation,
+  type,
+  values,
+  formatted,
+  depths,
+  testables,
 };

@@ -4,40 +4,34 @@ import Promise from 'bluebird';
 
 import sutils from '../lib/schedule/utils';
 import putils from '../lib/utils';
-import utils from './fixtures/_utils';
+import utils from './fixtures';
 import database from '../lib/database';
 import apps from './fixtures/applications/objects/database-mocks.js';
 
-const fixtures = utils.generate();
+const lang = 'schedule-test';
+const generated = 23;
+
+const fixtures = utils.generate(generated, lang);
+
 const length = fixtures.content.length;
 const count = Math.floor(Math.random() * length);
-const types = fixtures.types.names;
 
 test.cb.before(t => {
   database.init().then(() => {
-    t.end();
-  }).catch(e => {
-    t.fail(e);
-  });
-});
-
-test.cb.after.always(t => {
-  const items = types.map(type => {
-    return database('live').where('type', type).del().then(() => {
-      return database('schedule').where('type', type).del();
-    });
-  });
-
-  Promise.all(items)
-    .then(() => {
+    database('live').where('language', lang).del().then(() => {
       t.end();
-    })
-    .catch(e => {
-      t.fail(e);
+    }).catch(e => { // because we can't return in a before, this catch doesn't bubble out
+      console.error(e.stack); // eslint-disable-line no-console
+      t.fail(e.stack);
     });
+  })
+  .catch(e => {
+    console.error(e.stack); // eslint-disable-line no-console
+    t.fail(e.stack);
+  });
 });
 
-test('Setup', t => {
+test.skip('Setup', t => {
   const item = count;
   const revision = fixtures.content[item];
 
@@ -91,7 +85,7 @@ test('Pull', t => {
   return database('live').insert({
     'id': revision.id,
     'revision': revision.revision,
-    'language': revision.language,
+    'language': lang,
     'sunrise': revision.sunrise,
     'sunset': revision.sunset,
     'attributes': revision.value,
@@ -149,7 +143,7 @@ test.skip('Sunset', t => {
   return database('live').insert({
     'id': revision.id,
     'revision': revision.revision,
-    'language': revision.language,
+    'language': lang,
     'sunrise': revision.sunrise,
     'sunset': revision.sunset,
     'attributes': revision.value,
@@ -171,5 +165,20 @@ test.skip('Sunset', t => {
   }).catch(e => {
     console.error(e.message); // eslint-disable-line no-console
     t.fail(e.message);
+  });
+});
+
+
+//////////////////////////////
+// AFTER ALL TESTS RUN
+//////////////////////////////
+test.cb.after.always(t => {
+  database('live').where('language', lang).del().then(() => {
+    t.end();
+  })
+  .catch(e => {
+    console.error(e.stack); // eslint-disable-line no-console
+    t.fail(e);
+    t.end();
   });
 });
