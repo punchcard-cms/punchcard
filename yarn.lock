@@ -1480,6 +1480,10 @@ bufferstreams@^1.1.1:
   dependencies:
     readable-stream "^2.0.2"
 
+buffertools:
+  version "2.1.4"
+  resolved "https://registry.yarnpkg.com/buffertools/-/buffertools-2.1.4.tgz#62d4e1584c0090a0c7d3587f25934a84b8b38de4"
+
 builtin-modules@^1.0.0:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/builtin-modules/-/builtin-modules-1.1.1.tgz#270f076c5a72c02f5b65a47df94c5fe3a278892f"
@@ -2280,7 +2284,7 @@ defined@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/defined/-/defined-1.0.0.tgz#c98d9bcef75674188e110969151199e39b1fa693"
 
-del@^2.0.2, del@^2.2:
+del, del@^2.0.2, del@^2.2:
   version "2.2.2"
   resolved "https://registry.yarnpkg.com/del/-/del-2.2.2.tgz#c12c981d067846c84bcaf862cff930d907ffd1a8"
   dependencies:
