@@ -1,7 +1,5 @@
 'use strict';
 
-const ipsum = require('lorem-ipsum');
-const uuid = require('uuid');
 const path = require('path');
 const fs = require('fs');
 
@@ -20,7 +18,7 @@ const fixtures = () => {
   do {
     counter = Math.round(Math.random() * (files.length - 1));
 
-    let type = path.extname(files[counter]) === '.js' ? 'document/javascript' : 'image/svg';
+    const type = path.extname(files[counter]) === '.js' ? 'document/javascript' : 'image/svg';
 
     items.push({
       fieldName: `file-upload--file-${counter}`,
@@ -36,11 +34,11 @@ const fixtures = () => {
     });
 
     files.splice(counter, 1);
-  } while (files.length > 0 && Math.random() > .5);
+  } while (files.length > 0 && Math.random() > 0.5);
 
 
   return items;
-}
+};
 
 
 module.exports = fixtures;
