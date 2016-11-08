@@ -275,7 +275,7 @@ test.serial('Utils: Format Results - with follow', t => {
   return formatted.then(result => {
     result.forEach(itm => {
       utils.formatted(t, itm, query);
-      if (typeof itm !== 'null') {
+      if (itm !== null) {
         t.true(itm.hasOwnProperty('attributes'), 'Contains attributes');
 
         utils.depths(t, itm.attributes, query);
