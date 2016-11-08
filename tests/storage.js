@@ -1,5 +1,3 @@
-'use strict';
-
 import test from 'ava';
 import del from 'del';
 import buffertools from 'buffertools';
@@ -9,7 +7,7 @@ import fixtures from './fixtures/files';
 
 const input = fixtures();
 
-test.after.always(t => {
+test.after.always(() => {
   return del(['public']);
 });
 
@@ -26,7 +24,7 @@ test('Storage - Default', t => {
       t.true(result.hasOwnProperty('_uuid'), 'Has a UUID');
       t.true(result.hasOwnProperty('_type'), 'Has a type');
       t.true(result.hasOwnProperty('_rel'), 'Has a relative path');
-       t.is(result.type, expected.type, 'Have the same type');
+      t.is(result.type, expected.type, 'Have the same type');
       t.is(result.stat.size, expected.size, 'Same size files');
 
       const output = fs.readFileSync(result.path);
