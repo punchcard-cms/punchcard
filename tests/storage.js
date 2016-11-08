@@ -1,6 +1,5 @@
 import test from 'ava';
 import del from 'del';
-import buffertools from 'buffertools';
 import _ from 'lodash';
 import fs from 'fs';
 import path from 'path';
@@ -33,7 +32,7 @@ test('Storage - Default', t => {
       const output = fs.readFileSync(result.path);
       const original = fs.readFileSync(expected.path);
 
-      t.is(buffertools.compare(output, original), 0, 'Output and original are the same file');
+      t.is(output.toString(), original.toString(), 'Output and original are the same file');
     });
   }).catch(e => {
     console.error(e.stack);

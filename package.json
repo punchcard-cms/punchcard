@@ -92,7 +92,6 @@
   },
   "devDependencies": {
     "ava": "^0.16.0",
-    "buffertools": "^2.1.4",
     "coveralls": "^2.11.9",
     "del": "^2.2.2",
     "eslint-config-punchcard": "^1.1.1",
