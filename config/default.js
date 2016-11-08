@@ -140,5 +140,6 @@ module.exports = {
     type: 'fs',
     dest: 'public/files',
     settings: {},
+    public: '/files', // Can include {{dest}} for the dest path
   },
 };
