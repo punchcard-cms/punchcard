@@ -57,7 +57,7 @@ test('Storage - Get', t => {
     }
 
     t.true(result.hasOwnProperty('name'), 'Result has a name');
-    t.true(result.hasOwnProperty('path'), 'Result has a path')
+    t.true(result.hasOwnProperty('path'), 'Result has a path');
     t.true(result.hasOwnProperty('type'), 'Result has a type');
 
     t.is(result.name, expected.name, 'Result name is same as expected name');

@@ -43,7 +43,7 @@ const raw = () => {
   return items;
 };
 
-const saved =  () => {
+const saved = () => {
   const files = _.cloneDeep(all);
   const items = [];
   let counter = files.length - 1;
