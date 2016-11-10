@@ -121,12 +121,14 @@ module.exports = {
       add: 'add',
       edit: 'edit',
       delete: 'delete',
+      save: 'save',
     },
     messages: {
       errors: {
         edit: 'User does not exist',
         delete: 'User does not exist',
         current: 'Cannot delete logged-in user',
+        uuid: 'User ID must be in UUID format',
       },
     },
   },
