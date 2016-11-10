@@ -1,3 +1,5 @@
+'use strict';
+
 const uuid = require('uuid');
 const cloneDeep = require('lodash/cloneDeep');
 const ipsum = require('lorem-ipsum');

@@ -1,3 +1,5 @@
+'use strict';
+
 /**
  * Mock of all workflows after yaml files imported
  * @type {Array}

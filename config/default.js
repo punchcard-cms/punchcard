@@ -136,4 +136,10 @@ module.exports = {
       missing: 'Workflow \'%workflow\' for Content Type \'%type\' not found',
     },
   },
+  storage: {
+    type: 'fs',
+    dest: 'public/files',
+    settings: {},
+    public: '/files', // Can include {{dest}} for the dest path
+  },
 };

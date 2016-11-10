@@ -16,6 +16,10 @@ punchcard().then(app => {
 })
 ```
 
+## Setting File Storage
+
+Punchcard uses any [Vinyl Adapter](https://www.npmjs.com/package/vinyl#what-is-a-vinyl-adapter) that your heart desires. A good first place to start is searching for [vinyl on NPM](https://www.npmjs.com/search?q=vinyl). Punchcard assumes all vinyl adapters are named `vinyl-adapter`.
+
 ## Developing Locally
 
 Make sure PostgresSQL is set up locally (see below)
