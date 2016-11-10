@@ -60,7 +60,7 @@ test('Storage - Get', t => {
     t.true(result.hasOwnProperty('type'), 'Result has a type');
 
     t.is(result.name, expected.name, 'Result name is same as expected name');
-    t.is(result.type, expected.type, 'Result name is same as expected name');
+    t.is(result.type, expected.type, 'Result type is same as expected type');
 
     t.true(result.path.indexOf(expected.path) >= 0, 'Result path contains expected path');
   });
