@@ -136,6 +136,29 @@ test.serial('Utils: attributes - follow + depth 1', t => {
 
   const query = {
     follow: 'true',
+    depth: 1,
+  };
+
+  const attributes = apiUtils.attributes(testable.expected.attributes, testable.model.attributes, allTypes, query);
+
+  return attributes.then(result => {
+    t.is(typeof result, 'object', 'Should contain result, an object.');
+
+    // calling attributes funciton directly requires a depth of 2 to show follow's attributes
+    utils.depths(t, result, query);
+  })
+  .catch(e => {
+    console.error(e.stack); // eslint-disable-line no-console
+    t.fail(e);
+    t.end();
+  });
+});
+
+test.serial('Utils: attributes - follow + depth 2', t => {
+  const testable = utils.testables(live, allTypes);
+
+  const query = {
+    follow: 'true',
     depth: 2,
   };
 
