@@ -9,11 +9,15 @@ const all = [
   path.join(process.cwd(), '', 'storage.js'),
   path.join(process.cwd(), '..', 'index.js'),
   path.join(process.cwd(), '..', 'Gulpfile.js'),
-  path.join(process.cwd(), '../src/images', 'bee.svg'),
   path.join(process.cwd(), '../src/images', 'punchcard-image.svg'),
   path.join(process.cwd(), '../src/images', 'punchcard-404.svg'),
 ];
 
+/*
+ * Raw File Fixture
+ *
+ * @returns {array} - An array file objects as one receives from a multi-upload form
+ */
 const raw = () => {
   const files = _.cloneDeep(all);
   const items = [];
@@ -43,6 +47,11 @@ const raw = () => {
   return items;
 };
 
+/*
+ * Saved File Fixtures
+ *
+ * @returns {array} - Array of objects describing files as it's stored in the database. Object contains the original file's file name (name), the relative path to the file plugin (path), and the file's MIME type (type)
+ */
 const saved = () => {
   const files = _.cloneDeep(all);
   const items = [];
