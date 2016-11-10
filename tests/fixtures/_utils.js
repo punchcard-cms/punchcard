@@ -286,15 +286,22 @@ const depths = (t, attrs, query) => {
       if (Array.isArray(attrs[attr])) {
         // gets each entry
         attrs[attr].forEach(entry => {
-          // gets the id of each input
-          Object.keys(entry).forEach(id => {
+          // no id makes this a multi-input
+          if (entry && !entry.hasOwnProperty('id')) {
+            // gets the id of each input
+            Object.keys(entry).forEach(id => {
+              // check formatting
+              formatted(t, entry[id], qry);
+
+              return;
+            });
+          }
+          else {
             // check formatting
-            formatted(t, entry[id], qry);
+            formatted(t, entry, qry);
 
             return;
-          });
-
-          return;
+          }
         });
       }
       else {
