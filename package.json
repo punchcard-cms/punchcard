@@ -67,7 +67,7 @@
     "knex": "^0.12.6",
     "lodash": "^4.13.1",
     "modularscale-sass": "^2.1.1",
-    "moment": "^2.15.0",
+    "moment": "^2.16.0",
     "moment-timezone": "^0.5.4",
     "morgan": "^1.6.1",
     "multiparty": "^4.1.2",
