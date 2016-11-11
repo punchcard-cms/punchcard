@@ -110,8 +110,6 @@ test('Check user id - IS uuid', t => {
   });
 });
 
-
-
 //////////////////////////////
 // Utils - URL check
 //////////////////////////////
@@ -123,6 +121,17 @@ test('URL checks id is uuid', t => {
     t.is(err.message, 'User ID must be in UUID format', 'Should fail with message');
     t.is(err.safe, '/users', 'Should have a safe url');
     t.is(err.status, 404, 'Should be a 404');
+  });
+});
+
+test('URL without params returns true', t => {
+  const rq = cloneDeep(req);
+  delete rq.params;
+
+  return middleware(rq, {}, next).then(() => {
+    t.pass();
+  }).catch(() => {
+    t.fail();
   });
 });
 
