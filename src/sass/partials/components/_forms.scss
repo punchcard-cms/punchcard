@@ -183,10 +183,12 @@
   &--save {
     background-color: setting-get('primary support color');
     font-weight: setting-get('normal font weight');
+    margin-left: setting-get('rhythm') / 2;
   }
 
   &--publish {
     background-color: setting-get('secondary support color');
     font-weight: setting-get('normal font weight');
+    margin-left: setting-get('rhythm') / 2;
   }
 }
