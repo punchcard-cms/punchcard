@@ -35,7 +35,7 @@ test.cb.before(t => {
 //////////////////////////////
 // Utils - attributes
 //////////////////////////////
-test.serial.skip('Utils: attributes - empty query', t => {
+test.serial('Utils: attributes - empty query', t => {
   const testable = utils.testables(live, allTypes);
 
   const query = {};
@@ -56,7 +56,7 @@ test.serial.skip('Utils: attributes - empty query', t => {
   });
 });
 
-test.serial.skip('Utils: attributes - depth 0', t => {
+test.serial('Utils: attributes - depth 0', t => {
   const testable = utils.testables(live, allTypes);
 
   const query = {
@@ -78,7 +78,7 @@ test.serial.skip('Utils: attributes - depth 0', t => {
   });
 });
 
-test.serial.skip('Utils: attributes - depth 1 v depth 0 (no follow)', t => {
+test.serial('Utils: attributes - depth 1 v depth 0 (no follow)', t => {
   const testable = utils.testables(live, allTypes);
 
   const query0 = {
@@ -109,7 +109,7 @@ test.serial.skip('Utils: attributes - depth 1 v depth 0 (no follow)', t => {
   });
 });
 
-test.serial.skip('Utils: attributes - follow', t => {
+test.serial('Utils: attributes - follow', t => {
   const testable = utils.testables(live, allTypes);
 
   const query = {
@@ -131,7 +131,30 @@ test.serial.skip('Utils: attributes - follow', t => {
   });
 });
 
-test.serial.skip('Utils: attributes - follow + depth 1', t => {
+test.serial('Utils: attributes - follow + depth 1', t => {
+  const testable = utils.testables(live, allTypes);
+
+  const query = {
+    follow: 'true',
+    depth: 1,
+  };
+
+  const attributes = apiUtils.attributes(testable.expected.attributes, testable.model.attributes, allTypes, query);
+
+  return attributes.then(result => {
+    t.is(typeof result, 'object', 'Should contain result, an object.');
+
+    // calling attributes funciton directly requires a depth of 2 to show follow's attributes
+    utils.depths(t, result, query);
+  })
+  .catch(e => {
+    console.error(e.stack); // eslint-disable-line no-console
+    t.fail(e);
+    t.end();
+  });
+});
+
+test.serial('Utils: attributes - follow + depth 2', t => {
   const testable = utils.testables(live, allTypes);
 
   const query = {
@@ -154,7 +177,7 @@ test.serial.skip('Utils: attributes - follow + depth 1', t => {
   });
 });
 
-test.serial.skip('Utils: attributes - no references', t => {
+test.serial('Utils: attributes - no references', t => {
   const testable = utils.testables(live, allTypes);
 
   Object.keys(testable.expected.attributes).forEach(attr => {
@@ -194,7 +217,7 @@ test.serial.skip('Utils: attributes - no references', t => {
 //////////////////////////////
 // Utils - format
 //////////////////////////////
-test.serial.skip('Utils: Format Results - error check model attributes', t => {
+test.serial('Utils: Format Results - error check model attributes', t => {
   const formatted = apiUtils.format(live.slice(0, 9), 'fail');
 
   return formatted.catch(error => {
@@ -202,7 +225,7 @@ test.serial.skip('Utils: Format Results - error check model attributes', t => {
   });
 });
 
-test.serial.skip('Utils: Format Results - error check models parameter', t => {
+test.serial('Utils: Format Results - error check models parameter', t => {
   const formatted = apiUtils.format(live.slice(0, 9), [], 'fail');
 
   return formatted.catch(error => {
@@ -210,7 +233,7 @@ test.serial.skip('Utils: Format Results - error check models parameter', t => {
   });
 });
 
-test.serial.skip('Utils: Format Results - List', t => {
+test.serial('Utils: Format Results - List', t => {
   const formatted = apiUtils.format(live.slice(0, 9));
 
   return formatted.then(result => {
@@ -220,7 +243,7 @@ test.serial.skip('Utils: Format Results - List', t => {
   });
 });
 
-test.serial.skip('Utils: Format Results - no query', t => {
+test.serial('Utils: Format Results - no query', t => {
   const testable = utils.testables(live, allTypes);
 
   const formatted = apiUtils.format([testable.expected], testable.model.attributes, allTypes);
@@ -232,7 +255,7 @@ test.serial.skip('Utils: Format Results - no query', t => {
   });
 });
 
-test.serial.skip('Utils: Format Results - query depth zero', t => {
+test.serial('Utils: Format Results - query depth zero', t => {
   const testable = utils.testables(live, allTypes);
   const query = {
     depth: 0,
@@ -247,7 +270,7 @@ test.serial.skip('Utils: Format Results - query depth zero', t => {
   });
 });
 
-test.serial.skip('Utils: Format Results - query depth one', t => {
+test.serial('Utils: Format Results - query depth one', t => {
   const testable = utils.testables(live, allTypes);
   const query = {
     depth: 1,
@@ -264,7 +287,7 @@ test.serial.skip('Utils: Format Results - query depth one', t => {
   });
 });
 
-test.serial.skip('Utils: Format Results - with follow', t => {
+test.serial('Utils: Format Results - with follow', t => {
   const testable = utils.testables(live, allTypes);
   const query = {
     follow: 'true',
@@ -275,14 +298,16 @@ test.serial.skip('Utils: Format Results - with follow', t => {
   return formatted.then(result => {
     result.forEach(itm => {
       utils.formatted(t, itm, query);
-      t.true(itm.hasOwnProperty('attributes'), 'Contains attributes');
+      if (itm !== null) {
+        t.true(itm.hasOwnProperty('attributes'), 'Contains attributes');
 
-      utils.depths(t, itm.attributes, query);
+        utils.depths(t, itm.attributes, query);
+      }
     });
   });
 });
 
-test.serial.skip('Utils: Format Results - depth with follow', t => {
+test.serial('Utils: Format Results - depth with follow', t => {
   const testable = utils.testables(live, allTypes);
   const query = {
     follow: 'true',
@@ -607,7 +632,7 @@ test.serial('API: All with depth 1', t => {
   });
 });
 
-test.serial.skip('API: All with Follow', t => {
+test.serial('API: All with Follow', t => {
   const query = {
     follow: 'true',
   };
@@ -641,7 +666,7 @@ test.serial.skip('API: All with Follow', t => {
   });
 });
 
-test.serial.skip('API: All with Follow with depth zero', t => {
+test.serial('API: All with Follow with depth zero', t => {
   const query = {
     follow: 'true',
     depth: 0,
@@ -676,7 +701,7 @@ test.serial.skip('API: All with Follow with depth zero', t => {
   });
 });
 
-test.serial.skip('API: All with Follow with depth one', t => {
+test.serial('API: All with Follow with depth one', t => {
   const query = {
     follow: 'true',
     depth: 1,
@@ -711,7 +736,7 @@ test.serial.skip('API: All with Follow with depth one', t => {
   });
 });
 
-test.serial.skip('API: All with Follow with depth two', t => {
+test.serial('API: All with Follow with depth two', t => {
   const query = {
     follow: 'true',
     depth: 2,
@@ -857,7 +882,7 @@ test.serial('API: ofType depth one', t => {
   });
 });
 
-test.serial.skip('API: ofType with follow', t => {
+test.serial('API: ofType with follow', t => {
   const testable = utils.testables(live, allTypes);
   const query = {
     follow: 'true',
@@ -889,7 +914,7 @@ test.serial.skip('API: ofType with follow', t => {
   });
 });
 
-test.serial.skip('API: ofType with follow depth one', t => {
+test.serial('API: ofType with follow depth one', t => {
   const testable = utils.testables(live, allTypes);
   const query = {
     follow: 'true',
@@ -922,7 +947,7 @@ test.serial.skip('API: ofType with follow depth one', t => {
   });
 });
 
-test.serial.skip('API: ofType with follow depth two', t => {
+test.serial('API: ofType with follow depth two', t => {
   const testable = utils.testables(live, allTypes);
   const query = {
     follow: 'true',
@@ -961,7 +986,7 @@ test.serial('API: One - Not There', t => {
   });
 });
 
-test.serial.skip('API: One', t => {
+test.serial('API: One', t => {
   const testable = utils.testables(live, allTypes);
   const query = {};
 
@@ -980,7 +1005,7 @@ test.serial.skip('API: One', t => {
   });
 });
 
-test.serial.skip('API: One - depth zero', t => {
+test.serial('API: One - depth zero', t => {
   const testable = utils.testables(live, allTypes);
   const query = {
     depth: 0,
@@ -1001,7 +1026,7 @@ test.serial.skip('API: One - depth zero', t => {
   });
 });
 
-test.serial.skip('API: One - depth one', t => {
+test.serial('API: One - depth one', t => {
   const testable = utils.testables(live, allTypes);
   const query = {
     depth: 1,
@@ -1022,7 +1047,7 @@ test.serial.skip('API: One - depth one', t => {
   });
 });
 
-test.serial.skip('API: One - depth two', t => {
+test.serial('API: One - depth two', t => {
   const testable = utils.testables(live, allTypes);
   const query = {
     depth: 2,
