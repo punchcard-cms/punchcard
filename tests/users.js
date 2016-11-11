@@ -27,6 +27,22 @@ test('Users functions', t => {
   t.true(Array.isArray(users.model.roles), '`roles` exists and is an array');
 });
 
+//////////////////////////////
+// Users object structure
+//////////////////////////////
+test('Users structure object', t => {
+  const structure = users.model.structure;
+
+  t.is(typeof structure, 'object', 'Structure is an object');
+  t.is(structure.name, 'Users', 'Structure has name');
+  t.is(structure.description, 'An individual user', 'Structure has description');
+  t.is(structure.id, 'users', 'Structure has id');
+  t.true(Array.isArray(structure.attributes), 'attributes is an array');
+});
+
+//////////////////////////////
+// Users merged data model
+//////////////////////////////
 test('Users, with config, merged with correct param', t => {
   return users.model(model)
     .then(result => {
@@ -47,3 +63,7 @@ test('Users merged with correct param', t => {
       t.is(result[0].attributes[1].id, 'password', 'Password attribute id');
     });
 });
+
+//////////////////////////////
+// Users object structure
+//////////////////////////////
