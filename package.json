@@ -129,7 +129,8 @@
   },
   "ava": {
     "files": [
-      "tests/users.js"
+      "tests/*.js",
+      "!tests/schedule.js"
     ],
     "failFast": false,
     "tap": false
