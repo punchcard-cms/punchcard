@@ -18,13 +18,33 @@ const model = {
   ],
 };
 
-test('Exports exist', t => {
+test('Users functions', t => {
   t.is(typeof userRoutes, 'function', 'Submodule `routes` exists and is a function');
-  t.is(typeof users, 'function', 'Submodule `model`, is the primary for `users`, and is a function');
+
+  t.is(typeof users, 'object', 'main Users object');
+  t.is(typeof users.model, 'function', 'Submodule `model`, is the primary for `users`, and is a function');
+  t.is(typeof users.model.structure, 'object', '`structure` exists and is an object');
+  t.true(Array.isArray(users.model.roles), '`roles` exists and is an array');
 });
 
+//////////////////////////////
+// Users object structure
+//////////////////////////////
+test('Users structure object', t => {
+  const structure = users.model.structure;
+
+  t.is(typeof structure, 'object', 'Structure is an object');
+  t.is(structure.name, 'Users', 'Structure has name');
+  t.is(structure.description, 'An individual user', 'Structure has description');
+  t.is(structure.id, 'users', 'Structure has id');
+  t.true(Array.isArray(structure.attributes), 'attributes is an array');
+});
+
+//////////////////////////////
+// Users merged data model
+//////////////////////////////
 test('Users, with config, merged with correct param', t => {
-  return users(model)
+  return users.model(model)
     .then(result => {
       t.is(result[0].name, 'Users', 'Get users content type name');
       t.is(result[0].description, 'Test users description', 'Get users content type desc');
@@ -34,7 +54,7 @@ test('Users, with config, merged with correct param', t => {
 });
 
 test('Users merged with correct param', t => {
-  return users()
+  return users.model()
     .then(result => {
       t.is(result[0].name, 'Users', 'Get users content type name');
       t.is(result[0].description, 'An individual user', 'Get users content type desc');
@@ -43,3 +63,7 @@ test('Users merged with correct param', t => {
       t.is(result[0].attributes[1].id, 'password', 'Password attribute id');
     });
 });
+
+//////////////////////////////
+// Users object structure
+//////////////////////////////

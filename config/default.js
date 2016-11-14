@@ -121,6 +121,7 @@ module.exports = {
       add: 'add',
       edit: 'edit',
       delete: 'delete',
+      save: 'save',
     },
     messages: {
       errors: {
