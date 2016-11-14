@@ -1,5 +1,6 @@
 import test from 'ava';
 import _ from 'lodash';
+import uuid from 'uuid';
 
 import types from './fixtures/content-types/objects/all-merged';
 import typesRef from './fixtures/content-types/objects/types-reference';
@@ -161,6 +162,9 @@ test('Request Format', t => {
   t.deepEqual(result, expected, 'A single object is retrieved from array based on key/value');
 });
 
+//////////////////////////////
+// Routes - Get Identifier
+//////////////////////////////
 test('Get identifier', t => {
   const rows = [
     {
@@ -196,7 +200,57 @@ test('Sad empty identifier value', t => {
   t.is(result[0].identifier, 'Revision: 1234', 'Should have title as identifier');
 });
 
+//////////////////////////////
+// Routes - Action variable
+//////////////////////////////
+test('Action add', t => {
+  return utils.routes.actions('add').then(res => {
+    t.true(res, 'Should return true on add action');
+  });
+});
 
+test('Check action - must be string', t => {
+  return utils.routes.actions({}).catch(err => {
+    t.is(typeof err, 'string', 'Non-uuid id fails');
+    t.is(err, 'Content ID must be in UUID format', 'Should fail with a message');
+  });
+});
+
+test('Check action - string, but not number', t => {
+  return utils.routes.actions('123').catch(err => {
+    t.is(typeof err, 'string', 'Non-uuid id fails');
+    t.is(err, 'Content ID must be in UUID format', 'Should fail with a message');
+  });
+});
+
+test('Check action - must match an action', t => {
+  return utils.routes.actions('foo').catch(err => {
+    t.is(typeof err, 'string', 'Non-uuid id fails');
+    t.is(err, 'Content ID must be in UUID format', 'Should fail with a message');
+  });
+});
+
+test('Check content id - no id param', t => {
+  return utils.routes.actions().then(result => {
+    t.true(result, 'No id returns true');
+  });
+});
+
+test('Check content id - IS action', t => {
+  return utils.routes.actions('add').then(result => {
+    t.true(result, 'Action id returns true');
+  });
+});
+
+test('Check content id - IS uuid', t => {
+  return utils.routes.actions(uuid.v4()).then(result => {
+    t.true(result, 'Good id returns true');
+  });
+});
+
+//////////////////////////////
+// References
+//////////////////////////////
 test('Reference array has values', t => {
   const expected = {
     cts: [
