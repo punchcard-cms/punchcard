@@ -1,5 +1,5 @@
 import test from 'ava';
-import users from '../lib/users/index';
+import users from '../lib/users';
 import userRoutes from '../lib/routes/users';
 
 
