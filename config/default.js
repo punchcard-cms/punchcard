@@ -130,6 +130,9 @@ module.exports = {
         current: 'Cannot delete logged-in user',
         uuid: 'User ID must be in UUID format',
       },
+      format: {
+        id: 'User ID must be in UUID format',
+      },
     },
   },
   workflows: {
