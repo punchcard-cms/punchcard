@@ -1,5 +1,7 @@
 import test from 'ava';
+import config from 'config';
 import events from 'events';
+import _ from 'lodash';
 import httpMocks from 'node-mocks-http';
 
 import application from './fixtures/app';
@@ -23,7 +25,7 @@ const reqObj = application.request({
   },
   session: {
     form: {
-      applications: {
+      users: {
         save: {},
         edit: {},
       },
@@ -141,6 +143,115 @@ test.cb('All Users route', t => {
     t.is(data.config.base, 'users', 'includes users base');
     t.is(user.email, 'admin@test.com', 'includes user email in data');
     t.is(user.password, 'pa55word', 'includes user password in data');
+
+    t.end();
+  });
+});
+
+//////////////////////////////
+// Routes - New User
+//////////////////////////////
+test.cb('New user route', t => {
+  const req = _.cloneDeep(reqObj);
+  req.url = '/users/add';
+
+  const request = httpMocks.createRequest(req);
+
+  const response = httpMocks.createResponse({ eventEmitter: EventEmitter });
+  users.routes.add(request, response);
+  response.render();
+
+  response.on('end', () => {
+    const data = response._getRenderData();
+
+    t.is(response.statusCode, 200, 'Should be a 200 response');
+    t.true(_.includes(data.form.html, 'name="email--email"'), 'includes form with inputs');
+    t.end();
+  });
+});
+
+//////////////////////////////
+// Routes - Single user
+//////////////////////////////
+test.cb('Single user route', t => {
+  const req = _.cloneDeep(reqObj);
+  req.url = '/users/1';
+  req.params.id = 1;
+
+  const request = httpMocks.createRequest(req);
+
+  const response = httpMocks.createResponse({ eventEmitter: EventEmitter });
+  const resp = users.routes.one(request, response);
+  response.render();
+
+  response.on('end', () => {
+    const data = response._getRenderData();
+
+    t.is(response.statusCode, 200, 'Should be a 200 response');
+
+    // form is populated
+    t.true(_.includes(data.form.html, 'value=\"admin@test.com\"'), 'includes form with email value');
+    t.true(_.includes(data.form.html, 'value=\"admin\"'), 'includes form with role value');
+
+    t.true(_.includes(data.action, '/users/save'), 'includes `save` for form action');
+    t.is(data.config.toString(), config.users.toString(), 'includes config for users');
+    t.is(data.button, 'update', 'includes `update` as text for button');
+
+    return resp.then(res => {
+      t.is(res, true, 'should return true');
+      t.end();
+    });
+  });
+});
+
+test.cb('Single user route - bad id', t => {
+  const req = _.cloneDeep(reqObj);
+  req.url = '/users/1000';
+  req.params.id = 1000;
+
+  const request = httpMocks.createRequest(req);
+
+  const response = httpMocks.createResponse({ eventEmitter: EventEmitter });
+  const resp = users.routes.one(request, response, next);
+
+  response.on('end', () => {
+    t.is(response.statusCode, 200, 'Should be a 200 response');
+
+    return resp.then(res => {
+      t.is(res.status, 404, 'should have 404 status');
+      t.end();
+    });
+  });
+  response.render();
+});
+
+test.cb('Single user route - error on save', t => {
+  const req = _.cloneDeep(reqObj);
+  req.url = '/users/3';
+  req.params.id = 3;
+  req.session.form.users.edit.id = 3;
+  req.session.form.users.save.errors = {
+    'email--email': 'Field is required to be saved!',
+  };
+  req.session.form.users.save.content = {
+    'email': { email: { value: '' } },
+    'role': { select: { value: 'creator' } },
+    'password': { password: { value: 'pa55word' } },
+  };
+
+  const request = httpMocks.createRequest(req);
+
+  const response = httpMocks.createResponse({ eventEmitter: EventEmitter });
+  users.routes.one(request, response);
+  response.render();
+
+  response.on('end', () => {
+    const data = response._getRenderData();
+
+    t.is(response.statusCode, 200, 'Should be a 200 response');
+
+    // form shows error
+    t.regex(data.form.html, /<p class="form--alert" role="alert" for="([0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12})">Field is required to be saved!<\/p>/g, 'includes form alert');
 
     t.end();
   });

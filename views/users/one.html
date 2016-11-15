@@ -1,0 +1,22 @@
+{% extends "_donut.html" %}
+
+{% block pageHead %}
+  {{ super() }}
+{% endblock %}
+
+{% block header %}
+  {{ super() }}
+{% endblock %}
+
+{% block main %}
+  <div class="introduction">
+    <h1 class="introduction--h1">{{config.actions.edit|capitalize}}</h1>
+    <p class="introduction--p">{{structure.description}}</p>
+  </div>
+
+  {% include "_basic-form.html" %}
+{% endblock %}
+
+{% block footer %}
+  {{ super() }}
+{% endblock %}

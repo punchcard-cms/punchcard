@@ -122,8 +122,12 @@ module.exports = {
       edit: 'edit',
       delete: 'delete',
       save: 'save',
+      update: 'update',
     },
     messages: {
+      missing: {
+        id: 'A user with the id \'%id\' was not found',
+      },
       errors: {
         edit: 'User does not exist',
         delete: 'User does not exist',
