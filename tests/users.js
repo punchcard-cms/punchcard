@@ -42,7 +42,7 @@ test.cb.before(t => {
       });
     });
   }).catch(e => {
-    t.fail(e.message);
+    t.fail(e.stack);
   });
 });
 
@@ -50,7 +50,7 @@ test.cb.after.always(t => {
   database('users').select('*').del().then(() => {
     t.end();
   }).catch(e => {
-    t.fail(e.message);
+    t.fail(e.stack);
   });
 });
 
