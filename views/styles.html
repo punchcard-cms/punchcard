@@ -1,12 +1,16 @@
 {% extends "_donut.html" %}
 
-{% block pageTitle %}{{pageTitle}}{% endblock %}
-
 {% block pageHead %}
   {{ super() }}
 {% endblock %}
 
 {% block main %}
+  <section class="_style-guide--group">
+    <h2 class="_style-guide--title">Tabular Data</h2>
+    {% from "components/tabular-data.html" import tabularData %}
+    {{tabularData(myLatest)}}
+  </section>
+
   <section class="base--section">
     <header class="base--header">
       <h1 class="base--h1">Text</h1>
