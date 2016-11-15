@@ -9,15 +9,13 @@
 {% endblock %}
 
 {% block main %}
-<div class="introduction">
-  <h1 class="introduction--h1">{{title|capitalize}}</h1>
-</div>
-  {% include "users/_form.html" %}
+  <div class="introduction">
+    <h1 class="introduction--h1">{{config.actions.add|capitalize}}</h1>
+    <p class="introduction--p">{{structure.description}}</p>
+  </div>
+  {% include "_basic-form.html" %}
 {% endblock %}
 
 {% block footer %}
   {{ super() }}
-  <script type="text/javascript">
-    {{form.validation|safe}}
-  </script>
 {% endblock %}
