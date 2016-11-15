@@ -6454,9 +6454,9 @@ punchcard-commit-msg@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/punchcard-commit-msg/-/punchcard-commit-msg-1.0.1.tgz#b914aa8cbd4dfd4fd3a3aeb1e28c3283645f3ccf"
 
-punchcard-content-types@^6.0.1:
-  version "6.1.5"
-  resolved "https://registry.yarnpkg.com/punchcard-content-types/-/punchcard-content-types-6.1.5.tgz#0505ec514e1c007206248fb0fd4939e83ff67819"
+punchcard-content-types@^6.1.6:
+  version "6.1.6"
+  resolved "https://registry.yarnpkg.com/punchcard-content-types/-/punchcard-content-types-6.1.6.tgz#0d176a3ed795460f46f1f3eeef4e6a018e759da5"
   dependencies:
     browserify "^13.0.1"
     deepmerge "^1.1.0"

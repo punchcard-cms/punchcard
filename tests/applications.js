@@ -530,7 +530,7 @@ test.cb('Single application route - error on save', t => {
     t.is(response.statusCode, 200, 'Should be a 200 response');
 
     // form shows error
-    t.true(_.includes(data.form.html, 'class="required--save">Field is required to be saved!'), 'includes form with name value');
+    t.regex(data.form.html, /<p class="form--alert" role="alert" for="([0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12})">Field is required to be saved!<\/p>/g, 'includes form alert');
 
     t.end();
   });
