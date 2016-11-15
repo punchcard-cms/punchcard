@@ -191,7 +191,7 @@ test('Grab applications model-merged and all apps', t => {
     t.is(typeof result, 'object', 'Returns an object');
     t.is(typeof result.merged, 'object', 'Returns merged object');
     t.true(Array.isArray(result.apps), 'Returns applications in an array');
-    t.is(result.apps.length, 5, 'has five applications');
+    t.true(result.apps.length <= 5, 'has no more than five applications');
   });
 });
 
