@@ -35,7 +35,7 @@ test('Storage - Default', t => {
       t.is(output.toString(), original.toString(), 'Output and original are the same file');
     });
   }).catch(e => {
-    console.error(e.stack);
+    console.error(e.stack); // eslint-disable-line no-console
     t.fail();
   });
 });
