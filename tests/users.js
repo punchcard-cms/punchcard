@@ -3,6 +3,7 @@ import config from 'config';
 import events from 'events';
 import _ from 'lodash';
 import httpMocks from 'node-mocks-http';
+import isInt from 'validator/lib/isInt';
 
 import application from './fixtures/app';
 import database from '../lib/database';
@@ -13,6 +14,17 @@ import dbmocks from './fixtures/users/objects/database-mocks.js';
 
 const EventEmitter = events.EventEmitter;
 const next = application.next;
+
+/**
+ * Form body response
+ * @type {Object}
+ */
+const body = {
+  'email--email': dbmocks.rows[0].email,
+  'role--select': dbmocks.rows[0].role,
+  'password--password': dbmocks.rows[0].password,
+  'submit': 'save',
+};
 
 /**
  * Express Request Object
@@ -252,6 +264,114 @@ test.cb('Single user route - error on save', t => {
 
     // form shows error
     t.regex(data.form.html, /<p class="form--alert" role="alert" for="([0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12})">Field is required to be saved!<\/p>/g, 'includes form alert');
+
+    t.end();
+  });
+});
+
+//////////////////////////////
+// Routes - Save user
+//////////////////////////////
+test.cb('Save new user: name required', t => {
+  const req = _.cloneDeep(reqObj);
+  req.method = 'POST';
+  req.session.referrer = '/users/add';
+  req.url = '/users/save';
+  req.body = _.cloneDeep(body);
+  req.body['email--email'] = '';
+
+  const request = httpMocks.createRequest(req);
+
+  const response = httpMocks.createResponse({ eventEmitter: EventEmitter });
+  users.routes.save(request, response);
+
+  response.on('end', () => {
+    t.is(response.statusCode, 302, 'Should be a 302 response');
+    t.is(response._getRedirectUrl(), '/users/add');
+    t.end();
+  });
+  response.render();
+});
+
+test.cb('Save existing user: name required', t => {
+  const req = _.cloneDeep(reqObj);
+  req.method = 'POST';
+  req.session.referrer = '/users/123';
+  req.url = '/users/save';
+  req.body = _.cloneDeep(body);
+  req.body['email--email'] = '';
+
+  const request = httpMocks.createRequest(req);
+
+  const response = httpMocks.createResponse({ eventEmitter: EventEmitter });
+  users.routes.save(request, response);
+
+  response.on('end', () => {
+    t.is(response.statusCode, 302, 'Should be a 302 response');
+    t.is(response._getRedirectUrl(), '/users/123');
+    t.end();
+  });
+  response.render();
+});
+
+test.cb('Delete existing user', t => {
+  const req = _.cloneDeep(reqObj);
+  req.method = 'POST';
+  req.session.referrer = '/users/4';
+  req.session.form.users.edit.id = 4;
+  req.url = '/users/save';
+  req.body = _.cloneDeep(body);
+  req.body.submit = 'delete';
+
+  const request = httpMocks.createRequest(req);
+
+  const response = httpMocks.createResponse({ eventEmitter: EventEmitter });
+  users.routes.save(request, response);
+
+  response.on('end', () => {
+    t.is(response._getRedirectUrl(), '/users');
+    t.end();
+  });
+});
+
+test.cb('Update existing user', t => {
+  const req = _.cloneDeep(reqObj);
+  req.method = 'POST';
+  req.session.referrer = '/users/2';
+  req.session.form.users.edit.id = 2;
+  req.url = '/users/save';
+  req.body = _.cloneDeep(body);
+  req.body.submit = 'update';
+
+  const request = httpMocks.createRequest(req);
+
+  const response = httpMocks.createResponse({ eventEmitter: EventEmitter });
+  users.routes.save(request, response);
+
+  response.on('end', () => {
+    t.is(response._getRedirectUrl(), '/users');
+    t.end();
+  });
+});
+
+test.cb('Save new user', t => {
+  const req = _.cloneDeep(reqObj);
+  req.method = 'POST';
+  req.session.referrer = '/users/add';
+  req.url = '/users/save';
+  req.body = _.cloneDeep(body);
+
+  const request = httpMocks.createRequest(req);
+
+  const response = httpMocks.createResponse({ eventEmitter: EventEmitter });
+  users.routes.save(request, response);
+
+  response.on('end', () => {
+    const redir = response._getRedirectUrl();
+    const parts = redir.split('/');
+
+    t.is(parts[1], 'users', 'Should have users base');
+    t.true(isInt(parts[2]), 'Should have last user id');
 
     t.end();
   });
