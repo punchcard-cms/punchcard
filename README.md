@@ -1,5 +1,7 @@
 # Punchcard CMS [![Build Status](https://travis-ci.org/punchcard-cms/punchcard.svg?branch=master)](https://travis-ci.org/punchcard-cms/punchcard) [![Coverage Status](https://coveralls.io/repos/github/punchcard-cms/punchcard/badge.svg?branch=master)](https://coveralls.io/github/punchcard-cms/punchcard?branch=master) [![Code Climate](https://codeclimate.com/github/punchcard-cms/punchcard/badges/gpa.svg)](https://codeclimate.com/github/punchcard-cms/punchcard)
 
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/punchcard-cms/demo)
+
 Headless Content Management System designed with content strategy at its heart. Built with Node.
 
 ## Install and Usage
