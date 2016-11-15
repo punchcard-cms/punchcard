@@ -21,26 +21,28 @@ const all = [
 const raw = () => {
   const files = _.cloneDeep(all);
   const items = [];
-  let counter = files.length - 1;
+  let counter = 0;
+  let random;
   do {
-    counter = Math.round(Math.random() * (files.length - 1));
+    random = Math.round(Math.random() * (files.length - 1));
 
-    const type = path.extname(files[counter]) === '.js' ? 'document/javascript' : 'image/svg';
+    const type = path.extname(files[random]) === '.js' ? 'document/javascript' : 'image/svg';
 
     items.push({
       fieldName: `file-upload--file-${counter}`,
-      originalFilename: path.basename(files[counter]),
-      path: files[counter],
+      originalFilename: path.basename(files[random]),
+      path: files[random],
       headers: {
-        'content-disposition': `form-data; name="file-upload--file-${counter}"; filename="${path.basename(files[counter])}"`,
+        'content-disposition': `form-data; name="file-upload--file-${counter}"; filename="${path.basename(files[random])}"`,
         'content-type': type,
       },
-      size: fs.statSync(files[counter]).size,
-      name: path.basename(files[counter]),
+      size: fs.statSync(files[random]).size,
+      name: path.basename(files[random]),
       type,
     });
 
-    files.splice(counter, 1);
+    files.splice(random, 1);
+    counter++;
   } while (files.length > 0 && Math.random() > 0.5);
 
 
