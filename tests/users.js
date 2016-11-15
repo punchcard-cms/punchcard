@@ -1,23 +1,63 @@
 import test from 'ava';
+import events from 'events';
+import httpMocks from 'node-mocks-http';
+
+import application from './fixtures/app';
+import database from '../lib/database';
 import users from '../lib/users';
 import userRoutes from '../lib/routes/users';
+import merged from './fixtures/users/objects/model-merged.js';
+import dbmocks from './fixtures/users/objects/database-mocks.js';
 
+const EventEmitter = events.EventEmitter;
+const next = application.next;
 
-const model = {
-  'name': 'Users',
-  'description': 'Test users description',
-  'id': 'users',
-  'identifier': 'email',
-  'attributes': [
-    {
-      'type': 'email',
-      'id': 'email',
-      'name': 'Email',
-      'description': 'Your email is your username',
+/**
+ * Express Request Object
+ * @type {Object}
+ */
+const reqObj = application.request({
+  url: '/users',
+  app: {
+    'users-model': merged,
+  },
+  session: {
+    form: {
+      applications: {
+        save: {},
+        edit: {},
+      },
     },
-  ],
-};
+  },
+});
 
+//////////////////////////////
+// Before/After test env setup
+//////////////////////////////
+test.cb.before(t => {
+  database.init().then(() => {
+    database('users').del().then(() => {
+      database('users').insert(dbmocks.rows).then(() => {
+        t.end();
+      });
+    });
+  }).catch(e => {
+    t.fail(e.message);
+  });
+});
+
+test.cb.after.always(t => {
+  database('users').select('*').del().then(() => {
+    t.end();
+  }).catch(e => {
+    t.fail(e.message);
+  });
+});
+
+
+//////////////////////////////
+// Users Functions and Objects
+//////////////////////////////
 test('Users functions', t => {
   t.is(typeof userRoutes, 'function', 'Submodule `routes` exists and is a function');
 
@@ -44,6 +84,21 @@ test('Users structure object', t => {
 // Users merged data model
 //////////////////////////////
 test('Users, with config, merged with correct param', t => {
+  const model = {
+    'name': 'Users',
+    'description': 'Test users description',
+    'id': 'users',
+    'identifier': 'email',
+    'attributes': [
+      {
+        'type': 'email',
+        'id': 'email',
+        'name': 'Email',
+        'description': 'Your email is your username',
+      },
+    ],
+  };
+
   return users.model(model)
     .then(result => {
       t.is(result[0].name, 'Users', 'Get users content type name');
@@ -65,5 +120,28 @@ test('Users merged with correct param', t => {
 });
 
 //////////////////////////////
-// Users object structure
+// Routes - Users landing
 //////////////////////////////
+test.cb('All Users route', t => {
+  const request = httpMocks.createRequest(reqObj);
+
+  const response = httpMocks.createResponse({ eventEmitter: EventEmitter });
+  users.routes.all(request, response, next);
+  response.render();
+
+  response.on('end', () => {
+    const data = response._getRenderData();
+    const user = data.users.find((usr) => {
+      return usr.email === 'admin@test.com';
+    });
+
+    t.is(response.statusCode, 200, 'Should be a 200 response');
+    t.is(data.title, 'users', 'includes page title');
+    t.is(typeof data.config, 'object', 'includes users config');
+    t.is(data.config.base, 'users', 'includes users base');
+    t.is(user.email, 'admin@test.com', 'includes user email in data');
+    t.is(user.password, 'pa55word', 'includes user password in data');
+
+    t.end();
+  });
+});
