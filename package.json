@@ -130,8 +130,7 @@
   "ava": {
     "files": [
       "tests/*.js",
-      "!tests/schedule.js",
-      "!tests/server.js"
+      "!tests/schedule.js"
     ],
     "failFast": false,
     "tap": false
