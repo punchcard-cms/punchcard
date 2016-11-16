@@ -134,7 +134,7 @@ module.exports = {
         current: 'Cannot delete logged-in user',
       },
       format: {
-        id: 'User ID must be in UUID format',
+        id: 'User ID must be a number.',
       },
     },
   },
