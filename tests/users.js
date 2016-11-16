@@ -3,7 +3,6 @@ import config from 'config';
 import events from 'events';
 import _ from 'lodash';
 import httpMocks from 'node-mocks-http';
-import isInt from 'validator/lib/isInt';
 
 import application from './fixtures/app';
 import database from '../lib/database';
@@ -367,12 +366,7 @@ test.cb('Save new user', t => {
   users.routes.save(request, response);
 
   response.on('end', () => {
-    const redir = response._getRedirectUrl();
-    const parts = redir.split('/');
-
-    t.is(parts[1], 'users', 'Should have users base');
-    t.true(isInt(parts[2]), 'Should have last user id');
-
+    t.is(response._getRedirectUrl(), '/users');
     t.end();
   });
 });
