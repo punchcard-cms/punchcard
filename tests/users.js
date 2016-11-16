@@ -63,7 +63,7 @@ test('Users functions', t => {
   t.is(typeof users, 'object', 'main Users object');
   t.is(typeof users.model, 'function', 'Submodule `model`, is the primary for `users`, and is a function');
   t.is(typeof users.model.structure, 'object', '`structure` exists and is an object');
-  t.is(typeof users.model.create, 'object', '`create` exists and is an object');
+  t.is(typeof users.model.create, 'function', '`create` exists and is a function');
   t.true(Array.isArray(users.model.roles), '`roles` exists and is an array');
 });
 
@@ -120,11 +120,11 @@ test('Users merged with correct param', t => {
 });
 
 test('Create users model merged with correct param', t => {
-  return users.model.create
+  return users.model.create()
     .then(result => {
-      t.is(result[0].name, 'Users', 'Get users content type name');
-      t.is(result[0].description, 'An individual user', 'Get users content type desc');
-      t.is(result[0].id, 'users', 'Get users content type id');
+      t.is(result[0].name, 'Create New User', 'Get users content type name');
+      t.is(result[0].description, 'Create a new user', 'Get users content type desc');
+      t.is(result[0].id, 'users-create', 'Get users content type id');
       t.is(result[0].attributes[1].name, 'Password', 'Password attribute name');
       t.is(result[0].attributes[1].id, 'password', 'Password attribute id');
       t.is(result[0].attributes[1].required, 'save', 'Password is required to save');
