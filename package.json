@@ -21,7 +21,7 @@
     "start": "nodemon -e html,js ./index.js",
     "lint": "gulp lint",
     "ava:watch": "NODE_ENV=test NODE_CONFIG_DIR=../config ava --watch",
-    "ava": "NODE_ENV=test NODE_CONFIG_DIR=../config ava",
+    "ava": "NODE_ENV=test NODE_CONFIG_DIR=../config ava --serial",
     "nyc": "nyc --all npm run ava",
     "dev:database": "postgres -D /usr/local/var/postgres",
     "dev:start": "gulp",
