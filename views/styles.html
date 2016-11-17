@@ -1,15 +1,7 @@
 {% extends "_donut.html" %}
 
-{% block pageHead %}
-  {{ super() }}
-{% endblock %}
-
 {% block main %}
-  <section class="_style-guide--group">
-    <h2 class="_style-guide--title">Tabular Data</h2>
-    {% from "components/tabular-data.html" import tabularData %}
-    {{tabularData(myLatest)}}
-  </section>
+<div class="_style-guide">
 
   <section class="base--section">
     <header class="base--header">
@@ -335,5 +327,12 @@ p q r s t u v w x y z { | } ~ </pre>
       </div>
     </form>
   </section>
-</main>
+
+  <section class="_style-guide--group">
+    <h2 class="_style-guide--title">Tabular Data</h2>
+    {% from "components/table.html" import table %}
+    {{table(data)}}
+  </section>
+
+</div>
 {% endblock %}
