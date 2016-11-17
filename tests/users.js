@@ -389,3 +389,23 @@ test.cb('Save new user', t => {
     t.end();
   });
 });
+
+//////////////////////////////
+// Routes - Create Superuser
+//////////////////////////////
+test.cb('Superuser: redirect', t => {
+  const req = _.cloneDeep(reqObj);
+  req.url = '/create-admin';
+
+  const request = httpMocks.createRequest(req);
+
+  const response = httpMocks.createResponse({ eventEmitter: EventEmitter });
+  users.routes.setup(request, response);
+  response.render();
+
+  response.on('end', () => {
+    t.is(response.statusCode, 302, 'Should be a 302 response');
+    t.is(response._getRedirectUrl(), '/');
+    t.end();
+  });
+});
