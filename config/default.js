@@ -127,6 +127,7 @@ module.exports = {
     setup: {
       path: '/create-admin',
       title: 'Create an admin account for your new CMS',
+      button: 'Create Admin Account',
     },
     messages: {
       missing: {
