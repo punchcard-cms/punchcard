@@ -51,7 +51,10 @@ test.cb.before(t => {
   database.init().then(() => {
     database('users').del().then(() => {
       database('users').insert(dbmocks.rows).then(() => {
-        t.end();
+        // auto-increment set past added entries
+        database.schema.raw('select setval(\'users_id_seq\', 20, true)').then(() => {
+          t.end();
+        });
       });
     });
   }).catch(e => {
