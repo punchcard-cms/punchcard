@@ -24,6 +24,19 @@
     }
   }
 
+  &--add {
+    @include button(setting-get('primary accent color'), setting-get('primary accent color'), setting-get('primary color'), setting-get('primary accent color'), setting-get('primary color'), setting-get('primary color'), setting-get('primary color'));
+    margin-top: setting-get('rhythm') * 2;
+  }
+
+  &--delete {
+    @include button(color('neutral-white', 40), setting-get('primary color'), setting-get('primary color'), color('neutral-white', 40), setting-get('primary color'), setting-get('primary color'), setting-get('primary color'));
+  }
+
+  &--repeatable {
+    margin-top: setting-get('rhythm') * 2;
+  }
+
   &--description {
     color: color('grey', 60);
     font-size: ms(-1);
