@@ -359,6 +359,7 @@ test.cb('Save new user', t => {
   req.session.referrer = '/users/add';
   req.url = '/users/save';
   req.body = _.cloneDeep(body);
+  req.body['email--email'] = 'foo@example.com';
 
   const request = httpMocks.createRequest(req);
 
