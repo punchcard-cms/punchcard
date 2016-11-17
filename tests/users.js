@@ -282,7 +282,7 @@ test.cb('Save new user: name required', t => {
   const request = httpMocks.createRequest(req);
 
   const response = httpMocks.createResponse({ eventEmitter: EventEmitter });
-  users.routes.save(request, response);
+  users.routes.save(request, response, next);
 
   response.on('end', () => {
     t.is(response.statusCode, 302, 'Should be a 302 response');
@@ -303,7 +303,7 @@ test.cb('Save existing user: name required', t => {
   const request = httpMocks.createRequest(req);
 
   const response = httpMocks.createResponse({ eventEmitter: EventEmitter });
-  users.routes.save(request, response);
+  users.routes.save(request, response, next);
 
   response.on('end', () => {
     t.is(response.statusCode, 302, 'Should be a 302 response');
@@ -325,7 +325,7 @@ test.cb('Delete existing user', t => {
   const request = httpMocks.createRequest(req);
 
   const response = httpMocks.createResponse({ eventEmitter: EventEmitter });
-  users.routes.save(request, response);
+  users.routes.save(request, response, next);
 
   response.on('end', () => {
     t.is(response._getRedirectUrl(), '/users');
@@ -345,7 +345,7 @@ test.cb('Update existing user', t => {
   const request = httpMocks.createRequest(req);
 
   const response = httpMocks.createResponse({ eventEmitter: EventEmitter });
-  users.routes.save(request, response);
+  users.routes.save(request, response, next);
 
   response.on('end', () => {
     t.is(response._getRedirectUrl(), '/users');
@@ -363,7 +363,7 @@ test.cb('Save new user', t => {
   const request = httpMocks.createRequest(req);
 
   const response = httpMocks.createResponse({ eventEmitter: EventEmitter });
-  users.routes.save(request, response);
+  users.routes.save(request, response, next);
 
   response.on('end', () => {
     t.is(response._getRedirectUrl(), '/users');
