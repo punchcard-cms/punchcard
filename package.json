@@ -83,7 +83,7 @@
     "punchcard-content-types": "^6.1.6",
     "request": "^2.75.0",
     "sass-toolkit": "^2.10.0",
-    "serve-favicon": "^2.3.0",
+    "serve-favicon": "^2.3.2",
     "stream-from-array": "^1.0.0",
     "underscore.string": "^3.3.4",
     "uuid": "^2.0.2",
