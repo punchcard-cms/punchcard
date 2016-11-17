@@ -1,18 +1,18 @@
-{% macro table(data) %}
+{% macro table(tableData) %}
 <article class="base--article" itemscope itemtype="http://schema.org/Table">
   <header class="base--header">
-    <h1 class="base--h1" itemprop="name">{{data.title}}</h1>
+    <h1 class="base--h1" itemprop="name">{{tableData.name}}</h1>
   </header>
   <table class="base--table">
     <thead class="base--thead">
       <tr class="base--tr">
-        {% for header in data.body.headers %}
+        {% for header in tableData.data.headers %}
         <th class="base--th">{{header}}</th>
         {% endfor %}
       </tr>
     </thead>
     <tbody class="base--tbody">
-        {% for row in data.body.row %}
+        {% for row in tableData.data.row %}
         <tr class="base--tr" itemprop="dataset" itemscope itemtype="https://schema.org/Dataset">
           {% for rows in row.rows %}
           <td data-th="{{header}}" class="base--td">{{rows}}</td>
