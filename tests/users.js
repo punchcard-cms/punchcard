@@ -32,7 +32,8 @@ const body = {
 const reqObj = application.request({
   url: '/users',
   app: {
-    'users-model': merged,
+    'users-model': merged.users,
+    'users-create-model': merged.create(),
   },
   session: {
     form: {
@@ -153,7 +154,7 @@ test('Create users model merged with correct param', t => {
 //////////////////////////////
 // Routes - Users landing
 //////////////////////////////
-test.cb('All Users route', t => {
+test.cb.serial('All Users route', t => {
   const request = httpMocks.createRequest(reqObj);
 
   const response = httpMocks.createResponse({ eventEmitter: EventEmitter });
@@ -202,7 +203,7 @@ test.cb('New user route', t => {
 //////////////////////////////
 // Routes - Single user
 //////////////////////////////
-test.cb('Single user route', t => {
+test.cb.serial('Single user route', t => {
   const req = _.cloneDeep(reqObj);
   req.url = '/users/1';
   req.params.id = 1;
@@ -233,7 +234,7 @@ test.cb('Single user route', t => {
   });
 });
 
-test.cb('Single user route - bad id', t => {
+test.cb.serial('Single user route - bad id', t => {
   const req = _.cloneDeep(reqObj);
   req.url = '/users/1000';
   req.params.id = 1000;
@@ -254,7 +255,7 @@ test.cb('Single user route - bad id', t => {
   response.render();
 });
 
-test.cb('Single user route - error on save', t => {
+test.cb.serial('Single user route - error on save', t => {
   const req = _.cloneDeep(reqObj);
   req.url = '/users/3';
   req.params.id = 3;
@@ -289,7 +290,7 @@ test.cb('Single user route - error on save', t => {
 //////////////////////////////
 // Routes - Save user
 //////////////////////////////
-test.cb('Save new user: name required', t => {
+test.cb.serial('Save new user: name required', t => {
   const req = _.cloneDeep(reqObj);
   req.method = 'POST';
   req.session.referrer = '/users/add';
@@ -310,7 +311,7 @@ test.cb('Save new user: name required', t => {
   response.render();
 });
 
-test.cb('Save existing user: name required', t => {
+test.cb.serial('Save existing user: name required', t => {
   const req = _.cloneDeep(reqObj);
   req.method = 'POST';
   req.session.referrer = '/users/123';
@@ -331,7 +332,7 @@ test.cb('Save existing user: name required', t => {
   response.render();
 });
 
-test.cb('Delete existing user', t => {
+test.cb.serial('Delete existing user', t => {
   const req = _.cloneDeep(reqObj);
   req.method = 'POST';
   req.session.referrer = '/users/4';
@@ -351,7 +352,7 @@ test.cb('Delete existing user', t => {
   });
 });
 
-test.cb('Update existing user', t => {
+test.cb.serial('Update existing user', t => {
   const req = _.cloneDeep(reqObj);
   req.method = 'POST';
   req.session.referrer = '/users/2';
@@ -371,7 +372,7 @@ test.cb('Update existing user', t => {
   });
 });
 
-test.cb('Save new user', t => {
+test.cb.serial('Save new user', t => {
   const req = _.cloneDeep(reqObj);
   req.method = 'POST';
   req.session.referrer = '/users/add';
@@ -393,19 +394,41 @@ test.cb('Save new user', t => {
 //////////////////////////////
 // Routes - Create Superuser
 //////////////////////////////
-test.cb('Superuser: redirect', t => {
+test.cb.serial('Superuser: redirect', t => {
   const req = _.cloneDeep(reqObj);
   req.url = '/create-admin';
 
   const request = httpMocks.createRequest(req);
 
   const response = httpMocks.createResponse({ eventEmitter: EventEmitter });
-  users.routes.setup(request, response);
+  users.routes.setup(request, response, next);
   response.render();
 
   response.on('end', () => {
     t.is(response.statusCode, 302, 'Should be a 302 response');
     t.is(response._getRedirectUrl(), '/');
     t.end();
+  });
+});
+
+test.cb.serial('Superuser: show form', t => {
+  // we need to delete users now to see the create form
+  database('users').select('*').del().then(() => {
+    const req = _.cloneDeep(reqObj);
+    req.url = '/create-admin';
+
+    const request = httpMocks.createRequest(req);
+
+    const response = httpMocks.createResponse({ eventEmitter: EventEmitter });
+    users.routes.setup(request, response, next);
+    response.render();
+
+    response.on('end', () => {
+      const data = response._getRenderData();
+
+      t.is(response.statusCode, 200, 'Should be a 200 response');
+      t.true(_.includes(data.title.toString(), 'Create an admin account for your new CMS'), 'title for new admin account');
+      t.end();
+    });
   });
 });
