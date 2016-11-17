@@ -5,7 +5,11 @@
 {% endblock %}
 
 {% block header %}
-  {{ super() }}
+  {% if setup %}
+    {% include "_header-not-auth.html" %}
+  {% else %}
+    {{ super() }}
+  {% endif %}
 {% endblock %}
 
 {% block main %}

@@ -38,7 +38,10 @@ test.cb.before(t => {
   database.init().then(() => {
     database('users').del().then(() => {
       database('users').insert(dbmocks.rows).then(() => {
-        t.end();
+        // auto-increment set past added entries
+        database.schema.raw('select setval(\'users_id_seq\', 20, true)').then(() => {
+          t.end();
+        });
       });
     });
   }).catch(e => {
@@ -119,6 +122,9 @@ test('Users merged with correct param', t => {
     });
 });
 
+//////////////////////////////
+// Users merged data model (create new user)
+//////////////////////////////
 test('Create users model merged with correct param', t => {
   return users.model.create()
     .then(result => {

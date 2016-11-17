@@ -123,6 +123,10 @@ module.exports = {
       delete: 'delete',
       save: 'save',
     },
+    setup: {
+      path: '/create-admin',
+      title: 'Create an admin account for your new CMS',
+    },
     messages: {
       errors: {
         edit: 'User does not exist',
