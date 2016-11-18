@@ -1,5 +1,4 @@
 import test from 'ava';
-import uuid from 'uuid';
 import cloneDeep from 'lodash/cloneDeep';
 
 import middleware from '../lib/users/middleware';
@@ -39,7 +38,7 @@ test('URL checks id is uuid', t => {
   rq.params.id = 'foo';
 
   return middleware(rq, {}, next).then(err => {
-    t.is(err.message, 'User ID must be in UUID format', 'Should fail with message');
+    t.is(err.message, 'User ID must be a number.', 'Should fail with message');
     t.is(err.safe, '/users', 'Should have a safe url');
     t.is(err.status, 404, 'Should be a 404');
   });
@@ -58,7 +57,7 @@ test('URL without params returns true', t => {
 
 test('URL works with CMS as it is configured', t => {
   const rq2 = cloneDeep(req);
-  rq2.params.id = uuid.v4();
+  rq2.params.id = 1234;
 
   return middleware(rq2, {}, next).then(() => {
     t.pass();
