@@ -1,3 +1,4 @@
+'use strict';
 
 const moment = require('moment');
 const uuid = require('uuid');

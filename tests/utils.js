@@ -161,6 +161,9 @@ test('Request Format', t => {
   t.deepEqual(result, expected, 'A single object is retrieved from array based on key/value');
 });
 
+//////////////////////////////
+// Routes - Get Identifier
+//////////////////////////////
 test('Get identifier', t => {
   const rows = [
     {
@@ -196,7 +199,9 @@ test('Sad empty identifier value', t => {
   t.is(result[0].identifier, 'Revision: 1234', 'Should have title as identifier');
 });
 
-
+//////////////////////////////
+// References
+//////////////////////////////
 test('Reference array has values', t => {
   const expected = {
     cts: [

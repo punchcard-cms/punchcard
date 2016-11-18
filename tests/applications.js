@@ -7,6 +7,7 @@ import config from 'config';
 import _ from 'lodash';
 import isInt from 'validator/lib/isInt';
 
+import application from './fixtures/app';
 import applications from '../lib/applications';
 import init from '../lib/applications/init';
 import database from '../lib/database';
@@ -14,17 +15,7 @@ import merged from './fixtures/applications/objects/model-merged.js';
 import dbmocks from './fixtures/applications/objects/database-mocks.js';
 
 const EventEmitter = events.EventEmitter;
-
-/**
- * Next
- *
- * @param {object} value object send to next
- *
- * @returns {object} whatever the function received
- */
-const next = (value) => {
-  return value;
-};
+const next = application.next;
 
 
 /**
@@ -40,45 +31,15 @@ const body = {
 };
 
 /**
- * appget
- *
- * @param {string} find - value to search for
- *
- * @returns {varies} whatever the search gives back
- */
-const appget = (find) => {
-  // here to mimic application functions until this pr is complete: https://github.com/howardabrams/node-mocks-http/pull/107
-  return reqObj.app[find]; // eslint-disable-line no-use-before-define
-};
-
-/**
- * appset
- *
- * @param {string} find - value to search for
- * @param {varies} changed - new value to replace with
- */
-const appset = (find, changed) => {
-  // here to mimic application functions until this pr is complete: https://github.com/howardabrams/node-mocks-http/pull/107
-  reqObj.app[find] = changed; // eslint-disable-line no-use-before-define
-};
-
-/**
  * Express Request Object
  * @type {Object}
- *
- * eslint note: quote-props required because app.settings cannot call sub-objects
  */
-const reqObj = {
-  method: 'GET',
+const reqObj = application.request({
   url: '/application',
   app: {
-    'get': appget,
-    'set': appset,
     'applications-apps': dbmocks.rows,
     'applications-merged': merged,
   },
-  headers: {},
-  params: {},
   session: {
     form: {
       applications: {
@@ -87,7 +48,7 @@ const reqObj = {
       },
     },
   },
-};
+});
 
 /**
  * Request options
@@ -160,7 +121,7 @@ test('Applications structure object', t => {
   t.is(structure.description, 'Contains webhook applications', 'Structure has description');
   t.is(structure.id, 'applications', 'Structure has id');
   t.true(Array.isArray(structure.attributes), 'attributes is an array');
-  t.is(reqObj.app['applications-merged'], merged, 'merged model is part of request object fixture');
+  t.deepEqual(reqObj.app['applications-merged'], merged, 'merged model is part of request object fixture');
 });
 
 //////////////////////////////
@@ -191,7 +152,7 @@ test('Grab applications model-merged and all apps', t => {
     t.is(typeof result, 'object', 'Returns an object');
     t.is(typeof result.merged, 'object', 'Returns merged object');
     t.true(Array.isArray(result.apps), 'Returns applications in an array');
-    t.is(result.apps.length, 5, 'has five applications');
+    t.true(result.apps.length <= 5, 'has no more than five applications');
   });
 });
 
@@ -530,7 +491,7 @@ test.cb('Single application route - error on save', t => {
     t.is(response.statusCode, 200, 'Should be a 200 response');
 
     // form shows error
-    t.true(_.includes(data.form.html, 'class="required--save">Field is required to be saved!'), 'includes form with name value');
+    t.regex(data.form.html, /<p class="form--alert" role="alert" for="([0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12})">Field is required to be saved!<\/p>/g, 'includes form alert');
 
     t.end();
   });
