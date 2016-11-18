@@ -26,11 +26,26 @@
 
   &--add {
     @include button(setting-get('primary accent color'), setting-get('primary accent color'), setting-get('primary color'), setting-get('primary accent color'), setting-get('primary color'), setting-get('primary color'), setting-get('primary color'));
+
+    background-image: url('/images/add.svg');
+    background-position: setting-get('rhythm') 49%;
+    background-repeat: no-repeat;
+    background-size: 9px;
     margin-top: setting-get('rhythm') * 2;
+    padding-left: setting-get('rhythm') * 2;
   }
 
   &--delete {
-    @include button(color('neutral-white', 40), setting-get('primary color'), setting-get('primary color'), color('neutral-white', 40), setting-get('primary color'), setting-get('primary color'), setting-get('primary color'));
+    @include link(setting-get('primary color'), setting-get('primary color'), setting-get('secondary link color'), setting-get('secondary link color'));
+
+    background-color: transparent;
+    border: {
+      left: 0 none;
+      right: 0 none;
+      top: 0 none;
+    }
+    margin-top: setting-get('rhythm') / 2;
+    padding: 0;
   }
 
   &--repeatable {
