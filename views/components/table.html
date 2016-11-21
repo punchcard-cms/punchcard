@@ -1,25 +1,22 @@
-{% macro table(tableData) %}
-<article class="base--article" itemscope itemtype="http://schema.org/Table">
-  <header class="base--header">
-    <h1 class="base--h1" itemprop="name">{{tableData.name}}</h1>
-  </header>
-  <table class="base--table">
-    <thead class="base--thead">
-      <tr class="base--tr">
-        {% for header in tableData.data.headers %}
-        <th class="base--th">{{header}}</th>
-        {% endfor %}
-      </tr>
-    </thead>
-    <tbody class="base--tbody">
-        {% for row in tableData.data.row %}
-        <tr class="base--tr" itemprop="dataset" itemscope itemtype="https://schema.org/Dataset">
-          {% for rows in row.rows %}
-          <td data-th="{{header}}" class="base--td">{{rows}}</td>
-          {% endfor %}
-        </tr>
-        {% endfor %}
-    </tbody>
-  </table>
-</article>
+{% macro table(data) %}
+<table class="base--table" itemscope itemtype="https://schema.org/table">
+  <caption class="base--caption">{{data.name}}</caption>
+  <thead class="base--thead">
+    <tr class="base--tr">
+      {% for header in data.headers %}
+      <th class="base--th">{{header}}</th>
+      {% endfor %}
+    </tr>
+  </thead>
+  <tbody class="base--tbody">
+    {% for row in data.rows %}
+    <tr class="base--tr">
+      {% for header in data.headers %}
+      {% set r = row[loop.index0] %}
+      <td data-th="{{header}}" class="base--td">{% if r.url and r.title %}<a href="{{row.url}}" class="base--link">{{r.title}}</a>{% else %}{{r}}{% endif %}</td>
+      {% endfor %}
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
 {% endmacro %}
