@@ -84,85 +84,6 @@ test('Type exists in all types', t => {
 });
 
 //////////////////////////////
-// Utils - id check
-//////////////////////////////
-test('Check content id-not blank', t => {
-  const rq = cloneDeep(req);
-
-  return utils.id(rq).catch(err => {
-    t.is(typeof err, 'string', 'Blank id fails');
-    t.is(err, 'Content ID must be in UUID format', 'Should fail with a message');
-  });
-});
-
-test('Check content id-not empty string', t => {
-  const rq = cloneDeep(req);
-  rq.params.id = '';
-
-  return utils.id(rq).catch(err => {
-    t.is(typeof err, 'string', 'Non-uuid id fails');
-    t.is(err, 'Content ID must be in UUID format', 'Should fail with a message');
-  });
-});
-
-test('Check content id-not object', t => {
-  const rq = cloneDeep(req);
-  rq.params.id = {};
-
-  return utils.id(rq).catch(err => {
-    t.is(typeof err, 'string', 'Non-uuid id fails');
-    t.is(err, 'Content ID must be in UUID format', 'Should fail with a message');
-  });
-});
-
-test('Check content id-not string', t => {
-  const rq = cloneDeep(req);
-  rq.params.id = 'foo';
-
-  return utils.id(rq).catch(err => {
-    t.is(typeof err, 'string', 'Non-uuid id fails');
-    t.is(err, 'Content ID must be in UUID format', 'Should fail with a message');
-  });
-});
-
-test('Check content id-not just a number', t => {
-  const rq = cloneDeep(req);
-  rq.params.id = 123;
-
-  return utils.id(rq).catch(err => {
-    t.is(typeof err, 'string', 'Non-uuid id fails');
-    t.is(err, 'Content ID must be in UUID format', 'Should fail with a message');
-  });
-});
-
-test('Check content id - no id param', t => {
-  const rq = cloneDeep(req);
-  delete rq.params.id;
-
-  return utils.id(rq).then(result => {
-    t.true(result, 'No id returns true');
-  });
-});
-
-test('Check content id - IS action', t => {
-  const rq = cloneDeep(req);
-  rq.params.id = 'add';
-
-  return utils.id(rq).then(result => {
-    t.true(result, 'Action id returns true');
-  });
-});
-
-test('Check content id - IS uuid', t => {
-  const rq = cloneDeep(req);
-  rq.params.id = uuid.v4();
-
-  return utils.id(rq).then(result => {
-    t.true(result, 'Good id returns true');
-  });
-});
-
-//////////////////////////////
 // Utils - revision check
 //////////////////////////////
 test('Check revision id-not blank', t => {
@@ -216,6 +137,25 @@ test('Check revision  - good', t => {
 //////////////////////////////
 // Utils - URL check
 //////////////////////////////
+test('URL without params', t => {
+  return middleware({}, {}, next).then(() => {
+    t.pass();
+  }).catch(() => {
+    t.fail();
+  });
+});
+
+test('URL checks id, moves on when missing', t => {
+  const rq = cloneDeep(req);
+  delete rq.params.id;
+
+  return middleware(rq, {}, next).then(() => {
+    t.pass();
+  }).catch(() => {
+    t.fail();
+  });
+});
+
 test('URL checks type exists in CMS', t => {
   const rq = cloneDeep(req);
   rq.params.type = 'foo';

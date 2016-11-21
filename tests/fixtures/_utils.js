@@ -1,3 +1,5 @@
+'use strict';
+
 const uuid = require('uuid');
 const cloneDeep = require('lodash/cloneDeep');
 const ipsum = require('lorem-ipsum');
@@ -219,6 +221,9 @@ const values = ctype => {
 const formatted = (t, content, query) => {
   const qry = cloneDeep(query) || {};
   let typeslug;
+  if (!qry.hasOwnProperty('depth')) {
+    qry.depth = 0;
+  }
 
   t.true(content.hasOwnProperty('id'), 'Contains ID');
   t.true(content.hasOwnProperty('type'), 'Contains Type');
@@ -238,7 +243,7 @@ const formatted = (t, content, query) => {
   t.true(content.hasOwnProperty('key_slug'), 'Contains Key Slug');
 
   // if follow, then should have attributes
-  if (qry.follow) {
+  if (qry.follow && qry.depth >= 0) {
     t.true(content.hasOwnProperty('attributes'), 'Contains attributes');
 
     // if we still have depth, keep digging down
@@ -271,11 +276,7 @@ const depths = (t, attrs, query) => {
     qry.depth--;
   }
   else {
-    qry.depth = 0;
-  }
-
-  if (qry.depth <= 0) {
-    qry.follow = false;
+    qry.depth = -1;
   }
 
   Object.keys(attrs).forEach(attr => {
@@ -285,20 +286,27 @@ const depths = (t, attrs, query) => {
       if (Array.isArray(attrs[attr])) {
         // gets each entry
         attrs[attr].forEach(entry => {
-          // gets the id of each input
-          Object.keys(entry).forEach(id => {
+          // no id makes this a multi-input
+          if (entry && !entry.hasOwnProperty('id')) {
+            // gets the id of each input
+            Object.keys(entry).forEach(id => {
+              // check formatting
+              formatted(t, entry[id], qry);
+
+              return;
+            });
+          }
+          else {
             // check formatting
-            formatted(t, entry[id], qry);
+            formatted(t, entry, qry);
 
             return;
-          });
-
-          return;
+          }
         });
       }
       else {
         // no id makes this a multi-input
-        if (!attrs[attr].hasOwnProperty('id')) {
+        if (attrs[attr] && !attrs[attr].hasOwnProperty('id')) {
           // gets the id of each input
           Object.keys(attrs[attr]).forEach(id => {
             // check formatting
