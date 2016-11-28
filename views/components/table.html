@@ -1,6 +1,6 @@
-{% macro table(data) %}
-<table class="base--table" itemscope itemtype="https://schema.org/table">
-  <caption class="base--caption">{{data.name}}</caption>
+{% macro table(tableData) %}
+<table class="base--table">
+  <caption class="base--h1">{{data.name}}</caption>
   <thead class="base--thead">
     <tr class="base--tr">
       {% for header in data.headers %}
@@ -9,11 +9,11 @@
     </tr>
   </thead>
   <tbody class="base--tbody">
-    {% for row in data.rows %}
-    <tr class="base--tr">
+    {% for row in data.body %}
+    <tr class="base--tr" itemprop="dataset" itemscope itemtype="https://schema.org/Dataset">
       {% for header in data.headers %}
-      {% set r = row[loop.index0] %}
-      <td data-th="{{header}}" class="base--td">{% if r.url and r.title %}<a href="{{row.url}}" class="base--link">{{r.title}}</a>{% else %}{{r}}{% endif %}</td>
+      {% set row = rows[loop.index0] %}
+      <td data-th="{{header}}" class="base--td">{% if row.url and row.title %}<a href="{{row.url}}">{{row.title}}</a>{% else %}{{row}}{% endif %}</td>
       {% endfor %}
     </tr>
     {% endfor %}
