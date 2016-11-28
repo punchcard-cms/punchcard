@@ -15,7 +15,7 @@ test.cb.before(t => {
 
 test.cb('CMS Landing Page', t => {
   agent
-    .get('/login')
+    .get('/create-admin')
     .expect(200)
     .end((err, res) => {
       t.is(err, null, 'Should not have an error');

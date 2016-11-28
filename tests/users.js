@@ -32,7 +32,8 @@ const body = {
 const reqObj = application.request({
   url: '/users',
   app: {
-    'users-model': merged,
+    'users-model': merged.users,
+    'users-create-model': merged.create(),
   },
   session: {
     form: {
@@ -76,10 +77,10 @@ test.cb.after.always(t => {
 //////////////////////////////
 test('Users functions', t => {
   t.is(typeof userRoutes, 'function', 'Submodule `routes` exists and is a function');
-
   t.is(typeof users, 'object', 'main Users object');
   t.is(typeof users.model, 'function', 'Submodule `model`, is the primary for `users`, and is a function');
   t.is(typeof users.model.structure, 'object', '`structure` exists and is an object');
+  t.is(typeof users.model.create, 'function', '`create` exists and is a function');
   t.true(Array.isArray(users.model.roles), '`roles` exists and is an array');
 });
 
@@ -136,9 +137,24 @@ test('Users merged with correct param', t => {
 });
 
 //////////////////////////////
+// Users merged data model (create new user)
+//////////////////////////////
+test('Create users model merged with correct param', t => {
+  return users.model.create()
+    .then(result => {
+      t.is(result[0].name, 'Create New User', 'Get users content type name');
+      t.is(result[0].description, 'Create a new user', 'Get users content type desc');
+      t.is(result[0].id, 'users-create', 'Get users content type id');
+      t.is(result[0].attributes[1].name, 'Password', 'Password attribute name');
+      t.is(result[0].attributes[1].id, 'password', 'Password attribute id');
+      t.is(result[0].attributes[1].required, 'save', 'Password is required to save');
+    });
+});
+
+//////////////////////////////
 // Routes - Users landing
 //////////////////////////////
-test.cb('All Users route', t => {
+test.cb.serial('All Users route', t => {
   const request = httpMocks.createRequest(reqObj);
 
   const response = httpMocks.createResponse({ eventEmitter: EventEmitter });
@@ -187,7 +203,7 @@ test.cb('New user route', t => {
 //////////////////////////////
 // Routes - Single user
 //////////////////////////////
-test.cb('Single user route', t => {
+test.cb.serial('Single user route', t => {
   const req = _.cloneDeep(reqObj);
   req.url = '/users/1';
   req.params.id = 1;
@@ -218,7 +234,7 @@ test.cb('Single user route', t => {
   });
 });
 
-test.cb('Single user route - bad id', t => {
+test.cb.serial('Single user route - bad id', t => {
   const req = _.cloneDeep(reqObj);
   req.url = '/users/1000';
   req.params.id = 1000;
@@ -239,7 +255,7 @@ test.cb('Single user route - bad id', t => {
   response.render();
 });
 
-test.cb('Single user route - error on save', t => {
+test.cb.serial('Single user route - error on save', t => {
   const req = _.cloneDeep(reqObj);
   req.url = '/users/3';
   req.params.id = 3;
@@ -274,7 +290,7 @@ test.cb('Single user route - error on save', t => {
 //////////////////////////////
 // Routes - Save user
 //////////////////////////////
-test.cb('Save new user: name required', t => {
+test.cb.serial('Save new user: name required', t => {
   const req = _.cloneDeep(reqObj);
   req.method = 'POST';
   req.session.referrer = '/users/add';
@@ -295,7 +311,7 @@ test.cb('Save new user: name required', t => {
   response.render();
 });
 
-test.cb('Save existing user: name required', t => {
+test.cb.serial('Save existing user: name required', t => {
   const req = _.cloneDeep(reqObj);
   req.method = 'POST';
   req.session.referrer = '/users/123';
@@ -316,7 +332,7 @@ test.cb('Save existing user: name required', t => {
   response.render();
 });
 
-test.cb('Delete existing user', t => {
+test.cb.serial('Delete existing user', t => {
   const req = _.cloneDeep(reqObj);
   req.method = 'POST';
   req.session.referrer = '/users/4';
@@ -336,7 +352,7 @@ test.cb('Delete existing user', t => {
   });
 });
 
-test.cb('Update existing user', t => {
+test.cb.serial('Update existing user', t => {
   const req = _.cloneDeep(reqObj);
   req.method = 'POST';
   req.session.referrer = '/users/2';
@@ -356,7 +372,7 @@ test.cb('Update existing user', t => {
   });
 });
 
-test.cb('Save new user', t => {
+test.cb.serial('Save new user', t => {
   const req = _.cloneDeep(reqObj);
   req.method = 'POST';
   req.session.referrer = '/users/add';
@@ -372,5 +388,47 @@ test.cb('Save new user', t => {
   response.on('end', () => {
     t.is(response._getRedirectUrl(), '/users');
     t.end();
+  });
+});
+
+//////////////////////////////
+// Routes - Create Superuser
+//////////////////////////////
+test.cb.serial('Superuser: redirect', t => {
+  const req = _.cloneDeep(reqObj);
+  req.url = '/create-admin';
+
+  const request = httpMocks.createRequest(req);
+
+  const response = httpMocks.createResponse({ eventEmitter: EventEmitter });
+  users.routes.setup(request, response, next);
+  response.render();
+
+  response.on('end', () => {
+    t.is(response.statusCode, 302, 'Should be a 302 response');
+    t.is(response._getRedirectUrl(), '/');
+    t.end();
+  });
+});
+
+test.cb.serial('Superuser: show form', t => {
+  // we need to delete users now to see the create form
+  database('users').select('*').del().then(() => {
+    const req = _.cloneDeep(reqObj);
+    req.url = '/create-admin';
+
+    const request = httpMocks.createRequest(req);
+
+    const response = httpMocks.createResponse({ eventEmitter: EventEmitter });
+    users.routes.setup(request, response, next);
+    response.render();
+
+    response.on('end', () => {
+      const data = response._getRenderData();
+
+      t.is(response.statusCode, 200, 'Should be a 200 response');
+      t.true(_.includes(data.title.toString(), 'Create an admin account for your new CMS'), 'title for new admin account');
+      t.end();
+    });
   });
 });
