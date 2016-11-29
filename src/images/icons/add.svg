@@ -1,4 +1,3 @@
-<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 9.5 9.5">
-  <title>add</title>
-  <polygon points="9.5 3.875 5.625 3.875 5.625 0 3.875 0 3.875 3.875 0 3.875 0 5.625 3.875 5.625 3.875 9.5 5.625 9.5 5.625 5.625 9.5 5.625 9.5 3.875" fill="#003c32"/>
+<svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 9.5 9.5">
+  <polygon class="icon--plus" fill="#003c32" points="9.5 3.875 5.625 3.875 5.625 0 3.875 0 3.875 3.875 0 3.875 0 5.625 3.875 5.625 3.875 9.5 5.625 9.5 5.625 5.625 9.5 5.625 9.5 3.875"/>
 </svg>
