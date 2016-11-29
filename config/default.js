@@ -124,6 +124,10 @@ module.exports = {
       save: 'save',
       update: 'update',
     },
+    setup: {
+      title: 'Create an admin account for your new CMS',
+      button: 'Create Admin Account',
+    },
     messages: {
       missing: {
         id: 'A user with the id \'%id\' was not found',

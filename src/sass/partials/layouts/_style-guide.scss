@@ -1,0 +1,12 @@
+._style-guide {
+  @include wrapper;
+
+  &--title {
+    @include h2;
+    border-bottom: 2px solid color('grey', 20);
+  }
+
+  &--group {
+    margin-bottom: setting-get('rhythm times four');
+  }
+}
