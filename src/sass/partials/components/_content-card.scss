@@ -1,0 +1,41 @@
+.card {
+  border: setting-get('input border width') solid setting-get('secondary color');
+  display: flex;
+  flex-direction: column;
+  margin-top: (setting-get('rhythm') / .5);
+  padding: setting-get('rhythm') / .75;
+
+  &--link {
+    @include link(setting-get('active link color'), setting-get('active link color'), setting-get('secondary link color'), setting-get('secondary link color'));
+  }
+
+  &--name {
+    @include h2;
+    color: setting-get('secondary link color');
+    margin-top: setting-get('rhythm');
+  }
+
+  &--actions {
+    margin-top: setting-get('rhythm') / .5;
+    width: 100%;
+    @include breakpoint(setting-get('responsive form')) {
+      flex-grow: 1;
+      order: 2;
+    }
+  }
+
+  &--button {
+    @include button(setting-get('primary accent color'), setting-get('primary accent color'), setting-get('primary color'), setting-get('primary accent color'), setting-get('primary color'), setting-get('primary color'), setting-get('primary color'));
+  }
+
+  &--add {
+    @include button(setting-get('primary accent color'), setting-get('primary accent color'), setting-get('primary color'), setting-get('primary accent color'), setting-get('primary color'), setting-get('primary color'), setting-get('primary color'));
+
+    background-image: url('/images/icons/add.svg');
+    background-position: setting-get('rhythm') 50%;
+    background-repeat: no-repeat;
+    background-size: .7em;
+    margin-top: setting-get('rhythm') * 2;
+    padding-left: setting-get('rhythm') * 2;
+  }
+}

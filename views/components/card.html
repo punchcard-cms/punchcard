@@ -1,0 +1,12 @@
+{% macro card(type) %}
+<article class="card" itemscope itemtype="http://schema.org/Product">
+  <h2 class="card--name" itemprop="name">{{type.name}}</h2>
+  <p class="card--description" itemprop="description">{{type.description}}</p>
+
+  <div class="card--actions">
+    {% for button in type.buttons %}
+    <a href="{{button.url}}" {% if button.title == 'Add' %}class="card--add"{% else %}class="card--button"{% endif %}>{{button.title}}</a>
+    {% endfor %}
+  </div>
+</article>
+{% endmacro %}

@@ -1,0 +1,35 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  margin: 2rem 0 0;
+  width: 100%;
+
+
+  @include breakpoint(setting-get('two grid cards')) {
+    margin-right: 4%;
+    width: 48%;
+
+    &:nth-child(2n) {
+      margin-right: 0;
+    }
+  }
+
+  @include breakpoint(setting-get('fixed container')) {
+    margin-right: 4%;
+    width: 22%;
+
+    &:nth-child(2n) {
+      margin-right: 4%;
+    }
+
+    &:nth-child(4n) {
+      margin-right: 0;
+    }
+  }
+
+  &--group {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: setting-get('rhythm times four');
+  }
+}
