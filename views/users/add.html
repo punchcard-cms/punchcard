@@ -5,12 +5,16 @@
 {% endblock %}
 
 {% block header %}
-  {{ super() }}
+  {% if setup %}
+    {% include "_header-not-auth.html" %}
+  {% else %}
+    {{ super() }}
+  {% endif %}
 {% endblock %}
 
 {% block main %}
   <div class="introduction">
-    <h1 class="introduction--h1">{{config.actions.add|capitalize}}</h1>
+    <h1 class="introduction--h1">{{title}}</h1>
     <p class="introduction--p">{{structure.description}}</p>
   </div>
   {% include "_basic-form.html" %}

@@ -38,6 +38,24 @@ Run the following to run both the database and get the server running:
 $ npm run dev
 ```
 
+## debug mode
+
+Uses node's [built in inspector](https://medium.com/@paul_irish/debugging-node-js-nightlies-with-chrome-devtools-7c4a1b95ae27#.vgad4zqg9). This works in **chrome only**.
+
+```bash
+$ npm run dev:database
+```
+
+then in a separate window:
+
+```bash
+$ npm run debug
+```
+
+There will be instructions and a link to paste into chrome shown in the terminal after this `debug` command is run.
+
+
+
 ## Setting up PostgreSQL locally
 
 1. Make sure you have homebrew installed: `/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"`
