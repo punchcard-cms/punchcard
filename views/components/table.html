@@ -15,7 +15,13 @@
     <tr class="base--tr">
       {% for header in data.headers %}
       {% set row = rows[loop.index0] %}
-      <td data-th="{{header}}" class="base--td">{% if row.url and row.title %}<a href="{{row.url}}" class="base--link">{{row.title}}</a>{% else %}{{row}}{% endif %}</td>
+      <td data-th="{{header}}" class="base--td">
+        {% if row.actions %}
+        {% for action in row.actions %}
+        <a href="{{action.url}}" class="base--link">{{action.title}}</a>{% endfor %}
+        {% else %}{{row}}
+        {% endif %}
+      </td>
       {% endfor %}
     </tr>
     {% endfor %}
