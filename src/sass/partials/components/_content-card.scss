@@ -27,15 +27,4 @@
   &--button {
     @include button(setting-get('primary accent color'), setting-get('primary accent color'), setting-get('primary color'), setting-get('primary accent color'), setting-get('primary color'), setting-get('primary color'), setting-get('primary color'));
   }
-
-  &--add {
-    @include button(setting-get('primary accent color'), setting-get('primary accent color'), setting-get('primary color'), setting-get('primary accent color'), setting-get('primary color'), setting-get('primary color'), setting-get('primary color'));
-
-    background-image: url('/images/icons/add.svg');
-    background-position: setting-get('rhythm') 50%;
-    background-repeat: no-repeat;
-    background-size: .7em;
-    margin-top: setting-get('rhythm') * 2;
-    padding-left: setting-get('rhythm') * 2;
-  }
 }

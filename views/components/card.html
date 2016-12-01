@@ -5,7 +5,7 @@
 
   <div class="card--actions">
     {% for button in type.buttons %}
-    <a href="{{button.url}}" {% if button.title == 'Add' %}class="card--add"{% else %}class="card--button"{% endif %}>{{button.title}}</a>
+    <a href="{{button.url}}" class="card--button">{{button.title}}</a>
     {% endfor %}
   </div>
 </article>
