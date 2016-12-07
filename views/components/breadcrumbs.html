@@ -1,9 +1,9 @@
 {% macro breadcrumbs(data) %}
 <nav itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation" aria-label="Sub Level Navigation" class="breadcrumb">
   <ul class="breadcrumb--list">
-    {% for items in data %}
-      <li class="breadcrumb--item" {% if items.active %} data-state="active" {% endif %}>
-        <a href="{{items.url}}" class="breadcrumb--link">{{items.title}}</a>
+    {% for item in data %}
+      <li class="breadcrumb--item" {% if item.active %} data-state="active" {% endif %}>
+        <a href="{{item.url}}" class="breadcrumb--link">{{item.title}}</a>
       </li>
     {% endfor %}
   </ul>
