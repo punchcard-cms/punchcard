@@ -1,10 +1,10 @@
-{% macro card(type) %}
+{% macro card(data) %}
 <article class="card" itemscope itemtype="http://schema.org/Product">
-  <h2 class="card--name" itemprop="name">{{type.name}}</h2>
-  <p class="card--description" itemprop="description">{{type.description}}</p>
+  <h2 class="card--name" itemprop="name">{{data.name}}</h2>
+  <p class="card--description" itemprop="description">{{data.description}}</p>
 
   <div class="card--actions">
-    {% for button in type.buttons %}
+    {% for button in data.buttons %}
     <a href="{{button.url}}" class="card--button">{{button.title}}</a>
     {% endfor %}
   </div>
