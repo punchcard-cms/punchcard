@@ -52,6 +52,7 @@
 }
 
 @mixin checkbox {
+  opacity: 0;
 
   + label {
     position: relative;
@@ -137,6 +138,7 @@
 }
 
 @mixin radio {
+  opacity: 0;
 
   + label {
     position: relative;
