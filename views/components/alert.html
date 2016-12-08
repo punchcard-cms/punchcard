@@ -1,5 +1,5 @@
 {% macro alert(data) %}
 {% for item in data %}
-<p class="form--alert" role="alert" for="{{item.for}}"><strong class="form--alert-type">{{item.type}} </strong>{{item.value}}</p>
+<p class="form--alert" role="alert" for="{{item.for}}">{{item.value}}</p>
 {% endfor %}
 {% endmacro %}
