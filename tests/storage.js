@@ -2,6 +2,7 @@ import test from 'ava';
 import del from 'del';
 import _ from 'lodash';
 import fs from 'fs';
+import path from 'path';
 import storage from '../lib/storage';
 import fixtures from './fixtures/files';
 
@@ -26,7 +27,7 @@ test('Storage - Default', t => {
       t.true(result.hasOwnProperty('relative'), 'Has a relative path');
       t.is(result.type, expected.type, 'Have the same type');
 
-      const output = fs.readFileSync(result.relative);
+      const output = fs.readFileSync(path.join(__dirname, 'public/files', result.relative));
       const original = fs.readFileSync(expected.path);
 
       t.is(output.toString(), original.toString(), 'Output and original are the same file');
