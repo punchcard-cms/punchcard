@@ -87,13 +87,13 @@
     "serve-favicon": "^2.3.0",
     "stream-from-array": "^1.0.0",
     "underscore.string": "^3.3.4",
-    "uuid": "^2.0.2",
+    "uuid": "^3.0.1",
     "validator": "^6.0.0",
     "vinyl": "^2.0.0",
     "vinyl-fs": "^2.4.4"
   },
   "devDependencies": {
-    "ava": "^0.16.0",
+    "ava": "^0.17.0",
     "coveralls": "^2.11.9",
     "del": "^2.2.2",
     "eslint-config-punchcard": "^1.1.1",
@@ -101,19 +101,19 @@
     "gulp": "^3.9.1",
     "input-plugin-file": "^1.1.0",
     "lorem-ipsum": "^1.0.3",
-    "mock-express-response": "^0.1.2",
+    "mock-express-response": "^0.2.0",
     "nock": "^9.0.0",
     "node-mocks-http": "^1.5.3",
-    "nyc": "^6.6.0",
+    "nyc": "^10.0.0",
     "punchcard-commit-msg": "^1.0.0",
     "punchcard-runner": "^2.1.2",
     "punchcard-semantic-release": "^2.0.1",
     "punchcard-shared-tests": "^1.0.2",
     "reparo": "^1.1.1-0",
-    "semantic-release": "^4.3.5",
+    "semantic-release": "^6.3.2",
     "supertest": "^2.0.1",
     "tap-difflet": "^0.7.0",
-    "uuid": "^2.0.2"
+    "uuid": "^3.0.1"
   },
   "engines": {
     "node": "^6"
