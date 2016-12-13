@@ -8,6 +8,10 @@
     @include link(setting-get('active link color'), setting-get('active link color'), setting-get('secondary link color'), setting-get('secondary link color'));
   }
 
+  &--link + &--link {
+    margin-left: setting-get('rhythm');
+  }
+
   &--h1 {
     @include h1;
   }
