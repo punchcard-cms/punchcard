@@ -1,0 +1,12 @@
+{% macro basicCard(data) %}
+<article class="_basic-card basic-card" itemscope itemtype="http://schema.org/Thing">
+  <h2 class="basic-card--name" itemprop="name">{{data.name}}</h2>
+  <p class="basic-card--description" itemprop="description">{{data.description}}</p>
+
+  <div class="basic-card--actions">
+    {% for button in data.buttons %}
+    <a href="{{button.url}}" class="basic-card--button">{{button.title}}</a>
+    {% endfor %}
+  </div>
+</article>
+{% endmacro %}

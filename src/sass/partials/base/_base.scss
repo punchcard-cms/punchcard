@@ -5,7 +5,7 @@
 
 .base {
   &--link {
-    @include link(setting-get('active link color'), setting-get('active link color'), setting-get('secondary link color'), setting-get('secondary link color'));
+    @include base--link;
   }
 
   &--h1 {
@@ -277,7 +277,7 @@
   }
 
   &--button {
-    @include button(setting-get('primary accent color'), setting-get('primary accent color'), setting-get('primary color'), setting-get('primary accent color'), setting-get('primary color'), setting-get('primary color'), setting-get('primary color'));
+    @include base--button;
   }
 }
 

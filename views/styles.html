@@ -341,14 +341,14 @@ p q r s t u v w x y z { | } ~ </pre>
   </section>
 
   <section class="_style-guide--group">
+    <h2 class="_style-guide--title">Single Content Type</h2>
+    {% from "components/basic-card.html" import basicCard %}
+    {{basicCard(cardData)}}
+  </section>
+
+  <section class="_style-guide--group">
     <h2 class="_style-guide--title">All Content Types</h2>
-    {% from "components/card.html" import card %}
-    <div class="card--group">
-    {{card(contentData)}}
-    {{card(contentData)}}
-    {{card(contentData)}}
-    {{card(contentData)}}
-    </div>
+    {% include "layouts/basic-card.html" %}
   </section>
 
   <section class="_style-guide--group">
