@@ -22,14 +22,12 @@ test('Storage - Default', t => {
         return inp.fieldName === file;
       });
 
-      t.true(result.hasOwnProperty('_uuid'), 'Has a UUID');
-      t.true(result.hasOwnProperty('_type'), 'Has a type');
-      t.true(result.hasOwnProperty('_rel'), 'Has a relative path');
+      t.true(result.hasOwnProperty('original'), 'Has original filename');
+      t.true(result.hasOwnProperty('type'), 'Has a type');
+      t.true(result.hasOwnProperty('relative'), 'Has a relative path');
       t.is(result.type, expected.type, 'Have the same type');
-      t.is(result.stat.size, expected.size, 'Same size files');
-      t.is(result.rel, path.basename(result.path), 'Relative URL is the same as basename of path');
 
-      const output = fs.readFileSync(result.path);
+      const output = fs.readFileSync(path.join(__dirname, 'public/files', result.relative));
       const original = fs.readFileSync(expected.path);
 
       t.is(output.toString(), original.toString(), 'Output and original are the same file');

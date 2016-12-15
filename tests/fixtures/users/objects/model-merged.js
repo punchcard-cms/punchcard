@@ -1,12 +1,13 @@
 'use strict';
 
+const _ = require('lodash');
 const validation = require('../../').validation;
 
 /**
  * Mock of `users` merged-content-type object
  * @type {Object}
  */
-module.exports = {
+const users = {
   name: 'Users',
   description: 'An individual user',
   id: 'users',
@@ -98,4 +99,20 @@ module.exports = {
       type: 'select',
     },
   ],
+};
+
+const create = () => {
+  const struct = {
+    name: 'Create New User',
+    description: 'Create a new user',
+    id: 'users-create',
+    identifier: 'email',
+  };
+
+  return _.merge({}, users, struct);
+};
+
+module.exports = {
+  users,
+  create,
 };
