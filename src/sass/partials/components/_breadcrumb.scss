@@ -1,0 +1,43 @@
+.breadcrumb {
+
+  &--list {
+    background-color: transparent;
+    display: flex;
+    margin-top: 0;
+    transition: .2s transform ease-out;
+    width: 100%;
+  }
+
+  &--item {
+    flex-direction: row;
+    margin: 1em .75em 0;
+    padding: 0;
+
+    &[data-state='active'] {
+
+      .breadcrumb--link {
+        border-bottom: 0;
+        color: setting-get('text color');
+      }
+    }
+
+    &:first-child {
+      margin-left: 0;
+    }
+  }
+
+  &--item + &--item {
+
+    &::before {
+      color: color('grey', 20);
+      content: '/';
+      display: inline-block;
+      left: -.55em;
+      position: relative;
+    }
+  }
+
+  &--link {
+    @include link(setting-get('active link color'), setting-get('active link color'), setting-get('secondary link color'), setting-get('secondary link color'));
+  }
+}
