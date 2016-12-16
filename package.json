@@ -107,10 +107,10 @@
     "nyc": "^10.0.0",
     "punchcard-commit-msg": "^1.0.0",
     "punchcard-runner": "^2.1.2",
-    "punchcard-semantic-release": "^2.0.1",
+    "punchcard-semantic-release": "^2.0.3",
     "punchcard-shared-tests": "^1.0.2",
     "reparo": "^1.1.1-0",
-    "semantic-release": "^4.3.5",
+    "semantic-release": "^6.3.2",
     "supertest": "^2.0.1",
     "tap-difflet": "^0.7.0",
     "uuid": "^2.0.2"
