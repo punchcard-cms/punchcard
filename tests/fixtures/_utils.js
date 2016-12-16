@@ -130,6 +130,32 @@ const type = name => {
         type: 'reference',
         repeatable: true,
       },
+      {
+        name: 'Filer',
+        inputs: {
+          filesingle: {
+            label: 'File single',
+            type: 'file',
+            id: uuid.v4(),
+            name: 'filer-single--file',
+          },
+        },
+        id: `${slugify(name)}-filer`,
+        type: 'file',
+      },
+      {
+        name: 'Filer Repeating',
+        inputs: {
+          filerepeater: {
+            label: 'File repeater',
+            type: 'file',
+            id: uuid.v4(),
+            name: 'filer-repeating--file',
+          },
+        },
+        id: `${slugify(name)}-filer`,
+        type: 'file',
+      },
     ],
   };
 };

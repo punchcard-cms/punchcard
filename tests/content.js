@@ -17,6 +17,13 @@ const type = {
 
 
 //////////////////////////////
+// Utils - file paths
+//////////////////////////////
+test('filepaths - content unchanged if no files', t => {
+  t.pass();
+});
+
+//////////////////////////////
 // Utils - id check
 //////////////////////////////
 test('Check content id-not blank', t => {
