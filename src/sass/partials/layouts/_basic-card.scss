@@ -1,6 +1,5 @@
 ._basic-card {
   margin-top: (setting-get('rhythm') / .5);
-  padding: setting-get('rhythm') / .5;
   width: 100%;
 
   @include breakpoint(setting-get('two grid cards')) {
@@ -9,12 +8,5 @@
 
   @include breakpoint(setting-get('fixed container')) {
     width: 22%;
-  }
-
-  &--group {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    margin-bottom: setting-get('rhythm times four');
   }
 }

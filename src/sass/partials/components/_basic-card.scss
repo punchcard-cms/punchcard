@@ -1,5 +1,6 @@
 .basic-card {
   border: setting-get('input border width') solid setting-get('secondary color');
+  padding: setting-get('rhythm') / .5;
 
   &--name {
     @include h2;

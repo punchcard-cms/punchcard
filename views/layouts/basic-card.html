@@ -1,7 +1,15 @@
 {% from "components/basic-card.html" import basicCard %}
-<div class="_basic-card--group">
-{{basicCard(cardData)}}
-{{basicCard(cardData)}}
-{{basicCard(cardData)}}
-{{basicCard(cardData)}}
+
+{% for item in data %}
+
+{% set data = {
+  name: data.attributes.name,
+  description: data.attributes.description,
+  button.url: data.attributes.button.url,
+  button.title: data.attributes.button.title,
+} %}
+
+<div class="_basic-card">
+{{basicCard(data)}}
 </div>
+{% endfor %}
