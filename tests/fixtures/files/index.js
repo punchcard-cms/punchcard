@@ -3,7 +3,6 @@
 const uuid = require('uuid');
 const _ = require('lodash');
 const path = require('path');
-const fs = require('fs');
 
 const all = [
   path.join(process.cwd(), '', 'storage.js'),
