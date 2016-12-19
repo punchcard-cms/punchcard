@@ -3,6 +3,8 @@ import del from 'del';
 import _ from 'lodash';
 import fs from 'fs';
 import path from 'path';
+import shared from 'punchcard-shared-tests';
+
 import storage from '../lib/storage';
 import fixtures from './fixtures/files';
 
@@ -11,7 +13,7 @@ test.after.always(() => {
 });
 
 test('Storage - Default', t => {
-  const input = fixtures.raw();
+  const input = shared.fixtures.files();
 
   return storage.put(input).then(files => {
     t.is(Object.keys(files).length, input.length, 'Same number of files came out as went in');
@@ -46,21 +48,21 @@ test('Storage - Get', t => {
 
   input.forEach(expected => {
     const result = results.find(r => {
-      return r.name === expected.name;
+      return r.original === expected.original;
     });
 
     if (result === false) {
       t.fail('No result for input item');
     }
 
-    t.true(result.hasOwnProperty('name'), 'Result has a name');
-    t.true(result.hasOwnProperty('path'), 'Result has a path');
+    t.true(result.hasOwnProperty('original'), 'Result has a name');
+    t.true(result.hasOwnProperty('relative'), 'Result has a path');
     t.true(result.hasOwnProperty('type'), 'Result has a type');
 
-    t.is(result.name, expected.name, 'Result name is same as expected name');
+    t.is(result.original, expected.original, 'Result name is same as expected name');
     t.is(result.type, expected.type, 'Result type is same as expected type');
 
-    t.true(result.path.indexOf(expected.path) >= 0, 'Result path contains expected path');
+    t.true(result.relative.indexOf(expected.relative) >= 0, 'Result path contains expected path');
   });
 
   t.pass();
