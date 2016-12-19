@@ -54,6 +54,12 @@ $LayoutSettings: (
 
 $GlobalSettings: map-merge($GlobalSettings, $LayoutSettings);
 
+$RhythmSettings: (
+  'double rhythm': setting-get('rhythm') * 2
+);
+
+$GlobalSettings: map-merge($GlobalSettings, $RhythmSettings);
+
 // Forms
 
 $FormSettings: (

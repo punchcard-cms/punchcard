@@ -1,6 +1,6 @@
 .basic-card {
   border: setting-get('input border width') solid setting-get('secondary color');
-  padding: setting-get('rhythm') / .5;
+  padding: setting-get('double rhythm');
 
   &--name {
     @include h2;
@@ -9,7 +9,7 @@
   }
 
   &--actions {
-    margin-top: setting-get('rhythm') / .5;
+    margin-top: setting-get('double rhythm');
     width: 100%;
     @include breakpoint(setting-get('responsive form')) {
       flex-grow: 1;
