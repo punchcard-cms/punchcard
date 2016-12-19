@@ -65,13 +65,13 @@ test('filepaths - convert file values to add absolute', t => {
   t.is(typeof result['fileinputs-file-single'], 'object', 'file-single input should be an object');
   t.is(typeof result['fileinputs-file-single'].filesingle, 'object', 'file-single input should contain an input object');
   t.is(typeof result['fileinputs-file-single'].filesingle.value, 'object', 'file-single input should contain an input value object');
-  t.is(typeof result['fileinputs-file-single'].filesingle.value.absolute, 'string', 'file-single input should contain an absolute string');
-  t.true(_.includes(result['fileinputs-file-single'].filesingle.value.absolute, config.storage.public), 'file-single input should contain the storage prefix');
+  t.is(typeof result['fileinputs-file-single'].filesingle.value.path, 'string', 'file-single input should contain an absolute string');
+  t.true(_.includes(result['fileinputs-file-single'].filesingle.value.path, config.storage.public), 'file-single input should contain the storage prefix');
 
   t.true(Array.isArray(result['fileinputs-file-repeating'].filerepeater), 'file-repeating input should be an array');
   result['fileinputs-file-repeating'].filerepeater.forEach(input => {
-    t.is(typeof input.value.absolute, 'string', 'filerepeater input should contain an absolute string');
-    t.true(_.includes(input.value.absolute, config.storage.public), 'filerepeater input should contain the storage prefix');
+    t.is(typeof input.value.path, 'string', 'filerepeater input should contain an absolute string');
+    t.true(_.includes(input.value.path, config.storage.public), 'filerepeater input should contain the storage prefix');
   });
 
   t.is(typeof result['fileinputs-file-multiple'], 'object', 'file-multiple input should be an object');
@@ -80,7 +80,7 @@ test('filepaths - convert file values to add absolute', t => {
   t.is(Object.keys(multis).length, 2, 'should contain two inputs');
   Object.keys(multis).forEach(input => {
     t.is(typeof multis[input].value, 'object', 'file-multiple input should contain an input value object');
-    t.is(typeof multis[input].value.absolute, 'string', 'file-multiple input should contain an absolute string');
-    t.true(_.includes(multis[input].value.absolute, config.storage.public), 'file-multiple input should contain the storage prefix');
+    t.is(typeof multis[input].value.path, 'string', 'file-multiple input should contain an absolute string');
+    t.true(_.includes(multis[input].value.path, config.storage.public), 'file-multiple input should contain the storage prefix');
   });
 });

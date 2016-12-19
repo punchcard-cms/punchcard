@@ -42,14 +42,9 @@ test('Storage - Default', t => {
 
 test('Storage - Get', t => {
   const input = fixtures.saved();
-  const results = storage.get(_.cloneDeep(input));
-
-  t.true(input.length === results.length, 'Equal number of inputs and results');
 
   input.forEach(expected => {
-    const result = results.find(r => {
-      return r.original === expected.original;
-    });
+    const result = storage.get(_.cloneDeep(expected));
 
     if (result === false) {
       t.fail('No result for input item');
