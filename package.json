@@ -97,7 +97,7 @@
     "coveralls": "^2.11.9",
     "del": "^2.2.2",
     "eslint-config-punchcard": "^1.1.1",
-    "ghooks": "^1.2.4",
+    "ghooks": "^2.0.0",
     "gulp": "^3.9.1",
     "input-plugin-file": "^1.1.0",
     "lorem-ipsum": "^1.0.3",
