@@ -44,7 +44,7 @@ test.serial('Utils: attributes - empty query', t => {
 
   return attributes.then(result => {
     t.is(typeof result, 'object', 'Should contain result, an object.');
-    t.is(Object.keys(result).length, 9, 'Should contain six main objects.');
+    t.is(Object.keys(result).length, 9, 'Should contain all attributes.');
 
     // depths checks each attribute
     utils.depths(t, result, query);
@@ -205,7 +205,7 @@ test.serial('Utils: attributes - no references', t => {
 
   return attributes.then(result => {
     t.is(typeof result, 'object', 'Should contain result, an object.');
-    t.is(Object.keys(result).length, 5, 'Should contain two main objects.');
+    t.is(Object.keys(result).length, 5, 'Should contain all non-reference attributes.');
   })
   .catch(e => {
     console.error(e.stack); // eslint-disable-line no-console

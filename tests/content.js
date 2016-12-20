@@ -20,7 +20,7 @@ test('fileinputs - get file inputs', t => {
   const result = utils.fileinputs(type.attributes);
 
   t.true(Array.isArray(result), 'should return an array');
-  t.is(result.length, 4, 'should have two items in array');
+  t.is(result.length, 4, 'should have all file inputs');
 
   t.is(typeof result[0], 'object', 'file input desc should be an object');
   t.is(result[0].attr, 'fileinputs-file-single', 'should know 1st attribute\'s id');
