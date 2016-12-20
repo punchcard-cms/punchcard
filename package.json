@@ -52,7 +52,7 @@
     "connect-ensure-login": "^0.1.1",
     "connect-multiparty": "^2.0.0",
     "connect-session-knex": "^1.0.23",
-    "debug": "^2.2.0",
+    "debug": "^2.3.0",
     "express": "^4.14.0",
     "express-session": "^1.13.0",
     "ibm-design-colors": "^1.8.0",
