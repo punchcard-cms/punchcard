@@ -81,9 +81,13 @@ test('filepaths - convert file values to add absolute', t => {
   t.is(typeof result['fileinputs-file-single'].filesingle, 'object', 'file-single input should contain an input object');
   valcheck(t, result['fileinputs-file-single'].filesingle.value);
 
-  t.true(Array.isArray(result['fileinputs-file-repeating'].filerepeater), 'file-repeating input should be an array');
-  result['fileinputs-file-repeating'].filerepeater.forEach(input => {
-    valcheck(t, input.value);
+  t.true(Array.isArray(result['fileinputs-file-repeating']), 'file-repeating should be an array');
+  result['fileinputs-file-repeating'].forEach(input => {
+    Object.keys(input).forEach(key => {
+      if (input[key].hasOwnProperty('value')) {
+        valcheck(t, input[key].value);
+      }
+    });
   });
 
   t.is(typeof result['fileinputs-file-multiple'], 'object', 'file-multiple input should be an object');
