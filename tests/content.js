@@ -5,6 +5,21 @@ import _ from 'lodash';
 import utils from '../lib/content/utils';
 import futils from './fixtures/_utils';
 
+/**
+ * Checks a file's value as it is saved in the db
+ *
+ * @param  {object} t - ava test
+ * @param  {object} value - a file input's value as it would be saved in the db
+ */
+const valcheck = (t, value) => {
+  t.is(typeof value, 'object', 'database file value should be an object');
+  t.is(typeof value.path, 'string', 'database value should contain a path string');
+  t.true(_.includes(value.path, config.storage.public), 'database value should contain the storage prefix');
+  t.is(typeof value.type, 'string', 'database value should contain a type string');
+  t.is(typeof value.original, 'string', 'database value should contain an original filename string');
+  t.is(typeof value.relative, 'string', 'database value should contain a relative path as a string');
+};
+
 //////////////////////////////
 // Utils - file inputs
 //////////////////////////////
@@ -64,14 +79,11 @@ test('filepaths - convert file values to add absolute', t => {
 
   t.is(typeof result['fileinputs-file-single'], 'object', 'file-single input should be an object');
   t.is(typeof result['fileinputs-file-single'].filesingle, 'object', 'file-single input should contain an input object');
-  t.is(typeof result['fileinputs-file-single'].filesingle.value, 'object', 'file-single input should contain an input value object');
-  t.is(typeof result['fileinputs-file-single'].filesingle.value.path, 'string', 'file-single input should contain an absolute string');
-  t.true(_.includes(result['fileinputs-file-single'].filesingle.value.path, config.storage.public), 'file-single input should contain the storage prefix');
+  valcheck(t, result['fileinputs-file-single'].filesingle.value);
 
   t.true(Array.isArray(result['fileinputs-file-repeating'].filerepeater), 'file-repeating input should be an array');
   result['fileinputs-file-repeating'].filerepeater.forEach(input => {
-    t.is(typeof input.value.path, 'string', 'filerepeater input should contain an absolute string');
-    t.true(_.includes(input.value.path, config.storage.public), 'filerepeater input should contain the storage prefix');
+    valcheck(t, input.value);
   });
 
   t.is(typeof result['fileinputs-file-multiple'], 'object', 'file-multiple input should be an object');
@@ -79,8 +91,6 @@ test('filepaths - convert file values to add absolute', t => {
 
   t.is(Object.keys(multis).length, 2, 'should contain two inputs');
   Object.keys(multis).forEach(input => {
-    t.is(typeof multis[input].value, 'object', 'file-multiple input should contain an input value object');
-    t.is(typeof multis[input].value.path, 'string', 'file-multiple input should contain an absolute string');
-    t.true(_.includes(multis[input].value.path, config.storage.public), 'file-multiple input should contain the storage prefix');
+    valcheck(t, multis[input].value);
   });
 });
