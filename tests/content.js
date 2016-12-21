@@ -98,3 +98,23 @@ test('filepaths - convert file values to add absolute', t => {
     valcheck(t, multis[input].value);
   });
 });
+
+
+//////////////////////////////
+// Utils - file hold
+//////////////////////////////
+test('filehold - returns second param unchanged if first param empty or not array, 3rd param not an object', t => {
+  const result = utils.filehold('', 'foo');
+  t.is(result, 'foo', 'should return 2nd param');
+
+  const result2 = utils.filehold('bar', 'foo');
+  t.is(result2, 'foo', 'should return 2nd param');
+
+  const result3 = utils.filehold([], 'foo', 'bar');
+  t.is(result3, 'foo', 'should return 2nd param');
+});
+
+test('filehold - returns value with files added', t => {
+  const type = futils.type('fileholds');
+  t.pass('coming soon!');
+})
