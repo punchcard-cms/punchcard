@@ -74,6 +74,7 @@
     "moment": "^2.15.0",
     "moment-timezone": "^0.5.4",
     "morgan": "^1.6.1",
+    "multer": "^1.2.1",
     "multiparty": "^4.1.2",
     "node-dir": "^0.1.11",
     "node-schedule": "^1.1.1",
@@ -131,7 +132,8 @@
   },
   "ava": {
     "files": [
-      "tests/*.js",
+      "tests/storage.js",
+      "tests/content.js",
       "!tests/schedule.js"
     ],
     "failFast": false,
