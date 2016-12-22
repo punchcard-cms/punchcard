@@ -115,6 +115,5 @@ test('filehold - returns second param unchanged if first param empty or not arra
 });
 
 test('filehold - returns value with files added', t => {
-  const type = futils.type('fileholds');
   t.pass('coming soon!');
-})
+});

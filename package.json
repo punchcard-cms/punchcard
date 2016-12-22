@@ -132,8 +132,7 @@
   },
   "ava": {
     "files": [
-      "tests/storage.js",
-      "tests/content.js",
+      "tests/*.js",
       "!tests/schedule.js"
     ],
     "failFast": false,
