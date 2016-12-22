@@ -260,16 +260,18 @@ const values = ctype => {
       value: files.saved()[0],
     },
   };
-  results[`${slugify(ctype)}-file-repeating`] = {
-    filerepeater: [
-      {
+  results[`${slugify(ctype)}-file-repeating`] = [
+    {
+      filerepeater: {
         value: files.saved()[0],
       },
-      {
+    },
+    {
+      filerepeater: {
         value: files.saved()[0],
       },
-    ],
-  };
+    },
+  ];
   results[`${slugify(ctype)}-file-multiple`] = {
     filemulti1: {
       value: files.saved()[0],

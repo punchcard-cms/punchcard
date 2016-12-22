@@ -153,6 +153,9 @@ module.exports = {
     dest: 'public/files',
     settings: {},
     public: '/files', // Can include {{dest}} for the dest path
-    temp: 'public/tmp/',
+    temp: {
+      dest: 'public/tmp/',
+      public: '/tmp',
+    },
   },
 };
