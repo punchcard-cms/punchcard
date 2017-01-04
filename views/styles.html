@@ -341,6 +341,12 @@ p q r s t u v w x y z { | } ~ </pre>
   </section>
 
   <section class="_style-guide--group">
+    <h2 class="_style-guide--title">Single Content Type</h2>
+    {% from "components/basic-card.html" import basicCard %}
+    {{basicCard(cardData)}}
+  </section>
+
+  <section class="_style-guide--group">
     <h2 class="_style-guide--title">Breadcrumb</h2>
     {% from "components/breadcrumb.html" import breadcrumb %}
     {{breadcrumb(breadcrumbData)}}

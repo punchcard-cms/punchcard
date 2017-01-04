@@ -29,6 +29,10 @@
   }
 }
 
+@mixin base--button {
+  @include button(setting-get('primary accent color'), setting-get('primary accent color'), setting-get('primary color'), setting-get('primary accent color'), setting-get('primary color'), setting-get('primary color'), setting-get('primary color'));
+}
+
 @mixin dl {
   display: block;
 }
@@ -135,6 +139,10 @@
     color: $color-hover;
     transition: setting-get('fade');
   }
+}
+
+@mixin base--link {
+  @include link(setting-get('active link color'), setting-get('active link color'), setting-get('secondary link color'), setting-get('secondary link color'));
 }
 
 @mixin radio {
