@@ -5,6 +5,8 @@ const cloneDeep = require('lodash/cloneDeep');
 const ipsum = require('lorem-ipsum');
 const slugify = require('underscore.string/slugify');
 
+const files = require('./files');
+
 const type = name => {
   return {
     name,
@@ -130,6 +132,52 @@ const type = name => {
         type: 'reference',
         repeatable: true,
       },
+      {
+        name: 'File Single',
+        inputs: {
+          filesingle: {
+            label: 'File single',
+            type: 'file',
+            id: uuid.v4(),
+            name: 'file-single--filesingle',
+          },
+        },
+        id: `${slugify(name)}-file-single`,
+        type: 'file',
+      },
+      {
+        name: 'File Repeating',
+        inputs: {
+          filerepeater: {
+            label: 'File repeater',
+            type: 'file',
+            id: uuid.v4(),
+            name: 'file-repeating--filerepeater',
+          },
+        },
+        id: `${slugify(name)}-file-repeating`,
+        type: 'file',
+        repeatable: true,
+      },
+      {
+        name: 'File multiple',
+        inputs: {
+          filemulti1: {
+            label: 'File Multi 1',
+            type: 'file',
+            id: uuid.v4(),
+            name: 'file-multiple--filemulti1',
+          },
+          filemulti2: {
+            label: 'File Multi 2',
+            type: 'file',
+            id: uuid.v4(),
+            name: 'file-multiple--filemulti2',
+          },
+        },
+        id: `${slugify(name)}-file-multiple`,
+        type: 'file',
+      },
     ],
   };
 };
@@ -207,6 +255,31 @@ const values = ctype => {
       },
     },
   ];
+  results[`${slugify(ctype)}-file-single`] = {
+    filesingle: {
+      value: files.saved()[0],
+    },
+  };
+  results[`${slugify(ctype)}-file-repeating`] = [
+    {
+      filerepeater: {
+        value: files.saved()[0],
+      },
+    },
+    {
+      filerepeater: {
+        value: files.saved()[0],
+      },
+    },
+  ];
+  results[`${slugify(ctype)}-file-multiple`] = {
+    filemulti1: {
+      value: files.saved()[0],
+    },
+    filemulti2: {
+      value: files.saved()[0],
+    },
+  };
 
   return results;
 };
