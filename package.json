@@ -1,6 +1,7 @@
 {
   "name": "punchcard-cms",
   "description": "Node-based content management system",
+  "version": "0.0.0",
   "main": "index.js",
   "keywords": [
     "punchcard-cms",
