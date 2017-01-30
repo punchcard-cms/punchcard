@@ -116,7 +116,7 @@
     "punchcard-shared-tests": "^1.3.0",
     "reparo": "^1.1.1-0",
     "semantic-release": "^6.3.2",
-    "supertest": "^2.0.1",
+    "supertest": "^3.0.0",
     "tap-difflet": "^0.7.0",
     "uuid": "^2.0.2"
   },
