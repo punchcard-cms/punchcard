@@ -88,7 +88,7 @@
     "punchcard-content-types": "^6.1.15",
     "request": "^2.75.0",
     "sass-toolkit": "^2.10.0",
-    "serve-favicon": "^2.3.0",
+    "serve-favicon": "^2.4.1",
     "stream-from-array": "^1.0.0",
     "underscore.string": "^3.3.4",
     "url-join": "^1.1.0",
