@@ -70,7 +70,7 @@
     "js-yaml": "^3.6.1",
     "knex": "^0.12.6",
     "lodash": "^4.17.2",
-    "map-stream": "^0.0.6",
+    "map-stream": "^0.0.7",
     "mkdirp": "^0.5.1",
     "modularscale-sass": "^2.1.1",
     "moment": "^2.15.0",
