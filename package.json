@@ -74,7 +74,7 @@
     "mkdirp": "^0.5.1",
     "modularscale-sass": "^2.1.1",
     "moment": "^2.15.0",
-    "moment-timezone": "^0.5.4",
+    "moment-timezone": "^0.5.13",
     "morgan": "^1.6.1",
     "multer": "^1.2.1",
     "multiparty": "^4.1.2",
