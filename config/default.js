@@ -41,6 +41,9 @@ module.exports = {
     plugins: {
       directory: [path.join(__dirname, '../input-plugins')],
     },
+    plugins: {
+      directory: [],
+    },
     directory: path.join(__dirname, '../content-types'),
     messages: {
       content: {
