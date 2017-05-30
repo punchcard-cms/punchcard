@@ -78,7 +78,7 @@
     "morgan": "^1.6.1",
     "multer": "^1.2.1",
     "multiparty": "^4.1.2",
-    "node-dir": "^0.1.11",
+    "node-dir": "^0.1.17",
     "node-schedule": "^1.1.1",
     "nodemon": "^1.10.0",
     "nunjucks": "^3.0.0",
