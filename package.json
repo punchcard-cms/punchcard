@@ -46,7 +46,7 @@
   "dependencies": {
     "acl": "^0.4.9",
     "bcrypt-nodejs": "0.0.3",
-    "body-parser": "^1.15.2",
+    "body-parser": "^1.17.0",
     "breakpoint-sass": "^2.7.1",
     "cfenv": "^1.0.3",
     "config": "^1.20.4",
