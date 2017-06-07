@@ -67,7 +67,7 @@
     "input-plugin-text": "^0.1.3",
     "input-plugin-textarea": "^0.1.3",
     "input-plugin-url": "^0.3.0",
-    "js-yaml": "^3.6.1",
+    "js-yaml": "^3.8.1",
     "knex": "^0.12.6",
     "lodash": "^4.17.2",
     "map-stream": "^0.0.6",
