@@ -109,7 +109,7 @@
     "mock-express-response": "^0.1.2",
     "nock": "^9.0.0",
     "node-mocks-http": "^1.5.3",
-    "nyc": "^10.0.0",
+    "nyc": "^10.1.0",
     "punchcard-commit-msg": "^1.0.0",
     "punchcard-runner": "^2.1.2",
     "punchcard-semantic-release": "^2.0.3",
