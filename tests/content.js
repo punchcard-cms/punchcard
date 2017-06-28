@@ -81,9 +81,13 @@ test('filepaths - convert file values to add absolute', t => {
   t.is(typeof result['fileinputs-file-single'].filesingle, 'object', 'file-single input should contain an input object');
   valcheck(t, result['fileinputs-file-single'].filesingle.value);
 
-  t.true(Array.isArray(result['fileinputs-file-repeating'].filerepeater), 'file-repeating input should be an array');
-  result['fileinputs-file-repeating'].filerepeater.forEach(input => {
-    valcheck(t, input.value);
+  t.true(Array.isArray(result['fileinputs-file-repeating']), 'file-repeating should be an array');
+  result['fileinputs-file-repeating'].forEach(input => {
+    Object.keys(input).forEach(key => {
+      if (input[key].hasOwnProperty('value')) {
+        valcheck(t, input[key].value);
+      }
+    });
   });
 
   t.is(typeof result['fileinputs-file-multiple'], 'object', 'file-multiple input should be an object');
@@ -93,4 +97,23 @@ test('filepaths - convert file values to add absolute', t => {
   Object.keys(multis).forEach(input => {
     valcheck(t, multis[input].value);
   });
+});
+
+
+//////////////////////////////
+// Utils - file hold
+//////////////////////////////
+test('filehold - returns second param unchanged if first param empty or not array, 3rd param not an object', t => {
+  const result = utils.filehold('', 'foo');
+  t.is(result, 'foo', 'should return 2nd param');
+
+  const result2 = utils.filehold('bar', 'foo');
+  t.is(result2, 'foo', 'should return 2nd param');
+
+  const result3 = utils.filehold([], 'foo', 'bar');
+  t.is(result3, 'foo', 'should return 2nd param');
+});
+
+test('filehold - returns value with files added', t => {
+  t.pass('coming soon!');
 });
