@@ -55,7 +55,7 @@
     "connect-session-knex": "^1.0.23",
     "debug": "^2.6.8",
     "express": "^4.14.0",
-    "express-session": "^1.13.0",
+    "express-session": "^1.15.3",
     "ibm-design-colors": "^2.0.4",
     "input-plugin-checkbox": "^0.3.1",
     "input-plugin-email": "^0.2.0",
