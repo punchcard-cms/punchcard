@@ -91,7 +91,7 @@
     "serve-favicon": "^2.3.0",
     "stream-from-array": "^1.0.0",
     "underscore.string": "^3.3.4",
-    "url-join": "^2.0.1",
+    "url-join": "^2.0.2",
     "uuid": "^2.0.2",
     "validator": "^6.0.0",
     "vinyl": "^2.0.0",
