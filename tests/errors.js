@@ -40,7 +40,7 @@ const err = {
 //////////////////////////////
 // Routes - 404
 //////////////////////////////
-test.cb('404 error route', t => {
+test('404 error route', t => {
   const response = mocks.createResponse({ eventEmitter: EventEmitter });
   const request = mocks.createRequest({
     method: 'GET',
@@ -52,24 +52,23 @@ test.cb('404 error route', t => {
     safe: '/refreshing/safe/path',
   });
 
-  routes.missing(request, response);
+  const resp = routes.missing(request, response);
+  response.render();
 
-  response.on('end', () => {
+  return resp.then(() => {
     const data = response._getRenderData();
 
     t.is(response.statusCode, 404, 'Should be a 404 response');
     t.is(data.message, 'Something bad happened');
     t.is(data.safe, '/refreshing/safe/path');
-    t.end();
   });
-  response.render();
 });
 
 
 //////////////////////////////
 // Routes - error
 //////////////////////////////
-test.cb('General error', t => {
+test('General error', t => {
   const response = mocks.createResponse({ eventEmitter: EventEmitter });
   const error = _.cloneDeep(err);
   const request = mocks.createRequest({
@@ -80,55 +79,52 @@ test.cb('General error', t => {
   error.message = 'Something bad happened';
   error.safe = '/refreshing/safe/path';
 
-  routes.errors(error, request, response, next, app);
+  const resp = routes.errors(error, request, response, next, app);
+  response.render();
 
-  response.on('end', () => {
+  return resp.then(() => {
     const data = response._getRenderData();
 
     t.is(response.statusCode, 404, 'Should be a 404 response');
     t.is(data.message, 'Something bad happened');
     t.is(data.safe, '/refreshing/safe/path');
-    t.end();
   });
-  response.render();
 });
 
-test.cb('Unknown error', t => {
+test('Unknown error', t => {
   const response = mocks.createResponse({ eventEmitter: EventEmitter });
   const request = mocks.createRequest({
     method: 'GET',
     url: '/some/madeup/icky/path',
   });
 
-  routes.errors('', request, response, next, app);
+  const resp = routes.errors('', request, response, next, app);
+  response.render();
 
-  response.on('end', () => {
+  return resp.then(() => {
     const data = response._getRenderData();
 
     t.is(response.statusCode, 500, 'Should be a 500 response');
     t.is(data.message, 'route error');
     t.is(data.safe, '/');
-    t.end();
   });
-  response.render();
 });
 
-test.cb('Message into error', t => {
+test('Message into error', t => {
   const response = mocks.createResponse({ eventEmitter: EventEmitter });
   const request = mocks.createRequest({
     method: 'GET',
     url: '/some/madeup/icky/path',
   });
 
-  routes.errors('I am error', request, response, next, app);
+  const resp = routes.errors('I am error', request, response, next, app);
+  response.render();
 
-  response.on('end', () => {
+  return resp.then(() => {
     const data = response._getRenderData();
 
     t.is(response.statusCode, 500, 'Should be a 500 response');
     t.is(data.message, 'I am error');
     t.is(data.safe, '/');
-    t.end();
   });
-  response.render();
 });
