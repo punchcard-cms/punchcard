@@ -72,7 +72,7 @@
     "lodash": "^4.17.2",
     "map-stream": "^0.0.6",
     "mkdirp": "^0.5.1",
-    "modularscale-sass": "^2.1.1",
+    "modularscale-sass": "^3.0.1",
     "moment": "^2.15.0",
     "moment-timezone": "^0.5.4",
     "morgan": "^1.8.2",
