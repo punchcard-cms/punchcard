@@ -78,7 +78,7 @@
     "morgan": "^1.8.2",
     "multer": "^1.2.1",
     "multiparty": "^4.1.2",
-    "node-dir": "^0.1.17",	
+    "node-dir": "^0.1.17",
     "node-schedule": "^1.2.3",
     "nodemon": "^1.10.0",
     "nunjucks": "^3.0.1",
@@ -99,6 +99,7 @@
   },
   "devDependencies": {
     "ava": "^0.19.1",
+    "ava-config": "^1.1.0",
     "coveralls": "^2.13.1",
     "del": "^2.2.2",
     "eslint-config-punchcard": "^1.1.1",
@@ -108,7 +109,7 @@
     "lorem-ipsum": "^1.0.3",
     "mock-express-response": "^0.1.2",
     "nock": "^9.0.12",
-    "node-mocks-http": "^1.6.3",	
+    "node-mocks-http": "^1.6.3",
     "nyc": "^10.3.2",
     "punchcard-commit-msg": "^1.0.0",
     "punchcard-runner": "^2.1.2",
@@ -139,7 +140,10 @@
       "!tests/schedule.js"
     ],
     "failFast": false,
-    "tap": false
+    "tap": false,
+    "require": [
+      "ava-config"
+    ]
   },
   "config": {
     "ghooks": {
