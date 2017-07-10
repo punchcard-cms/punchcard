@@ -356,60 +356,53 @@ test('Send - bad urls', t => {
 //////////////////////////////
 // Routes - Applications landing
 //////////////////////////////
-test.cb('All applications route', t => {
+test('All applications route', t => {
   const request = httpMocks.createRequest(reqObj);
 
   const response = httpMocks.createResponse({ eventEmitter: EventEmitter });
   applications.routes.all(request, response);
   response.render();
-
-  response.on('end', () => {
-    const data = response._getRenderData();
-    const app = data.applications.find((ap) => {
-      return ap.name === 'Foo First Application';
-    });
-
-    t.is(response.statusCode, 200, 'Should be a 200 response');
-    t.is(app.name, 'Foo First Application', 'includes form with inputs');
-
-    t.is(_.get(app, 'responses.live[0].response', null), 200, 'includes live response');
-    t.true(_.isDate(new Date(_.get(app, 'responses.live[0].timestamp', null))), 'includes live timestamp which is a date');
-    t.is(_.get(app, 'responses.updated[0].response', null), 200, 'includes updated response');
-    t.true(_.isDate(new Date(_.get(app, 'responses.updated[0].timestamp', null))), 'includes updated timestamp which is a date');
-    t.is(_.get(app, 'responses.sunset[0].response', null), 200, 'includes sunset response');
-    t.true(_.isDate(new Date(_.get(app, 'responses.sunset[0].timestamp', null))), 'includes sunset timestamp which is a date');
-
-    t.end();
+  const data = response._getRenderData();
+  const app = data.applications.find((ap) => {
+    return ap.name === 'Foo First Application';
   });
-  response.end();
+
+  t.is(response.statusCode, 200, 'Should be a 200 response');
+  t.is(app.name, 'Foo First Application', 'includes form with inputs');
+
+  t.is(_.get(app, 'responses.live[0].response', null), 200, 'includes live response');
+  t.true(_.isDate(new Date(_.get(app, 'responses.live[0].timestamp', null))), 'includes live timestamp which is a date');
+  t.is(_.get(app, 'responses.updated[0].response', null), 200, 'includes updated response');
+  t.true(_.isDate(new Date(_.get(app, 'responses.updated[0].timestamp', null))), 'includes updated timestamp which is a date');
+  t.is(_.get(app, 'responses.sunset[0].response', null), 200, 'includes sunset response');
+  t.true(_.isDate(new Date(_.get(app, 'responses.sunset[0].timestamp', null))), 'includes sunset timestamp which is a date');
 });
 
 //////////////////////////////
 // Routes - New Application
 //////////////////////////////
-test.cb('New application route', t => {
+test('New application route', t => {
   const req = _.cloneDeep(reqObj);
   req.url = '/applications/add';
 
   const request = httpMocks.createRequest(req);
 
   const response = httpMocks.createResponse({ eventEmitter: EventEmitter });
-  applications.routes.add(request, response);
+  const resp = applications.routes.add(request, response);
   response.render();
 
-  response.on('end', () => {
+  return resp.then(() => {
     const data = response._getRenderData();
 
     t.is(response.statusCode, 200, 'Should be a 200 response');
     t.true(_.includes(data.form.html, 'name="sunset-endpoint--url"'), 'includes form with inputs');
-    t.end();
   });
 });
 
 //////////////////////////////
 // Routes - Single application
 //////////////////////////////
-test.cb('Single application route', t => {
+test('Single application route', t => {
   const req = _.cloneDeep(reqObj);
   req.url = '/applications/1';
   req.params.id = 1;
@@ -420,7 +413,7 @@ test.cb('Single application route', t => {
   const resp = applications.routes.one(request, response);
   response.render();
 
-  response.on('end', () => {
+  return resp.then(() => {
     const data = response._getRenderData();
 
     t.is(response.statusCode, 200, 'Should be a 200 response');
@@ -435,11 +428,6 @@ test.cb('Single application route', t => {
     t.is(data.config.toString(), config.applications.toString(), 'includes config for applications');
     t.is(data.app.name, 'Foo First Application', 'includes data from database');
     t.is(data.button, 'update', 'includes `update` as text for button');
-
-    return resp.then(res => {
-      t.is(res, true, 'should return true');
-      t.end();
-    });
   });
 });
 
@@ -464,7 +452,7 @@ test.cb('Single application route - bad id', t => {
   response.render();
 });
 
-test.cb('Single application route - error on save', t => {
+test('Single application route - error on save', t => {
   const req = _.cloneDeep(reqObj);
   req.url = '/applications/3';
   req.params.id = 3;
@@ -482,25 +470,23 @@ test.cb('Single application route - error on save', t => {
   const request = httpMocks.createRequest(req);
 
   const response = httpMocks.createResponse({ eventEmitter: EventEmitter });
-  applications.routes.one(request, response);
+  const resp = applications.routes.one(request, response);
   response.render();
 
-  response.on('end', () => {
+  return resp.then(() => {
     const data = response._getRenderData();
 
     t.is(response.statusCode, 200, 'Should be a 200 response');
 
     // form shows error
     t.regex(data.form.html, /<p class="form--alert" role="alert" for="([0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12})">Field is required to be saved!<\/p>/g, 'includes form alert');
-
-    t.end();
   });
 });
 
 //////////////////////////////
 // Routes - Secret
 //////////////////////////////
-test.cb('Create new secret', t => {
+test('Create new secret', t => {
   const req = _.cloneDeep(reqObj);
   req.method = 'POST';
   req.headers.referrer = '/applications/1';
@@ -518,12 +504,11 @@ test.cb('Create new secret', t => {
 
     return resp.then(res => {
       t.not(res, dbmocks.rows[0]['client-secret'], 'should be a new client secret');
-      t.end();
     });
   });
 });
 
-test.cb('Create new secret - bad id kills db', t => {
+test('Create new secret - bad id kills db', t => {
   const req = _.cloneDeep(reqObj);
   req.method = 'POST';
   req.headers.referrer = '/applications/break';
@@ -534,9 +519,8 @@ test.cb('Create new secret - bad id kills db', t => {
   const response = httpMocks.createResponse({ eventEmitter: EventEmitter });
   const resp = applications.routes.secret(request, response, next);
 
-  resp.then(res => {
+  return resp.then(res => {
     t.true(_.includes(res.message, 'update "applications" set "client-secret"'), 'postgres error');
-    t.end();
   });
 });
 
@@ -565,7 +549,7 @@ test.cb('Create new secret - bad referrer', t => {
 //////////////////////////////
 // Routes - Save application
 //////////////////////////////
-test.cb('Save new app: name required', t => {
+test('Save new app: name required', t => {
   const req = _.cloneDeep(reqObj);
   req.method = 'POST';
   req.session.referrer = '/applications/add';
@@ -577,16 +561,13 @@ test.cb('Save new app: name required', t => {
 
   const response = httpMocks.createResponse({ eventEmitter: EventEmitter });
   applications.routes.save(request, response);
-
-  response.on('end', () => {
-    t.is(response.statusCode, 302, 'Should be a 302 response');
-    t.is(response._getRedirectUrl(), '/applications/add');
-    t.end();
-  });
   response.render();
+
+  t.is(response.statusCode, 302, 'Should be a 302 response');
+  t.is(response._getRedirectUrl(), '/applications/add');
 });
 
-test.cb('Save existing app: name required', t => {
+test('Save existing app: name required', t => {
   const req = _.cloneDeep(reqObj);
   req.method = 'POST';
   req.session.referrer = '/applications/123';
@@ -599,12 +580,8 @@ test.cb('Save existing app: name required', t => {
   const response = httpMocks.createResponse({ eventEmitter: EventEmitter });
   applications.routes.save(request, response);
 
-  response.on('end', () => {
-    t.is(response.statusCode, 302, 'Should be a 302 response');
-    t.is(response._getRedirectUrl(), '/applications/123');
-    t.end();
-  });
-  response.render();
+  t.is(response.statusCode, 302, 'Should be a 302 response');
+  t.is(response._getRedirectUrl(), '/applications/123');
 });
 
 test.cb('Delete existing application', t => {
