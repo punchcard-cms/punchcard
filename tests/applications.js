@@ -498,13 +498,8 @@ test('Create new secret', t => {
   const resp = applications.routes.secret(request, response, next);
   response.render();
 
-  return response.on('end', () => {
-    t.is(response.statusCode, 302, 'Should be a 302 response');
-    t.is(response._getRedirectUrl(), '/applications/1', 'should redirect to edit url');
-
-    return resp.then(res => {
-      t.not(res, dbmocks.rows[0]['client-secret'], 'should be a new client secret');
-    });
+  return resp.then(res => {
+    t.not(res, dbmocks.rows[0]['client-secret'], 'should be a new client secret');
   });
 });
 
