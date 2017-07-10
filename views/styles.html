@@ -1,12 +1,8 @@
 {% extends "_donut.html" %}
 
-{% block pageTitle %}{{pageTitle}}{% endblock %}
-
-{% block pageHead %}
-  {{ super() }}
-{% endblock %}
-
 {% block main %}
+<div class="_style-guide">
+
   <section class="base--section">
     <header class="base--header">
       <h1 class="base--h1">Text</h1>
@@ -331,5 +327,30 @@ p q r s t u v w x y z { | } ~ </pre>
       </div>
     </form>
   </section>
-</main>
+
+  <section class="_style-guide--group">
+    <h2 class="_style-guide--title">Alerts</h2>
+    {% from "components/alert.html" import alert %}
+    {{alert(alertData)}}
+  </section>
+
+  <section class="_style-guide--group">
+    <h2 class="_style-guide--title">Tabular Data</h2>
+    {% from "components/table.html" import table %}
+    {{table(tableData)}}
+  </section>
+
+  <section class="_style-guide--group">
+    <h2 class="_style-guide--title">Single Content Type</h2>
+    {% from "components/basic-card.html" import basicCard %}
+    {{basicCard(cardData)}}
+  </section>
+
+  <section class="_style-guide--group">
+    <h2 class="_style-guide--title">Breadcrumb</h2>
+    {% from "components/breadcrumb.html" import breadcrumb %}
+    {{breadcrumb(breadcrumbData)}}
+  </section>
+
+</div>
 {% endblock %}

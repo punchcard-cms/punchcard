@@ -5,12 +5,7 @@
 {% endblock %}
 
 {% block header %}
-<div class="_header">
-  <header class="site-header">
-    <a href="/" class="nav--home"><img src="/images/punchcard-type.svg" class="nav--logo" alt="punchcard-logo"></a>
-  </header>
-</div>
-
+  {% include "_header-not-auth.html" %}
 {% endblock %}
 
 {% block main %}

@@ -1,3 +1,3 @@
-{% macro alert(for, type, value) %}
-<p class="alert--{{type | upper}}" role="alert" for="{{for}}">{{value}}</p>
+{% macro alert(data) %}
+<p class="form--alert" role="alert" for="{{data.for}}">{{data.value}}</p>
 {% endmacro %}

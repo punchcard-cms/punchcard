@@ -5,7 +5,7 @@
 
 .base {
   &--link {
-    @include link(setting-get('active link color'), setting-get('active link color'), setting-get('secondary link color'), setting-get('secondary link color'));
+    @include base--link;
   }
 
   &--h1 {
@@ -92,10 +92,9 @@
   }
 
   &--caption {
-    color: color('gray', 50);
-    font-size: .8em;
-    padding: 0 0 setting-get('rhythm') / 2;
-    text-align: right;
+    @include h1;
+    margin: 0 0 setting-get('rhythm') / .5 0;
+    text-align: left;
   }
 
   &--thead {
@@ -278,7 +277,7 @@
   }
 
   &--button {
-    @include button(setting-get('primary accent color'), setting-get('primary accent color'), setting-get('primary color'), setting-get('primary accent color'), setting-get('primary color'), setting-get('primary color'), setting-get('primary color'));
+    @include base--button;
   }
 }
 
