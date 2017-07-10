@@ -9,7 +9,7 @@ import storage from '../lib/storage';
 import fixtures from './fixtures/files';
 
 test.after.always(() => {
-  return del(['public']);
+  return del(['./tests/public']);
 });
 
 test('Storage - Default', t => {
