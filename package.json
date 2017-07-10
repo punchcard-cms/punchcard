@@ -86,7 +86,7 @@
     "passport-local": "^1.0.0",
     "pg": "^6.2.3",
     "punchcard-content-types": "^6.1.15",
-    "request": "^2.75.0",
+    "request": "^2.79.0",
     "sass-toolkit": "^2.10.0",
     "serve-favicon": "^2.4.3",
     "stream-from-array": "^1.0.0",
