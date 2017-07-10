@@ -35,4 +35,10 @@ module.exports = {
   workflows: {
     directory: path.join(__dirname, '../tests/fixtures/workflows/good'),
   },
+  storage: {
+    dest: 'tests/public/files',
+    temp: {
+      dest: 'tests/public/tmp/',
+    },
+  },
 };
