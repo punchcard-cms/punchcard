@@ -315,10 +315,7 @@ test.serial('Utils: Format Results - depth with follow', t => {
   };
 
   // fixes a bug where sometimes testable.model.attributes is null
-  if (!testable.model || !testable.model.attributes) {
-    const refixtures = utils.generate(generated, lang);
-    testable = utils.testables(refixtures.live, refixtures.types.full);
-  }
+  console.log(JSON.stringify(testable, null, 2));
 
   const formatted = apiUtils.format([testable.expected], testable.model.attributes, allTypes, query);
 
