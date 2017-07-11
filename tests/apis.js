@@ -308,11 +308,17 @@ test.serial('Utils: Format Results - with follow', t => {
 });
 
 test.serial('Utils: Format Results - depth with follow', t => {
-  const testable = utils.testables(live, allTypes);
+  let testable = utils.testables(live, allTypes);
   const query = {
     follow: 'true',
     depth: 2, // depth gets subtracted during attributes, to see depth the format function needs at least depth: two
   };
+
+  // fixes a bug where sometimes testable.model.attributes is null
+  if (!testable.model || !testable.model.attributes) {
+    const refixtures = utils.generate(generated, lang);
+    testable = utils.testables(refixtures.live, refixtures.types.full);
+  }
 
   const formatted = apiUtils.format([testable.expected], testable.model.attributes, allTypes, query);
 
