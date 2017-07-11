@@ -93,7 +93,7 @@
     "underscore.string": "^3.3.4",
     "url-join": "^2.0.2",
     "uuid": "^2.0.2",
-    "validator": "^6.0.0",
+    "validator": "^7.0.0",
     "vinyl": "^2.0.0",
     "vinyl-fs": "^2.4.4"
   },
