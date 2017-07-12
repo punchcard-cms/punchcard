@@ -5,7 +5,7 @@
 
 .base {
   &--link {
-    @include link(setting-get('active link color'), setting-get('active link color'), setting-get('secondary link color'), setting-get('secondary link color'));
+    @include base--link;
   }
 
   &--h1 {
@@ -103,7 +103,7 @@
 
   &--tr {
     &:nth-of-type(even) {
-      background-color: color('neutral-white', 30);
+      background-color: color('white');
     }
   }
 
@@ -159,7 +159,7 @@
   }
 
   &--kbd {
-    background-color: color('neutral-white', 40);
+    background-color: color('white');
     border: 1px solid color('gray', 10);
     border-radius: 3px;
     font-size: ms(-1);
@@ -167,7 +167,7 @@
   }
 
   &--code {
-    background: color('neutral-white', 40);
+    background: color('white');
     direction: ltr;
     font-family: setting-get('monospace font');
     font-size: ms(-1);
@@ -277,7 +277,7 @@
   }
 
   &--button {
-    @include button(setting-get('primary accent color'), setting-get('primary accent color'), setting-get('primary color'), setting-get('primary accent color'), setting-get('primary color'), setting-get('primary color'), setting-get('primary color'));
+    @include base--button;
   }
 }
 

@@ -9,7 +9,7 @@ import storage from '../lib/storage';
 import fixtures from './fixtures/files';
 
 test.after.always(() => {
-  return del(['public']);
+  return del(['./tests/public']);
 });
 
 test('Storage - Default', t => {
@@ -21,13 +21,13 @@ test('Storage - Default', t => {
     Object.keys(files).forEach(file => {
       const result = files[file];
       const expected = input.find(inp => {
-        return inp.fieldName === file;
+        return inp.fieldname === file;
       });
 
       t.true(result.hasOwnProperty('original'), 'Has original filename');
       t.true(result.hasOwnProperty('type'), 'Has a type');
       t.true(result.hasOwnProperty('relative'), 'Has a relative path');
-      t.is(result.type, expected.type, 'Have the same type');
+      t.is(result.type, expected.mimetype, 'Have the same type');
 
       const output = fs.readFileSync(path.join(__dirname, 'public/files', result.relative));
       const original = fs.readFileSync(expected.path);

@@ -49,7 +49,7 @@
   }
 
   &--field-container {
-    background-color: color('neutral-white', 40);
+    background-color: color('white');
     margin-top: setting-get('rhythm') / .5;
     padding: setting-get('rhythm') / .75;
     @include breakpoint(setting-get('responsive form')) {
@@ -63,7 +63,7 @@
   }
 
   &--publish-container {
-    background-color: color('neutral-white', 40);
+    background-color: color('white');
     margin-top: setting-get('rhythm') / .5;
     order: 0;
     padding: setting-get('rhythm') / .75;
@@ -78,7 +78,7 @@
   &--publish-fields {
 
     @include breakpoint(setting-get('responsive form')) {
-      background-color: color('neutral-white', 40);
+      background-color: color('white');
       order: 1;
       padding: setting-get('rhythm') / .5;
     }
@@ -89,10 +89,10 @@
   }
 
   &--legend {
-    background-color: color('neutral-white', 40);
-    border: setting-get('input border width') solid color('neutral-white', 40);
+    background-color: color('white');
+    border: setting-get('input border width') solid color('white');
     border-radius: setting-get('input border radius');
-    color: color('black');
+    color: color('black', 100);
     font-weight: setting-get('bold font weight');
     padding: 0 setting-get('rhythm');
     transform: translateX(setting-get('rhythm') / -1);

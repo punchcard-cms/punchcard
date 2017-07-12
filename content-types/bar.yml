@@ -12,6 +12,34 @@ attributes:
     inputs:
       text:
         placeholder: add svc name
+  - type: email
+    id: service-email
+    name: Service Email
+    inputs:
+      text:
+        placeholder: add svc email
+  - type: file
+    id: image-file
+    name: Image Filer
+    inputs:
+      file:
+        settings:
+          types:
+            - .png
+            - .jpg
+            - .gif
+  - type: file
+    id: text-file
+    name: Text Filer
+  - type: file
+    id: bar-file-repeat
+    name: Bar File Repeater
+    repeatable: true
+  - type: text
+    id: bar-repeat-test
+    name: Bar Repeat Test
+    description: Checkin the repeatin
+    repeatable: true
   - type: reference
     id: bar-reference
     name: Bar reference
