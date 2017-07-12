@@ -1,0 +1,23 @@
+.basic-card {
+  border: setting-get('input border width') solid setting-get('secondary color');
+  padding: setting-get('double rhythm');
+
+  &--name {
+    @include h2;
+    color: setting-get('secondary link color');
+    margin-top: setting-get('rhythm');
+  }
+
+  &--actions {
+    margin-top: setting-get('double rhythm');
+    width: 100%;
+    @include breakpoint(setting-get('responsive form')) {
+      flex-grow: 1;
+      order: 2;
+    }
+  }
+
+  &--button {
+    @include base--button;
+  }
+}

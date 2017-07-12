@@ -29,6 +29,10 @@
   }
 }
 
+@mixin base--button {
+  @include button(setting-get('primary accent color'), setting-get('primary accent color'), setting-get('primary color'), setting-get('primary accent color'), setting-get('primary color'), setting-get('primary color'), setting-get('primary color'));
+}
+
 @mixin dl {
   display: block;
 }
@@ -42,7 +46,7 @@
 }
 
 @mixin dt {
-  background-color: color('neutral-white', 40);
+  background-color: color('white');
   font-weight: setting-get('bold font weight');
   padding: setting-get('rhythm') / 2 setting-get('rhythm') / .75;
 
@@ -135,6 +139,10 @@
     color: $color-hover;
     transition: setting-get('fade');
   }
+}
+
+@mixin base--link {
+  @include link(setting-get('active link color'), setting-get('active link color'), setting-get('secondary link color'), setting-get('secondary link color'));
 }
 
 @mixin radio {

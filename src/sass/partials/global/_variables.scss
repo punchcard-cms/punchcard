@@ -47,10 +47,18 @@ $LayoutSettings: (
   'max character legnth break': 1000px,
   'responsive form': 800px,
   'responsive table': 700px,
-  '404 contianer': 600px
+  '404 contianer': 600px,
+  'one grid cards': 500px,
+  'two grid cards': 660px
 );
 
 $GlobalSettings: map-merge($GlobalSettings, $LayoutSettings);
+
+$RhythmSettings: (
+  'double rhythm': setting-get('rhythm') * 2
+);
+
+$GlobalSettings: map-merge($GlobalSettings, $RhythmSettings);
 
 // Forms
 
