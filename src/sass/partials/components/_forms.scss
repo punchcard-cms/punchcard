@@ -24,6 +24,36 @@
     }
   }
 
+  &--add {
+    @include button(setting-get('primary accent color'), setting-get('primary accent color'), setting-get('primary color'), setting-get('primary accent color'), setting-get('primary color'), setting-get('primary color'), setting-get('primary color'));
+
+    background: {
+      image: url('/images/icons/add.svg');
+      position: setting-get('rhythm') 50%;
+      repeat: no-repeat;
+      size: 1em;
+    }
+    margin-top: setting-get('rhythm') * 2;
+    padding-left: setting-get('rhythm') * 2.5;
+  }
+
+  &--delete {
+    @include link(setting-get('primary color'), setting-get('primary color'), setting-get('secondary link color'), setting-get('secondary link color'));
+
+    background-color: transparent;
+    border: {
+      left: 0;
+      right: 0;
+      top: 0;
+    }
+    margin-top: setting-get('rhythm') / 2;
+    padding: 0;
+  }
+
+  &--repeatable {
+    margin-top: setting-get('rhythm') * 2;
+  }
+
   &--description {
     color: color('grey', 60);
     font-size: ms(-1);
