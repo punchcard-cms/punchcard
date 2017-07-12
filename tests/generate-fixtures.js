@@ -108,8 +108,16 @@ test('Test Utility - fixtures - content', t => {
       }
       else {
         Object.keys(item.value[val]).forEach(input => {
-          t.true(item.value[val][input].hasOwnProperty('value'), 'Value input contains a value');
-          t.not(item.value[val][input].value, null, 'value is not null');
+          if (Array.isArray(item.value[val][input])) {
+            item.value[val][input].forEach(inpt => {
+              t.true(inpt.hasOwnProperty('value'), 'Value input contains a value');
+              t.not(inpt.value, null, 'value is not null');
+            });
+          }
+          else {
+            t.true(item.value[val][input].hasOwnProperty('value'), 'Value input contains a value');
+            t.not(item.value[val][input].value, null, 'value is not null');
+          }
         });
       }
     });
@@ -153,8 +161,16 @@ test('Test Utility - fixtures - live', t => {
       }
       else {
         Object.keys(item.attributes[val]).forEach(input => {
-          t.true(item.attributes[val][input].hasOwnProperty('value'), 'attributes input contains a value');
-          t.not(item.attributes[val][input].value, null, 'value is not null');
+          if (Array.isArray(item.attributes[val][input])) {
+            item.attributes[val][input].forEach(inpt => {
+              t.true(inpt.hasOwnProperty('value'), 'Value input contains a value');
+              t.not(inpt.value, null, 'value is not null');
+            });
+          }
+          else {
+            t.true(item.attributes[val][input].hasOwnProperty('value'), 'Value input contains a value');
+            t.not(item.attributes[val][input].value, null, 'value is not null');
+          }
         });
       }
     });
