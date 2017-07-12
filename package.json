@@ -107,7 +107,7 @@
     "gulp": "^3.9.1",
     "input-plugin-file": "^1.1.0",
     "lorem-ipsum": "^1.0.4",
-    "mock-express-response": "^0.1.2",
+    "mock-express-response": "^0.2.0",
     "nock": "^9.0.12",
     "node-mocks-http": "^1.6.3",
     "nyc": "^10.3.2",
