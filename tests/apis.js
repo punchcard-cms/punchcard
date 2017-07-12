@@ -314,9 +314,6 @@ test.serial('Utils: Format Results - depth with follow', t => {
     depth: 2, // depth gets subtracted during attributes, to see depth the format function needs at least depth: two
   };
 
-  // fixes a bug where sometimes testable.model.attributes is null
-  console.log(JSON.stringify(testable, null, 2));
-
   const formatted = apiUtils.format([testable.expected], testable.model.attributes, allTypes, query);
 
   return formatted.then(result => {
