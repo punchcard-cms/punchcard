@@ -46,7 +46,7 @@
 }
 
 @mixin dt {
-  background-color: color('neutral-white', 40);
+  background-color: color('white');
   font-weight: setting-get('bold font weight');
   padding: setting-get('rhythm') / 2 setting-get('rhythm') / .75;
 

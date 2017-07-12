@@ -44,7 +44,7 @@
   ],
   "license": "Apache-2.0",
   "dependencies": {
-    "acl": "^0.4.9",
+    "acl": "^0.4.10",
     "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.17.2",
     "breakpoint-sass": "^2.7.1",
