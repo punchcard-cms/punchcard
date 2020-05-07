@@ -30,7 +30,9 @@
     "dev": "npm run dev:database & npm run dev:start",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "semantic-release": "semantic-release pre && npm publish && semantic-release post",
-    "reparo": "reparo -b master"
+    "reparo": "reparo -b master",
+    "snyk-protect": "snyk protect",
+    "prepublish": "npm run snyk-protect"
   },
   "repository": {
     "type": "git",
@@ -95,7 +97,8 @@
     "uuid": "^3.0.1",
     "validator": "^7.0.0",
     "vinyl": "^2.0.0",
-    "vinyl-fs": "^2.4.4"
+    "vinyl-fs": "^2.4.4",
+    "snyk": "^1.319.1"
   },
   "devDependencies": {
     "ava": "^0.19.1",
@@ -153,5 +156,6 @@
   "release": {
     "analyzeCommits": "punchcard-semantic-release/analyze",
     "generateNotes": "punchcard-semantic-release/notes"
-  }
+  },
+  "snyk": true
 }
