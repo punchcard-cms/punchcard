@@ -76,7 +76,7 @@
     "moment": "^2.18.1",
     "moment-timezone": "^0.5.13",
     "morgan": "^1.8.2",
-    "multer": "^1.2.1",
+    "multer": "^2.0.1",
     "multiparty": "^4.1.2",
     "node-dir": "^0.1.17",
     "node-schedule": "^1.2.3",
